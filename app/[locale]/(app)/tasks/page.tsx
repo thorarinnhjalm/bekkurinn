@@ -1,242 +1,276 @@
-import { Gift, PartyPopper, Cake, Users } from 'lucide-react';
-import { DietaryIcon } from '@/components/icons/DietaryIcons';
+'use client';
+
+import { Calendar, Users, CheckCircle, Loader2, ListTodo } from 'lucide-react';
+import { useTasks } from '@/hooks/useFirestore';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
 
 /**
- * Tasks Page - "Reddingar" (Logistics Management)
+ * Tasks Page - Skipulag (Organization/Event Coordination)
  * 
- * Features:
- * - Event management (Christmas party, etc.)
- * - Multi-slot tasks (Bake Cake 0/3)
- * - Gift collection workflows
- * - Dietary awareness integration
+ * Manage event tasks and volunteer coordination
+ * Now connected to real Firestore data!
  */
 
+// TODO: Get this from user's class membership
+const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
+
 export default function TasksPage() {
-    // Mock data with birthday party showing dietary restrictions
-    const mockEvents = [
-        {
-            id: 1,
-            type: 'birthday',
-            title: 'Afmælisveisla Ara - 10 ára!',
-            date: '2026-01-15',
-            host: 'Anna Jónsdóttir',
-            attendees: [
-                { name: 'Ari Jónsson', dietary: ['peanut'] },
-                { name: 'Baldur Gunnarsson', dietary: ['gluten', 'dairy'] },
-                { name: 'Dagur Kristjánsson', dietary: ['vegan'] },
-                { name: 'Einar Einarsson', dietary: ['pork'] },
-                { name: 'Guðrún Jónsdóttir', dietary: ['gluten'] },
-                { name: 'Íris Kristjánsdóttir', dietary: ['peanut', 'gluten'] },
-                { name: 'Auður Sigurðardóttir', dietary: [] },
-                { name: 'Jón Magnússon', dietary: [] },
-            ],
-        },
-        {
-            id: 2,
-            type: 'event',
-            title: 'Jólahátíð bekkjarins',
-            date: '2026-12-20',
-            tasks: [
-                { name: 'Baka kökur', slots: 3, filled: 1 },
-                { name: 'Skreyta sal', slots: 2, filled: 2 },
-                { name: 'Taka upp eftir að', slots: 2, filled: 0 },
-            ],
-        },
-        {
-            id: 3,
-            type: 'gift',
-            title: 'Gjöf fyrir kennara',
-            date: '2026-06-15',
-            goal: 'Safna fyrir bókakort',
-            collected: 15,
-            target: 30,
-        },
-    ];
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
+
+    // Redirect to login if not authenticated
+    if (!authLoading && !user) {
+        router.push('/is/login');
+        return null;
+    }
+
+    // Format date for display
+    const formatDate = (timestamp: any) => {
+        if (!timestamp?.toDate) return '';
+        const date = timestamp.toDate();
+        return new Intl.DateTimeFormat('is-IS', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+            weekday: 'long'
+        }).format(date);
+    };
+
+    // Check if date is upcoming or past
+    const isUpcoming = (timestamp: any) => {
+        if (!timestamp?.toDate) return false;
+        const date = timestamp.toDate();
+        return date.getTime() > Date.now();
+    };
+
+    // Loading state
+    if (authLoading || tasksLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center pt-24">
+                <div className="flex flex-col items-center gap-3">
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <p style={{ color: 'var(--text-secondary)' }}>Hleður verkefnum...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const allTasks = tasksData || [];
+
+    // Get only event type tasks
+    const events = allTasks.filter(task => task.type === 'event');
+
+    // Sort by date (upcoming first, then past)
+    const sortedEvents = [...events].sort((a, b) => {
+        const aTime = a.date?.toDate?.()?.getTime() || 0;
+        const bTime = b.date?.toDate?.()?.getTime() || 0;
+        const now = Date.now();
+
+        const aUpcoming = aTime > now;
+        const bUpcoming = bTime > now;
+
+        // Upcoming events first
+        if (aUpcoming && !bUpcoming) return -1;
+        if (!aUpcoming && bUpcoming) return 1;
+
+        // Within same category, sort by date
+        return aTime - bTime;
+    });
+
+    const upcomingCount = events.filter(e => isUpcoming(e.date)).length;
+    const pastCount = events.length - upcomingCount;
 
     return (
         <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
             {/* Header */}
-            <header className="space-y-2">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
-                    Skipulag
-                </h1>
+            <header className="space-y-3">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                        Skipulag
+                    </h1>
+                    {upcomingCount > 0 && (
+                        <div
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
+                            style={{ backgroundColor: 'var(--sage-green)20', color: 'var(--sage-dark)' }}
+                        >
+                            <Calendar size={14} />
+                            <span>{upcomingCount} í vændum</span>
+                        </div>
+                    )}
+                </div>
                 <p style={{ color: 'var(--text-secondary)' }}>
                     Viðburðir og verkefni bekkjarins
                 </p>
             </header>
 
-            {/* Events List */}
+            {/* Event Cards */}
             <div className="space-y-4">
-                {mockEvents.map((event) => (
-                    <div key={event.id} className="nordic-card p-5 space-y-4">
-                        {/* Event Header */}
-                        <div className="flex items-start gap-3">
-                            <div
-                                className="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0"
-                                style={{ backgroundColor: 'var(--sage-green)' }}
-                            >
-                                {event.type === 'event' ? (
-                                    <PartyPopper size={24} color="white" />
-                                ) : (
-                                    <Gift size={24} color="white" />
-                                )}
-                            </div>
+                {sortedEvents.map((event) => {
+                    const upcoming = isUpcoming(event.date);
+                    const progress = event.slotsTotal > 0
+                        ? (event.slotsFilled / event.slotsTotal) * 100
+                        : 0;
+                    const isComplete = event.slotsFilled >= event.slotsTotal;
 
-                            <div className="flex-1">
-                                <h3 className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
-                                    {event.title}
-                                </h3>
-                                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                    {new Date(event.date).toLocaleDateString('is-IS', {
-                                        day: 'numeric',
-                                        month: 'long',
-                                        year: 'numeric',
-                                    })}
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* Event Tasks */}
-                        {event.type === 'event' && event.tasks && (
-                            <div className="space-y-3">
-                                <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                                    Verkefni sem þarf að leysa:
-                                </p>
-
-                                {event.tasks.map((task, idx) => (
-                                    <div key={idx} className="flex items-center justify-between p-3 rounded-lg"
-                                        style={{ backgroundColor: 'var(--paper)' }}>
-                                        <div className="flex items-center gap-2">
-                                            <Cake size={16} style={{ color: 'var(--text-tertiary)' }} />
-                                            <span className="text-sm font-medium">{task.name}</span>
-                                        </div>
-
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                                {task.filled}/{task.slots}
-                                            </span>
-
-                                            {task.filled < task.slots ? (
-                                                <button
-                                                    className="px-4 py-2 rounded-lg text-sm font-medium"
+                    return (
+                        <div
+                            key={event.id}
+                            className="nordic-card overflow-hidden"
+                            style={{
+                                opacity: upcoming ? 1 : 0.7,
+                                borderColor: isComplete ? 'var(--green-success)' : 'var(--border-light)',
+                                borderWidth: isComplete ? '2px' : '1px',
+                            }}
+                        >
+                            {/* Event Header */}
+                            <div className="p-5 space-y-3">
+                                <div className="flex items-start justify-between gap-3">
+                                    <div className="flex-1">
+                                        <div className="flex items-center gap-2 flex-wrap mb-2">
+                                            <h2 className="text-xl font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                                {event.title}
+                                            </h2>
+                                            {!upcoming && (
+                                                <span
+                                                    className="text-xs px-2 py-0.5 rounded"
                                                     style={{
-                                                        backgroundColor: 'var(--sage-green)',
-                                                        color: 'white'
+                                                        backgroundColor: 'var(--text-tertiary)20',
+                                                        color: 'var(--text-tertiary)'
                                                     }}
                                                 >
-                                                    Bjóðast
-                                                </button>
-                                            ) : (
-                                                <span className="text-sm font-medium" style={{ color: 'var(--green-success)' }}>
-                                                    ✓ Bókað
+                                                    Liðinn
                                                 </span>
                                             )}
+                                            {isComplete && (
+                                                <div
+                                                    className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium"
+                                                    style={{ backgroundColor: 'var(--green-success)', color: 'white' }}
+                                                >
+                                                    <CheckCircle size={12} />
+                                                    <span>Fullbókað</span>
+                                                </div>
+                                            )}
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
 
-                        {/* Birthday Party Attendees with Dietary Info */}
-                        {event.type === 'birthday' && event.attendees && (
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <p className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                                        Staðfest mæting ({event.attendees.length} börn)
-                                    </p>
-                                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                        Gestgjafi: {event.host}
-                                    </p>
+                                        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                                            <Calendar size={16} />
+                                            <span>{formatDate(event.date)}</span>
+                                        </div>
+
+                                        {event.description && (
+                                            <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                                {event.description}
+                                            </p>
+                                        )}
+                                    </div>
                                 </div>
 
-                                <div className="grid gap-3">
-                                    {event.attendees.map((attendee, idx) => (
+                                {/* Progress Bar */}
+                                {event.slotsTotal > 0 && (
+                                    <div className="space-y-2">
+                                        <div className="flex items-center justify-between text-sm">
+                                            <span style={{ color: 'var(--text-secondary)' }}>
+                                                Þátttakendur
+                                            </span>
+                                            <span style={{ color: 'var(--text-primary)' }} className="font-medium">
+                                                {event.slotsFilled}/{event.slotsTotal}
+                                            </span>
+                                        </div>
                                         <div
-                                            key={idx}
-                                            className="flex items-center justify-between p-3 rounded-lg"
-                                            style={{ backgroundColor: 'var(--paper)' }}
+                                            className="h-2 rounded-full overflow-hidden"
+                                            style={{ backgroundColor: 'var(--stone)' }}
                                         >
-                                            <div className="flex items-center gap-2">
-                                                <Users size={16} style={{ color: 'var(--text-tertiary)' }} />
-                                                <span className="text-sm font-medium">{attendee.name}</span>
-                                            </div>
-
-                                            <div className="flex items-center gap-2">
-                                                {attendee.dietary.length > 0 ? (
-                                                    attendee.dietary.map((type) => (
-                                                        <DietaryIcon
-                                                            key={type}
-                                                            type={type as any}
-                                                            size={16}
-                                                            showLabel={false}
-                                                        />
-                                                    ))
-                                                ) : (
-                                                    <span className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                                        Engar sérþarfir
-                                                    </span>
-                                                )}
-                                            </div>
+                                            <div
+                                                className="h-full transition-all duration-300"
+                                                style={{
+                                                    width: `${progress}%`,
+                                                    backgroundColor: isComplete
+                                                        ? 'var(--green-success)'
+                                                        : 'var(--sage-green)',
+                                                }}
+                                            />
                                         </div>
-                                    ))}
-                                </div>
-
-                                {/* Dietary Summary */}
-                                <div className="p-3 rounded-lg border" style={{
-                                    borderColor: 'var(--amber-light)',
-                                    backgroundColor: 'var(--amber-light)20'
-                                }}>
-                                    <p className="text-xs font-medium mb-2" style={{ color: 'var(--text-secondary)' }}>
-                                        ⚠️ Athugið við matarval:
-                                    </p>
-                                    <div className="flex flex-wrap gap-3">
-                                        <DietaryIcon type="peanut" size={14} />
-                                        <DietaryIcon type="gluten" size={14} />
-                                        <DietaryIcon type="dairy" size={14} />
-                                        <DietaryIcon type="vegan" size={14} />
-                                        <DietaryIcon type="pork" size={14} />
                                     </div>
-                                </div>
+                                )}
+
+                                {/* Volunteers List */}
+                                {event.volunteers && event.volunteers.length > 0 && (
+                                    <div className="space-y-2">
+                                        <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
+                                            Skráðir þátttakendur
+                                        </p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {event.volunteers.map((volunteer, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
+                                                    style={{ backgroundColor: 'var(--stone)' }}
+                                                >
+                                                    <div
+                                                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                                    >
+                                                        {volunteer.name[0]}
+                                                    </div>
+                                                    <span style={{ color: 'var(--text-primary)' }}>
+                                                        {volunteer.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Action Button */}
+                                {upcoming && !isComplete && (
+                                    <button className="nordic-button w-full">
+                                        Skrá mig
+                                    </button>
+                                )}
                             </div>
-                        )}
+                        </div>
+                    );
+                })}
+            </div>
 
-                        {/* Gift Collection Progress */}
-                        {event.type === 'gift' && event.collected !== undefined && event.target !== undefined && (
-                            <div className="space-y-3">
-                                <div className="flex items-center justify-between">
-                                    <span className="text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>
-                                        {event.goal}
-                                    </span>
-                                    <span className="text-sm font-semibold" style={{ color: 'var(--sage-green)' }}>
-                                        {event.collected}/{event.target} foreldrar
-                                    </span>
-                                </div>
+            {/* Empty state */}
+            {events.length === 0 && (
+                <div className="text-center py-12">
+                    <ListTodo size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
+                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
+                        Engin verkefni enn
+                    </h3>
+                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+                        Bekkjarformaður mun bæta við viðburðum og verkefnum
+                    </p>
+                </div>
+            )}
 
-                                <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: 'var(--border-light)' }}>
-                                    <div
-                                        className="h-full rounded-full transition-all duration-500"
-                                        style={{
-                                            width: `${(event.collected / event.target) * 100}%`,
-                                            backgroundColor: 'var(--sage-green)'
-                                        }}
-                                    />
-                                </div>
-
-                                <button className="nordic-button w-full text-sm">
-                                    Staðfesta þátttöku
-                                </button>
+            {/* Summary Stats */}
+            {events.length > 0 && (
+                <div className="nordic-card p-5">
+                    <div className="grid grid-cols-2 gap-4 text-center">
+                        <div>
+                            <div className="text-2xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                                {upcomingCount}
                             </div>
-                        )}
+                            <div className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                                Í vændum
+                            </div>
+                        </div>
+                        <div>
+                            <div className="text-2xl font-bold" style={{ color: 'var(--text-tertiary)' }}>
+                                {pastCount}
+                            </div>
+                            <div className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                                Liðnir
+                            </div>
+                        </div>
                     </div>
-                ))}
-            </div>
-
-            {/* Create Task Button (Admin only - will be conditional) */}
-            <div className="nordic-card p-4 text-center" style={{ borderStyle: 'dashed', borderColor: 'var(--border-medium)' }}>
-                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                    Aðeins stjórn getur búið til verkefni
-                </p>
-            </div>
+                </div>
+            )}
         </div>
     );
 }

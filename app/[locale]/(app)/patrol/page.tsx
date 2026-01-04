@@ -1,185 +1,263 @@
 'use client';
 
-import { CalendarDays, Users as UsersIcon, Clock, MapPin, Cake, PartyPopper, ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
+import { Calendar, ChevronDown, ChevronUp, Loader2, Users } from 'lucide-react';
+import { useTasks } from '@/hooks/useFirestore';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
 
-export default function CalendarPage() {
-    const [showJanBirthdays, setShowJanBirthdays] = useState(false);
-    const [showFebBirthdays, setShowFebBirthdays] = useState(false);
-    const [showMarBirthdays, setShowMarBirthdays] = useState(false);
-    const [showPatrols, setShowPatrols] = useState(false);
-    const [showActivities, setShowActivities] = useState(true);
+/**
+ * Patrol Page - Dagatal (Calendar with patrols)
+ * 
+ * Shows birthdays, class activities, and parent patrols
+ * Now connected to real Firestore data!
+ */
 
-    const januaryBirthdays = [
-        { name: 'Ari Jónsson', date: '15. janúar', age: 10 },
-        { name: 'Íris Kristjánsdóttir', date: '13. janúar', age: 10 },
-    ];
+// TODO: Get this from user's class membership
+const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
 
-    const februaryBirthdays = [{ name: 'Finnur Þorsteinsson', date: '11. febrúar', age: 10 }];
-    const marchBirthdays = [{ name: 'Auður Sigurðardóttir', date: '22. mars', age: 10 }];
+export default function PatrolPage() {
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
 
-    const upcomingPatrols = [
-        { date: '2026-01-13', time: '16:00 - 18:00', location: 'Leikskóli → Bæjarlind', volunteers: ['Birna Sigurðardóttir'], slots: 2, filled: 1 },
-        { date: '2026-01-20', time: '16:00 - 18:00', location: 'Leikskóli → Bæjarlind', volunteers: [], slots: 2, filled: 0 },
-        { date: '2026-01-27', time: '16:00 - 18:00', location: 'Leikskóli → Bæjarlind', volunteers: ['Guðrún Magnúsdóttir', 'Þú'], slots: 2, filled: 2 },
-    ];
+    const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['patrols']));
 
-    const activities = [
-        { title: 'Foreldrafundur', date: '2026-01-15', time: '19:00', location: 'Matsalur' },
-        { title: 'Íþróttadagur', date: '2026-02-08', time: '10:00', location: 'Íþróttahús' },
-        { title: 'Skíðaferð til Bláfjalla', date: '2026-02-21', time: 'Allan daginn', location: 'Bláfjöll' },
-    ];
+    // Redirect to login if not authenticated
+    if (!authLoading && !user) {
+        router.push('/is/login');
+        return null;
+    }
+
+    const toggleSection = (sectionId: string) => {
+        const newExpanded = new Set(expandedSections);
+        if (newExpanded.has(sectionId)) {
+            newExpanded.delete(sectionId);
+        } else {
+            newExpanded.add(sectionId);
+        }
+        setExpandedSections(newExpanded);
+    };
+
+    // Format date for display
+    const formatDate = (timestamp: any) => {
+        if (!timestamp?.toDate) return '';
+        const date = timestamp.toDate();
+        return new Intl.DateTimeFormat('is-IS', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }).format(date);
+    };
+
+    // Format date short (for headers)
+    const formatMonth = (timestamp: any) => {
+        if (!timestamp?.toDate) return '';
+        const date = timestamp.toDate();
+        return new Intl.DateTimeFormat('is-IS', {
+            month: 'long',
+            year: 'numeric'
+        }).format(date);
+    };
+
+    // Loading state
+    if (authLoading || tasksLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center pt-24">
+                <div className="flex flex-col items-center gap-3">
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <p style={{ color: 'var(--text-secondary)' }}>Hleður dagatali...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const allTasks = tasksData || [];
+
+    // Filter patrols (rölt) from tasks
+    const patrols = allTasks.filter(task => task.type === 'rolt');
+    const events = allTasks.filter(task => task.type === 'event');
+
+    // Sort by date (ascending - soonest first)
+    const sortedPatrols = [...patrols].sort((a, b) => {
+        const aTime = a.date?.toDate?.()?.getTime() || 0;
+        const bTime = b.date?.toDate?.()?.getTime() || 0;
+        return aTime - bTime;
+    });
+
+    const sortedEvents = [...events].sort((a, b) => {
+        const aTime = a.date?.toDate?.()?.getTime() || 0;
+        const bTime = b.date?.toDate?.()?.getTime() || 0;
+        return aTime - bTime;
+    });
 
     return (
-        <div className="min-h-screen p-4 space-y-4 pb-24 pt-[88px]">
-            <header className="space-y-2">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>Dagatal</h1>
-                <p style={{ color: 'var(--text-secondary)' }}>Viðburðir, afmæli og foreldrarölt</p>
+        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
+            {/* Header */}
+            <header className="space-y-3">
+                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                    Dagatal
+                </h1>
+                <p style={{ color: 'var(--text-secondary)' }}>
+                    Afmæli, viðburðir og foreldrarölt
+                </p>
             </header>
 
-            {/* Activities */}
+            {/* Parent Patrols Section */}
             <div className="nordic-card overflow-hidden">
-                <button onClick={() => setShowActivities(!showActivities)}
-                    className="w-full p-4 flex items-center justify-between text-left transition-colors"
-                    style={{ backgroundColor: showActivities ? 'var(--sage-green)' : 'var(--stone)', color: showActivities ? 'white' : 'var(--text-primary)' }}>
+                <button
+                    onClick={() => toggleSection('patrols')}
+                    className="w-full px-5 py-4 flex items-center justify-between hover:bg-opacity-50 transition-colors"
+                    style={{ backgroundColor: 'var(--stone)' }}
+                >
                     <div className="flex items-center gap-2">
-                        <CalendarDays size={20} />
-                        <span className="font-semibold">Viðburðir ({activities.length})</span>
+                        <Users size={20} style={{ color: 'var(--sage-green)' }} />
+                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                            Foreldrarölt ({patrols.length})
+                        </h2>
                     </div>
-                    {showActivities ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    {expandedSections.has('patrols') ? (
+                        <ChevronUp size={20} style={{ color: 'var(--text-tertiary)' }} />
+                    ) : (
+                        <ChevronDown size={20} style={{ color: 'var(--text-tertiary)' }} />
+                    )}
                 </button>
-                {showActivities && (
-                    <div className="p-4 space-y-3">
-                        {activities.map((activity, idx) => (
-                            <div key={idx} className="p-3 rounded-lg" style={{ backgroundColor: 'var(--stone)' }}>
-                                <p className="font-semibold">{activity.title}</p>
-                                <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm mt-1" style={{ color: 'var(--text-tertiary)' }}>
-                                    <span>{new Date(activity.date).toLocaleDateString('is-IS', { day: 'numeric', month: 'long' })}</span>
-                                    <span>{activity.time}</span>
-                                    <span>{activity.location}</span>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
 
-            {/* January Birthdays - Highlighted */}
-            <div className="nordic-card overflow-hidden" style={{ borderColor: 'var(--amber)', borderWidth: '2px' }}>
-                <button onClick={() => setShowJanBirthdays(!showJanBirthdays)}
-                    className="w-full p-4 flex items-center justify-between text-left"
-                    style={{ backgroundColor: 'var(--amber)20' }}>
-                    <div className="flex items-center gap-2">
-                        <Cake size={20} style={{ color: 'var(--amber-dark)' }} />
-                        <span className="font-semibold" style={{ color: 'var(--amber-dark)' }}>
-                            Afmæli í janúar 🎉 ({januaryBirthdays.length})
-                        </span>
-                    </div>
-                    {showJanBirthdays ? <ChevronUp size={20} style={{ color: 'var(--amber-dark)' }} /> : <ChevronDown size={20} style={{ color: 'var(--amber-dark)' }} />}
-                </button>
-                {showJanBirthdays && (
-                    <div className="p-4 space-y-3">
-                        {januaryBirthdays.map((birthday, idx) => (
-                            <div key={idx} className="flex items-center justify-between p-3 rounded-lg" style={{ backgroundColor: 'var(--white)' }}>
-                                <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold"
-                                        style={{ backgroundColor: 'var(--amber)', color: 'white' }}>{birthday.name[0]}</div>
-                                    <div>
-                                        <p className="font-semibold">{birthday.name}</p>
-                                        <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>{birthday.date} - verður {birthday.age} ára</p>
+                {expandedSections.has('patrols') && (
+                    <div className="divide-y" style={{ borderColor: 'var(--border-light)' }}>
+                        {sortedPatrols.length > 0 ? (
+                            sortedPatrols.map((patrol) => (
+                                <div key={patrol.id} className="p-5 space-y-2">
+                                    <div className="flex items-start justify-between gap-3">
+                                        <div className="flex-1">
+                                            <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                                {patrol.title}
+                                            </h3>
+                                            <p className="text-sm mt-1" style={{ color: 'var(--text-tertiary)' }}>
+                                                {formatDate(patrol.date)}
+                                            </p>
+                                            {patrol.description && (
+                                                <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
+                                                    {patrol.description}
+                                                </p>
+                                            )}
+                                        </div>
+                                        <div className="text-right flex-shrink-0">
+                                            <div
+                                                className="text-xs px-2 py-1 rounded"
+                                                style={{
+                                                    backgroundColor: patrol.slotsFilled >= patrol.slotsTotal
+                                                        ? 'var(--green-success)20'
+                                                        : 'var(--amber)20',
+                                                    color: patrol.slotsFilled >= patrol.slotsTotal
+                                                        ? 'var(--green-success)'
+                                                        : 'var(--amber-dark)'
+                                                }}
+                                            >
+                                                {patrol.slotsFilled}/{patrol.slotsTotal}
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    {/* Volunteers */}
+                                    {patrol.volunteers && patrol.volunteers.length > 0 && (
+                                        <div className="flex flex-wrap gap-2 mt-3">
+                                            {patrol.volunteers.map((volunteer, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
+                                                    style={{ backgroundColor: 'var(--stone)' }}
+                                                >
+                                                    <div
+                                                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                                    >
+                                                        {volunteer.name[0]}
+                                                    </div>
+                                                    <span style={{ color: 'var(--text-primary)' }}>
+                                                        {volunteer.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
+                                    {/* Volunteer button if not full */}
+                                    {patrol.slotsFilled < patrol.slotsTotal && (
+                                        <button className="nordic-button mt-3 text-sm">
+                                            Bjóðast
+                                        </button>
+                                    )}
                                 </div>
-                                <PartyPopper size={20} style={{ color: 'var(--amber-dark)' }} />
+                            ))
+                        ) : (
+                            <div className="p-5 text-center" style={{ color: 'var(--text-secondary)' }}>
+                                Engin rölt áætluð
                             </div>
-                        ))}
+                        )}
                     </div>
                 )}
             </div>
 
-            {/* February Birthdays */}
+            {/* Events Section */}
             <div className="nordic-card overflow-hidden">
-                <button onClick={() => setShowFebBirthdays(!showFebBirthdays)}
-                    className="w-full p-4 flex items-center justify-between text-left" style={{ backgroundColor: 'var(--stone)' }}>
+                <button
+                    onClick={() => toggleSection('events')}
+                    className="w-full px-5 py-4 flex items-center justify-between hover:bg-opacity-50 transition-colors"
+                    style={{ backgroundColor: 'var(--stone)' }}
+                >
                     <div className="flex items-center gap-2">
-                        <Cake size={18} style={{ color: 'var(--text-secondary)' }} />
-                        <span className="font-medium">Afmæli í febrúar ({februaryBirthdays.length})</span>
+                        <Calendar size={20} style={{ color: 'var(--sage-green)' }} />
+                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                            Viðburðir ({events.length})
+                        </h2>
                     </div>
-                    {showFebBirthdays ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                    {expandedSections.has('events') ? (
+                        <ChevronUp size={20} style={{ color: 'var(--text-tertiary)' }} />
+                    ) : (
+                        <ChevronDown size={20} style={{ color: 'var(--text-tertiary)' }} />
+                    )}
                 </button>
-                {showFebBirthdays && (
-                    <div className="p-4 space-y-2">
-                        {februaryBirthdays.map((birthday, idx) => (
-                            <div key={idx} className="flex items-center gap-3 p-2">
-                                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                                    style={{ backgroundColor: 'var(--stone)', color: 'var(--text-primary)' }}>{birthday.name[0]}</div>
-                                <div><p className="font-medium text-sm">{birthday.name}</p>
-                                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{birthday.date}</p></div>
+
+                {expandedSections.has('events') && (
+                    <div className="divide-y" style={{ borderColor: 'var(--border-light)' }}>
+                        {sortedEvents.length > 0 ? (
+                            sortedEvents.map((event) => (
+                                <div key={event.id} className="p-5 space-y-2">
+                                    <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                        {event.title}
+                                    </h3>
+                                    <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                                        {formatDate(event.date)}
+                                    </p>
+                                    {event.description && (
+                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                            {event.description}
+                                        </p>
+                                    )}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="p-5 text-center" style={{ color: 'var(--text-secondary)' }}>
+                                Engir viðburðir áætlaðir
                             </div>
-                        ))}
+                        )}
                     </div>
                 )}
             </div>
 
-            {/* March Birthdays */}
-            <div className="nordic-card overflow-hidden">
-                <button onClick={() => setShowMarBirthdays(!showMarBirthdays)}
-                    className="w-full p-4 flex items-center justify-between text-left" style={{ backgroundColor: 'var(--stone)' }}>
-                    <div className="flex items-center gap-2">
-                        <Cake size={18} style={{ color: 'var(--text-secondary)' }} />
-                        <span className="font-medium">Afmæli í mars ({marchBirthdays.length})</span>
-                    </div>
-                    {showMarBirthdays ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </button>
-                {showMarBirthdays && (
-                    <div className="p-4 space-y-2">
-                        {marchBirthdays.map((birthday, idx) => (
-                            <div key={idx} className="flex items-center gap-3 p-2">
-                                <div className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                                    style={{ backgroundColor: 'var(--stone)', color: 'var(--text-primary)' }}>{birthday.name[0]}</div>
-                                <div><p className="font-medium text-sm">{birthday.name}</p>
-                                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>{birthday.date}</p></div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-
-            {/* Foreldrarölt */}
-            <div className="nordic-card overflow-hidden">
-                <button onClick={() => setShowPatrols(!showPatrols)}
-                    className="w-full p-4 flex items-center justify-between text-left" style={{ backgroundColor: 'var(--stone)' }}>
-                    <div className="flex items-center gap-2">
-                        <UsersIcon size={20} style={{ color: 'var(--text-secondary)' }} />
-                        <span className="font-semibold">Foreldrarölt ({upcomingPatrols.length})</span>
-                    </div>
-                    {showPatrols ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                </button>
-                {showPatrols && (
-                    <div className="p-4 space-y-3">
-                        {upcomingPatrols.map((patrol, idx) => (
-                            <div key={idx} className="p-3 rounded-lg space-y-2" style={{ backgroundColor: 'var(--paper)' }}>
-                                <p className="font-medium">{new Date(patrol.date).toLocaleDateString('is-IS', { weekday: 'long', day: 'numeric', month: 'long' })}</p>
-                                <div className="flex items-start gap-4 text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                    <div className="flex items-center gap-1.5"><Clock size={14} /><span>{patrol.time}</span></div>
-                                    <div className="flex items-center gap-1.5"><MapPin size={14} /><span>{patrol.location}</span></div>
-                                </div>
-                                {patrol.volunteers.length > 0 && (
-                                    <div className="flex flex-wrap gap-2">
-                                        {patrol.volunteers.map((vol, vIdx) => (
-                                            <span key={vIdx} className="text-xs px-2 py-1 rounded-full"
-                                                style={{ backgroundColor: vol === 'Þú' ? 'var(--sage-green)' : 'var(--stone)', color: vol === 'Þú' ? 'white' : 'var(--text-primary)' }}>{vol}</span>
-                                        ))}
-                                    </div>
-                                )}
-                                <div className="flex items-center justify-between pt-2">
-                                    <span className="text-sm" style={{ color: 'var(--text-secondary)' }}>{patrol.filled}/{patrol.slots} foreldrar</span>
-                                    {patrol.filled < patrol.slots && <button className="nordic-button text-sm px-6">Taka vaktina</button>}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
+            {/* Empty state */}
+            {patrols.length === 0 && events.length === 0 && (
+                <div className="text-center py-12">
+                    <Calendar size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
+                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
+                        Ekkert í dagatalinu enn
+                    </h3>
+                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+                        Bekkjarformaður mun bæta við viðburðum
+                    </p>
+                </div>
+            )}
         </div>
     );
 }

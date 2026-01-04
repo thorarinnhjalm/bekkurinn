@@ -1,223 +1,181 @@
-import { Pin, Calendar, User, Heart, MessageCircle } from 'lucide-react';
+'use client';
+
+import { Heart, Pin, Loader2, MessageSquare } from 'lucide-react';
+import { useAnnouncements } from '@/hooks/useFirestore';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useRouter } from 'next/navigation';
 
 /**
- * Announcements Page - "Auglýsingataflan" (The Fridge)
+ * Announcements Page - Auglýsingataflan
  * 
- * Features:
- * - Pinned important announcements
- * - Chronological feed
- * - Admin-only posting
- * - Clean, scannable design
+ * Announcement feed with pinning and likes
+ * Now connected to real Firestore data!
  */
 
-export default function AnnouncementsPage() {
-    // Mock data with richer content
-    const mockAnnouncements = [
-        {
-            id: 1,
-            title: 'Foreldrafundur - 15. janúar',
-            content: 'Næsti foreldrafundur er þriðjudaginn 15. janúar kl. 19:00 í matsalnum.\n\nDagskrá:\n• Skíðaferð til Bláfjalla\n• Foreldrarölt - niðurstöður haustannar\n• Gjafasöfnun fyrir kennara\n• Vetrarfrí og næstu viðburðir\n\nKaffiveitingar í boði!',
-            date: '2026-01-01',
-            pinned: true,
-            author: 'Guðrún Magnúsdóttir',
-            role: 'Formaður',
-            likes: 12,
-        },
-        {
-            id: 2,
-            title: '⛷️ Skíðaferð 21.-23. febrúar',
-            content: 'Árlega skíðaferð bekkjarins verður haldin 21.-23. febrúar í Bláfjöll!\n\nVerð: 15.000 kr. á barn (innifalið: gisting, matur, skíðagögn)\n\nSkráning fyrir 1. febrúar á linknum hér að neðan. Hámark 20 börn.\n\nKontakt: Birna (699-1234)',
-            date: '2026-01-01',
-            pinned: false,
-            author: 'Birna Sigurðardóttir',
-            role: 'Viðburðastjóri',
-            likes: 18,
-        },
-        {
-            id: 3,
-            title: 'Íþróttadagur 8. febrúar',
-            content: 'Bekkurinn okkar mun taka þátt í íþróttadegi skólans laugardaginn 8. febrúar.\n\nVið þurfum 4 foreldra til að hjálpa til með:\n• Tímatöku (2)\n• Skráningu (1)\n• Ljósmyndun (1)\n\nVinsamlegast skráið ykkur í Tasks síðunni.',
-            date: '2025-12-28',
-            pinned: false,
-            author: 'Magnús Gunnarsson',
-            role: null,
-            likes: 8,
-        },
-        {
-            id: 4,
-            title: 'Bókaþjófurinn 🎄',
-            content: 'Gleymdu ekki að senda barnið með bók í dag fyrir bókaþjófinn!\n\nFyrirmæli frá kennaranum:\n• Verð 500-1000 kr\n• Ekki setja nafn á bókina\n• Aldurshópur 9-10 ára\n\nBækurnar verða gefnar út á jólahátíðinni!',
-            date: '2025-12-23',
-            pinned: false,
-            author: 'Anna Jónsdóttir',
-            role: null,
-            likes: 15,
-        },
-        {
-            id: 5,
-            title: 'Takk fyrir frábæra jólahátíð!',
-            content: 'Hjartanlegar þakkir til allra sem komu og tóku þátt í jólahátíð bekkjarins! 🎅\n\nSérstakar þakkir til:\n• Katrín og Sigrún fyrir kökurnar\n• Dagur fyrir músíkina\n• Þóra fyrir skreytingarnar\n• Allir foreldrar sem mættu og studdu\n\nBörnin voru mjög ánægð!',
-            date: '2025-12-21',
-            pinned: false,
-            author: 'Guðrún Magnúsdóttir',
-            role: 'Formaður',
-            likes: 24,
-        },
-        {
-            id: 6,
-            title: 'Ljósmyndir frá haustdögum',
-            content: 'Ljósmyndirnar frá haustdögunum eru komnar!\n\nÞið getið skoðað þær á Google Drive: [hlekkur]\n\nAthugið: Einungis foreldrar með aðgang að bekknum sjá myndirnar.',
-            date: '2025-12-15',
-            pinned: false,
-            author: 'Lilja Sigurðardóttir',
-            role: null,
-            likes: 19,
-        },
-    ];
+// TODO: Get this from user's class membership
+const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
 
-    const pinnedAnnouncements = mockAnnouncements.filter(a => a.pinned);
-    const regularAnnouncements = mockAnnouncements.filter(a => !a.pinned);
+export default function AnnouncementsPage() {
+    const { user, loading: authLoading } = useAuth();
+    const router = useRouter();
+    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(CLASS_ID);
+
+    // Redirect to login if not authenticated
+    if (!authLoading && !user) {
+        router.push('/is/login');
+        return null;
+    }
+
+    // Format timestamp for display
+    const formatDate = (timestamp: any) => {
+        if (!timestamp?.toDate) return '';
+        const date = timestamp.toDate();
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+        const diffDays = Math.floor(diffHours / 24);
+
+        if (diffHours < 1) return 'Rétt í þessu';
+        if (diffHours < 24) return `${diffHours} klukkustundum síðan`;
+        if (diffDays === 1) return 'Í gær';
+        if (diffDays < 7) return `${diffDays} dögum síðan`;
+
+        return new Intl.DateTimeFormat('is-IS', {
+            day: 'numeric',
+            month: 'long',
+            year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        }).format(date);
+    };
+
+    // Loading state
+    if (authLoading || announcementsLoading) {
+        return (
+            <div className="min-h-screen flex items-center justify-center pt-24">
+                <div className="flex flex-col items-center gap-3">
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <p style={{ color: 'var(--text-secondary)' }}>Hleður tilkynningum...</p>
+                </div>
+            </div>
+        );
+    }
+
+    const announcements = announcementsData || [];
+
+    // Sort: pinned first, then by date
+    const sortedAnnouncements = [...announcements].sort((a, b) => {
+        if (a.pinned && !b.pinned) return -1;
+        if (!a.pinned && b.pinned) return 1;
+        // Both pinned or both not pinned - sort by date (newest first)
+        const aTime = a.createdAt?.toDate?.()?.getTime() || 0;
+        const bTime = b.createdAt?.toDate?.()?.getTime() || 0;
+        return bTime - aTime;
+    });
+
+    const pinnedCount = announcements.filter(a => a.pinned).length;
 
     return (
         <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
             {/* Header */}
-            <header className="space-y-2">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
-                    Auglýsingataflan
-                </h1>
+            <header className="space-y-3">
+                <div className="flex items-center justify-between">
+                    <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                        Auglýsingataflan
+                    </h1>
+                    {pinnedCount > 0 && (
+                        <div
+                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
+                            style={{ backgroundColor: 'var(--amber)20', color: 'var(--amber-dark)' }}
+                        >
+                            <Pin size={14} />
+                            <span>{pinnedCount} fest</span>
+                        </div>
+                    )}
+                </div>
                 <p style={{ color: 'var(--text-secondary)' }}>
-                    Fréttir og tilkynningar frá stjórn
+                    Tilkynningar frá bekkjarformönnum
                 </p>
             </header>
 
-            {/* Pinned Announcements */}
-            {pinnedAnnouncements.length > 0 && (
-                <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                        <Pin size={16} style={{ color: 'var(--amber)' }} />
-                        <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
-                            Fest efst
-                        </h2>
-                    </div>
+            {/* Announcements Feed */}
+            <div className="space-y-4">
+                {sortedAnnouncements.map((announcement) => (
+                    <div
+                        key={announcement.id}
+                        className="nordic-card p-5 space-y-3"
+                        style={{
+                            borderColor: announcement.pinned ? 'var(--amber)' : 'var(--border-light)',
+                            borderWidth: announcement.pinned ? '2px' : '1px',
+                        }}
+                    >
+                        {/* Header */}
+                        <div className="flex items-start justify-between gap-3">
+                            <div className="flex items-start gap-3 flex-1 min-w-0">
+                                {/* Author Avatar */}
+                                <div
+                                    className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold"
+                                    style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                >
+                                    {(announcement.author || 'B')[0]}
+                                </div>
 
-                    {pinnedAnnouncements.map((announcement) => (
-                        <div
-                            key={announcement.id}
-                            className="nordic-card p-5 space-y-3 border-2"
-                            style={{ borderColor: 'var(--amber)' }}
-                        >
-                            <div className="flex items-start justify-between gap-3">
-                                <div className="flex-1">
-                                    <h3 className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
-                                        {announcement.title}
-                                    </h3>
-                                    <p className="text-sm mt-2 whitespace-pre-line" style={{ color: 'var(--text-secondary)' }}>
-                                        {announcement.content}
+                                <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className="font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
+                                            {announcement.author || 'Bekkjarformaður'}
+                                        </h3>
+                                        {announcement.pinned && (
+                                            <div
+                                                className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium"
+                                                style={{ backgroundColor: 'var(--amber)', color: 'white' }}
+                                            >
+                                                <Pin size={12} />
+                                                <span>Fest</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+                                        {formatDate(announcement.createdAt)}
                                     </p>
-                                </div>
-                                <Pin size={20} style={{ color: 'var(--amber)' }} className="flex-shrink-0" />
-                            </div>
-
-                            <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: 'var(--border-light)' }}>
-                                <div className="flex items-center gap-3">
-                                    <div className="flex items-center gap-2">
-                                        <div
-                                            className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold"
-                                            style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
-                                        >
-                                            {announcement.author[0]}
-                                        </div>
-                                        <div>
-                                            <p className="text-xs font-medium">{announcement.author}</p>
-                                            {announcement.role && (
-                                                <p className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>
-                                                    {announcement.role}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                        <Calendar size={12} />
-                                        {new Date(announcement.date).toLocaleDateString('is-IS', {
-                                            day: 'numeric',
-                                            month: 'short',
-                                        })}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                    <Heart size={14} />
-                                    <span>{announcement.likes}</span>
                                 </div>
                             </div>
                         </div>
-                    ))}
-                </div>
-            )}
 
-            {/* Regular Announcements */}
-            <div className="space-y-3">
-                {regularAnnouncements.length > 0 && (
-                    <h2 className="text-sm font-semibold uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
-                        Allar tilkynningar
-                    </h2>
-                )}
-
-                {regularAnnouncements.map((announcement) => (
-                    <div key={announcement.id} className="nordic-card p-5 space-y-3">
-                        <div>
-                            <h3 className="font-semibold text-lg" style={{ color: 'var(--text-primary)' }}>
+                        {/* Title & Content */}
+                        <div className="space-y-2">
+                            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                                 {announcement.title}
-                            </h3>
-                            <p className="text-sm mt-2 whitespace-pre-line" style={{ color: 'var(--text-secondary)' }}>
+                            </h2>
+                            <p className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>
                                 {announcement.content}
                             </p>
                         </div>
 
-                        <div className="flex items-center justify-between pt-2 border-t" style={{ borderColor: 'var(--border-light)' }}>
-                            <div className="flex items-center gap-3">
-                                <div className="flex items-center gap-2">
-                                    <div
-                                        className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-semibold"
-                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
-                                    >
-                                        {announcement.author[0]}
-                                    </div>
-                                    <div>
-                                        <p className="text-xs font-medium">{announcement.author}</p>
-                                        {announcement.role && (
-                                            <p className="text-[10px]" style={{ color: 'var(--text-tertiary)' }}>
-                                                {announcement.role}
-                                            </p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                    <Calendar size={12} />
-                                    {new Date(announcement.date).toLocaleDateString('is-IS', {
-                                        day: 'numeric',
-                                        month: 'short',
-                                    })}
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-1 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                <Heart size={14} />
-                                <span>{announcement.likes}</span>
-                            </div>
+                        {/* Footer Actions */}
+                        <div className="flex items-center gap-4 pt-2 border-t" style={{ borderColor: 'var(--border-light)' }}>
+                            <button
+                                className="flex items-center gap-2 text-sm transition-colors hover:opacity-70"
+                                style={{ color: 'var(--text-tertiary)' }}
+                            >
+                                <Heart size={16} />
+                                <span>Líkar vel</span>
+                            </button>
                         </div>
                     </div>
                 ))}
             </div>
 
-            {/* Admin Action (Hidden for non-admins) */}
-            <div className="nordic-card p-4 text-center" style={{ borderStyle: 'dashed', borderColor: 'var(--border-medium)' }}>
-                <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                    Aðeins stjórn getur búið til auglýsingar
-                </p>
-            </div>
+            {/* Empty state */}
+            {announcements.length === 0 && (
+                <div className="text-center py-12">
+                    <MessageSquare size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
+                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
+                        Engar tilkynningar enn
+                    </h3>
+                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
+                        Bekkjarformaður mun birta tilkynningar hér
+                    </p>
+                </div>
+            )}
         </div>
     );
 }
