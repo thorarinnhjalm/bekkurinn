@@ -204,12 +204,20 @@ export async function getTask(taskId: string): Promise<Task | null> {
 export async function getTasksByClass(classId: string): Promise<Task[]> {
     const q = query(
         collection(db, 'tasks'),
-        where('classId', '==', classId),
-        orderBy('date', 'desc')
+        where('classId', '==', classId)
+        // Removed orderBy to avoid index requirement - we'll sort client-side
     );
     const snapshot = await getDocs(q);
-    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Task));
+    const tasks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Task));
+
+    // Sort by date in memory (descending - newest first)
+    return tasks.sort((a, b) => {
+        const aTime = a.date?.seconds || 0;
+        const bTime = b.date?.seconds || 0;
+        return bTime - aTime;
+    });
 }
+
 
 export async function claimTaskSlot(taskId: string, userId: string, userName: string): Promise<void> {
     const task = await getTask(taskId);
