@@ -21,7 +21,16 @@ const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
 export default function DirectoryPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const { data: studentsData, isLoading: studentsLoading } = useStudents(CLASS_ID);
+
+    console.log('🔍 DirectoryPage - CLASS_ID:', CLASS_ID);
+    console.log('🔍 DirectoryPage - user:', user?.uid);
+    console.log('🔍 DirectoryPage - authLoading:', authLoading);
+
+    const { data: studentsData, isLoading: studentsLoading, error } = useStudents(CLASS_ID);
+
+    console.log('🔍 DirectoryPage - studentsData:', studentsData);
+    console.log('🔍 DirectoryPage - studentsLoading:', studentsLoading);
+    console.log('🔍 DirectoryPage - error:', error);
 
     const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.16",
+    "@tanstack/react-query-devtools": "^5.91.2",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
