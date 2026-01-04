@@ -1,0 +1,74 @@
+{
+  "common": {
+    "app_name": "Bekkurinn",
+    "loading": "Hleð...",
+    "error": "Villa kom upp",
+    "save": "Vista",
+    "cancel": "Hætta við",
+    "delete": "Eyða",
+    "edit": "Breyta",
+    "confirm": "Staðfesta",
+    "close": "Loka"
+  },
+  "auth": {
+    "sign_in": "Skrá inn",
+    "sign_out": "Skrá út",
+    "sign_in_with_google": "Skrá inn með Google",
+    "sign_in_with_email": "Skrá inn með tölvupósti",
+    "email": "Netfang",
+    "send_magic_link": "Senda tengil",
+    "magic_link_sent": "Við höfum sent þér innskráningartengil á {email}",
+    "check_email": "Athugaðu tölvupóstinn þinn"
+  },
+  "onboarding": {
+    "welcome_title": "Velkomin í Bekkurinn",
+    "welcome_subtitle": "Skipulagt kerfi fyrir foreldrafélag bekkjarins",
+    "enter_join_code": "Sláðu inn aðgangskóða bekkjarins",
+    "join_code_placeholder": "t.d. SALA-4B",
+    "create_class": "Stofna nýjan bekk",
+    "join_class": "Taka þátt í bekk"
+  },
+  "class": {
+    "directory": "Skrá",
+    "patrol": "Dagatal",
+    "tasks": "Skipulag",
+    "announcements": "Auglýsingataflan",
+    "my_children": "Börnin mín",
+    "parents": "Foreldrar",
+    "students": "Nemendur",
+    "search_placeholder": "Leita að nemanda eða foreldri...",
+    "directory_subtitle": "Sameiginleg skrá yfir nemendur og foreldra"
+  },
+  "patrol": {
+    "title": "Foreldrarölt",
+    "claim_slot": "Taka vaktina",
+    "unclaim_slot": "Hætta við",
+    "slots_filled": "{filled} af {total} vöktum skipaðar",
+    "progress_goal": "Markmið bekkjarins: {filled}/{total}",
+    "your_shifts": "Þínar vaktir"
+  },
+  "privacy": {
+    "phone_visible": "Símanúmer sýnilegt öllum",
+    "phone_hidden": "Símanúmer aðeins sýnilegt stjórn",
+    "photo_permission_denied": "Foreldri hefur óskað eftir að barn sé ekki í ljósmyndum",
+    "confidentiality_oath": "Ég samþykki að fara með öll gögn með ströngustu trúnaði",
+    "agree_to_pact": "Samþykkja félagssáttmála"
+  },
+  "dietary": {
+    "peanut": "Jarðhnetur",
+    "gluten": "Glúten",
+    "pork": "Svínakjöt",
+    "vegan": "Vegan",
+    "dairy": "Mjólk",
+    "none": "Engar sérþarfir"
+  },
+  "admin": {
+    "create_announcement": "Búa til auglýsingu",
+    "create_patrol": "Búa til rölt",
+    "create_event": "Búa til viðburð",
+    "export_teacher_list": "Útbúa lista fyrir kennara",
+    "pending_approvals": "Bíða samþykkis",
+    "approve": "Samþykkja",
+    "reject": "Hafna"
+  }
+}

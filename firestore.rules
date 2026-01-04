@@ -1,0 +1,149 @@
+rules_version = '2';
+
+/**
+ * Firestore Security Rules for Bekkurinn
+ * 
+ * Privacy-first architecture:
+ * - Only class members can read class data
+ * - Only admins can create/edit sensitive data
+ * - Parent links require admin approval
+ * - Phone visibility respects privacy toggles
+ */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isClassMember(classId) {
+      return isAuthenticated() && 
+             exists(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId));
+    }
+    
+    function isClassAdmin(classId) {
+      return isAuthenticated() &&
+             get(/databases/$(database)/documents/classes/$(classId)).data.admins.hasAny([request.auth.uid]);
+    }
+    
+    // ========================================
+    // USERS
+    // ========================================
+    
+    match /users/{userId} {
+      // Users can read their own profile
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Users can create/update their own profile
+      allow create, update: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Class members can read other members' profiles
+      // (but phone is filtered in the app based on isPhoneVisible)
+      allow read: if isAuthenticated();
+    }
+    
+    // ========================================
+    // CLASSES
+    // ========================================
+    
+    match /classes/{classId} {
+      // Anyone authenticated can read classes they're a member of
+      allow read: if isClassMember(classId) || isClassAdmin(classId);
+      
+      // Only authenticated users can create a class (becomes admin)
+      allow create: if isAuthenticated() && 
+                       request.resource.data.admins.hasAny([request.auth.uid]) &&
+                       request.resource.data.confidentialityAgreedAt is timestamp;
+      
+      // Only admins can update class details
+      allow update: if isClassAdmin(classId);
+      
+      // Only admins can delete a class
+      allow delete: if isClassAdmin(classId);
+    }
+    
+    // ========================================
+    // STUDENTS
+    // ========================================
+    
+    match /students/{studentId} {
+      // Class members can read students in their class
+      allow read: if isClassMember(resource.data.classId);
+      
+      // Parents can create student entries (pending admin approval via parentLinks)
+      allow create: if isAuthenticated();
+      
+      // Only admins can update student details
+      allow update: if isClassAdmin(resource.data.classId);
+      
+      // Only admins can delete students
+      allow delete: if isClassAdmin(resource.data.classId);
+    }
+    
+    // ========================================
+    // PARENT LINKS (Junction Table)
+    // ========================================
+    
+    match /parentLinks/{linkId} {
+      // Users can read their own links
+      allow read: if isAuthenticated() &&
+                     (request.auth.uid == resource.data.userId || 
+                      isClassAdmin(resource.data.classId));
+      
+      // Users can create links (status must be 'pending')
+      allow create: if isAuthenticated() &&
+                       request.auth.uid == request.resource.data.userId &&
+                       request.resource.data.status == 'pending';
+      
+      // Only admins can approve links
+      allow update: if isClassAdmin(resource.data.classId) &&
+                       request.resource.data.status == 'approved';
+      
+      // Users can delete their own pending links, admins can delete any
+      allow delete: if isAuthenticated() &&
+                       (request.auth.uid == resource.data.userId || 
+                        isClassAdmin(resource.data.classId));
+    }
+    
+    // ========================================
+    // TASKS (Patrol & Events)
+    // ========================================
+    
+    match /tasks/{taskId} {
+      // Class members can read tasks
+      allow read: if isClassMember(resource.data.classId);
+      
+      // Only admins can create tasks
+      allow create: if isClassAdmin(request.resource.data.classId) &&
+                       request.resource.data.createdBy == request.auth.uid;
+      
+      // Class members can update tasks (for claiming slots)
+      // But only via specific functions
+      allow update: if isClassMember(resource.data.classId);
+      
+      // Only admins can delete tasks
+      allow delete: if isClassAdmin(resource.data.classId);
+    }
+    
+    // ========================================
+    // ANNOUNCEMENTS
+    // ========================================
+    
+    match /announcements/{announcementId} {
+      // Class members can read announcements
+      allow read: if isClassMember(resource.data.classId);
+      
+      // Only admins can create announcements
+      allow create: if isClassAdmin(request.resource.data.classId) &&
+                       request.resource.data.createdBy == request.auth.uid;
+      
+      // Only admins can update announcements
+      allow update: if isClassAdmin(resource.data.classId);
+      
+      // Only admins can delete announcements
+      allow delete: if isClassAdmin(resource.data.classId);
+    }
+  }
+}

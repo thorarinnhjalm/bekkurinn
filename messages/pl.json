@@ -1,0 +1,72 @@
+{
+    "common": {
+        "app_name": "Bekkurinn",
+        "loading": "Ładowanie...",
+        "error": "Wystąpił błąd",
+        "save": "Zapisz",
+        "cancel": "Anuluj",
+        "delete": "Usuń",
+        "edit": "Edytuj",
+        "confirm": "Potwierdź",
+        "close": "Zamknij"
+    },
+    "auth": {
+        "sign_in": "Zaloguj się",
+        "sign_out": "Wyloguj",
+        "sign_in_with_google": "Zaloguj się przez Google",
+        "sign_in_with_email": "Zaloguj się przez e-mail",
+        "email": "E-mail",
+        "send_magic_link": "Wyślij link",
+        "magic_link_sent": "Wysłaliśmy link logowania na {email}",
+        "check_email": "Sprawdź swoją pocztę"
+    },
+    "onboarding": {
+        "welcome_title": "Witamy w Bekkurinn",
+        "welcome_subtitle": "Zorganizowany system dla przedstawiciela klasy",
+        "enter_join_code": "Wprowadź kod dostępu do klasy",
+        "join_code_placeholder": "np. SALA-4B",
+        "create_class": "Utwórz nową klasę",
+        "join_class": "Dołącz do klasy"
+    },
+    "class": {
+        "directory": "Katalog",
+        "patrol": "Patrol",
+        "tasks": "Zadania",
+        "announcements": "Ogłoszenia",
+        "my_children": "Moje dzieci",
+        "parents": "Rodzice",
+        "students": "Uczniowie"
+    },
+    "patrol": {
+        "title": "Patrol Osiedlowy",
+        "claim_slot": "Weź zmianę",
+        "unclaim_slot": "Anuluj",
+        "slots_filled": "{filled} z {total} zmian zajętych",
+        "progress_goal": "Cel klasy: {filled}/{total}",
+        "your_shifts": "Twoje zmiany"
+    },
+    "privacy": {
+        "phone_visible": "Telefon widoczny dla wszystkich",
+        "phone_hidden": "Telefon widoczny tylko dla administratorów",
+        "photo_permission_denied": "Rodzic poprosił, aby dziecko nie pojawiało się na zdjęciach",
+        "confidentiality_oath": "Zobowiązuję się traktować wszystkie dane ściśle poufnie",
+        "agree_to_pact": "Zgadzam się z umową społeczną"
+    },
+    "dietary": {
+        "peanut": "Orzeszki ziemne",
+        "gluten": "Gluten",
+        "pork": "Wieprzowina",
+        "vegan": "Vegan",
+        "dairy": "Nabiał",
+        "none": "Brak ograniczeń"
+    },
+    "admin": {
+        "create_announcement": "Utwórz ogłoszenie",
+        "create_patrol": "Utwórz patrol",
+        "create_event": "Utwórz wydarzenie",
+        "export_teacher_list": "Eksportuj listę dla nauczyciela",
+        "pending_approvals": "Oczekujące na zatwierdzenie",
+        "approve": "Zatwierdź",
+        "reject": "Odrzuć"
+    }
+}

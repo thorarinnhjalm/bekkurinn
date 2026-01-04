@@ -1,0 +1,74 @@
+{
+    "common": {
+        "app_name": "Bekkurinn",
+        "loading": "Cargando...",
+        "error": "Ocurrió un error",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "confirm": "Confirmar",
+        "close": "Cerrar"
+    },
+    "auth": {
+        "sign_in": "Iniciar sesión",
+        "sign_out": "Cerrar sesión",
+        "sign_in_with_google": "Iniciar sesión con Google",
+        "sign_in_with_email": "Iniciar sesión con correo electrónico",
+        "email": "Correo electrónico",
+        "send_magic_link": "Enviar enlace",
+        "magic_link_sent": "Te enviamos un enlace de inicio de sesión a {email}",
+        "check_email": "Revisa tu correo electrónico"
+    },
+    "onboarding": {
+        "welcome_title": "Bienvenido a Bekkurinn",
+        "welcome_subtitle": "Sistema organizado para representantes de clase",
+        "enter_join_code": "Ingresa el código de acceso de tu clase",
+        "join_code_placeholder": "ej. SALA-4B",
+        "create_class": "Crear nueva clase",
+        "join_class": "Unirse a clase"
+    },
+    "class": {
+        "directory": "Directorio",
+        "patrol": "Patrulla",
+        "tasks": "Tareas",
+        "announcements": "Anuncios",
+        "my_children": "Mis hijos",
+        "parents": "Padres",
+        "students": "Estudiantes",
+        "search_placeholder": "Buscar estudiante o padre...",
+        "directory_subtitle": "Directorio compartido de estudiantes y padres"
+    },
+    "patrol": {
+        "title": "Patrulla del vecindario",
+        "claim_slot": "Tomar turno",
+        "unclaim_slot": "Cancelar",
+        "slots_filled": "{filled} de {total} turnos ocupados",
+        "progress_goal": "Meta de la clase: {filled}/{total}",
+        "your_shifts": "Tus turnos"
+    },
+    "privacy": {
+        "phone_visible": "Teléfono visible para todos",
+        "phone_hidden": "Teléfono visible solo para administradores",
+        "photo_permission_denied": "Los padres solicitaron que el niño no aparezca en fotos",
+        "confidentiality_oath": "Acepto tratar todos los datos con estricta confidencialidad",
+        "agree_to_pact": "Aceptar contrato social"
+    },
+    "dietary": {
+        "peanut": "Cacahuetes",
+        "gluten": "Gluten",
+        "pork": "Cerdo",
+        "vegan": "Vegano",
+        "dairy": "Lácteos",
+        "none": "Sin restricciones"
+    },
+    "admin": {
+        "create_announcement": "Crear anuncio",
+        "create_patrol": "Crear patrulla",
+        "create_event": "Crear evento",
+        "export_teacher_list": "Exportar lista para el profesor",
+        "pending_approvals": "Aprobaciones pendientes",
+        "approve": "Aprobar",
+        "reject": "Rechazar"
+    }
+}

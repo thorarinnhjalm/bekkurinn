@@ -1,0 +1,72 @@
+{
+    "common": {
+        "app_name": "Bekkurinn",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "save": "Save",
+        "cancel": "Cancel",
+        "delete": "Delete",
+        "edit": "Edit",
+        "confirm": "Confirm",
+        "close": "Close"
+    },
+    "auth": {
+        "sign_in": "Sign In",
+        "sign_out": "Sign Out",
+        "sign_in_with_google": "Sign in with Google",
+        "sign_in_with_email": "Sign in with email",
+        "email": "Email",
+        "send_magic_link": "Send Link",
+        "magic_link_sent": "We sent you a login link to {email}",
+        "check_email": "Check your email"
+    },
+    "onboarding": {
+        "welcome_title": "Welcome to Bekkurinn",
+        "welcome_subtitle": "Organized system for your class representative",
+        "enter_join_code": "Enter your class join code",
+        "join_code_placeholder": "e.g. SALA-4B",
+        "create_class": "Create New Class",
+        "join_class": "Join Class"
+    },
+    "class": {
+        "directory": "Directory",
+        "patrol": "Patrol",
+        "tasks": "Tasks",
+        "announcements": "Announcements",
+        "my_children": "My Children",
+        "parents": "Parents",
+        "students": "Students"
+    },
+    "patrol": {
+        "title": "Neighborhood Patrol",
+        "claim_slot": "Claim Shift",
+        "unclaim_slot": "Cancel",
+        "slots_filled": "{filled} of {total} shifts filled",
+        "progress_goal": "Class Goal: {filled}/{total}",
+        "your_shifts": "Your Shifts"
+    },
+    "privacy": {
+        "phone_visible": "Phone visible to all",
+        "phone_hidden": "Phone visible to admins only",
+        "photo_permission_denied": "Parent requested child not be in photos",
+        "confidentiality_oath": "I agree to treat all data with strict confidentiality",
+        "agree_to_pact": "Agree to Social Contract"
+    },
+    "dietary": {
+        "peanut": "Peanuts",
+        "gluten": "Gluten",
+        "pork": "Pork",
+        "vegan": "Vegan",
+        "dairy": "Dairy",
+        "none": "No restrictions"
+    },
+    "admin": {
+        "create_announcement": "Create Announcement",
+        "create_patrol": "Create Patrol",
+        "create_event": "Create Event",
+        "export_teacher_list": "Export Teacher List",
+        "pending_approvals": "Pending Approvals",
+        "approve": "Approve",
+        "reject": "Reject"
+    }
+}
