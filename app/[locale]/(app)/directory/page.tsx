@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Phone, Mail, Star, ChevronUp, Users, Loader2 } from 'lucide-react';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents } from '@/hooks/useFirestore';
@@ -28,10 +28,11 @@ export default function DirectoryPage() {
     const [starredStudents, setStarredStudents] = useState<Set<string>>(new Set());
 
     // Redirect to login if not authenticated
-    if (!authLoading && !user) {
-        router.push('/is/login');
-        return null;
-    }
+    useEffect(() => {
+        if (!authLoading && !user) {
+            router.push('/is/login');
+        }
+    }, [authLoading, user, router]);
 
     const toggleStar = (studentId: string) => {
         const newStarred = new Set(starredStudents);
