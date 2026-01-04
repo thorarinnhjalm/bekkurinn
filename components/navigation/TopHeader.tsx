@@ -1,8 +1,10 @@
 'use client';
 
-import { Bell, Settings, Star } from 'lucide-react';
+import { Bell, Settings, LogOut, User as UserIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useState } from 'react';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -11,7 +13,14 @@ import Link from 'next/link';
  */
 
 export function TopHeader() {
+    const { user, signOut } = useAuth();
+    const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const unreadNotifications = 3; // Mock data
+
+    const handleSignOut = async () => {
+        await signOut();
+        setShowSettingsMenu(false);
+    };
 
     return (
         <header
@@ -60,15 +69,65 @@ export function TopHeader() {
                         )}
                     </button>
 
-                    {/* Settings */}
-                    <button
-                        className="tap-target p-2 rounded-lg"
-                        style={{
-                            backgroundColor: 'var(--stone)',
-                        }}
-                    >
-                        <Settings size={20} style={{ color: 'var(--text-primary)' }} />
-                    </button>
+                    {/* User / Settings */}
+                    {user ? (
+                        <div className="relative">
+                            <button
+                                onClick={() => setShowSettingsMenu(!showSettingsMenu)}
+                                className="tap-target p-1 rounded-lg"
+                                style={{
+                                    backgroundColor: 'var(--stone)',
+                                }}
+                            >
+                                {user.photoURL ? (
+                                    <Image
+                                        src={user.photoURL}
+                                        alt={user.displayName || 'User'}
+                                        width={32}
+                                        height={32}
+                                        className="rounded-full"
+                                    />
+                                ) : (
+                                    <div
+                                        className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
+                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                    >
+                                        {(user.displayName || user.email || 'U')[0].toUpperCase()}
+                                    </div>
+                                )}
+                            </button>
+
+                            {/* Settings Dropdown */}
+                            {showSettingsMenu && (
+                                <div
+                                    className="absolute right-0 mt-2 w-48 nordic-card py-2 shadow-lg"
+                                    onMouseLeave={() => setShowSettingsMenu(false)}
+                                >
+                                    <div className="px-4 py-2 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                                        <p className="font-medium text-sm truncate">{user.displayName || user.email}</p>
+                                        <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{user.email}</p>
+                                    </div>
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
+                                        style={{ color: 'var(--text-primary)' }}
+                                    >
+                                        <LogOut size={16} />
+                                        <span>Útskráning</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ) : (
+                        <button
+                            className="tap-target p-2 rounded-lg"
+                            style={{
+                                backgroundColor: 'var(--stone)',
+                            }}
+                        >
+                            <Settings size={20} style={{ color: 'var(--text-primary)' }} />
+                        </button>
+                    )}
                 </div>
             </div>
         </header>

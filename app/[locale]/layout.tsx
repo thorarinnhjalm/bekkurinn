@@ -3,10 +3,12 @@ import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n';
+import { QueryProvider } from '@/components/providers/QueryProvider';
+import { AuthProvider } from '@/components/providers/AuthProvider';
 
 /**
  * Locale Layout
- * Provides messages for the specific locale
+ * Provides messages, React Query, and Authentication for the specific locale
  */
 
 export function generateStaticParams() {
@@ -31,7 +33,11 @@ export default async function LocaleLayout({
 
     return (
         <NextIntlClientProvider messages={messages}>
-            {children}
+            <QueryProvider>
+                <AuthProvider>
+                    {children}
+                </AuthProvider>
+            </QueryProvider>
         </NextIntlClientProvider>
     );
 }

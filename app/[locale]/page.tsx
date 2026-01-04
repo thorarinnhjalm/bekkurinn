@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 
 /**
- * Locale Home Page - Redirects to Directory
+ * Locale Home Page - Redirects to Login
  */
 
 export default function LocaleHomePage() {
-    redirect('/directory');
+    redirect('/login');
 }
