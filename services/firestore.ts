@@ -5,6 +5,7 @@ import {
     getDocs,
     addDoc,
     updateDoc,
+    setDoc,
     deleteDoc,
     query,
     where,
@@ -43,10 +44,10 @@ import type {
 // ========================================
 
 export async function createUser(data: CreateUserInput): Promise<void> {
-    await updateDoc(doc(db, 'users', data.uid), {
+    await setDoc(doc(db, 'users', data.uid), {
         ...data,
         createdAt: serverTimestamp(),
-    });
+    }, { merge: true });
 }
 
 export async function getUser(uid: string): Promise<User | null> {
