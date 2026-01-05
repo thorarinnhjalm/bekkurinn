@@ -101,7 +101,15 @@
 - [x] **Birthday party** with 8 kids and dietary info
 - [x] **3 class activities** (meetings, trips, sports)
 
-### 10. **Responsive Desktop Layout** ✅
+### 10. **Dashboard (Heim)** ✅
+- [x] **Personal Greeting** - "Góðan daginn, [Name]"
+- [x] **Quick Overview** - See what's next immediately
+- [x] **Latest Announcements** - Most recent or pinned post
+- [x] **Upcoming Birthdays** - Next 3 birthdays highlighted
+- [x] **Upcoming Events** - Next 2 activities/patrols
+- [x] **Navigation** - "Heim" tab added as default view
+
+### 11. **Responsive Desktop Layout** ✅
 - [x] Directory: 1 col mobile → 2 cols tablet → 3 cols desktop
 - [x] All pages adapt to screen size
 - [x] Proper spacing and padding throughout
@@ -116,6 +124,7 @@ bekkurinn/
 ├── app/
 │   ├── [locale]/
 │   │   ├── (app)/
+│   │   │   ├── dashboard/page.tsx    # Dashboard (Home) with summary
 │   │   │   ├── directory/page.tsx    # Directory with starring & expansion
 │   │   │   ├── patrol/page.tsx       # Calendar with birthdays & events
 │   │   │   ├── tasks/page.tsx        # Organization/event coordination

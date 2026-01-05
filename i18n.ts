@@ -1,12 +1,7 @@
 import { getRequestConfig } from 'next-intl/server';
 import { notFound } from 'next/navigation';
 
-// Supported languages for Bekkurinn
-export const locales = ['en', 'is', 'pl', 'es'] as const;
-export type Locale = (typeof locales)[number];
-
-// Default language is English (hardcoded in UI, others via translation files)
-export const defaultLocale: Locale = 'en';
+import { locales, defaultLocale, type Locale } from './i18n-config';
 
 export default getRequestConfig(async ({ requestLocale }) => {
     let locale = await requestLocale;
