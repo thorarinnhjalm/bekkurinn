@@ -1,14 +1,28 @@
-import createMiddleware from 'next-intl/middleware';
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 
-export default createMiddleware({
-    locales: ['en', 'is', 'pl', 'es'],
-    defaultLocale: 'en',
-    localePrefix: 'as-needed',
-});
+export function middleware(request: NextRequest) {
+    const pathname = request.nextUrl.pathname;
+
+    // Check if pathname is missing locale
+    const pathnameIsMissingLocale = ['/is', '/en', '/pl', '/es'].every(
+        (locale) => !pathname.startsWith(locale) && pathname !== locale
+    );
+
+    // Redirect if there is no locale
+    if (pathnameIsMissingLocale) {
+        const locale = 'is'; // Default locale
+        // e.g. incoming request is /dashboard
+        // The new URL is now /is/dashboard
+        return NextResponse.redirect(
+            new URL(`/${locale}${pathname.startsWith('/') ? '' : '/'}${pathname}`, request.url)
+        );
+    }
+
+    return NextResponse.next();
+}
 
 export const config = {
-    // Match all pathnames except for
-    // - … if they start with `/api`, `/_next` or `/_vercel`
-    // - … the ones containing a dot (e.g. `favicon.ico`)
+    // Matcher excluding api, static files, etc.
     matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 };
