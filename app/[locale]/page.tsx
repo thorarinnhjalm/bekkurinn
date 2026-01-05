@@ -5,5 +5,5 @@ import { redirect } from 'next/navigation';
  */
 
 export default function LocaleHomePage() {
-    redirect('/login');
+    redirect('login');
 }
