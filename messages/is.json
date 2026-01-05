@@ -29,6 +29,7 @@
     "join_class": "Taka þátt í bekk"
   },
   "class": {
+    "home": "Heim",
     "directory": "Skrá",
     "patrol": "Dagatal",
     "tasks": "Skipulag",
@@ -70,5 +71,14 @@
     "pending_approvals": "Bíða samþykkis",
     "approve": "Samþykkja",
     "reject": "Hafna"
+  },
+  "dashboard": {
+    "greeting": "Góðan daginn, {name}",
+    "whats_next": "Hvað er framundan?",
+    "latest_announcement": "Nýjasta tilkynningin",
+    "upcoming_birthdays": "Afmæli framundan",
+    "no_events": "Engir viðburðir á næstunni",
+    "no_birthdays": "Engin afmæli á næstunni",
+    "quick_actions": "Flýtileiðir"
   }
 }

@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Users, Calendar, CheckSquare, Megaphone } from 'lucide-react';
+import { Users, Calendar, CheckSquare, Megaphone, Home } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -19,6 +19,12 @@ import { cn } from '@/lib/utils';
  */
 
 const navItems = [
+    {
+        key: 'dashboard',
+        href: '/dashboard',
+        icon: Home,
+        labelKey: 'class.home',
+    },
     {
         key: 'directory',
         href: '/directory',

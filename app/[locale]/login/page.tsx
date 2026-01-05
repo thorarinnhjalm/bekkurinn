@@ -20,7 +20,7 @@ export default function LoginPage() {
     useEffect(() => {
         // Redirect to directory if already logged in
         if (user && !loading) {
-            router.push('/is/directory');
+            router.push('/is/dashboard');
         }
     }, [user, loading, router]);
 
