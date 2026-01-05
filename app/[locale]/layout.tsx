@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
+
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n-config';
 import { QueryProvider } from '@/components/providers/QueryProvider';
@@ -29,15 +28,13 @@ export default async function LocaleLayout({
         notFound();
     }
 
-    const messages = await getMessages();
+
 
     return (
-        <NextIntlClientProvider messages={messages}>
-            <QueryProvider>
-                <AuthProvider>
-                    {children}
-                </AuthProvider>
-            </QueryProvider>
-        </NextIntlClientProvider>
+        <QueryProvider>
+            <AuthProvider>
+                {children}
+            </AuthProvider>
+        </QueryProvider>
     );
 }

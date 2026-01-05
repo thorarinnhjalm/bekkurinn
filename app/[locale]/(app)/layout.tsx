@@ -8,11 +8,16 @@ import { TopHeader } from '@/components/navigation/TopHeader';
  * to all app routes (directory, patrol, tasks, announcements)
  */
 
-export default function AppLayout({
+export default async function AppLayout({
     children,
+    params,
 }: {
     children: React.ReactNode;
+    params: Promise<{ locale: string }>;
 }) {
+    const { locale } = await params;
+    const messages = (await import(`@/messages/${locale}.json`)).default;
+
     return (
         <div className="min-h-screen flex flex-col">
             {/* Top Header */}
@@ -24,7 +29,7 @@ export default function AppLayout({
             </main>
 
             {/* Bottom Navigation */}
-            <BottomNav />
+            <BottomNav translations={messages.class} />
         </div>
     );
 }

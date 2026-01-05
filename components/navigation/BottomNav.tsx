@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Users, Calendar, CheckSquare, Megaphone, Home } from 'lucide-react';
@@ -51,8 +51,17 @@ const navItems = [
     },
 ] as const;
 
-export function BottomNav() {
-    const t = useTranslations();
+interface BottomNavProps {
+    translations: {
+        home: string;
+        directory: string;
+        patrol: string;
+        tasks: string;
+        announcements: string;
+    };
+}
+
+export function BottomNav({ translations }: BottomNavProps) {
     const pathname = usePathname();
 
     return (
@@ -94,7 +103,7 @@ export function BottomNav() {
                                     isActive ? 'font-semibold' : ''
                                 )}
                             >
-                                {t(item.labelKey)}
+                                {translations[item.key as keyof typeof translations]}
                             </span>
 
                             {/* Active indicator */}
