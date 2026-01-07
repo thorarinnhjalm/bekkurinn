@@ -86,7 +86,7 @@ export default function LandingPage() {
                     fontSize: '0.875rem',
                     marginBottom: 'var(--space-lg)'
                 }}>
-                    Fyrir foreldra sem vilja gera betur
+                    Skipulagt kerfi fyrir bekkinn
                 </div>
 
                 <h1 style={{
@@ -108,7 +108,7 @@ export default function LandingPage() {
                     lineHeight: 1.6
                 }}>
                     Bekkurinn er kerfi sem gerir bekkjarfulltrúum kleift að skipuleggja bekkinn
-                    án þess að týnast í WhatsApp-spjöllum, Google-skjölum eða tölvupóstum.
+                    án þess að týnast í Facebook-hópum, Google-skjölum eða tölvupóstum.
                 </p>
 
                 <div style={{
@@ -163,7 +163,7 @@ export default function LandingPage() {
                         marginBottom: 'var(--space-sm)',
                         color: 'var(--text-primary)'
                     }}>
-                        Þekkt hljómar?
+                        Kannast þú við þetta?
                     </h2>
                     <p style={{
                         textAlign: 'center',
@@ -185,7 +185,7 @@ export default function LandingPage() {
                             {
                                 color: '#EF4444',
                                 title: '47 ósvaruð skilaboð',
-                                description: 'WhatsApp-spjallið er fullt af „Hvað er að gerast?" og „Hvenær er næsti fundur?"'
+                                description: 'Facebook-hópurinn er fullur af „Hvað er að gerast?" og „Hvenær er næsti fundur?"'
                             },
                             {
                                 color: '#F59E0B',

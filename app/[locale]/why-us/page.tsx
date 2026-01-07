@@ -69,7 +69,7 @@ export default function WhyUsPage() {
                     fontSize: '0.875rem',
                     marginBottom: 'var(--space-lg)'
                 }}>
-                    Af hverju ekki bara nota WhatsApp?
+                    Af hverju ekki bara nota Facebook?
                 </div>
 
                 <h1 style={{
@@ -88,7 +88,7 @@ export default function WhyUsPage() {
                     color: 'var(--text-secondary)',
                     lineHeight: 1.6
                 }}>
-                    WhatsApp, Google Docs og tölvupóstur eru ókeypis. En tíminn þinn og geðheilsan þín eru það ekki.
+                    Facebook, Google Docs og tölvupóstur eru ókeypis. En tíminn þinn og geðheilsan þín eru það ekki.
                 </p>
             </section>
 
@@ -144,7 +144,7 @@ export default function WhyUsPage() {
                             feature: 'Allt á einum stað',
                             free: false,
                             bekkurinn: true,
-                            description: 'WhatsApp, Google Docs, Email... hvað vantar núna?'
+                            description: 'Facebook, Google Docs, tölvupóstur... hvað vantar núna?'
                         },
                         {
                             feature: 'Enginn týnist',
@@ -156,7 +156,7 @@ export default function WhyUsPage() {
                             feature: 'Verkefnastjórnun',
                             free: false,
                             bekkurinn: true,
-                            description: 'Ekki bara "to-do" listi heldur raunverulegt verkefnakerfi'
+                            description: 'Ekki bara „verkefnalisti" heldur raunverulegt stjórnunarkerfi'
                         },
                         {
                             feature: 'Farsímavænn',
@@ -171,7 +171,7 @@ export default function WhyUsPage() {
                             description: 'Bara foreldrar í bekknum. Engin leki.'
                         },
                         {
-                            feature: 'Virkar án "skrá inn"',
+                            feature: 'Virkar án innskráningar',
                             free: true,
                             bekkurinn: false,
                             description: 'Já, við þurfum innskráningu. En bara 10 sekúndur.'
@@ -180,7 +180,7 @@ export default function WhyUsPage() {
                             feature: 'Sólarhringsupptekið',
                             free: true,
                             bekkurinn: false,
-                            description: 'WhatsApp er alltaf opið. Bekkurinn hefur "quiet hours".'
+                            description: 'Facebook er alltaf opið. Bekkurinn hefur „þögla tíma".'
                         },
                         {
                             feature: 'Tíminn þinn til baka',
@@ -290,7 +290,7 @@ export default function WhyUsPage() {
                                 47%
                             </div>
                             <p style={{ color: 'var(--text-secondary)' }}>
-                                Foreldrar sem týna tilkynningum í WhatsApp-spjöllum
+                                Foreldrar sem týna tilkynningum í Facebook-hópum
                             </p>
                         </div>
                         <div>
@@ -335,7 +335,7 @@ export default function WhyUsPage() {
                         lineHeight: 1.6
                     }}>
                         Bekkurinn var ekki smíðaður af tæknifyrirtæki sem reynir að selja þér eitthvað.
-                        Við gerðum þetta vegna þess að við vorum orðin þreytt á WhatsApp hópum klukkan 23:00.
+                        Við gerðum þetta vegna þess að við vorum orðin þreytt á Facebook-hópum klukkan 23:00.
                     </p>
                 </div>
 
@@ -351,7 +351,7 @@ export default function WhyUsPage() {
                             {
                                 icon: Smartphone,
                                 title: 'Raunverulega farsímavænn',
-                                description: 'Ekki "virkar á síma" heldur "smíðað fyrir síma fyrst"'
+                                description: 'Ekki „virkar á síma" heldur „smíðað fyrir síma fyrst"'
                             },
                             {
                                 icon: Shield,
