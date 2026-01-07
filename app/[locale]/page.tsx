@@ -181,22 +181,22 @@ export default function LandingPage() {
                     }}>
                         {[
                             {
-                                emoji: '😫',
+                                color: '#EF4444',
                                 title: '47 ósvaruð skilaboð',
                                 description: 'WhatsApp-spjallið er fullt af „Hvað er að gerast?" og „Hvenær er næsti fundur?"'
                             },
                             {
-                                emoji: '📧',
+                                color: '#F59E0B',
                                 title: 'Týndir tölvupóstar',
                                 description: 'Helmingur foreldra sá ekki tilkynninguna þína. Afgangurinn gleymir henni eftir 10 mínútur.'
                             },
                             {
-                                emoji: '🤯',
+                                color: '#8B5CF6',
                                 title: 'Excel-skjal úr helvíti',
                                 description: '15 útgáfur af sama skjalinu, enginn veit hvor er rétt og einhver hefur eytt öllu.'
                             },
                             {
-                                emoji: '⏰',
+                                color: '#EC4899',
                                 title: 'Þú ert alltaf að vinna',
                                 description: 'Skilaboð klukkan 22:30 um morguninn eftir. Þú átt líka rétt á næturóleyfi.'
                             }
@@ -206,7 +206,8 @@ export default function LandingPage() {
                                 className="nordic-card"
                                 style={{
                                     padding: 'var(--space-lg)',
-                                    transition: 'all 0.3s ease'
+                                    transition: 'all 0.3s ease',
+                                    borderLeft: `4px solid ${pain.color}`
                                 }}
                                 onMouseEnter={(e) => {
                                     e.currentTarget.style.transform = 'translateY(-4px)';
@@ -217,9 +218,6 @@ export default function LandingPage() {
                                     e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
                                 }}
                             >
-                                <div style={{ fontSize: '3rem', marginBottom: 'var(--space-md)' }}>
-                                    {pain.emoji}
-                                </div>
                                 <h3 style={{
                                     fontSize: '1.25rem',
                                     fontWeight: 'bold',
