@@ -8,11 +8,8 @@ import { Loader2, Save, School, GraduationCap, AlertTriangle, Check, Calendar, R
 import { useRouter } from 'next/navigation';
 import { SCHOOLS } from '@/constants/schools';
 // Import firestore functions directly for the sync logic
-import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config'; // Ensure db is exported from lib/firebase or services
-
-// TODO: Get this from user's class membership (context)
-const CLASS_ID = 'CLQCGsPBSZxKV4Zq6Xsg';
 
 // Calendar Parsing Logic
 function parseICS(icsContent: string) {
@@ -55,7 +52,31 @@ function parseDate(dateStr: string): Date {
 
 export default function SettingsView() {
     const { user, loading: authLoading } = useAuth();
-    const { data: classData, isLoading: classLoading, refetch } = useClass(CLASS_ID);
+
+    // Dynamic Class Fetching
+    const [classId, setClassId] = useState<string | null>(null);
+
+    useEffect(() => {
+        async function fetchUserClass() {
+            if (!user) return;
+            try {
+                const q = query(
+                    collection(db, 'classes'),
+                    where('admins', 'array-contains', user.uid),
+                    orderBy('createdAt', 'desc')
+                );
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    setClassId(snapshot.docs[0].id);
+                }
+            } catch (error) {
+                console.error("Error finding class:", error);
+            }
+        }
+        if (!authLoading && user) fetchUserClass();
+    }, [user, authLoading]);
+
+    const { data: classData, isLoading: classLoading, refetch } = useClass(classId);
     const router = useRouter();
 
     const [isSaving, setIsSaving] = useState(false);
@@ -99,6 +120,7 @@ export default function SettingsView() {
     };
 
     const handleSave = async () => {
+        if (!classId) return;
         setIsSaving(true);
         try {
             // Generate display name automatically if fields are present
@@ -106,7 +128,7 @@ export default function SettingsView() {
                 ? `${formData.grade}. Bekkur ${formData.section || ''} - ${formData.schoolName}`
                 : formData.name;
 
-            await updateClass(CLASS_ID, {
+            await updateClass(classId, {
                 schoolName: formData.schoolName,
                 grade: Number(formData.grade),
                 section: formData.section,
@@ -125,6 +147,7 @@ export default function SettingsView() {
     };
 
     const handlePromoteClass = async () => {
+        if (!classId) return;
         const nextGrade = Number(formData.grade) + 1;
         if (confirm(`Ertu viss um að þú viljir hækka bekkinn upp í ${nextGrade}. bekk?\n\nÞetta uppfærir nafnið á bekknum fyrir alla.`)) {
             setIsSaving(true);
@@ -133,7 +156,7 @@ export default function SettingsView() {
                     ? `${nextGrade}. Bekkur ${formData.section || ''} - ${formData.schoolName}`
                     : `Bekkur ${nextGrade}`;
 
-                await updateClass(CLASS_ID, {
+                await updateClass(classId, {
                     grade: nextGrade,
                     name: displayName
                 });
@@ -149,7 +172,7 @@ export default function SettingsView() {
     };
 
     const handleSyncCalendar = async () => {
-        if (!formData.calendarUrl) return;
+        if (!classId || !formData.calendarUrl) return;
         setIsSyncing(true);
         setSyncStatus('Sæki dagatal...');
 
@@ -171,7 +194,7 @@ export default function SettingsView() {
 
             // 4. Delete old school events
             setSyncStatus('Hreinsa gamalt...');
-            const q = query(collection(db, 'tasks'), where('classId', '==', CLASS_ID), where('type', '==', 'school_event'));
+            const q = query(collection(db, 'tasks'), where('classId', '==', classId), where('type', '==', 'school_event'));
             const querySnapshot = await getDocs(q);
             const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
             await Promise.all(deletePromises);
@@ -184,7 +207,7 @@ export default function SettingsView() {
                 // if (date < new Date()) return Promise.resolve();
 
                 return addDoc(collection(db, 'tasks'), {
-                    classId: CLASS_ID,
+                    classId: classId,
                     type: 'school_event',
                     title: event.summary,
                     description: 'Samkvæmt skóladagatali',

@@ -3,10 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Phone, Mail, Star, ChevronUp, Users, Loader2 } from 'lucide-react';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
-import { useStudents } from '@/hooks/useFirestore';
+import { useStudents, useClass } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import type { Student, DietaryNeed } from '@/types';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
 
 /**
  * Directory Page - Sameiginleg skrá bekkjarins
@@ -15,22 +17,35 @@ import type { Student, DietaryNeed } from '@/types';
  * Now connected to real Firestore data!
  */
 
-// TODO: Get this from user's class membership
-const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
-
 export default function DirectoryPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const [classId, setClassId] = useState<string | null>(null);
 
-    console.log('🔍 DirectoryPage - CLASS_ID:', CLASS_ID);
-    console.log('🔍 DirectoryPage - user:', user?.uid);
-    console.log('🔍 DirectoryPage - authLoading:', authLoading);
+    // 1. Fetch User Class (Newest)
+    useEffect(() => {
+        async function fetchUserClass() {
+            if (!user) return;
+            try {
+                const q = query(
+                    collection(db, 'classes'),
+                    where('admins', 'array-contains', user.uid),
+                    orderBy('createdAt', 'desc')
+                );
+                const snapshot = await getDocs(q);
 
-    const { data: studentsData, isLoading: studentsLoading, error } = useStudents(CLASS_ID);
+                if (!snapshot.empty) {
+                    setClassId(snapshot.docs[0].id);
+                }
+            } catch (error) {
+                console.error("Error finding class:", error);
+            }
+        }
+        if (!authLoading && user) fetchUserClass();
+    }, [user, authLoading]);
 
-    console.log('🔍 DirectoryPage - studentsData:', studentsData);
-    console.log('🔍 DirectoryPage - studentsLoading:', studentsLoading);
-    console.log('🔍 DirectoryPage - error:', error);
+    const { data: classData } = useClass(classId);
+    const { data: studentsData, isLoading: studentsLoading, error } = useStudents(classId || '');
 
     const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
@@ -43,6 +58,7 @@ export default function DirectoryPage() {
         }
     }, [authLoading, user, router]);
 
+    // Format helpers and event handlers...
     const toggleStar = (studentId: string) => {
         const newStarred = new Set(starredStudents);
         if (newStarred.has(studentId)) {
@@ -63,7 +79,6 @@ export default function DirectoryPage() {
         setExpandedCards(newExpanded);
     };
 
-    // Format date for display
     const formatBirthDate = (timestamp: any) => {
         if (!timestamp?.toDate) return '';
         const date = timestamp.toDate();
@@ -75,12 +90,12 @@ export default function DirectoryPage() {
     };
 
     // Loading state
-    if (authLoading || studentsLoading) {
+    if (authLoading || studentsLoading || !classId) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
                     <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
-                    <p style={{ color: 'var(--text-secondary)' }}>Hleður nemendum...</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>Hleður gögnum...</p>
                 </div>
             </div>
         );
@@ -100,9 +115,10 @@ export default function DirectoryPage() {
         });
 
     const starredCount = starredStudents.size;
+    const displayName = classData?.name || (classData?.grade ? `${classData.grade}. Bekkur` : 'Bekkurinn');
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
+        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24 max-w-5xl mx-auto">
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -116,7 +132,7 @@ export default function DirectoryPage() {
                     )}
                 </div>
                 <p style={{ color: 'var(--text-secondary)' }}>
-                    Sameiginleg skrá yfir nemendur í Salaskóli 4. Bekkur
+                    Sameiginleg skrá yfir nemendur í {displayName}
                 </p>
             </header>
 
