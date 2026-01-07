@@ -390,6 +390,7 @@ export default function HomePage() {
 
                     <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
                         <p>{t('footer.copyright')}</p>
+                        <p className="text-xs text-gray-600 mt-2">{t('footer.ai_disclaimer')}</p>
                     </div>
                 </div>
             </footer>
