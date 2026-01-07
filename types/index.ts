@@ -34,7 +34,8 @@ export interface Class {
     schoolName: string;
     grade: number;
     section?: string;
-    calendarUrl?: string;
+    calendarUrl?: string; // ICS URL for school calendar
+
     admins: string[]; // Array of UIDs
     confidentialityAgreedAt: Timestamp; // Legal requirement
     pactText?: string; // Social contract HTML

@@ -223,6 +223,38 @@ export default function SettingsView() {
                 <p className="text-gray-500">Breyttu upplýsingum um skóla og árgang</p>
             </header>
 
+            {/* Invite Code Section */}
+            <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-1 h-full bg-nordic-blue" />
+                <div className="flex items-center justify-between">
+                    <div>
+                        <h2 className="text-lg font-semibold text-gray-900 mb-1">Boðskóði fyrir foreldra</h2>
+                        <p className="text-sm text-gray-500 max-w-md">
+                            Sendu þennan kóða á aðra foreldra svo þeir geti gengið í bekkinn.
+                        </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <div className="bg-stone-100 px-4 py-2 rounded-lg border border-stone-200">
+                            <code className="text-xl font-mono font-bold text-nordic-blue tracking-wider">
+                                {classData.joinCode || 'Enginn kóði'}
+                            </code>
+                        </div>
+                        {classData.joinCode && (
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(classData.joinCode || '');
+                                    alert('Kóði afritaður!');
+                                }}
+                                className="p-2 text-gray-500 hover:text-nordic-blue transition-colors"
+                                title="Afrita kóða"
+                            >
+                                <Check size={20} />
+                            </button>
+                        )}
+                    </div>
+                </div>
+            </section>
+
             {/* General Settings */}
             <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
                 <div className="flex items-center gap-3 mb-4">
