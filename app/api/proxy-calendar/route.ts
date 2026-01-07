@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { rateLimit, getClientIpFromNextRequest } from '@/lib/rate-limit';
 
 /**
  * Calendar Proxy API - Secure ICS Fetcher
@@ -9,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server';
  * - Request timeout (5 seconds)
  * - Redirect blocking
  * - Size limit validation
+ * - Rate limiting (10 requests/minute per IP)
  */
 
 // Whitelist of allowed calendar sources (Icelandic municipalities)
@@ -33,6 +35,25 @@ const MAX_RESPONSE_SIZE = 5 * 1024 * 1024; // 5MB limit
 const FETCH_TIMEOUT = 5000; // 5 seconds
 
 export async function GET(request: NextRequest) {
+    // RATE LIMIT: 10 requests per minute per IP
+    const clientIp = getClientIpFromNextRequest(request);
+    const limitResult = await rateLimit(clientIp, 10, 60000);
+
+    if (!limitResult.success) {
+        return NextResponse.json({
+            error: 'Too many requests',
+            message: 'Þú hefur sent of margar beiðnir. Reyndu aftur eftir smá stund.',
+            resetAt: limitResult.resetAt,
+        }, {
+            status: 429,
+            headers: {
+                'Retry-After': '60',
+                'X-RateLimit-Limit': '10',
+                'X-RateLimit-Remaining': '0',
+            }
+        });
+    }
+
     const searchParams = request.nextUrl.searchParams;
     const url = searchParams.get('url');
 

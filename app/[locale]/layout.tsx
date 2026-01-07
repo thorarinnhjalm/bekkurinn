@@ -4,10 +4,12 @@ import { notFound } from 'next/navigation';
 import { locales } from '@/i18n-config';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 import { AuthProvider } from '@/components/providers/AuthProvider';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ToastContainer } from '@/components/ui/Toast';
 
 /**
  * Locale Layout
- * Provides messages, React Query, and Authentication for the specific locale
+ * Provides messages, React Query, Authentication, Error Handling, and Toast Notifications
  */
 
 export function generateStaticParams() {
@@ -31,10 +33,13 @@ export default async function LocaleLayout({
 
 
     return (
-        <QueryProvider>
-            <AuthProvider>
-                {children}
-            </AuthProvider>
-        </QueryProvider>
+        <ErrorBoundary>
+            <QueryProvider>
+                <AuthProvider>
+                    {children}
+                    <ToastContainer />
+                </AuthProvider>
+            </QueryProvider>
+        </ErrorBoundary>
     );
 }
