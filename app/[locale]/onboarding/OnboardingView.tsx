@@ -21,6 +21,7 @@ async function createClassLocal(data: any, userId: string) {
 
     const classRef = await addDoc(collection(db, 'classes'), {
         ...data,
+        section: data.section || null, // Ensure section is null not undefined
         joinCode: uniqueCode,
         admins: [userId],
         createdAt: serverTimestamp(),
@@ -76,7 +77,7 @@ export default function OnboardingView() {
                 name: displayName,
                 schoolName: formData.schoolName,
                 grade: Number(formData.grade),
-                section: formData.isSplit ? formData.section : undefined,
+                section: formData.isSplit ? formData.section : null,
                 calendarUrl
             }, user.uid);
 
@@ -170,10 +171,10 @@ export default function OnboardingView() {
                                     <button
                                         key={g}
                                         onClick={() => setFormData({ ...formData, grade: g })}
-                                        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
+                                        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all border
                                             ${formData.grade === g
-                                                ? 'bg-nordic-blue text-white scale-110 shadow-md'
-                                                : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
+                                                ? 'bg-nordic-blue text-white border-nordic-blue scale-110 shadow-md'
+                                                : 'bg-white text-gray-900 border-gray-300 hover:bg-gray-50'}`}
                                     >
                                         {g}
                                     </button>
