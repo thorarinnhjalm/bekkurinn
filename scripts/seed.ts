@@ -35,6 +35,8 @@ async function seed() {
         const classId = await createClass({
             joinCode: 'SALA-4B',
             name: 'Salaskóli 4. Bekkur',
+            schoolName: 'Salaskóli',
+            grade: 4,
             admins: ['demo-admin-uid'],
             confidentialityAgreedAt: Timestamp.now(),
             pactText: '<p>Við samþykkjum að fara með allar upplýsingar með trúnaði.</p>',
