@@ -56,7 +56,7 @@ export default function HomePage() {
                         {/* Subheadline */}
                         <p className="text-xl sm:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
                             Skipulagðu rölt, samskipti foreldra og dagsskrá bekkjarins — allt á einum stað.
-                            <strong className="text-gray-900"> Bekkjarformenn og foreldrar elska okkur.</strong>
+                            <strong className="text-gray-900"> Nýtt kerfi sem gerir bekkjarformennsku auðveldari.</strong>
                         </p>
 
                         {/* CTA Buttons */}
@@ -76,20 +76,12 @@ export default function HomePage() {
                             </a>
                         </div>
 
-                        {/* Social Proof Stats */}
-                        <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-8 border-t border-gray-200">
-                            <div>
-                                <div className="text-3xl font-bold text-blue-600">47+</div>
-                                <div className="text-sm text-gray-600 mt-1">Bekkir</div>
-                            </div>
-                            <div>
-                                <div className="text-3xl font-bold text-blue-600">200+</div>
-                                <div className="text-sm text-gray-600 mt-1">Foreldrar</div>
-                            </div>
-                            <div>
-                                <div className="text-3xl font-bold text-blue-600">98%</div>
-                                <div className="text-sm text-gray-600 mt-1">Ánægja</div>
-                            </div>
+                        {/* Honest Beta Badge instead of fake stats */}
+                        <div className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-blue-200 rounded-xl mt-8">
+                            <Sparkles size={20} className="text-blue-600" />
+                            <span className="text-gray-700 font-medium">
+                                Nýtt í beta — vertu meðal fyrstu notenda!
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -256,77 +248,47 @@ export default function HomePage() {
                 </div>
             </section>
 
-            {/* Testimonials */}
+            {/* Why Join Beta Section */}
             <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
                 <div className="max-w-7xl mx-auto">
                     <div className="text-center mb-16">
                         <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                            Hvað segja notendur?
+                            Af hverju að vera meðal fyrstu?
                         </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Beta notendur fá sérstök fríðindi og móta framtíð kerfisins
+                        </p>
                     </div>
 
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="p-8 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100">
                             <div className="flex gap-1 mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
-                                ))}
+                                <CheckCircle size={24} className="text-blue-600" />
                             </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed italic">
-                                &quot;Loksins losnaðum við óendanlegum Facebook-þráðum. Allt skipulagt og yfirlitslegt.
-                                Bestu 5 mínútur sem ég hef varið í skipulagningu!&quot;
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Frítt að eilífu</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Beta notendur fá ávallt frítt aðgengi, jafnvel þó við bjóðum upp á premium features síðar.
                             </p>
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center font-bold text-blue-800">
-                                    SB
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Sigrún Bergsdóttir</div>
-                                    <div className="text-sm text-gray-600">Bekkjarfulltrúi, 3. bekkur</div>
-                                </div>
-                            </div>
                         </div>
 
                         <div className="p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-100">
                             <div className="flex gap-1 mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
-                                ))}
+                                <MessageSquare size={24} className="text-green-600" />
                             </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed italic">
-                                &quot;Sem foreldri er þetta svo þægilegt. Ég sé alla viðburði, veit hverjir eru á rölt,
-                                og fæ áminningar. Aldrei misst af neinu!&quot;
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Beinn áheyrn</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Þínar hugmyndir og þarfir móta hvernig kerfið þróast. Við hlustum á þig!
                             </p>
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center font-bold text-green-800">
-                                    JK
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Jón Kristjánsson</div>
-                                    <div className="text-sm text-gray-600">Foreldri, 5. bekkur</div>
-                                </div>
-                            </div>
                         </div>
 
                         <div className="p-8 bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100">
                             <div className="flex gap-1 mb-4">
-                                {[...Array(5)].map((_, i) => (
-                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
-                                ))}
+                                <Star size={24} className="text-purple-600" />
                             </div>
-                            <p className="text-gray-700 mb-6 leading-relaxed italic">
-                                &quot;Þægilegast að allir sjá ofnæmi barnanna. Engar hættulegar uppákomur lengur
-                                á bekkjarveislum. Þetta ætti að vera í öllum bekkjum!&quot;
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Persónuleg þjónusta</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Forgangsaðstoð og persónuleg uppsetning. Við hjálpum þér að komast á flug.
                             </p>
-                            <div className="flex items-center gap-3">
-                                <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center font-bold text-purple-800">
-                                    GA
-                                </div>
-                                <div>
-                                    <div className="font-semibold text-gray-900">Guðrún Arnardóttir</div>
-                                    <div className="text-sm text-gray-600">Foreldri, 2. bekkur</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
