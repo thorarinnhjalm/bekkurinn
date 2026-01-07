@@ -176,8 +176,10 @@ export default function LandingPage() {
 
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: 'var(--space-lg)'
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+                        gap: 'var(--space-lg)',
+                        maxWidth: '900px',
+                        margin: '0 auto'
                     }}>
                         {[
                             {
