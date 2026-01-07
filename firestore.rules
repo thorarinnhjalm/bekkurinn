@@ -17,6 +17,12 @@ service cloud.firestore {
     function isAuthenticated() {
       return request.auth != null;
     }
+
+    function isSuperAdmin() {
+      return isAuthenticated() && 
+             (request.auth.token.email == 'thorarinnhjalmarsson@gmail.com' || 
+              request.auth.token.email == 'thorarinn@antigravity.is');
+    }
     
     function isClassMember(classId) {
       return isAuthenticated() && 
@@ -24,6 +30,7 @@ service cloud.firestore {
     }
     
     function isClassAdmin(classId) {
+      // Use GET for cross-document checks (when checking permission on students/tasks)
       return isAuthenticated() &&
              get(/databases/$(database)/documents/classes/$(classId)).data.admins.hasAny([request.auth.uid]);
     }
@@ -33,15 +40,9 @@ service cloud.firestore {
     // ========================================
     
     match /users/{userId} {
-      // Users can read their own profile
-      allow read: if isAuthenticated() && request.auth.uid == userId;
-      
-      // Users can create/update their own profile
-      allow create, update: if isAuthenticated() && request.auth.uid == userId;
-      
-      // Class members can read other members' profiles
-      // (but phone is filtered in the app based on isPhoneVisible)
+      allow read, write: if isSuperAdmin();
       allow read: if isAuthenticated();
+      allow create, update: if isAuthenticated() && request.auth.uid == userId;
     }
     
     // ========================================
@@ -49,19 +50,16 @@ service cloud.firestore {
     // ========================================
     
     match /classes/{classId} {
-      // Anyone authenticated can read classes they're a member of
-      allow read: if isClassMember(classId) || isClassAdmin(classId);
+      // Allow read if Admin (checked on resource), SuperAdmin, or Member
+      // This enables list queries: where('admins', 'array-contains', uid)
+      allow read: if isSuperAdmin() || 
+                     resource.data.admins.hasAny([request.auth.uid]) ||
+                     isClassMember(classId);
       
-      // Only authenticated users can create a class (becomes admin)
-      allow create: if isAuthenticated() && 
-                       request.resource.data.admins.hasAny([request.auth.uid]) &&
-                       request.resource.data.confidentialityAgreedAt is timestamp;
+      allow create: if isAuthenticated();
       
-      // Only admins can update class details
-      allow update: if isClassAdmin(classId);
-      
-      // Only admins can delete a class
-      allow delete: if isClassAdmin(classId);
+      // Update/Delete requires Admin or SuperAdmin
+      allow update, delete: if isSuperAdmin() || resource.data.admins.hasAny([request.auth.uid]);
     }
     
     // ========================================
