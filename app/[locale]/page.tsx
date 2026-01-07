@@ -344,11 +344,11 @@ export default function HomePage() {
             {/* Final CTA */}
             <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
                 <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl sm:text-5xl font-bold mb-6">
-                        Tilbúinn að einfaldara líf?
+                    <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-white">
+                        Tilbúinn að prófa?
                     </h2>
-                    <p className="text-xl sm:text-2xl text-blue-100 mb-10 leading-relaxed">
-                        Gangi til liðs við hundruð foreldra og bekkjarfulltrúa sem hafa þegar fundið betri leið.
+                    <p className="text-xl sm:text-2xl text-white/90 mb-10 leading-relaxed">
+                        Vertu meðal fyrstu til að prófa nýja leiðina í bekkjarskipulagi.
                     </p>
                     <Link
                         href="/is/onboarding"
@@ -357,7 +357,7 @@ export default function HomePage() {
                         Stofna bekk núna
                         <ArrowRight size={20} />
                     </Link>
-                    <p className="text-blue-200 mt-6 text-sm">
+                    <p className="text-white/80 mt-6 text-sm">
                         Frítt fyrir alla · Engin binding · Tilbúið á 2 mínútum
                     </p>
                 </div>
