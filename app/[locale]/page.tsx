@@ -200,7 +200,7 @@ export default function LandingPage() {
                             {
                                 color: '#EC4899',
                                 title: 'Þú ert alltaf að vinna',
-                                description: 'Skilaboð klukkan 22:30 um morguninn eftir. Þú átt líka rétt á næturóleyfi.'
+                                description: 'Skilaboð klukkan 22:30 um sparinestið í fyrramálið.'
                             }
                         ].map((pain, i) => (
                             <div
