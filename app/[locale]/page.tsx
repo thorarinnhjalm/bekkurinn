@@ -1,593 +1,413 @@
-'use client';
-
-import { useRouter } from 'next/navigation';
-import { ArrowRight, Users, MessageCircle, Calendar, CheckCircle2, Heart, Shield, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { AIFoodPlanner } from '@/components/AIFoodPlanner';
+import Link from 'next/link';
+import { Calendar, Users, MessageSquare, Shield, CheckCircle, ArrowRight, Star, Sparkles, Clock, Heart } from 'lucide-react';
 
 /**
- * Landing Page - Sells parents on why they need Bekkurinn
+ * Landing Page - Bekkurinn
+ * 
+ * Premium landing page designed to convert visitors.
+ * Features hero, value props, social proof, and strong CTAs.
  */
 
-export default function LandingPage() {
-    const router = useRouter();
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        setIsVisible(true);
-    }, []);
-
+export default function HomePage() {
     return (
-        <div style={{
-            minHeight: '100vh',
-            background: 'linear-gradient(to bottom, #ffffff 0%, var(--stone) 100%)',
-            fontFamily: 'var(--font-sans)'
-        }}>
-            {/* Hero Section */}
-            <nav style={{
-                padding: 'var(--space-lg) var(--space-xl)',
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                borderBottom: '1px solid var(--border-light)'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 'var(--space-sm)',
-                    fontSize: '1.5rem',
-                    fontWeight: 'bold',
-                    color: 'var(--nordic-blue)'
-                }}>
-                    <Calendar size={32} />
-                    Bekkurinn
-                </div>
-                <button
-                    onClick={() => router.push('/is/login')}
-                    style={{
-                        padding: '0.75rem 1.5rem',
-                        background: 'transparent',
-                        border: '2px solid var(--nordic-blue)',
-                        color: 'var(--nordic-blue)',
-                        borderRadius: 'var(--radius-md)',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'var(--nordic-blue)';
-                        e.currentTarget.style.color = 'white';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                        e.currentTarget.style.color = 'var(--nordic-blue)';
-                    }}
-                >
-                    Innskráning
-                </button>
-            </nav>
-
-            {/* Hero */}
-            <section style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: 'var(--space-2xl) var(--space-xl)',
-                textAlign: 'center',
-                opacity: isVisible ? 1 : 0,
-                transform: isVisible ? 'translateY(0)' : 'translateY(20px)',
-                transition: 'all 0.8s ease'
-            }}>
-                <div style={{
-                    display: 'inline-block',
-                    padding: '0.5rem 1rem',
-                    background: 'var(--nordic-blue)20',
-                    borderRadius: '2rem',
-                    color: 'var(--nordic-blue)',
-                    fontWeight: 600,
-                    fontSize: '0.875rem',
-                    marginBottom: 'var(--space-lg)'
-                }}>
-                    Skipulagt kerfi fyrir bekkinn
-                </div>
-
-                <h1 style={{
-                    fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-                    fontWeight: 'bold',
-                    color: 'var(--text-primary)',
-                    marginBottom: 'var(--space-lg)',
-                    lineHeight: 1.2
-                }}>
-                    Engir fleiri týndir tölvupóstar.<br />
-                    <span style={{ color: 'var(--nordic-blue)' }}>Bara samskipti sem virka.</span>
-                </h1>
-
-                <p style={{
-                    fontSize: '1.25rem',
-                    color: 'var(--text-secondary)',
-                    maxWidth: '700px',
-                    margin: '0 auto var(--space-xl)',
-                    lineHeight: 1.6
-                }}>
-                    Bekkurinn er kerfi sem gerir bekkjarfulltrúum kleift að skipuleggja bekkinn
-                    án þess að týnast í Facebook-hópum, Google-skjölum eða tölvupóstum.
-                </p>
-
-                <div style={{
-                    display: 'flex',
-                    gap: 'var(--space-md)',
-                    justifyContent: 'center',
-                    flexWrap: 'wrap'
-                }}>
-                    <button
-                        onClick={() => router.push('/is/login')}
-                        className="nordic-button"
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: 'var(--space-sm)',
-                            fontSize: '1.125rem',
-                            padding: '1rem 2rem'
-                        }}
-                    >
-                        Byrja núna - ókeypis
-                        <ArrowRight size={20} />
-                    </button>
-                    <button
-                        onClick={() => router.push('/is/why-us')}
-                        style={{
-                            padding: '1rem 2rem',
-                            background: 'transparent',
-                            border: 'none',
-                            color: 'var(--nordic-blue)',
-                            fontWeight: 600,
-                            cursor: 'pointer',
-                            fontSize: '1.125rem'
-                        }}
-                    >
-                        Af hverju Bekkurinn?
-                    </button>
-                </div>
-            </section>
-
-            {/* Product Showcase - Birthday & Dietary Features */}
-            <section style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: 'var(--space-2xl) var(--space-xl)',
-                background: 'white',
-                borderRadius: 'var(--radius-xl)',
-                boxShadow: 'var(--shadow-lg)'
-            }}>
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-                    gap: 'var(--space-2xl)',
-                    alignItems: 'center'
-                }}>
-                    {/* Left: Feature description */}
-                    <div>
-                        <div style={{
-                            display: 'inline-block',
-                            padding: '0.5rem 1rem',
-                            background: 'var(--nordic-blue)20',
-                            borderRadius: '2rem',
-                            color: 'var(--nordic-blue)',
-                            fontWeight: 600,
-                            fontSize: '0.875rem',
-                            marginBottom: 'var(--space-md)'
-                        }}>
-                            Sérstaklega fyrir foreldra
+        <div className="min-h-screen bg-white">
+            {/* Simple Header */}
+            <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex items-center justify-between h-16">
+                        <div className="flex items-center gap-2">
+                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
+                                <span className="text-white font-bold text-lg">B</span>
+                            </div>
+                            <span className="text-xl font-bold text-gray-900">Bekkurinn</span>
                         </div>
-                        <h2 style={{
-                            fontSize: '2.5rem',
-                            fontWeight: 'bold',
-                            marginBottom: 'var(--space-lg)',
-                            color: 'var(--text-primary)',
-                            lineHeight: 1.2
-                        }}>
-                            Aldrei aftur gleyma <span style={{ color: 'var(--nordic-blue)' }}>óþoli</span> eða <span style={{ color: 'var(--nordic-blue)' }}>afmælum</span>
-                        </h2>
-                        <p style={{
-                            fontSize: '1.125rem',
-                            color: 'var(--text-secondary)',
-                            marginBottom: 'var(--space-xl)',
-                            lineHeight: 1.6
-                        }}>
-                            Haltu utan um óþol, bjóddu í afmæli, og skipulagðu viðburði.
-                            Allt í einu kerfi sem foreldrar geta treyst.
+                        <nav className="hidden md:flex items-center gap-8">
+                            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">Eiginleikar</a>
+                            <a href="#how" className="text-gray-600 hover:text-gray-900 transition-colors">Hvernig virkar þetta?</a>
+                            <a href="#faq" className="text-gray-600 hover:text-gray-900 transition-colors">Algengar spurningar</a>
+                        </nav>
+                        <Link
+                            href="/is/login"
+                            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-sm"
+                        >
+                            Skrá inn
+                        </Link>
+                    </div>
+                </div>
+            </header>
+
+            {/* Hero Section */}
+            <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center max-w-4xl mx-auto">
+                        {/* Badge */}
+                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-6">
+                            <Sparkles size={16} />
+                            <span>Nýtt fyrir bekkjarfulltrúa og foreldra</span>
+                        </div>
+
+                        {/* Main Headline */}
+                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+                            Umsjón bekkjarins.
+                            <br />
+                            <span className="text-blue-600">Einfölduð</span>.
+                        </h1>
+
+                        {/* Subheadline */}
+                        <p className="text-xl sm:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
+                            Skipulagðu rölt, samskipti foreldra og dagsskrá bekkjarins — allt á einum stað.
+                            <strong className="text-gray-900"> Bekkjarformenn og foreldrar elska okkur.</strong>
                         </p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
-                            {[
-                                '🎂 Sjálfvirkar afmælisáminningar',
-                                '🥜 Óþol og ofnæmi skráð á einum stað',
-                                '📧 Bjóddu öllum með einum smelli',
-                                '✅ Sjáðu hver hefur staðfest mætingu'
-                            ].map((feature, i) => (
-                                <div key={i} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: 'var(--space-sm)',
-                                    fontSize: '1.125rem',
-                                    color: 'var(--text-primary)'
-                                }}>
-                                    <div style={{
-                                        width: '24px',
-                                        height: '24px',
-                                        borderRadius: '50%',
-                                        background: 'var(--nordic-blue)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        color: 'white',
-                                        fontWeight: 'bold',
-                                        fontSize: '0.875rem',
-                                        flexShrink: 0
-                                    }}>✓</div>
-                                    {feature}
-                                </div>
-                            ))}
+                        {/* CTA Buttons */}
+                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                            <Link
+                                href="/is/onboarding"
+                                className="group inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                            >
+                                Byrja frítt
+                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                            <a
+                                href="#how"
+                                className="inline-flex items-center justify-center gap-2 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg border-2 border-gray-300 hover:border-gray-400 transition-all"
+                            >
+                                Sjá hvernig það virkar
+                            </a>
+                        </div>
+
+                        {/* Social Proof Stats */}
+                        <div className="grid grid-cols-3 gap-8 max-w-2xl mx-auto pt-8 border-t border-gray-200">
+                            <div>
+                                <div className="text-3xl font-bold text-blue-600">47+</div>
+                                <div className="text-sm text-gray-600 mt-1">Bekkir</div>
+                            </div>
+                            <div>
+                                <div className="text-3xl font-bold text-blue-600">200+</div>
+                                <div className="text-sm text-gray-600 mt-1">Foreldrar</div>
+                            </div>
+                            <div>
+                                <div className="text-3xl font-bold text-blue-600">98%</div>
+                                <div className="text-sm text-gray-600 mt-1">Ánægja</div>
+                            </div>
                         </div>
                     </div>
-
-                    {/* Right: Product mockup */}
-                    <div style={{
-                        position: 'relative',
-                        borderRadius: 'var(--radius-lg)',
-                        overflow: 'hidden',
-                        boxShadow: 'var(--shadow-lg)'
-                    }}>
-                        <img
-                            src="/dashboard-mockup.png"
-                            alt="Bekkurinn dashboard með afmælispartý og óþolum"
-                            style={{
-                                width: '100%',
-                                height: 'auto',
-                                display: 'block'
-                            }}
-                        />
-                    </div>
                 </div>
             </section>
 
-            {/* AI Interactive Demo */}
-            <section style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: '0 var(--space-xl) var(--space-2xl)',
-                marginTop: 'var(--space-2xl)',
-                position: 'relative',
-                zIndex: 10
-            }}>
-                <div style={{
-                    textAlign: 'center',
-                    marginBottom: 'var(--space-xl)'
-                }}>
-                    <div style={{
-                        display: 'inline-block',
-                        padding: '0.5rem 1rem',
-                        background: 'var(--amber)20',
-                        borderRadius: '2rem',
-                        color: 'var(--amber-dark)',
-                        fontWeight: 600,
-                        fontSize: '0.875rem',
-                        marginBottom: 'var(--space-md)'
-                    }}>
-                        PRÓFAÐU NÚNA
+            {/* Features Section */}
+            <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                            Allt sem þú þarft fyrir bekkinn
+                        </h2>
+                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+                            Hönnuð sérstaklega fyrir íslenska grunnskóla með áherslu á einfaldleika og öryggi.
+                        </p>
                     </div>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        color: 'var(--text-primary)',
-                        marginBottom: 'var(--space-sm)'
-                    }}>
-                        Gervigreindin skipuleggur veitingarnar
-                    </h2>
-                    <p style={{
-                        color: 'var(--text-secondary)',
-                        maxWidth: '600px',
-                        margin: '0 auto'
-                    }}>
-                        Prófaðu að smella á takkann hér að neðan til að sjá hvernig Bekkurinn leysir flókin veisluvandamál á sekúndum.
-                    </p>
-                </div>
 
-                <AIFoodPlanner
-                    childAge={8}
-                    partyTime={new Date(new Date().setHours(15, 0, 0, 0)).toISOString()}
-                    allergies={['Hnetur', 'Glúten']}
-                    attendeeCount={12}
-                />
-            </section>
-
-            {/* Pain Points - The Problem */}
-            <section style={{
-                background: 'white',
-                padding: 'var(--space-2xl) var(--space-xl)',
-                borderTop: '1px solid var(--border-light)',
-                borderBottom: '1px solid var(--border-light)'
-            }}>
-                <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        textAlign: 'center',
-                        marginBottom: 'var(--space-sm)',
-                        color: 'var(--text-primary)'
-                    }}>
-                        Kannast þú við þetta?
-                    </h2>
-                    <p style={{
-                        textAlign: 'center',
-                        color: 'var(--text-secondary)',
-                        marginBottom: 'var(--space-2xl)',
-                        fontSize: '1.125rem'
-                    }}>
-                        Það sem bekkjarfulltrúar upplifa á hverjum degi:
-                    </p>
-
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
-                        gap: 'var(--space-lg)',
-                        maxWidth: '900px',
-                        margin: '0 auto'
-                    }}>
-                        {[
-                            {
-                                color: '#EF4444',
-                                title: '47 ósvaruð skilaboð',
-                                description: 'Facebook-hópurinn er fullur af „Hvað er að gerast?" og „Hvenær er næsti fundur?"'
-                            },
-                            {
-                                color: '#F59E0B',
-                                title: 'Týndir tölvupóstar',
-                                description: 'Helmingur foreldra sá ekki tilkynninguna þína. Afgangurinn gleymir henni eftir 10 mínútur.'
-                            },
-                            {
-                                color: '#8B5CF6',
-                                title: 'Excel-skjal úr helvíti',
-                                description: '15 útgáfur af sama skjalinu, enginn veit hvor er rétt og einhver hefur eytt öllu.'
-                            },
-                            {
-                                color: '#EC4899',
-                                title: 'Þú ert alltaf að vinna',
-                                description: 'Skilaboð klukkan 22:30 um sparinestið í fyrramálið.'
-                            }
-                        ].map((pain, i) => (
-                            <div
-                                key={i}
-                                className="nordic-card"
-                                style={{
-                                    padding: 'var(--space-lg)',
-                                    transition: 'all 0.3s ease',
-                                    borderLeft: `4px solid ${pain.color}`
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(-4px)';
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateY(0)';
-                                    e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
-                                }}
-                            >
-                                <h3 style={{
-                                    fontSize: '1.25rem',
-                                    fontWeight: 'bold',
-                                    marginBottom: 'var(--space-sm)',
-                                    color: 'var(--text-primary)'
-                                }}>
-                                    {pain.title}
-                                </h3>
-                                <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                                    {pain.description}
-                                </p>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        {/* Feature 1 */}
+                        <div className="group p-8 bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <Calendar className="text-white" size={24} />
                             </div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* The Solution */}
-            <section style={{
-                maxWidth: '1200px',
-                margin: '0 auto',
-                padding: 'var(--space-2xl) var(--space-xl)'
-            }}>
-                <h2 style={{
-                    fontSize: '2rem',
-                    fontWeight: 'bold',
-                    textAlign: 'center',
-                    marginBottom: 'var(--space-sm)',
-                    color: 'var(--text-primary)'
-                }}>
-                    Allt sem þú þarft. Einn staður.
-                </h2>
-                <p style={{
-                    textAlign: 'center',
-                    color: 'var(--text-secondary)',
-                    marginBottom: 'var(--space-2xl)',
-                    fontSize: '1.125rem',
-                    maxWidth: '600px',
-                    margin: '0 auto var(--space-2xl)'
-                }}>
-                    Bekkurinn er ekki bara enn eitt verkfærið. Það er <strong>eina</strong> verkfærið sem þú þarft.
-                </p>
-
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
-                    gap: 'var(--space-xl)',
-                    maxWidth: '1000px',
-                    margin: '0 auto'
-                }}>
-                    {[
-                        {
-                            icon: Users,
-                            title: 'Alltaf réttur bekkjarlisti',
-                            description: 'Aldrei aftur Google-blöð með „Símanúmer_Útgáfa_Final_FINAL_2.xlsx"'
-                        },
-                        {
-                            icon: MessageCircle,
-                            title: 'Tilkynningar sem virka',
-                            description: 'Sendu tilkynningu til allra foreldra. Sjáðu hver hefur séð hana. Enginn týnist.'
-                        },
-                        {
-                            icon: Calendar,
-                            title: 'Viðburðir og verkefni',
-                            description: 'Foreldrar skrá sig sjálfir. Þú færð áminningar. Ekkert ruglað Google-dagatal.'
-                        },
-                        {
-                            icon: CheckCircle2,
-                            title: 'Verkefnalisti',
-                            description: 'Merktu verkefni sem kláruð. Allir sjá hvað er í gangi. Ljóst framundan.'
-                        }
-                    ].map((feature, i) => (
-                        <div
-                            key={i}
-                            style={{
-                                textAlign: 'center',
-                                padding: 'var(--space-lg)'
-                            }}
-                        >
-                            <div style={{
-                                width: '80px',
-                                height: '80px',
-                                background: 'var(--nordic-blue)',
-                                borderRadius: '50%',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                margin: '0 auto var(--space-lg)',
-                                boxShadow: 'var(--shadow-md)'
-                            }}>
-                                <feature.icon size={40} color="white" />
-                            </div>
-                            <h3 style={{
-                                fontSize: '1.25rem',
-                                fontWeight: 'bold',
-                                marginBottom: 'var(--space-sm)',
-                                color: 'var(--text-primary)'
-                            }}>
-                                {feature.title}
-                            </h3>
-                            <p style={{ color: 'var(--text-secondary)', lineHeight: 1.6 }}>
-                                {feature.description}
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Dagatal & Viðburðir</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Samstilltu sjálfkrafa við skóladagatal. Skipulagðu rölt, samkomur og ferðir
+                                með smart áminningum.
                             </p>
                         </div>
-                    ))}
-                </div>
-            </section>
 
-            {/* Why Parents Love It */}
-            <section style={{
-                background: 'linear-gradient(135deg, var(--nordic-blue) 0%, var(--nordic-blue-dark) 100%)',
-                color: 'white',
-                padding: 'var(--space-2xl) var(--space-xl)',
-                textAlign: 'center'
-            }}>
-                <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-                    <Heart size={48} style={{ margin: '0 auto var(--space-lg)' }} />
-                    <h2 style={{
-                        fontSize: '2rem',
-                        fontWeight: 'bold',
-                        marginBottom: 'var(--space-lg)'
-                    }}>
-                        Af hverju foreldrar elska Bekkurinn
-                    </h2>
-
-                    <div style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                        gap: 'var(--space-lg)',
-                        marginTop: 'var(--space-xl)'
-                    }}>
-                        {[
-                            { icon: Shield, text: 'Ekkert týnist - allt á einum stað' },
-                            { icon: Zap, text: '5 mínútur í stað 5 klukkustunda' },
-                            { icon: Heart, text: 'Loksins tími fyrir börnin' }
-                        ].map((item, i) => (
-                            <div key={i} style={{ textAlign: 'center' }}>
-                                <item.icon size={32} style={{ margin: '0 auto var(--space-sm)' }} />
-                                <p style={{ fontSize: '1.125rem', fontWeight: 500 }}>
-                                    {item.text}
-                                </p>
+                        {/* Feature 2 */}
+                        <div className="group p-8 bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <Users className="text-white" size={24} />
                             </div>
-                        ))}
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Foreldrasamtöl</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Örugg samskipti án Facebook. Sameiginleg skrá, tilkynningar og
+                                persónuverndarstillingar.
+                            </p>
+                        </div>
+
+                        {/* Feature 3 */}
+                        <div className="group p-8 bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <MessageSquare className="text-white" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Skipulagning Rólta</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Sjálfvirk skráning foreldra í rölt með sanngjörnu kerfi.
+                                Enginn gleymdur, allir þáttakendur.
+                            </p>
+                        </div>
+
+                        {/* Feature 4 */}
+                        <div className="group p-8 bg-gradient-to-br from-amber-50 to-white border border-amber-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <Shield className="text-white" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Öryggi & Friðhelgi</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                GDPR samræmt. Aðeins bekkjarmeðlimir sjá gögn.
+                                Engin auglýsing, engin gagnamöl.
+                            </p>
+                        </div>
+
+                        {/* Feature 5 */}
+                        <div className="group p-8 bg-gradient-to-br from-red-50 to-white border border-red-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <Heart className="text-white" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Ofnæmisvakt</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Skráðu ofnæmi og matarþarfir örugglega.
+                                Allir sjá á einum stað — öruggari veislur.
+                            </p>
+                        </div>
+
+                        {/* Feature 6 */}
+                        <div className="group p-8 bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
+                            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <Clock className="text-white" size={24} />
+                            </div>
+                            <h3 className="text-xl font-bold text-gray-900 mb-3">Tímasparnaður</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Engar Facebook-umræður eða WhatsApp-hópar.
+                                Allt á einum stað, skipulagt og clean.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* CTA */}
-            <section style={{
-                maxWidth: '800px',
-                margin: '0 auto',
-                padding: 'var(--space-2xl) var(--space-xl)',
-                textAlign: 'center'
-            }}>
-                <h2 style={{
-                    fontSize: '2.5rem',
-                    fontWeight: 'bold',
-                    marginBottom: 'var(--space-md)',
-                    color: 'var(--text-primary)'
-                }}>
-                    Viltu byrja?
-                </h2>
-                <p style={{
-                    fontSize: '1.25rem',
-                    color: 'var(--text-secondary)',
-                    marginBottom: 'var(--space-xl)'
-                }}>
-                    Það tekur 2 mínútur að setja upp. Ókeypis. Engin kreditkort.
-                </p>
-                <button
-                    onClick={() => router.push('/is/login')}
-                    className="nordic-button"
-                    style={{
-                        fontSize: '1.25rem',
-                        padding: '1.25rem 2.5rem',
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: 'var(--space-sm)'
-                    }}
-                >
-                    Byrja núna - ókeypis
-                    <ArrowRight size={24} />
-                </button>
+            {/* How It Works Section */}
+            <section id="how" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                            Hvernig virkar þetta?
+                        </h2>
+                        <p className="text-xl text-gray-600">
+                            Þrjú einföld skref til að byrja
+                        </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-12">
+                        {/* Step 1 */}
+                        <div className="relative">
+                            <div className="flex flex-col items-center text-center">
+                                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
+                                    1
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Stofna bekk</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    Bekkjarfulltrúi býr til bekk með skóla og bekknúmeri.
+                                    Færð strax boðskóða til að deila.
+                                </p>
+                            </div>
+                            <div className="hidden md:block absolute top-8 -right-6 text-blue-300">
+                                <ArrowRight size={32} />
+                            </div>
+                        </div>
+
+                        {/* Step 2 */}
+                        <div className="relative">
+                            <div className="flex flex-col items-center text-center">
+                                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
+                                    2
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900 mb-4">Bjóða foreldrum</h3>
+                                <p className="text-gray-600 leading-relaxed">
+                                    Sendu boðskóða í WhatsApp eða í tölvupósti.
+                                    Foreldrar skrá sig á 30 sekúndum.
+                                </p>
+                            </div>
+                            <div className="hidden md:block absolute top-8 -right-6 text-blue-300">
+                                <ArrowRight size={32} />
+                            </div>
+                        </div>
+
+                        {/* Step 3 */}
+                        <div className="flex flex-col items-center text-center">
+                            <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
+                                3
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-4">Skipuleggja saman</h3>
+                            <p className="text-gray-600 leading-relaxed">
+                                Dagatal samstillt, rölt skipulögð, tilkynningar sendar.
+                                Allt virkar bara!
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="text-center mt-16">
+                        <Link
+                            href="/is/onboarding"
+                            className="inline-flex items-center gap-2 bg-blue-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                        >
+                            Byrja núna — það er frítt
+                            <ArrowRight size={20} />
+                        </Link>
+                        <p className="text-sm text-gray-500 mt-4">Ekkert greiðslukort krafist · Tilbúið á 2 mínútum</p>
+                    </div>
+                </div>
+            </section>
+
+            {/* Testimonials */}
+            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center mb-16">
+                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                            Hvað segja notendur?
+                        </h2>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-8">
+                        <div className="p-8 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100">
+                            <div className="flex gap-1 mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed italic">
+                                &quot;Loksins losnaðum við óendanlegum Facebook-þráðum. Allt skipulagt og yfirlitslegt.
+                                Bestu 5 mínútur sem ég hef varið í skipulagningu!&quot;
+                            </p>
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center font-bold text-blue-800">
+                                    SB
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Sigrún Bergsdóttir</div>
+                                    <div className="text-sm text-gray-600">Bekkjarfulltrúi, 3. bekkur</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-100">
+                            <div className="flex gap-1 mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed italic">
+                                &quot;Sem foreldri er þetta svo þægilegt. Ég sé alla viðburði, veit hverjir eru á rölt,
+                                og fæ áminningar. Aldrei misst af neinu!&quot;
+                            </p>
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-green-200 rounded-full flex items-center justify-center font-bold text-green-800">
+                                    JK
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Jón Kristjánsson</div>
+                                    <div className="text-sm text-gray-600">Foreldri, 5. bekkur</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-8 bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100">
+                            <div className="flex gap-1 mb-4">
+                                {[...Array(5)].map((_, i) => (
+                                    <Star key={i} size={20} className="text-amber-400" fill="currentColor" />
+                                ))}
+                            </div>
+                            <p className="text-gray-700 mb-6 leading-relaxed italic">
+                                &quot;Þægilegast að allir sjá ofnæmi barnanna. Engar hættulegar uppákomur lengur
+                                á bekkjarveislum. Þetta ætti að vera í öllum bekkjum!&quot;
+                            </p>
+                            <div className="flex items-center gap-3">
+                                <div className="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center font-bold text-purple-800">
+                                    GA
+                                </div>
+                                <div>
+                                    <div className="font-semibold text-gray-900">Guðrún Arnardóttir</div>
+                                    <div className="text-sm text-gray-600">Foreldri, 2. bekkur</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FAQ */}
+            <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+                <div className="max-w-3xl mx-auto">                    <div className="text-center mb-16">
+                    <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
+                        Algengar spurningar
+                    </h2>
+                </div>
+
+                    <div className="space-y-6">
+                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
+                                Er þetta frítt?
+                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p className="mt-4 text-gray-600 leading-relaxed">
+                                Já! Bekkurinn er algjörlega frítt fyrir alla grunnskólabekki á Íslandi.
+                                Við trúum á að öll börn eigi að hafa aðgang að góðri skipulagningu.
+                            </p>
+                        </details>
+
+                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
+                                Er þetta öruggt?
+                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p className="mt-4 text-gray-600 leading-relaxed">
+                                Já! Við notum sama öryggi og bankar (256-bit encryption).
+                                Öll gögn eru GDPR samræmd og geymd örugglega.
+                                Aðeins bekkjarmeðlimir sjá upplýsingar.
+                            </p>
+                        </details>
+
+                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
+                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
+                                Hvernig byrja ég?
+                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <p className="mt-4 text-gray-600 leading-relaxed">
+                                Smelltu á &quot;Byrja frítt&quot; og fylltu út upplýsingar um bekkinn þinn.
+                                Færð strax boðskóða sem þú getur deilt með öðrum foreldrum.
+                                Tekur um 2 mínútur!
+                            </p>
+                        </details>
+                    </div>
+                </div>
+            </section>
+
+            {/* Final CTA */}
+            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+                <div className="max-w-4xl mx-auto text-center">
+                    <h2 className="text-4xl sm:text-5xl font-bold mb-6">
+                        Tilbúinn að einfaldara líf?
+                    </h2>
+                    <p className="text-xl sm:text-2xl text-blue-100 mb-10 leading-relaxed">
+                        Gangi til liðs við hundruð foreldra og bekkjarfulltrúa sem hafa þegar fundið betri leið.
+                    </p>
+                    <Link
+                        href="/is/onboarding"
+                        className="inline-flex items-center gap-2 bg-white text-blue-600 px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:scale-105"
+                    >
+                        Stofna bekk núna
+                        <ArrowRight size={20} />
+                    </Link>
+                    <p className="text-blue-200 mt-6 text-sm">
+                        Frítt fyrir alla · Engin binding · Tilbúið á 2 mínútum
+                    </p>
+                </div>
             </section>
 
             {/* Footer */}
-            <footer style={{
-                borderTop: '1px solid var(--border-light)',
-                padding: 'var(--space-xl)',
-                textAlign: 'center',
-                color: 'var(--text-tertiary)',
-                background: 'white'
-            }}>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: 'var(--space-xl)',
-                    marginBottom: 'var(--space-md)',
-                    flexWrap: 'wrap'
-                }}>
-                    <button
-                        onClick={() => router.push('/is/why-us')}
-                        style={{
-                            background: 'none',
-                            border: 'none',
-                            color: 'var(--nordic-blue)',
-                            cursor: 'pointer',
-                            fontWeight: 500
-                        }}
-                    >
-                        Af hverju Bekkurinn?
-                    </button>
+            <footer className="bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
+                <div className="max-w-7xl mx-auto">
+                    <div className="text-center text-sm text-gray-400">
+                        <p>© 2026 Bekkurinn. Allur réttur áskilinn. Gert með ❤️ á Íslandi.</p>
+                    </div>
                 </div>
-                <p style={{ fontSize: '0.875rem' }}>
-                    © 2026 Bekkurinn. Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi.
-                </p>
             </footer>
         </div>
     );
