@@ -155,7 +155,7 @@ export default function OnboardingView() {
                             <select
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white"
+                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white text-gray-900"
                             >
                                 <option value="">Veldu skóla...</option>
                                 {SCHOOLS.map(s => <option key={s.name} value={s.name}>{s.name}</option>)}
@@ -173,7 +173,7 @@ export default function OnboardingView() {
                                         className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all
                                             ${formData.grade === g
                                                 ? 'bg-nordic-blue text-white scale-110 shadow-md'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'}`}
+                                                : 'bg-gray-100 text-gray-900 hover:bg-gray-200'}`}
                                     >
                                         {g}
                                     </button>

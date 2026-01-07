@@ -280,7 +280,7 @@ export default function SettingsView() {
                         <select
                             value={formData.schoolName}
                             onChange={handleSchoolChange}
-                            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none bg-white"
+                            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none bg-white text-gray-900"
                         >
                             <option value="">Veldu skóla...</option>
                             {SCHOOLS.map(school => (
@@ -332,7 +332,7 @@ export default function SettingsView() {
                                 type="number"
                                 value={formData.grade}
                                 onChange={(e) => setFormData({ ...formData, grade: Number(e.target.value) })}
-                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
+                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none text-gray-900"
                                 min="1"
                                 max="10"
                             />
