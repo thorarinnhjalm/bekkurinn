@@ -40,13 +40,20 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 // Check if user is an admin of any class
                 const q = query(
                     collection(db, 'classes'),
-                    where('admins', 'array-contains', user.uid),
-                    orderBy('createdAt', 'desc') // Get newest class first
+                    where('admins', 'array-contains', user.uid)
                 );
                 const snapshot = await getDocs(q);
 
                 if (!snapshot.empty) {
-                    setClassId(snapshot.docs[0].id);
+                    // Client-side sort to avoid index requirement
+                    const sortedDocs = snapshot.docs.sort((a, b) => {
+                        const tA = a.data().createdAt?.toMillis() || 0;
+                        const tB = b.data().createdAt?.toMillis() || 0;
+                        return tB - tA; // Newest first
+                    });
+
+                    const userClassDoc = sortedDocs[0];
+                    setClassId(userClassDoc.id);
                 } else {
                     // Check parentLinks... (Future: not implemented for MVP onboarding yet)
                     // If no class found, redirect to Onboarding

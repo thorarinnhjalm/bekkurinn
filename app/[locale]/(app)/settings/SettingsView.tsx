@@ -62,12 +62,16 @@ export default function SettingsView() {
             try {
                 const q = query(
                     collection(db, 'classes'),
-                    where('admins', 'array-contains', user.uid),
-                    orderBy('createdAt', 'desc')
+                    where('admins', 'array-contains', user.uid)
                 );
                 const snapshot = await getDocs(q);
                 if (!snapshot.empty) {
-                    setClassId(snapshot.docs[0].id);
+                    const sortedDocs = snapshot.docs.sort((a, b) => {
+                        const tA = a.data().createdAt?.toMillis() || 0;
+                        const tB = b.data().createdAt?.toMillis() || 0;
+                        return tB - tA;
+                    });
+                    setClassId(sortedDocs[0].id);
                 }
             } catch (error) {
                 console.error("Error finding class:", error);
