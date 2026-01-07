@@ -218,9 +218,19 @@ export default function SettingsView() {
 
     return (
         <div className="max-w-2xl mx-auto p-4 space-y-8 pb-24 pt-8">
-            <header className="border-b border-gray-200 pb-4">
-                <h1 className="text-3xl font-bold text-gray-900">Stillingar Bekkjarins</h1>
-                <p className="text-gray-500">Breyttu upplýsingum um skóla og árgang</p>
+            <header className="border-b border-gray-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">Stillingar Bekkjarins</h1>
+                    <p className="text-gray-500">Breyttu upplýsingum um skóla og árgang</p>
+                </div>
+                <button
+                    onClick={handleSave}
+                    disabled={isSaving}
+                    className="hidden sm:flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-lg hover:bg-nordic-blue-dark transition-colors disabled:opacity-50 shadow-sm"
+                >
+                    {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
+                    Vista
+                </button>
             </header>
 
             {/* Invite Code Section */}

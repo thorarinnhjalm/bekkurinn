@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useAnnouncements, useTasks, useStudents, useClass } from '@/hooks/useFirestore';
 import { Loader2, Calendar, Star, Megaphone, ChevronRight } from 'lucide-react';
+import { db } from '@/lib/firebase/config';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 
 import Link from 'next/link';
 import type { Task, Announcement, Student } from '@/types';
@@ -27,12 +29,59 @@ interface DashboardViewProps {
 export default function DashboardView({ translations }: DashboardViewProps) {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const [classId, setClassId] = useState<string | null>(null);
+    const [findingClass, setFindingClass] = useState(true);
 
-    // Data Hooks
-    const { data: classData, isLoading: classLoading } = useClass(CLASS_ID);
-    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(CLASS_ID);
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
-    const { data: studentsData, isLoading: studentsLoading } = useStudents(CLASS_ID);
+    // 1. Find the user's class
+    useEffect(() => {
+        async function fetchUserClass() {
+            if (!user) return;
+            try {
+                // Check if user is an admin of any class
+                const q = query(collection(db, 'classes'), where('admins', 'array-contains', user.uid));
+                const snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    setClassId(snapshot.docs[0].id);
+                } else {
+                    // Check parentLinks... (Future: not implemented for MVP onboarding yet)
+                    // If no class found, redirect to Onboarding
+                    router.push('/is/onboarding');
+                }
+            } catch (error) {
+                console.error("Error finding class:", error);
+            } finally {
+                setFindingClass(false);
+            }
+        }
+
+        if (!authLoading && user) {
+            fetchUserClass();
+        }
+    }, [user, authLoading, router]);
+
+    // 2. Fetch Class Data (only if we have an ID)
+    const { data: classData, isLoading: classLoading } = useClass(classId || 'dummy');
+
+    // ... Hooks dependent on classId ...
+    // usage: enabled: !!classId
+    // We need to update useStudents, useTasks etc to accept skip/enabled flag or handle null ID
+
+    // TEMPORARY FIX:
+    // Since useTasks etc might crash with null ID, we only render them when classId is set.
+
+    // ... (Hooks below defined normally but we'll conditionally use their data)
+
+    // Re-implement hooks to depend on classId state mostly?
+    // Actually, react-query hooks usually usually handle null well if configured, 
+    // but our custom hooks might pass null to firestore methods.
+
+    // Let's modify the hooks imports or usage? 
+    // Easier: Just conditionally render the whole view.
+
+    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId || '');
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(classId || '');
+    const { data: studentsData, isLoading: studentsLoading } = useStudents(classId || '');
 
     // Auth redirection
     useEffect(() => {

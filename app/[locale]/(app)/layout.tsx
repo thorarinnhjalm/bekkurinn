@@ -24,7 +24,7 @@ export default async function AppLayout({
             <TopHeader />
 
             {/* Main content area with top and bottom padding */}
-            <main className="flex-1 overflow-y-auto">
+            <main className="flex-1 w-full max-w-5xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:px-8">
                 {children}
             </main>
 
