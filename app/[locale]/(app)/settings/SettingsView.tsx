@@ -67,7 +67,8 @@ export default function SettingsView() {
         grade: 1,
         section: '',
         name: '',
-        calendarUrl: ''
+        calendarUrl: '',
+        joinCode: ''
     });
 
     // Populate form when data loads
@@ -78,7 +79,8 @@ export default function SettingsView() {
                 grade: classData.grade || 1,
                 section: classData.section || '',
                 name: classData.name || '',
-                calendarUrl: classData.calendarUrl || ''
+                calendarUrl: classData.calendarUrl || '',
+                joinCode: classData.joinCode || ''
             });
         }
     }, [classData]);
@@ -109,7 +111,8 @@ export default function SettingsView() {
                 grade: Number(formData.grade),
                 section: formData.section,
                 name: displayName,
-                calendarUrl: formData.calendarUrl
+                calendarUrl: formData.calendarUrl,
+                joinCode: formData.joinCode
             });
             await refetch();
             alert('Stillingar vistaðar!');
@@ -244,10 +247,14 @@ export default function SettingsView() {
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <div className="bg-stone-100 px-4 py-2 rounded-lg border border-stone-200">
-                            <code className="text-xl font-mono font-bold text-nordic-blue tracking-wider">
-                                {classData.joinCode || 'Enginn kóði'}
-                            </code>
+                        <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200">
+                            <input
+                                type="text"
+                                value={formData.joinCode}
+                                onChange={(e) => setFormData({ ...formData, joinCode: e.target.value.toUpperCase() })}
+                                className="text-xl font-mono font-bold text-nordic-blue tracking-wider bg-transparent outline-none w-32 uppercase text-center"
+                                placeholder="KÓÐI"
+                            />
                         </div>
                         {classData.joinCode && (
                             <button

@@ -6,7 +6,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useAnnouncements, useTasks, useStudents, useClass } from '@/hooks/useFirestore';
 import { Loader2, Calendar, Star, Megaphone, ChevronRight } from 'lucide-react';
 import { db } from '@/lib/firebase/config';
-import { collection, query, where, getDocs } from 'firebase/firestore';
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 
 import Link from 'next/link';
 import type { Task, Announcement, Student } from '@/types';
@@ -38,7 +38,11 @@ export default function DashboardView({ translations }: DashboardViewProps) {
             if (!user) return;
             try {
                 // Check if user is an admin of any class
-                const q = query(collection(db, 'classes'), where('admins', 'array-contains', user.uid));
+                const q = query(
+                    collection(db, 'classes'),
+                    where('admins', 'array-contains', user.uid),
+                    orderBy('createdAt', 'desc') // Get newest class first
+                );
                 const snapshot = await getDocs(q);
 
                 if (!snapshot.empty) {
