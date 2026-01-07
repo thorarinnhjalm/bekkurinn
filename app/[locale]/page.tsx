@@ -432,8 +432,6 @@ export default function LandingPage() {
                     >
                         Af hverju Bekkurinn?
                     </button>
-                    <a href="#" style={{ color: 'var(--nordic-blue)', textDecoration: 'none' }}>Spurningar</a>
-                    <a href="#" style={{ color: 'var(--nordic-blue)', textDecoration: 'none' }}>Verð</a>
                 </div>
                 <p style={{ fontSize: '0.875rem' }}>
                     © 2026 Bekkurinn. Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi.
