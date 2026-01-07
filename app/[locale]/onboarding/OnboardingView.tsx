@@ -173,7 +173,7 @@ export default function OnboardingView() {
                                         onClick={() => setFormData({ ...formData, grade: g })}
                                         className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all border
                                             ${formData.grade === g
-                                                ? 'bg-nordic-blue text-white border-nordic-blue scale-110 shadow-md'
+                                                ? 'bg-blue-900 text-white border-blue-900 scale-110 shadow-md'
                                                 : 'bg-white text-gray-900 border-gray-300 hover:bg-gray-50'}`}
                                     >
                                         {g}
@@ -240,7 +240,7 @@ export default function OnboardingView() {
                         <button
                             onClick={handleCreate}
                             disabled={loading}
-                            className="w-full bg-nordic-blue text-white py-3 rounded-xl font-bold hover:bg-nordic-blue-dark transition-all transform active:scale-95 shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2"
+                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all transform active:scale-95 shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2"
                         >
                             {loading && <Loader2 className="animate-spin" />}
                             <span>Stofna Bekk</span>
