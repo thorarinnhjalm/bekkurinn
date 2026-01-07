@@ -109,8 +109,8 @@ SNIÐMÁT:
 
 Vertu ALLTAF öruggur, practical og raunhæfur. Þetta eru RAUNVERULEG börn með RAUNVERULEG ofnæmi.`;
 
-        // Use Gemini 1.5 Flash Latest (almennt available)
-        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash-latest' });
+        // Use Gemini 2.0 Flash Lite
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite-preview-02-05' });
         const result = await model.generateContent(prompt);
         const suggestion = result.response.text();
 
