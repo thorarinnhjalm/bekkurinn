@@ -1,44 +1,38 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { createClass } from '@/services/firestore'; // Assuming these exist or I'll create them
 import { SCHOOLS } from '@/constants/schools';
-import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check } from 'lucide-react';
-import { doc, getFirestore, updateDoc, setDoc, serverTimestamp, collection, addDoc, Timestamp } from 'firebase/firestore';
+import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check, Globe } from 'lucide-react';
+import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { OnboardingSchema, validateInput } from '@/lib/validation';
 
+// Define the steps explicitly
+type OnboardingStep = 'language' | 'select' | 'create' | 'join';
+
 // Temporary local implementations until moved to services
+// (Keep existing logic, just cleaner)
 async function createClassLocal(data: any, userId: string) {
-    // Generate simple join code: First 4 chars of school + grade + section
-    // e.g. SALA-4-H or SALA-4
     const schoolPrefix = data.schoolName.substring(0, 4).toUpperCase();
     const sectionSuffix = data.section ? `-${data.section.toUpperCase().substring(0, 1)}` : '';
     const baseCode = `${schoolPrefix}-${data.grade}${sectionSuffix}`;
-    // Add random suffix to ensure uniqueness
     const uniqueCode = `${baseCode}-${Math.floor(1000 + Math.random() * 9000)}`;
 
     const classRef = await addDoc(collection(db, 'classes'), {
         ...data,
-        section: data.section || null, // Ensure section is null not undefined
+        section: data.section || null,
         joinCode: uniqueCode,
         admins: [userId],
         createdAt: serverTimestamp(),
-        confidentialityAgreedAt: serverTimestamp(), // Auto-agree for creator ?? TBD
+        confidentialityAgreedAt: serverTimestamp(),
     });
-
-    // Add creator as admin/parent link? Usually handled separately, 
-    // but for MVP creator just gets access via 'admins' array.
-
-    // Update USER profile with this classId? 
-    // For now we rely on the user being in the 'admins' array.
 
     return classRef.id;
 }
 
-// Calendar helpers (duplicated from SettingsView for now)
+// Calendar helpers
 function parseICS(icsContent: string) {
     const events: any[] = [];
     const lines = icsContent.split(/\r\n|\n|\r/);
@@ -79,8 +73,13 @@ function parseDate(dateStr: string): Date {
 export default function OnboardingView() {
     const { user } = useAuth();
     const router = useRouter();
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
-    const [mode, setMode] = useState<'select' | 'create' | 'join'>('select');
+    // Check query param 'step' to see if language is already selected
+    const initialStep = searchParams.get('step') === 'select' ? 'select' : 'language';
+
+    const [step, setStep] = useState<OnboardingStep>(initialStep);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -88,24 +87,38 @@ export default function OnboardingView() {
     const [formData, setFormData] = useState({
         schoolName: '',
         grade: 1,
-        isSplit: true, // Default to split classes (A, B, etc.)
+        isSplit: true,
         section: ''
     });
 
-    // Join Form State
-    const [joinCode, setJoinCode] = useState('');
+    const handleLanguageSelect = (lang: string) => {
+        // Construct new path with selected locale
+        // Current path format: /[locale]/onboarding
+        // We replace [locale] with the selected lang
+        const segments = pathname.split('/');
+        if (segments.length >= 3) {
+            segments[1] = lang; // Replace existing locale
+            const newPath = segments.join('/');
+
+            // Navigate to new locale with ?step=select to skip language screen
+            router.replace(`${newPath}?step=select`);
+            // Set state immediately for responsiveness, though page might reload
+            setStep('select');
+        } else {
+            // Fallback
+            router.push(`/${lang}/onboarding?step=select`);
+        }
+    };
 
     const handleCreate = async () => {
         if (!user) return;
 
-        // VALIDATE with Zod
         const validation = validateInput(OnboardingSchema, formData);
         if (!validation.success) {
-            setError(validation.errors[0]); // Show first error
+            setError(validation.errors[0]);
             return;
         }
 
-        // Additional manual checks
         if (formData.isSplit && !formData.section) {
             setError('Skráðu deild (t.d. A eða Hlíð)');
             return;
@@ -115,7 +128,6 @@ export default function OnboardingView() {
         setError(null);
 
         try {
-            // Find Calendar URL
             const schoolObj = SCHOOLS.find(s => s.name === formData.schoolName);
             const calendarUrl = schoolObj?.icsUrl;
 
@@ -131,25 +143,21 @@ export default function OnboardingView() {
                 calendarUrl
             }, user.uid);
 
-            // SYNC CALENDAR AUTOMATICALLY
             if (calendarUrl) {
                 try {
-                    // Fetch ICS
                     const res = await fetch(`/api/proxy-calendar?url=${encodeURIComponent(calendarUrl)}`);
                     if (res.ok) {
                         const icsText = await res.text();
                         const events = parseICS(icsText);
-
                         const keywords = ['Starfsdagur', 'Skipulagsdagur', 'Vetrarfrí', 'Jólafrí', 'Páskafrí', 'Skólasetning', 'Skólaslit', 'Lýðveldisdagurinn', 'Sumardagurinn fyrsti', 'Frídagur'];
                         const relevantEvents = events.filter((e: any) =>
                             keywords.some(k => e.summary && e.summary.toLowerCase().includes(k.toLowerCase()))
                         );
 
-                        // Add events to tasks
                         const addPromises = relevantEvents.map((event: any) => {
                             const date = parseDate(event.dtstart);
                             return addDoc(collection(db, 'tasks'), {
-                                classId: classId, // Use the new classId
+                                classId: classId,
                                 type: 'school_event',
                                 title: event.summary,
                                 description: 'Samkvæmt skóladagatali',
@@ -164,13 +172,14 @@ export default function OnboardingView() {
                         await Promise.all(addPromises);
                     }
                 } catch (calError) {
-                    console.error("Failed to sync calendar during onboarding:", calError);
-                    // Don't block onboarding success, just log error
+                    console.error("Calendar sync failed:", calError);
                 }
             }
 
-            // Redirect
-            router.push('/is/dashboard?welcome=true');
+            // Keep current locale in dashboard redirect
+            const segments = pathname.split('/');
+            const locale = segments[1] || 'is';
+            router.push(`/${locale}/dashboard?welcome=true`);
         } catch (err: any) {
             console.error(err);
             setError('Gat ekki stofnað bekk. Reyndu aftur.');
@@ -179,22 +188,70 @@ export default function OnboardingView() {
         }
     };
 
-    const handleJoin = async () => {
-        alert('Virkni til að ganga í bekk er í vinnslu! (Notaðu Stofna bekk í bili)');
-        // Implement join logic later
-    };
+    // --- STEP 1: LANGUAGE SELECTION ---
+    if (step === 'language') {
+        return (
+            <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
+                <div className="text-center space-y-3">
+                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
+                        <Globe className="text-white" size={32} />
+                    </div>
+                    <h1 className="text-3xl font-bold text-gray-900">Veldu tungumál</h1>
+                    <p className="text-gray-500 text-lg">Select your language / Wybierz język</p>
+                </div>
 
-    if (mode === 'select') {
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
+                    <LanguageCard
+                        lang="is"
+                        flag="🇮🇸"
+                        name="Íslenska"
+                        sub="Móðurmál"
+                        onClick={() => handleLanguageSelect('is')}
+                    />
+                    <LanguageCard
+                        lang="en"
+                        flag="🇬🇧"
+                        name="English"
+                        sub="International"
+                        onClick={() => handleLanguageSelect('en')}
+                    />
+                    <LanguageCard
+                        lang="pl"
+                        flag="🇵🇱"
+                        name="Polski"
+                        sub="Język polski"
+                        onClick={() => handleLanguageSelect('pl')}
+                    />
+                    <LanguageCard
+                        lang="lt"
+                        flag="🇱🇹"
+                        name="Lietuvių"
+                        sub="Lietuvių kalba"
+                        onClick={() => handleLanguageSelect('lt')}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+    // --- STEP 2: SELECT MODE (Create vs Join) ---
+    if (step === 'select') {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8">
                 <div className="text-center space-y-2">
+                    <button
+                        onClick={() => setStep('language')}
+                        className="text-sm text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1 mx-auto"
+                    >
+                        <Globe size={14} /> Breyta tungumáli / Change language
+                    </button>
                     <h1 className="text-3xl font-bold text-nordic-blue-dark">Velkomin í Bekkinn!</h1>
                     <p className="text-text-secondary">Hvernig viltu byrja?</p>
                 </div>
 
                 <div className="grid gap-4 w-full max-w-md">
                     <button
-                        onClick={() => setMode('join')}
+                        onClick={() => setStep('join')}
                         className="nordic-card p-6 flex items-center gap-4 hover:border-nordic-blue transition-all group text-left"
                     >
                         <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
@@ -208,7 +265,7 @@ export default function OnboardingView() {
                     </button>
 
                     <button
-                        onClick={() => setMode('create')}
+                        onClick={() => setStep('create')}
                         className="nordic-card p-6 flex items-center gap-4 hover:border-amber-400 transition-all group text-left border-2 border-transparent"
                     >
                         <div className="bg-amber-50 p-3 rounded-full group-hover:bg-amber-100 transition-colors">
@@ -225,12 +282,13 @@ export default function OnboardingView() {
         );
     }
 
-    if (mode === 'create') {
+    // --- STEP 3: CREATE CLASS ---
+    if (step === 'create') {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
                     <header>
-                        <button onClick={() => setMode('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
+                        <button onClick={() => setStep('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
                             ← Til baka
                         </button>
                         <h1 className="text-2xl font-bold text-nordic-blue-dark">Stofna nýjan bekk</h1>
@@ -238,7 +296,6 @@ export default function OnboardingView() {
                     </header>
 
                     <div className="space-y-4">
-                        {/* School */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">Skóli (í Kópavogi)</label>
                             <select
@@ -251,7 +308,6 @@ export default function OnboardingView() {
                             </select>
                         </div>
 
-                        {/* Grade */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Árgangur</label>
                             <select
@@ -267,7 +323,6 @@ export default function OnboardingView() {
                             </select>
                         </div>
 
-                        {/* Structure Type */}
                         <div className="bg-blue-50 p-4 rounded-lg space-y-3">
                             <label className="block text-sm font-medium text-nordic-blue-dark">Hvernig er árganginum skipt?</label>
 
@@ -300,7 +355,6 @@ export default function OnboardingView() {
                             </label>
                         </div>
 
-                        {/* Section Input (Only if split) */}
                         {formData.isSplit && (
                             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Nafn deildar/bekkjar</label>
@@ -336,11 +390,12 @@ export default function OnboardingView() {
         );
     }
 
-    if (mode === 'join') {
+    // --- STEP 4: JOIN CLASS ---
+    if (step === 'join') {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6">
-                    <button onClick={() => setMode('select')} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
+                    <button onClick={() => setStep('select')} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <QrCode className="text-nordic-blue" size={32} />
                     </div>
@@ -355,10 +410,25 @@ export default function OnboardingView() {
                     <button disabled className="w-full bg-gray-300 text-white py-3 rounded-xl font-bold cursor-not-allowed">Ganga í bekk</button>
                 </div>
             </div>
-        )
+        );
     }
 
     return null;
+}
+
+function LanguageCard({ lang, flag, name, sub, onClick }: any) {
+    return (
+        <button
+            onClick={onClick}
+            className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all text-left group"
+        >
+            <span className="text-4xl group-hover:scale-110 transition-transform">{flag}</span>
+            <div>
+                <h3 className="font-bold text-lg text-gray-900">{name}</h3>
+                <p className="text-sm text-gray-500">{sub}</p>
+            </div>
+        </button>
+    );
 }
 
 function AlertTriangle(props: any) {
