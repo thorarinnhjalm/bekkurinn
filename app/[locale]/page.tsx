@@ -148,6 +148,107 @@ export default function LandingPage() {
                 </div>
             </section>
 
+            {/* Product Showcase - Birthday & Dietary Features */}
+            <section style={{
+                maxWidth: '1200px',
+                margin: '0 auto',
+                padding: 'var(--space-2xl) var(--space-xl)',
+                background: 'white',
+                borderRadius: 'var(--radius-xl)',
+                boxShadow: 'var(--shadow-lg)'
+            }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))',
+                    gap: 'var(--space-2xl)',
+                    alignItems: 'center'
+                }}>
+                    {/* Left: Feature description */}
+                    <div>
+                        <div style={{
+                            display: 'inline-block',
+                            padding: '0.5rem 1rem',
+                            background: 'var(--nordic-blue)20',
+                            borderRadius: '2rem',
+                            color: 'var(--nordic-blue)',
+                            fontWeight: 600,
+                            fontSize: '0.875rem',
+                            marginBottom: 'var(--space-md)'
+                        }}>
+                            Sérstaklega fyrir foreldra
+                        </div>
+                        <h2 style={{
+                            fontSize: '2.5rem',
+                            fontWeight: 'bold',
+                            marginBottom: 'var(--space-lg)',
+                            color: 'var(--text-primary)',
+                            lineHeight: 1.2
+                        }}>
+                            Aldrei aftur gleyma <span style={{ color: 'var(--nordic-blue)' }}>óþoli</span> eða <span style={{ color: 'var(--nordic-blue)' }}>afmælum</span>
+                        </h2>
+                        <p style={{
+                            fontSize: '1.125rem',
+                            color: 'var(--text-secondary)',
+                            marginBottom: 'var(--space-xl)',
+                            lineHeight: 1.6
+                        }}>
+                            Haltu utan um óþol, bjóddu í afmæli, og skipulagðu viðburði.
+                            Allt í einu kerfi sem foreldrar geta treyst.
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-md)' }}>
+                            {[
+                                '🎂 Sjálfvirkar afmælisáminningar',
+                                '🥜 Óþol og ofnæmi skráð á einum stað',
+                                '📧 Bjóddu öllum með einum smelli',
+                                '✅ Sjáðu hver hefur staðfest mætingu'
+                            ].map((feature, i) => (
+                                <div key={i} style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: 'var(--space-sm)',
+                                    fontSize: '1.125rem',
+                                    color: 'var(--text-primary)'
+                                }}>
+                                    <div style={{
+                                        width: '24px',
+                                        height: '24px',
+                                        borderRadius: '50%',
+                                        background: 'var(--nordic-blue)',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        color: 'white',
+                                        fontWeight: 'bold',
+                                        fontSize: '0.875rem',
+                                        flexShrink: 0
+                                    }}>✓</div>
+                                    {feature}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Right: Product mockup */}
+                    <div style={{
+                        position: 'relative',
+                        borderRadius: 'var(--radius-lg)',
+                        overflow: 'hidden',
+                        boxShadow: 'var(--shadow-lg)'
+                    }}>
+                        <img
+                            src="/dashboard-mockup.png"
+                            alt="Bekkurinn dashboard með afmælispartý og óþolum"
+                            style={{
+                                width: '100%',
+                                height: 'auto',
+                                display: 'block'
+                            }}
+                        />
+                    </div>
+                </div>
+            </section>
+
             {/* Pain Points - The Problem */}
             <section style={{
                 background: 'white',
