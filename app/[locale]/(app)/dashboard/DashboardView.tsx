@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useAnnouncements, useTasks, useStudents } from '@/hooks/useFirestore';
+import { useAnnouncements, useTasks, useStudents, useClass } from '@/hooks/useFirestore';
 import { Loader2, Calendar, Star, Megaphone, ChevronRight } from 'lucide-react';
 
 import Link from 'next/link';
 import type { Task, Announcement, Student } from '@/types';
 
 // TODO: Get this from user's class membership
-const CLASS_ID = '0I3MpwErmopmxnREzoV5';
+const CLASS_ID = 'CLQCGsPBSZxKV4Zq6Xsg';
 
 interface DashboardViewProps {
     translations: {
@@ -29,6 +29,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     const router = useRouter();
 
     // Data Hooks
+    const { data: classData, isLoading: classLoading } = useClass(CLASS_ID);
     const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(CLASS_ID);
     const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
     const { data: studentsData, isLoading: studentsLoading } = useStudents(CLASS_ID);
@@ -50,7 +51,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         }).format(timestamp.toDate());
     };
 
-    if (authLoading || announcementsLoading || tasksLoading || studentsLoading) {
+    if (authLoading || announcementsLoading || tasksLoading || studentsLoading || classLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
@@ -63,7 +64,14 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     // 1. Get user first name
     const firstName = user?.displayName ? user.displayName.split(' ')[0] : 'Foreldri';
 
-    // 2. Latest Pinned Announcement (or just latest)
+    // 2. Class Name Display Logic
+    const displayClassName = classData
+        ? (classData.schoolName && classData.grade
+            ? `${classData.grade}. Bekkur ${classData.section || ''} - ${classData.schoolName}`
+            : classData.name)
+        : 'Bekkurinn';
+
+    // 3. Latest Pinned Announcement (or just latest)
     const announcements = announcementsData || [];
     const latestAnnouncement = announcements.length > 0
         ? [...announcements].sort((a, b) => {
@@ -103,7 +111,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     {translations.greeting.replace('{name}', firstName)}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)' }}>
-                    Velkomin í 4. Bekk Salaskóla
+                    Velkomin í {displayClassName}
                 </p>
             </header>
 
@@ -149,24 +157,29 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                 {upcomingTasks.length > 0 ? (
                     <div className="space-y-3">
-                        {upcomingTasks.map(task => (
-                            <div key={task.id} className="nordic-card p-4 flex items-center gap-4">
-                                <div className="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-stone-100 flex-shrink-0">
-                                    <span className="text-xs font-bold uppercase" style={{ color: 'var(--nordic-blue)' }}>
-                                        {task.date.toDate().toLocaleDateString('is-IS', { month: 'short' })}
-                                    </span>
-                                    <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-                                        {task.date.toDate().getDate()}
-                                    </span>
+                        {upcomingTasks.slice(0, 4).map(task => { // Increased to 4 items
+                            const isSchoolEvent = task.type === 'school_event';
+                            return (
+                                <div key={task.id} className="nordic-card p-4 flex items-center gap-4">
+                                    <div className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg flex-shrink-0 ${isSchoolEvent ? 'bg-amber-100' : 'bg-stone-100'}`}>
+                                        <span className={`text-xs font-bold uppercase ${isSchoolEvent ? 'text-amber-700' : 'text-nordic-blue'}`} style={{ color: isSchoolEvent ? 'var(--amber-dark)' : 'var(--nordic-blue)' }}>
+                                            {task.date.toDate().toLocaleDateString('is-IS', { month: 'short' })}
+                                        </span>
+                                        <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
+                                            {task.date.toDate().getDate()}
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <h4 className="font-medium">{task.title}</h4>
+                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                            {isSchoolEvent
+                                                ? 'Skóladagatal'
+                                                : `${task.slotsFilled} af ${task.slotsTotal} skráðir`}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <h4 className="font-medium">{task.title}</h4>
-                                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                        {task.slotsFilled} af {task.slotsTotal} skráðir
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 ) : (
                     <div className="nordic-card p-6 text-center" style={{ color: 'var(--text-secondary)' }}>

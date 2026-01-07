@@ -38,7 +38,10 @@ async function seed() {
         console.log('Creating class...');
         const classRef = await addDoc(collection(db, 'classes'), {
             joinCode: 'SALA-4B',
-            name: 'Salaskóli 4. Bekkur',
+            name: '4. bekkur Hlíð - Salaskóli',
+            schoolName: 'Salaskóli',
+            grade: 4,
+            section: 'Hlíð',
             admins: ['demo-admin-uid'],
             confidentialityAgreedAt: Timestamp.now(),
             pactText: '<p>Við samþykkjum að fara með allar upplýsingar með trúnaði.</p>',

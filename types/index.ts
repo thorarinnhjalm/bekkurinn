@@ -31,6 +31,10 @@ export interface Class {
     id: string;
     joinCode: string; // Unique, e.g., "SALA-4B"
     name: string; // e.g., "Salaskóli 4. Bekkur"
+    schoolName: string;
+    grade: number;
+    section?: string;
+    calendarUrl?: string;
     admins: string[]; // Array of UIDs
     confidentialityAgreedAt: Timestamp; // Legal requirement
     pactText?: string; // Social contract HTML
@@ -75,7 +79,7 @@ export interface ParentLink {
 // TASK (Polymorphic)
 // ========================================
 
-export type TaskType = 'rolt' | 'event' | 'gift_collection';
+export type TaskType = 'rolt' | 'event' | 'gift_collection' | 'school_event';
 
 export interface TaskVolunteer {
     userId: string;

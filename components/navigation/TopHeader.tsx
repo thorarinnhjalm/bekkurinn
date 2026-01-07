@@ -107,10 +107,21 @@ export function TopHeader() {
                                         <p className="font-medium text-sm truncate">{user.displayName || user.email}</p>
                                         <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{user.email}</p>
                                     </div>
-                                    <button
-                                        onClick={handleSignOut}
+
+                                    <Link
+                                        href="/is/settings"
                                         className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
                                         style={{ color: 'var(--text-primary)' }}
+                                        onClick={() => setShowSettingsMenu(false)}
+                                    >
+                                        <Settings size={16} />
+                                        <span>Stillingar Bekkjar</span>
+                                    </Link>
+
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors border-t"
+                                        style={{ color: 'var(--red)', borderColor: 'var(--border-light)' }}
                                     >
                                         <LogOut size={16} />
                                         <span>Útskráning</span>
