@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, ChevronDown, ChevronUp, Loader2, Users } from 'lucide-react';
+import { Calendar, ChevronDown, ChevronUp, Loader2, Users, Check } from 'lucide-react';
 import { useTasks } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
@@ -182,12 +182,34 @@ export default function PatrolPage() {
                                         </div>
                                     )}
 
-                                    {/* Volunteer button if not full */}
-                                    {patrol.slotsFilled < patrol.slotsTotal && (
-                                        <button className="nordic-button mt-3 text-sm">
-                                            Bjóðast
-                                        </button>
-                                    )}
+                                    {/* Check if user is already volunteering for THIS patrol */}
+                                    {(() => {
+                                        const isVolunteeringForThis = patrol.volunteers?.some((v: any) => v.uid === user?.uid);
+                                        const isVolunteeringAnywhere = patrols.some(p => p.volunteers?.some((v: any) => v.uid === user?.uid));
+
+                                        // Show button if: 
+                                        // 1. Not full
+                                        // 2. User is NOT volunteering anywhere yet (First come first served)
+                                        // 3. OR User is volunteering for THIS one (so they can potentially withdraw - logic to be added)
+
+                                        if (patrol.slotsFilled < patrol.slotsTotal && !isVolunteeringAnywhere) {
+                                            return (
+                                                <button className="nordic-button mt-3 text-sm">
+                                                    Bjóðast
+                                                </button>
+                                            );
+                                        }
+
+                                        if (isVolunteeringForThis) {
+                                            return (
+                                                <div className="mt-3 text-sm font-medium text-green-700 flex items-center gap-1">
+                                                    <Check size={16} /> Þú ert skráð(ur) á þessa vakt
+                                                </div>
+                                            );
+                                        }
+
+                                        return null;
+                                    })()}
                                 </div>
                             ))
                         ) : (
