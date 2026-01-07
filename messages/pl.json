@@ -68,5 +68,90 @@
         "pending_approvals": "Oczekujące na zatwierdzenie",
         "approve": "Zatwierdź",
         "reject": "Odrzuć"
+    },
+    "landing": {
+        "nav": {
+            "features": "Funkcje",
+            "how_it_works": "Jak to działa?",
+            "faq": "FAQ",
+            "login": "Zaloguj się"
+        },
+        "hero": {
+            "badge": "Wreszcie porządny system dla przedstawicieli klas",
+            "title_start": "Wszystko, czego potrzebuje Twoja klasa.",
+            "title_highlight": "W jednym miejscu.",
+            "subtitle": "Zapomnij o niekończących się wątkach na Facebooku i zagubionych e-mailach. Bekkurinn zarządza patrolami, wydarzeniami i kontaktami w sposób <strong>bezpieczny i prosty</strong>.",
+            "cta_primary": "Utwórz klasę (Za darmo)",
+            "cta_secondary": "Jak to działa?",
+            "beta_badge": "Otwarte nowe rejestracje – dołącz od początku!"
+        },
+        "features": {
+            "title": "Narzędzia ułatwiające życie",
+            "subtitle": "Zaprojektowane z myślą o prostocie, bezpieczeństwie i wygodzie.",
+            "f1_title": "Kalendarz szkolny w kieszeni",
+            "f1_desc": "Dni szkolne, święta i wydarzenia synchronizują się automatycznie. Nigdy więcej nie musisz szukać kalendarza.",
+            "f2_title": "Legalna komunikacja",
+            "f2_desc": "Grupy na Facebooku nie są zgodne z RODO. Tutaj komunikacja szkolna jest bezpieczna, legalna i prywatna.",
+            "f3_title": "Sprawiedliwe patrole",
+            "f3_desc": "Sprawiedliwy system przydzielania zmian. System przypomina ludziom – nie trzeba nikogo ścigać.",
+            "f4_title": "Nie pozwól Zuckerbergowi przejąć Twoich danych",
+            "f4_desc": "Facebook i WhatsApp wykorzystują Twoje dane. Bekkurinn jest w 100% zgodny z RODO i islandzki. Twoje dane należą do Ciebie.",
+            "f5_title": "Alergie i potrzeby specjalne",
+            "f5_desc": "Informuj wszystkich o urodzinach i imprezach. Bez stresu, po prostu bezpiecznie.",
+            "f6_title": "Mniej czasu na administrację",
+            "f6_desc": "Zgłosiłeś się do pomocy, a nie do pracy na pełen etat. Oddajemy Ci Twój czas."
+        },
+        "how": {
+            "title": "Trzy proste kroki",
+            "subtitle": "Rozpoczęcie zajmuje mniej niż 2 minuty",
+            "step1_title": "Utwórz swoją klasę",
+            "step1_desc": "Zarejestruj szkołę i klasę. Otrzymaj natychmiast kod dostępu do udostępnienia na WhatsApp.",
+            "step2_title": "Zaproś rodziców",
+            "step2_desc": "Rodzice klikają link i są w środku. Zajmuje to 30 sekund, bez skomplikowanych procedur.",
+            "step3_title": "Gotowe",
+            "step3_desc": "Kalendarz, patrol i kontakty są zorganizowane. System zajmuje się resztą.",
+            "cta": "Wypróbuj za darmo – bez zobowiązań",
+            "fine_print": "Karta kredytowa nie jest wymagana · Gotowe w 2 minuty"
+        },
+        "beta": {
+            "title": "Dlaczego warto zacząć teraz?",
+            "subtitle": "Dołącz do nas w kształtowaniu przyszłości i zyskaj korzyści.",
+            "b1_title": "Darmowe na zawsze",
+            "b1_desc": "Ci, którzy zaczną teraz, otrzymują dożywotni bezpłatny dostęp dla swojej klasy.",
+            "b2_title": "Twój głos się liczy",
+            "b2_desc": "Słuchamy użytkowników. Potrzebujesz jakiejś funkcji? Zbudujemy ją.",
+            "b3_title": "Bezpośrednie wsparcie",
+            "b3_desc": "Pomożemy Ci zacząć i natychmiast odpowiemy na pytania. Bez list oczekujących."
+        },
+        "faq": {
+            "title": "Często zadawane pytania",
+            "q1": "Czy to naprawdę darmowe?",
+            "a1": "Tak, całkowicie darmowe. Bez ukrytych kosztów, bez zobowiązań. Wierzymy, że wszystkie dzieci zasługują na zorganizowane zajęcia szkolne.",
+            "q2": "Jak bezpieczne to jest?",
+            "a2": "Bezpieczeństwo danych jest priorytetem. Stosujemy szyfrowanie klasy bankowej (256-bit). Wszystkie dane są zgodne z RODO i przechowywane bezpiecznie. Tylko członkowie klasy widzą informacje.",
+            "q3": "Nie znam się na technologii. Czy mogę tego używać?",
+            "a3": "Oczywiście. Zostało to zaprojektowane tak prosto, jak to tylko możliwe. Jeśli potrafisz korzystać z Facebooka lub e-maila, poradzisz sobie z Bekkurinn.",
+            "q4": "Czy potrzebuję aplikacji?",
+            "a4": "Nie, Bekkurinn działa w przeglądarce na telefonie i komputerze. Nie wymaga pobierania.",
+            "q5": "Mam dzieci w różnych klasach?",
+            "a5": "Żaden problem! Możesz być w wielu klasach na jednym koncie i łatwo się między nimi przełączać."
+        },
+        "cta_final": {
+            "title": "Przejmij kontrolę już dziś",
+            "subtitle": "Dołącz do postepowych rodziców i ułatw życie całej klasie.",
+            "button": "Utwórz klasę (Za darmo)",
+            "fine_print": "Bez zobowiązań · Gotowe w 2 minuty · Bezpieczne"
+        },
+        "footer": {
+            "desc": "Bezpieczna i prosta organizacja dla szkół.",
+            "products": "Funkcje",
+            "support": "Wsparcie",
+            "contact": "Kontakt",
+            "forgot_password": "Zapomniałem hasła",
+            "legal": "Prawne",
+            "terms": "Regulamin",
+            "privacy": "Polityka prywatności",
+            "copyright": "© 2026 Bekkurinn. Wszelkie prawa zastrzeżone. Stworzone na Islandii 🇮🇸"
+        }
     }
 }
