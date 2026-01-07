@@ -81,9 +81,18 @@ export default function AdminView() {
 
     return (
         <div className="max-w-5xl mx-auto p-6 space-y-8">
-            <header className="border-b pb-4">
-                <h1 className="text-3xl font-bold text-gray-900">Kerfisstjórn</h1>
-                <p className="text-gray-500">Yfirlit yfir alla skóla og bekki</p>
+            <header className="border-b pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900">Kerfisstjórn</h1>
+                    <p className="text-gray-500">Yfirlit yfir alla skóla og bekki</p>
+                </div>
+                <button
+                    onClick={() => router.push('/is/dashboard')}
+                    className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                >
+                    <Users size={20} />
+                    Fara í mitt Mælaborð
+                </button>
             </header>
 
             <div className="grid gap-4">
@@ -102,7 +111,7 @@ export default function AdminView() {
                                         {schoolClasses.length} bekkir
                                     </span>
                                 </div>
-                                {isExpanded ? <ChevronDown text-gray-500 /> : <ChevronRight text-gray-500 />}
+                                {isExpanded ? <ChevronDown className="text-gray-500" /> : <ChevronRight className="text-gray-500" />}
                             </button>
 
                             {isExpanded && (
@@ -140,15 +149,4 @@ export default function AdminView() {
             </div>
         </div>
     );
-}
-
-function ChevronDown(props: any) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
-    )
-}
-function ChevronRight(props: any) {
-    return (
-        <svg {...props} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
-    )
 }
