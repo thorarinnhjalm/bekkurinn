@@ -131,12 +131,13 @@ export async function deleteStudent(studentId: string): Promise<void> {
 // ========================================
 
 export async function createParentLink(data: CreateParentLinkInput): Promise<string> {
-    const docRef = await addDoc(collection(db, 'parentLinks'), {
+    const linkId = `${data.userId}_${data.classId}`;
+    await setDoc(doc(db, 'parentLinks', linkId), {
         ...data,
         status: 'pending',
         createdAt: serverTimestamp(),
     });
-    return docRef.id;
+    return linkId;
 }
 
 export async function getParentLinksByUser(userId: string): Promise<ParentLink[]> {

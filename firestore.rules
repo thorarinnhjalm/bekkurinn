@@ -92,13 +92,15 @@ service cloud.firestore {
                      (request.auth.uid == resource.data.userId || 
                       isClassAdmin(resource.data.classId));
       
-      // Users can create links (status must be 'pending')
+      // Users can create links (status must be 'pending' AND ID must be userId_classId)
       allow create: if isAuthenticated() &&
                        request.auth.uid == request.resource.data.userId &&
-                       request.resource.data.status == 'pending';
+                       request.resource.data.status == 'pending' &&
+                       linkId == request.resource.data.userId + '_' + request.resource.data.classId;
       
-      // Only admins can approve links
+      // Only admins can approve links (only update status)
       allow update: if isClassAdmin(resource.data.classId) &&
+                       request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'approvedAt', 'approvedBy']) &&
                        request.resource.data.status == 'approved';
       
       // Users can delete their own pending links, admins can delete any

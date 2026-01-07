@@ -10,30 +10,39 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
  * Uses Google Gemini (cheaper and easier than Claude!)
  */
 
-interface FoodPlannerRequest {
-    childAge: number;
-    partyTime: string; // ISO datetime
-    allergies: string[]; // e.g., ["nuts", "gluten", "dairy"]
-    attendeeCount: number;
-}
+import { z } from 'zod';
+
+// Input Validation Schema
+const dietSchema = z.object({
+    childAge: z.number().min(1).max(18),
+    partyTime: z.string().datetime(),
+    allergies: z.array(z.string()).max(10),
+    attendeeCount: z.number().min(1).max(100),
+});
 
 export async function POST(req: NextRequest) {
     try {
         const apiKey = process.env.GEMINI_API_KEY;
         if (!apiKey) {
-            console.error('Missing GEMINI_API_KEY environment variable');
             return NextResponse.json(
-                {
-                    success: false,
-                    error: 'Gervigreind ekki virk (vantar API lykil). Vinsamlegast hafið samband við kerfisstjóra.'
-                },
+                { success: false, error: 'Gervigreind ekki virk (vantar API lykil).' },
                 { status: 500 }
             );
         }
 
+        const body = await req.json();
+
+        // Validate Input
+        const validation = dietSchema.safeParse(body);
+        if (!validation.success) {
+            return NextResponse.json(
+                { success: false, error: 'Ógild gögn: ' + validation.error.message },
+                { status: 400 }
+            );
+        }
+
+        const { childAge, partyTime, allergies, attendeeCount } = validation.data;
         const genAI = new GoogleGenerativeAI(apiKey);
-        const body: FoodPlannerRequest = await req.json();
-        const { childAge, partyTime, allergies, attendeeCount } = body;
 
         // Parse party time to get hour
         const partyDate = new Date(partyTime);
