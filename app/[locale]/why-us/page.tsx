@@ -88,7 +88,7 @@ export default function WhyUsPage() {
                     color: 'var(--text-secondary)',
                     lineHeight: 1.6
                 }}>
-                    WhatsApp, Google Docs, og email eru ókeypis. En tíminn þinn og geðheilsan þín er það ekki.
+                    WhatsApp, Google Docs og tölvupóstur eru ókeypis. En tíminn þinn og geðheilsan þín eru það ekki.
                 </p>
             </section>
 
@@ -290,7 +290,7 @@ export default function WhyUsPage() {
                                 47%
                             </div>
                             <p style={{ color: 'var(--text-secondary)' }}>
-                                Foreldrar sem týna tilkynningum í WhatsApp spjöllum
+                                Foreldrar sem týna tilkynningum í WhatsApp-spjöllum
                             </p>
                         </div>
                         <div>
@@ -441,7 +441,7 @@ export default function WhyUsPage() {
                         marginBottom: 'var(--space-lg)'
                     }}>
                         Við erum í beta. Við viljum læra hvað virkar og hvað ekki.
-                        Þegar við erum tilbúin með fullt kerfi, þá munum við byrja að rukka.
+                        Þegar við erum tilbúin með fullkomið kerfi munum við byrja að rukka.
                         En það verður <strong>ekki</strong> dýrt og <strong>alltaf</strong> gegnsætt.
                     </p>
                     <div style={{
@@ -482,7 +482,7 @@ export default function WhyUsPage() {
                     color: 'var(--text-secondary)',
                     marginBottom: 'var(--space-xl)'
                 }}>
-                    Prófaðu Bekkurinn í dag. Ef þú hefur ekki sparað sér minnst 2 tíma í fyrstu viku, skaltu senda okkur email og við lögum það.
+                    Prófaðu Bekkurinn í dag. Ef þú hefur ekki sparað þér að minnsta kosti 2 tíma í fyrstu viku skaltu senda okkur tölvupóst og við lögum það.
                 </p>
                 <button
                     onClick={() => router.push('/is/login')}

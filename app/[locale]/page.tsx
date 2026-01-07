@@ -96,7 +96,7 @@ export default function LandingPage() {
                     marginBottom: 'var(--space-lg)',
                     lineHeight: 1.2
                 }}>
-                    Engin fleiri tölvupóstar týndir.<br />
+                    Engir fleiri týndir tölvupóstar.<br />
                     <span style={{ color: 'var(--nordic-blue)' }}>Bara samskipti sem virka.</span>
                 </h1>
 
@@ -108,7 +108,7 @@ export default function LandingPage() {
                     lineHeight: 1.6
                 }}>
                     Bekkurinn er kerfi sem gerir bekkjarfulltrúum kleift að skipuleggja bekkinn
-                    án þess að týnast í WhatsApp spjöllum, Google skjölum eða tölvupóstum.
+                    án þess að týnast í WhatsApp-spjöllum, Google-skjölum eða tölvupóstum.
                 </p>
 
                 <div style={{
@@ -182,8 +182,8 @@ export default function LandingPage() {
                         {[
                             {
                                 emoji: '😫',
-                                title: '47 ósvarað skilaboð',
-                                description: 'WhatsApp spjallið er fullt af "Hvað er að gerast?" og "Hvenær er næsta fundur?"'
+                                title: '47 ósvaruð skilaboð',
+                                description: 'WhatsApp-spjallið er fullt af „Hvað er að gerast?" og „Hvenær er næsti fundur?"'
                             },
                             {
                                 emoji: '📧',
@@ -192,8 +192,8 @@ export default function LandingPage() {
                             },
                             {
                                 emoji: '🤯',
-                                title: 'Excel skjal frá helvíti',
-                                description: '15 útgáfur af sama skjalinu, enginn veit hver er rétt, og einhver hefur eytt öllu.'
+                                title: 'Excel-skjal úr helvíti',
+                                description: '15 útgáfur af sama skjalinu, enginn veit hvor er rétt og einhver hefur eytt öllu.'
                             },
                             {
                                 emoji: '⏰',
@@ -272,7 +272,7 @@ export default function LandingPage() {
                         {
                             icon: Users,
                             title: 'Nafnalisti sem uppfærist',
-                            description: 'Aldrei aftur Google Sheets með "Símanúmer_Útgáfa_Final_FINAL_2.xlsx"'
+                            description: 'Aldrei aftur Google-blöð með „Símanúmer_Útgáfa_Final_FINAL_2.xlsx"'
                         },
                         {
                             icon: MessageCircle,
@@ -282,7 +282,7 @@ export default function LandingPage() {
                         {
                             icon: Calendar,
                             title: 'Vaktir og viðburðir',
-                            description: 'Foreldrar skrá sig sjálfir. Þú færð áminningar. Engin rugluð Google Calendar skipti.'
+                            description: 'Foreldrar skrá sig sjálfir. Þú færð áminningar. Ekkert ruglað Google-dagatal.'
                         },
                         {
                             icon: CheckCircle2,
