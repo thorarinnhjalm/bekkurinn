@@ -165,8 +165,8 @@ export default function OnboardingView() {
 
                         {/* Grade */}
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Árgangur</label>
-                            <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Árgangur</label>
+                            <div className="flex flex-wrap gap-3 justify-center py-2">
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(g => (
                                     <button
                                         key={g}
