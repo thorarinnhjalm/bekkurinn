@@ -1,5 +1,6 @@
 'use client';
 
+import { TranslationButton } from '@/components/ui/TranslationButton';
 import { Heart, Pin, Loader2, MessageSquare } from 'lucide-react';
 import { useAnnouncements } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -148,6 +149,9 @@ export default function AnnouncementsPage() {
                             <p className="whitespace-pre-wrap" style={{ color: 'var(--text-secondary)' }}>
                                 {announcement.content}
                             </p>
+
+                            {/* AI Translation Feature */}
+                            <TranslationButton text={announcement.content} />
                         </div>
 
                         {/* Footer Actions */}
