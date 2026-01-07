@@ -88,29 +88,25 @@ PRACTICAL RÁÐLEGGINGAR:
 3. Gefðu tímaáætlun fyrir undirbúning
 4. Komdu með 1-2 "back-up" hugmyndum
 
-SNIÐMÁT:
-**Ráðlagður matseðill:**
-[3-5 réttir með NÁKVÆMUM lýsingum]
+MÓTAÐU SVARIÐ SEM JSON:
+Svarið þitt Á AÐEINS að vera JSON hlutur (engar markdown code blocks) með þessari strúktúr:
+{
+  "menu": [
+    { "title": "Réttur", "description": "Lýsing", "isVegan": boolean, "isGlutenFree": boolean }
+  ],
+  "shoppingList": ["Vara 1", "Vara 2"],
+  "preparationSteps": ["Skref 1", "Skref 2"],
+  "safetyTips": ["Ábending 1"],
+  "estimatedCost": "X.XXX kr."
+}
 
-**Innkauparlisti:**
-[Nákvæm listi með magni og vörumerki ef óþol]
+Vertu ALLTAF öruggur, practical og raunhæfur.`;
 
-**Undirbúningur:**
-[Tímaáætlun og skref-fyrir-skref]
-
-**Öryggisábendingar:**
-[Varnagli varðandi krossmengun ef óþol]
-
-**Áætlaður kostnaður:**
-[Raunhæft verðmat í ISK frá íslenskum verslunum]
-
-**Back-up hugmyndir:**
-[1-2 aukavalkostir ef eitthvað fer úrskeiðis]
-
-Vertu ALLTAF öruggur, practical og raunhæfur. Þetta eru RAUNVERULEG börn með RAUNVERULEG ofnæmi.`;
-
-        // Use Gemini 2.0 Flash Lite
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-lite-preview-02-05' });
+        // Use Gemini 2.0 Flash (Hratt og öflugt)
+        const model = genAI.getGenerativeModel({
+            model: 'gemini-2.0-flash',
+            generationConfig: { responseMimeType: "application/json" }
+        });
         const result = await model.generateContent(prompt);
         const suggestion = result.response.text();
 
