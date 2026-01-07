@@ -126,12 +126,12 @@ Vertu ALLTAF öruggur, practical og raunhæfur. Þetta eru RAUNVERULEG börn me�
             },
         });
 
-    } catch (error) {
+    } catch (error: any) {
         console.error('AI Food Planner Error:', error);
         return NextResponse.json(
             {
                 success: false,
-                error: 'Villa kom upp við að búa til matseðil'
+                error: `Villa: ${error.message || 'Villa kom upp við að búa til matseðil'}`
             },
             { status: 500 }
         );
