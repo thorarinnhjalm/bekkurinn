@@ -10,15 +10,39 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
-  description: "Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi. Róleg, einföld lausn til að skipuleggja foreldrafélag bekkjarins.",
-  keywords: ["bekkjarfulltrúi", "foreldrafélag", "skóli", "Iceland", "class representative"],
+  metadataBase: new URL('https://bekkurinn.vercel.app'),
+  title: {
+    default: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
+    template: "%s | Bekkurinn"
+  },
+  description: "Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi. Róleg, einföld lausn til að skipuleggja foreldrafélag bekkjarins, safna í sjóði og halda utan um viðburði.",
+  keywords: ["bekkjarfulltrúi", "foreldrafélag", "skóli", "Iceland", "class representative", "foreldrar", "grunnskóli"],
   authors: [{ name: "Bekkurinn" }],
   openGraph: {
-    title: "Bekkurinn",
-    description: "Skipulagt kerfi fyrir bekkjarfulltrúa",
+    title: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
+    description: "Allt sem þú þarft fyrir bekkinn á einum stað. Nafnalistar, tilkynningar og viðburðir.",
+    url: 'https://bekkurinn.vercel.app',
+    siteName: 'Bekkurinn',
+    locale: 'is_IS',
     type: "website",
+    images: [
+      {
+        url: '/dashboard-mockup.png',
+        width: 1200,
+        height: 630,
+        alt: 'Bekkurinn mælaborð',
+      },
+    ],
   },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Bekkurinn',
+    description: 'Bylting fyrir bekkjarfulltrúa á Íslandi.',
+    images: ['/dashboard-mockup.png'],
+  },
+  icons: {
+    icon: '/logo.png',
+  }
 };
 
 export default function RootLayout({
