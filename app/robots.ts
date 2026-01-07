@@ -5,8 +5,8 @@ export default function robots(): MetadataRoute.Robots {
         rules: {
             userAgent: '*',
             allow: '/',
-            disallow: ['/dashboard/', '/admin/'],
+            disallow: ['/admin/', '/api/', '/_next/'],
         },
-        sitemap: 'https://bekkurinn.vercel.app/sitemap.xml',
+        sitemap: 'https://bekkurinn.is/sitemap.xml',
     };
 }
