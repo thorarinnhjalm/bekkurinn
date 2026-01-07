@@ -40,8 +40,8 @@ export async function POST(req: NextRequest) {
             mealType = 'léttar veitingar';
         }
 
-        // Build context-aware prompt
-        const prompt = `Þú ert sérfræðingur í barnaafmælum og næringu. Þú átt að búa til matseðil fyrir ${childAge} ára barn.
+        // Build context-aware prompt with detailed safety guidelines
+        const prompt = `Þú ert reynslumikill næringarfræðingur og sérfræðingur í barnaafmælum á Íslandi. Þú átt að búa til öruggann og hagnýtan matseðil.
 
 UPPLÝSINGAR UM AFMÆLIÐ:
 - Aldur barns: ${childAge} ára
@@ -50,32 +50,56 @@ UPPLÝSINGAR UM AFMÆLIÐ:
 - Fjöldi barna: ${attendeeCount}
 - Óþol/ofnæmi: ${allergies.length > 0 ? allergies.join(', ') : 'Ekkert skráð'}
 
-LEIÐBEININGAR:
-1. Búðu til matseðil sem passar fyrir ${mealType} fyrir ${childAge} ára barn
-2. ALLUR matur verður að vera öruggur miðað við þessi óþol: ${allergies.join(', ')}
-3. Sýndu aðeins mat sem ÖLL börn geta borðað
-4. Taktu tillit til aldurs - ${childAge} ára börn éta öðruvísi en eldri/yngri
-5. Svaraðu á ÍSLENSKU
+MIKILVÆGAR ÖRYGGIS-LEIÐBEININGAR:
+1. **CRÍTIKAL:** ALLUR matur verður að vera 100% öruggur fyrir þessi óþol: ${allergies.length > 0 ? allergies.join(', ') : 'engin'}
+2. Ef óþol eru skráð, ALDREI stinga til mögulegum valkostum - aðeins fullkomlega öruggt
+3. Láttu foreldra ALLTAF vita um krossmengun hættu (t.d. "gakktu úr skugga um að nota sér hnífapör")
+4. Ef hnetuofnæmi: EKKERT hrútur, mandelur, peanut butter, Nutella, eða bakkelsi með hnetur
+5. Ef glútenaofnæmi: Aðeins vottaðar glútenfrír vörur, aldrei "gæti innihaldið"
+
+LEIÐBEININGAR UM MATSEÐIL:
+1. Aldur skiptir máli:
+   - 4-6 ára: Einföld finger food, litríkt, lítil brot
+   - 7-9 ára: Variað úrval, smá "cool" factor
+   - 10-12 ára: Sophistication, lengri molar
+2. Tími skiptir máli:
+   - 10-13: Brunch vibe (bollar, ávextir, kleinur)
+   - 13-17: Snakk & sweets (nammi + healthy valkostir)
+   - 17-21: Kvöldmatur (pizzusneiðar, pasta, etc)
+3. Íslenskar aðstæður:
+   - Notaðu íslenska heitið (ekki "cupcakes" heldur "muffins")
+   - Verðlag áætlað fyrir Bónus/Krónu/Costco
+   - Svara á íslensku
+
+PRACTICAL RÁÐLEGGINGAR:
+1. Gef NÁKVÆMT magn (ekki "nokkrir" heldur "500g")
+2. Segðu NÁKVÆMLEGA hvaða vörumerki eru öruggar ef óþol
+3. Gefðu tímaáætlun fyrir undirbúning
+4. Komdu með 1-2 "back-up" hugmyndum
 
 SNIÐMÁT:
-Gefðu svör á þessu formi:
-
 **Ráðlagður matseðill:**
-[3-5 réttir sem passa fyrir aldur og tíma]
+[3-5 réttir með NÁKVÆMUM lýsingum]
 
 **Innkauparlisti:**
-[Nákvæm listi með magni fyrir ${attendeeCount} börn]
+[Nákvæm listi með magni og vörumerki ef óþol]
 
-**Ábendingar:**
-[2-3 practical tips um að elda/undirbúa]
+**Undirbúningur:**
+[Tímaáætlun og skref-fyrir-skref]
+
+**Öryggisábendingar:**
+[Varnagli varðandi krossmengun ef óþol]
 
 **Áætlaður kostnaður:**
-[Raunhæft verðmat í ISK]
+[Raunhæft verðmat í ISK frá íslenskum verslunum]
 
-Vertu practical, realistic og ALLTAF hafa öll óþol í huga.`;
+**Back-up hugmyndir:**
+[1-2 aukavalkostir ef eitthvað fer úrskeiðis]
 
-        // Use Gemini 2.0 Flash (fast + cheap!)
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+Vertu ALLTAF öruggur, practical og raunhæfur. Þetta eru RAUNVERULEG börn með RAUNVERULEG ofnæmi.`;
+
+        // Use Gemini 1.5 Flash (ódýrasta stable modelið!)
+        const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
         const result = await model.generateContent(prompt);
         const suggestion = result.response.text();
 
