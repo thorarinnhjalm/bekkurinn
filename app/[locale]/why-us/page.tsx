@@ -475,7 +475,7 @@ export default function WhyUsPage() {
                     marginBottom: 'var(--space-md)',
                     color: 'var(--text-primary)'
                 }}>
-                    Tilbúinn til að fá tímann þinn til baka?
+                    Viltu fá tímann þinn til baka?
                 </h2>
                 <p style={{
                     fontSize: '1.25rem',

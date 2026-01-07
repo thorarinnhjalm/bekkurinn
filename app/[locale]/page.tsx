@@ -378,7 +378,7 @@ export default function LandingPage() {
                     marginBottom: 'var(--space-md)',
                     color: 'var(--text-primary)'
                 }}>
-                    Tilbúinn að byrja?
+                    Viltu byrja?
                 </h2>
                 <p style={{
                     fontSize: '1.25rem',
