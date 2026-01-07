@@ -68,5 +68,90 @@
         "pending_approvals": "Pending Approvals",
         "approve": "Approve",
         "reject": "Reject"
+    },
+    "landing": {
+        "nav": {
+            "features": "Features",
+            "how_it_works": "How it Works",
+            "faq": "FAQ",
+            "login": "Sign In"
+        },
+        "hero": {
+            "badge": "Finally, a proper system for class reps",
+            "title_start": "Everything your class needs.",
+            "title_highlight": "In one place.",
+            "subtitle": "Forget endless Facebook threads and lost emails. Bekkurinn manages patrol, events, and contacts simply and <strong>securely</strong>.",
+            "cta_primary": "Create Class (Free)",
+            "cta_secondary": "How does it work?",
+            "beta_badge": "Open for new signups – join from the start!"
+        },
+        "features": {
+            "title": "Tools that simplify life",
+            "subtitle": "Designed for simplicity, security, and convenience.",
+            "f1_title": "School Calendar in your pocket",
+            "f1_desc": "School days, holidays, and events sync automatically. You never have to chase the calendar again.",
+            "f2_title": "Communication that works",
+            "f2_desc": "Skip the noisy threads. Send messages that get delivered without drowning in likes and comments.",
+            "f3_title": "Patrol made fair and easy",
+            "f3_desc": "A fair system for distributing shifts. The system reminds people – no chasing required.",
+            "f4_title": "Security first",
+            "f4_desc": "We protect your data. Information is encrypted (GDPR compliant) and only verified parents get access.",
+            "f5_title": "Allergies & Special Needs",
+            "f5_desc": "Keep everyone informed for birthdays and parties. No stress, just safety.",
+            "f6_title": "Less administration time",
+            "f6_desc": "You volunteered to help, not for a full-time job. We give you your time back."
+        },
+        "how": {
+            "title": "Three simple steps",
+            "subtitle": "Takes less than 2 minutes to start",
+            "step1_title": "Create your class",
+            "step1_desc": "Register school and class. Get a join code instantly to share on WhatsApp.",
+            "step2_title": "Invite parents",
+            "step2_desc": "Parents click the link and are in. Takes 30 seconds, no complexity.",
+            "step3_title": "All set",
+            "step3_desc": "Calendar, patrol, and contacts are organized. The system handles the rest.",
+            "cta": "Try for free – no commitment",
+            "fine_print": "No credit card required · Ready in 2 minutes"
+        },
+        "beta": {
+            "title": "Why start now?",
+            "subtitle": "Join us in shaping the future and get benefits.",
+            "b1_title": "Free forever",
+            "b1_desc": "Those who start in beta get lifetime free access for their class.",
+            "b2_title": "Your voice matters",
+            "b2_desc": "We listen to beta users. Need a feature? We'll build it.",
+            "b3_title": "Direct support",
+            "b3_desc": "We help you get started and answer questions immediately. No waiting lists."
+        },
+        "faq": {
+            "title": "Frequently Asked Questions",
+            "q1": "Is it really free?",
+            "a1": "Yes, completely free. No hidden costs, no commitment. We believe all children deserve organized school activities.",
+            "q2": "How secure is it?",
+            "a2": "Data security is a priority. We use bank-grade encryption (256-bit). All data is GDPR compliant and stored securely. Only class members see the info.",
+            "q3": "I'm not tech-savvy. Can I use this?",
+            "a3": "Absolutely. It's designed to be as simple as possible. If you can use Facebook or Email, you can use Bekkurinn.",
+            "q4": "Do I need an app?",
+            "a4": "No, Bekkurinn works in your browser on phone and computer. No download needed.",
+            "q5": "I have children in different classes?",
+            "a5": "No problem! You can be in multiple classes with one account and switch between them easily."
+        },
+        "cta_final": {
+            "title": "Take control today",
+            "subtitle": "Join forward-thinking parents and simplify life for the whole class.",
+            "button": "Create Class (Free)",
+            "fine_print": "No commitment · Ready in 2 minutes · Secure"
+        },
+        "footer": {
+            "desc": "Secure and simple organization for schools.",
+            "products": "Features",
+            "support": "Support",
+            "contact": "Contact",
+            "forgot_password": "Forgot Password",
+            "legal": "Legal",
+            "terms": "Terms",
+            "privacy": "Privacy Policy",
+            "copyright": "© 2026 Bekkurinn. All rights reserved. Made in Iceland 🇮🇸"
+        }
     }
 }

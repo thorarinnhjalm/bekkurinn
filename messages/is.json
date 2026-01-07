@@ -80,5 +80,90 @@
     "no_events": "Engir viðburðir á næstunni",
     "no_birthdays": "Engin afmæli á næstunni",
     "quick_actions": "Flýtileiðir"
+  },
+  "landing": {
+    "nav": {
+      "features": "Virkni",
+      "how_it_works": "Hvernig virkar þetta?",
+      "faq": "Spurt & svarað",
+      "login": "Innskráning"
+    },
+    "hero": {
+      "badge": "Loksins almennilegt kerfi fyrir bekkjarfulltrúa",
+      "title_start": "Allt sem bekkurinn þarf.",
+      "title_highlight": "Á einum stað.",
+      "subtitle": "Gleymdu óendanlegum Facebook-þráðum og týndum tölvupóstum. Bekkurinn heldur utan um rölt, viðburði og tengiliði á <strong>öruggan og einfaldan</strong> hátt.",
+      "cta_primary": "Stofna bekk (Frítt)",
+      "cta_secondary": "Hvernig virkar þetta?",
+      "beta_badge": "Opið fyrir nýskráningar – vertu með frá byrjun!"
+    },
+    "features": {
+      "title": "Verkfærin sem létta lífið",
+      "subtitle": "Hannað sérstaklega fyrir íslenska ráðskonur og bekkjarfulltrúa. Einfalt, öruggt og þægilegt.",
+      "f1_title": "Skóladagatalið beint í símann",
+      "f1_desc": "Starfsdagar, frí og viðburðir skrá sig sjálfir. Þú þarft aldrei að elta uppi skóladagatalið aftur – það er sjálfvirkt.",
+      "f2_title": "Samskipti sem virka",
+      "f2_desc": "Slepptu við „Hringi í…“ þræðina. Sendu skilaboð sem komast til skila án þess að drukkna í lækum og tölvupóstum.",
+      "f3_title": "Röltið leyst á núll einni",
+      "f3_desc": "Sanngjarnt kerfi sem deilir niður vöktum. Kerfið sér um að minna fólk á – engin eftirfylgni eða nöldur þörf.",
+      "f4_title": "Öryggið í fyrirrúmi",
+      "f4_desc": "Við pössum upp á upplýsingarnar. Gögnin eru vistuð á dulkóðuðu formi (GDPR) og aðeins staðfestir foreldrar fá aðgang.",
+      "f5_title": "Ofnæmi og sérþarfir",
+      "f5_desc": "Allir með upplýsingarnar á hreinu fyrir afmæli og veislur. Ekkert stress, bara öryggi.",
+      "f6_title": "Minni tími í stjórnun",
+      "f6_desc": "Þú tókst að þér að vera bekkjarfulltrúi til að hjálpa, ekki til að vera í fullu starfi. Við gefum þér tímann til baka."
+    },
+    "how": {
+      "title": "Þrjú einföld skref",
+      "subtitle": "Það tekur innan við 2 mínútur að byrja",
+      "step1_title": "Stofnaðu bekkinn",
+      "step1_desc": "Skráðu skóla og bekk. Færð strax boðskóða sem þú getur sent beint í WhatsApp hópinn.",
+      "step2_title": "Bjóddu foreldrum",
+      "step2_desc": "Foreldrar smella á hlekkinn og eru komnir inn. Tekur 30 sekúndur, enginn flækjustig.",
+      "step3_title": "Allt klárt",
+      "step3_desc": "Dagatal, rölt og tengiliðir eru komin í lag. Kerfið sér um afganginn og heldur utan um hlutina.",
+      "cta": "Prófa frítt — engin binding",
+      "fine_print": "Ekkert greiðslukort krafist · Klárt á 2 mínútum"
+    },
+    "beta": {
+      "title": "Af hverju að byrja núna?",
+      "subtitle": "Vertu með í að móta framtíðina og fáðu fríðindi fyrir vikið.",
+      "b1_title": "Frítt fyrir alla framtíð",
+      "b1_desc": "Þeir sem byrja í beta fá ævilangt ókeypis aðgang fyrir sinn bekk, jafnvel þó við bætum við gjaldskyldum fídusum síðar.",
+      "b2_title": "Þín rödd skiptir máli",
+      "b2_desc": "Við hlustum á beta-notendur. Vantar þig eitthvað ákveðið í kerfið? Við smíðum það.",
+      "b3_title": "Beint samband",
+      "b3_desc": "Við hjálpum þér að komast í gang og svörum öllum spurningum strax. Engir biðlistar."
+    },
+    "faq": {
+      "title": "Algengar spurningar",
+      "q1": "Er þetta virkilega frítt?",
+      "a1": "Já, algerlega frítt. Enginn falinn kostnaður, engin binding. Við trúum að öll börn eigi skilið gott skipulag í skólastarfinu.",
+      "q2": "Hvernig er öryggið í kerfinu?",
+      "a2": "Gagnaöryggi er forgangsmál. Við notum sömu dulkóðun og netbankar (256-bit encryption). Öll gögn eru GDPR-samræmd og vistuð á öruggum dulkóðuðum netþjónum. Bara þeir sem hafa aðgang að bekknum sjá upplýsingarnar.",
+      "q3": "Ég er ekki tæknitröll. Get ég notað þetta?",
+      "a3": "Algjörlega. Kerfið er hannað til að vera eins einfalt og hægt er. Ef þú kannt á Facebook eða Tölvupóst, þá kanntu á Bekkurinn. Þetta tekur um 2 mínútur að setja upp.",
+      "q4": "Þarf ég app í símann?",
+      "a4": "Nei, Bekkurinn virkar í vafra í símanum og tölvunni. Engin þörf á að sækja app. Þú getur vistað síðuna á heimaskjáinn hjá þér fyrir fljótlegan aðgang.",
+      "q5": "Ég er með tvö börn í mismunandi bekkjum?",
+      "a5": "Ekkert mál! Þú getur verið meðskráð/ur í eins marga bekki og þarf með einum aðgangi. Þú skiptir á milli þeirra með einum smelli."
+    },
+    "cta_final": {
+      "title": "Taktu stjórnina í dag",
+      "subtitle": "Gakktu í lið með framsýnum foreldrum og gerðu lífið einfaldara fyrir allan bekkinn.",
+      "button": "Stofna bekk (Frítt)",
+      "fine_print": "Engin binding · Klárt á 2 mínútum · Öruggt"
+    },
+    "footer": {
+      "desc": "Öruggt og einfalt skipulag fyrir íslenska grunnskóla.",
+      "products": "Vörur",
+      "support": "Aðstoð",
+      "contact": "Hafa samband",
+      "forgot_password": "Gleymt lykilorð",
+      "legal": "Lagalegt",
+      "terms": "Skilmálar",
+      "privacy": "Persónuverndarstefna",
+      "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn. Hannað og þróað á Íslandi 🇮🇸"
+    }
   }
 }
