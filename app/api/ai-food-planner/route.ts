@@ -1,16 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import Anthropic from '@anthropic-ai/sdk';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 
 /**
  * AI Party Food Planner API
  * 
  * Generates age-appropriate, allergy-safe party food suggestions
  * based on time of day, child's age, and dietary restrictions
+ * 
+ * Uses Google Gemini (cheaper and easier than Claude!)
  */
 
-const anthropic = new Anthropic({
-    apiKey: process.env.ANTHROPIC_API_KEY || '',
-});
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 interface FoodPlannerRequest {
     childAge: number;
@@ -74,20 +74,10 @@ Gefðu svör á þessu formi:
 
 Vertu practical, realistic og ALLTAF hafa öll óþol í huga.`;
 
-        const response = await anthropic.messages.create({
-            model: 'claude-3-5-sonnet-20241022',
-            max_tokens: 2048,
-            messages: [
-                {
-                    role: 'user',
-                    content: prompt,
-                },
-            ],
-        });
-
-        const suggestion = response.content[0].type === 'text'
-            ? response.content[0].text
-            : '';
+        // Use Gemini 2.0 Flash (fast + cheap!)
+        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+        const result = await model.generateContent(prompt);
+        const suggestion = result.response.text();
 
         return NextResponse.json({
             success: true,
