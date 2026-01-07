@@ -1,399 +1,300 @@
-import Link from 'next/link';
-import { useTranslations } from 'next-intl';
-import { Calendar, Users, MessageSquare, Shield, CheckCircle, ArrowRight, Star, Sparkles, Clock, Heart } from 'lucide-react';
+'use client';
 
-/**
- * Landing Page - Bekkurinn
- * 
- * Standardized landing page using i18n translations.
- * Supports multicultural society by allowing language switching.
- */
+import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { ArrowRight, Shield, Calendar, Users, Home, Coffee, MessageCircle, Lock, CheckCircle2, Globe } from 'lucide-react';
+import Link from 'next/link';
+import React from 'react';
 
 export default function HomePage() {
     const t = useTranslations('landing');
+    const { user } = useAuth();
+    const router = useRouter();
 
-    // Rich text renderer helper for bold tags
     const richText = {
-        strong: (chunks: React.ReactNode) => <strong className="text-gray-900">{chunks}</strong>
+        strong: (chunks: React.ReactNode) => <span className="text-blue-600 font-bold">{chunks}</span>
     };
 
     return (
-        <div className="min-h-screen bg-white">
-            {/* Header */}
-            <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200">
+        <div className="min-h-screen bg-white font-sans selection:bg-blue-100 selection:text-blue-900">
+            {/* Fixed Navigation Bar with Glass Effect */}
+            <nav className="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="flex items-center justify-between h-16">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
-                                <span className="text-white font-bold text-lg">B</span>
+                    <div className="flex justify-between items-center h-20">
+                        {/* Logo */}
+                        <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-900/10">
+                                B
                             </div>
-                            <span className="text-xl font-bold text-gray-900">Bekkurinn</span>
-                        </div>
-                        <nav className="hidden md:flex items-center gap-8">
-                            <a href="#features" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('nav.features')}</a>
-                            <a href="#how" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('nav.how_it_works')}</a>
-                            <a href="#faq" className="text-gray-600 hover:text-gray-900 transition-colors font-medium">{t('nav.faq')}</a>
-                        </nav>
-                        <Link
-                            href="/is/login"
-                            className="bg-blue-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition-colors shadow-sm"
-                        >
-                            {t('nav.login')}
-                        </Link>
-                    </div>
-                </div>
-            </header>
-
-            {/* Hero Section */}
-            <section className="pt-32 pb-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-blue-50 to-white">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center max-w-4xl mx-auto">
-                        {/* Badge */}
-                        <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-700 rounded-full text-sm font-medium mb-6">
-                            <Sparkles size={16} />
-                            <span>{t('hero.badge')}</span>
-                        </div>
-
-                        {/* Main Headline */}
-                        <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 mb-6 leading-tight">
-                            {t('hero.title_start')}
-                            <br />
-                            <span className="text-blue-600">{t('hero.title_highlight')}</span>
-                        </h1>
-
-                        {/* Subheadline */}
-                        <p className="text-xl sm:text-2xl text-gray-600 mb-10 max-w-3xl mx-auto leading-relaxed">
-                            {t.rich('hero.subtitle', richText)}
-                        </p>
-
-                        {/* CTA Buttons */}
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-                            <Link
-                                href="/is/onboarding"
-                                className="group inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
-                            >
-                                {t('hero.cta_primary')}
-                                <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                            </Link>
-                            <a
-                                href="#how"
-                                className="inline-flex items-center justify-center gap-2 bg-white text-gray-900 px-8 py-4 rounded-xl font-bold text-lg border-2 border-gray-300 hover:border-gray-400 transition-all"
-                            >
-                                {t('hero.cta_secondary')}
-                            </a>
-                        </div>
-
-                        {/* Beta Badge */}
-                        <div className="inline-flex items-center gap-2 px-6 py-3 bg-white border-2 border-blue-200 rounded-xl mt-8 shadow-sm">
-                            <Sparkles size={20} className="text-blue-600" />
-                            <span className="text-gray-700 font-medium">
-                                {t('hero.beta_badge')}
+                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 tracking-tight">
+                                Bekkurinn
                             </span>
                         </div>
+
+                        {/* Desktop Links */}
+                        <div className="hidden md:flex items-center gap-8">
+                            <NavLink href="#features">{t('nav.features')}</NavLink>
+                            <NavLink href="#how-it-works">{t('nav.how_it_works')}</NavLink>
+                            <NavLink href="#faq">{t('nav.faq')}</NavLink>
+
+                            {/* Language Switcher */}
+                            <div className="relative group">
+                                <button className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
+                                    <Globe size={20} />
+                                    <span className="uppercase text-xs font-bold">{t('locale' as any) || 'IS'}</span>
+                                </button>
+                                <div className="absolute top-full right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
+                                    <a href="/is" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇮🇸 Íslenska</a>
+                                    <a href="/en" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇬🇧 English</a>
+                                    <a href="/pl" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇵🇱 Polski</a>
+                                    <a href="/lt" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇱🇹 Lietuvių</a>
+                                </div>
+                            </div>
+
+                            {user ? (
+                                <Link
+                                    href="/is/dashboard"
+                                    className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-gray-800 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+                                >
+                                    Mælaborð
+                                </Link>
+                            ) : (
+                                <Link
+                                    href="/is/login"
+                                    className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
+                                >
+                                    {t('nav.login')}
+                                </Link>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            {/* Hero Section with Soft Gradient Background */}
+            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                {/* Background Decor */}
+                <div className="absolute top-0 inset-x-0 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-white to-white -z-10" />
+                <div className="absolute top-20 right-0 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
+                <div className="absolute top-40 left-0 w-[600px] h-[600px] bg-amber-50/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
+
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                        </span>
+                        {t('hero.badge')}
+                    </div>
+
+                    <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-8 leading-[1.1] animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
+                        {t('hero.title_start')} <br className="hidden md:block" />
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
+                            {t('hero.title_highlight')}
+                        </span>
+                    </h1>
+
+                    <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                        {t.rich('hero.subtitle', richText)}
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
+                        <Link
+                            href={user ? "/is/dashboard" : "/is/onboarding"}
+                            className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2"
+                        >
+                            {t('hero.cta_primary')} <ArrowRight size={20} />
+                        </Link>
+                        <Link
+                            href="#features"
+                            className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all"
+                        >
+                            {t('hero.cta_secondary')}
+                        </Link>
+                    </div>
+
+                    <div className="mt-12 flex flex-col items-center gap-3 text-sm text-gray-500 animate-in fade-in delay-500">
+                        <div className="flex -space-x-2 overflow-hidden">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
+                                    {(String.fromCharCode(64 + i))}
+                                </div>
+                            ))}
+                        </div>
+                        <p>{t('hero.beta_badge')}</p>
                     </div>
                 </div>
             </section>
 
-            {/* Features Section */}
-            <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                            {t('features.title')}
-                        </h2>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            {t('features.subtitle')}
-                        </p>
+            {/* Features Grid with Modern Cards */}
+            <section id="features" className="py-24 bg-white relative">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="text-center max-w-3xl mx-auto mb-20">
+                        <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase mb-2">{t('features.title')}</h2>
+                        <p className="text-3xl md:text-4xl font-bold text-gray-900">{t('features.subtitle')}</p>
                     </div>
 
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {/* Feature 1 */}
-                        <div className="group p-8 bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Calendar className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f1_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f1_desc')}</p>
-                        </div>
-
-                        {/* Feature 2 */}
-                        <div className="group p-8 bg-gradient-to-br from-green-50 to-white border border-green-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-green-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Users className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f2_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f2_desc')}</p>
-                        </div>
-
-                        {/* Feature 3 */}
-                        <div className="group p-8 bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-purple-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <MessageSquare className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f3_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f3_desc')}</p>
-                        </div>
-
-                        {/* Feature 4 */}
-                        <div className="group p-8 bg-gradient-to-br from-amber-50 to-white border border-amber-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-amber-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Shield className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f4_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f4_desc')}</p>
-                        </div>
-
-                        {/* Feature 5 */}
-                        <div className="group p-8 bg-gradient-to-br from-red-50 to-white border border-red-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-red-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Heart className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f5_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f5_desc')}</p>
-                        </div>
-
-                        {/* Feature 6 */}
-                        <div className="group p-8 bg-gradient-to-br from-indigo-50 to-white border border-indigo-100 rounded-2xl hover:shadow-xl transition-all hover:-translate-y-1">
-                            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                <Clock className="text-white" size={24} />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.f6_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('features.f6_desc')}</p>
-                        </div>
+                        <FeatureCard
+                            icon={<Calendar className="text-blue-600" size={28} />}
+                            title={t('features.f1_title')}
+                            desc={t('features.f1_desc')}
+                            color="bg-blue-50"
+                        />
+                        <FeatureCard
+                            icon={<Shield className="text-green-600" size={28} />}
+                            title={t('features.f2_title')}
+                            desc={t('features.f2_desc')}
+                            color="bg-green-50"
+                        />
+                        <FeatureCard
+                            icon={<Users className="text-purple-600" size={28} />}
+                            title={t('features.f3_title')}
+                            desc={t('features.f3_desc')}
+                            color="bg-purple-50"
+                        />
+                        <FeatureCard
+                            icon={<Lock className="text-amber-600" size={28} />}
+                            title={t('features.f4_title')}
+                            desc={t('features.f4_desc')}
+                            color="bg-amber-50"
+                        />
+                        <FeatureCard
+                            icon={<CheckCircle2 className="text-teal-600" size={28} />}
+                            title={t('features.f5_title')}
+                            desc={t('features.f5_desc')}
+                            color="bg-teal-50"
+                        />
+                        <FeatureCard
+                            icon={<Coffee className="text-indigo-600" size={28} />}
+                            title={t('features.f6_title')}
+                            desc={t('features.f6_desc')}
+                            color="bg-indigo-50"
+                        />
                     </div>
                 </div>
             </section>
 
-            {/* How It Works */}
-            <section id="how" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-                <div className="max-w-7xl mx-auto">
+            {/* How It Works - Clean Steps */}
+            <section id="how-it-works" className="py-24 bg-gray-50 border-y border-gray-100">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                            {t('how.title')}
-                        </h2>
-                        <p className="text-xl text-gray-600">
-                            {t('how.subtitle')}
-                        </p>
+                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('how.title')}</h2>
+                        <p className="text-xl text-gray-600">{t('how.subtitle')}</p>
                     </div>
 
-                    <div className="grid md:grid-cols-3 gap-12">
-                        {/* Step 1 */}
-                        <div className="relative">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
-                                    1
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('how.step1_title')}</h3>
-                                <p className="text-gray-600 leading-relaxed">{t('how.step1_desc')}</p>
-                            </div>
-                            <div className="hidden md:block absolute top-8 -right-6 text-blue-300">
-                                <ArrowRight size={32} />
-                            </div>
-                        </div>
+                    <div className="grid md:grid-cols-3 gap-12 relative">
+                        {/* Connecting Line (Desktop) */}
+                        <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gray-200 -z-0" />
 
-                        {/* Step 2 */}
-                        <div className="relative">
-                            <div className="flex flex-col items-center text-center">
-                                <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
-                                    2
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('how.step2_title')}</h3>
-                                <p className="text-gray-600 leading-relaxed">{t('how.step2_desc')}</p>
-                            </div>
-                            <div className="hidden md:block absolute top-8 -right-6 text-blue-300">
-                                <ArrowRight size={32} />
-                            </div>
-                        </div>
-
-                        {/* Step 3 */}
-                        <div className="flex flex-col items-center text-center">
-                            <div className="w-16 h-16 bg-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mb-6 shadow-lg">
-                                3
-                            </div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-4">{t('how.step3_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('how.step3_desc')}</p>
-                        </div>
+                        <StepCard number="1" title={t('how.step1_title')} desc={t('how.step1_desc')} />
+                        <StepCard number="2" title={t('how.step2_title')} desc={t('how.step2_desc')} />
+                        <StepCard number="3" title={t('how.step3_title')} desc={t('how.step3_desc')} />
                     </div>
 
-                    <div className="text-center mt-16">
+                    <div className="mt-16 text-center">
                         <Link
-                            href="/is/onboarding"
-                            className="inline-flex items-center gap-2 bg-blue-600 text-white px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl hover:scale-105"
+                            href={user ? "/is/dashboard" : "/is/onboarding"}
+                            className="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-xl text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors"
                         >
                             {t('how.cta')}
-                            <ArrowRight size={20} />
                         </Link>
-                        <p className="text-sm text-gray-500 mt-4">{t('how.fine_print')}</p>
+                        <p className="mt-4 text-sm text-gray-500">{t('how.fine_print')}</p>
                     </div>
                 </div>
             </section>
 
-            {/* Why Join Beta */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
-                <div className="max-w-7xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                            {t('beta.title')}
-                        </h2>
-                        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-                            {t('beta.subtitle')}
-                        </p>
-                    </div>
-
-                    <div className="grid md:grid-cols-3 gap-8">
-                        {/* Benefit 1 */}
-                        <div className="p-8 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100">
-                            <div className="flex gap-1 mb-4">
-                                <CheckCircle size={24} className="text-blue-600" />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('beta.b1_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('beta.b1_desc')}</p>
-                        </div>
-
-                        {/* Benefit 2 */}
-                        <div className="p-8 bg-gradient-to-br from-green-50 to-white rounded-2xl border border-green-100">
-                            <div className="flex gap-1 mb-4">
-                                <MessageSquare size={24} className="text-green-600" />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('beta.b2_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('beta.b2_desc')}</p>
-                        </div>
-
-                        {/* Benefit 3 */}
-                        <div className="p-8 bg-gradient-to-br from-purple-50 to-white rounded-2xl border border-purple-100">
-                            <div className="flex gap-1 mb-4">
-                                <Star size={24} className="text-purple-600" />
-                            </div>
-                            <h3 className="text-xl font-bold text-gray-900 mb-3">{t('beta.b3_title')}</h3>
-                            <p className="text-gray-600 leading-relaxed">{t('beta.b3_desc')}</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ */}
-            <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-                <div className="max-w-3xl mx-auto">
-                    <div className="text-center mb-16">
-                        <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-                            {t('faq.title')}
-                        </h2>
-                    </div>
-
+            {/* FAQ Section */}
+            <section id="faq" className="py-24 bg-white">
+                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 className="text-3xl font-bold text-gray-900 text-center mb-16">{t('faq.title')}</h2>
                     <div className="space-y-6">
-                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
-                                {t('faq.q1')}
-                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <p className="mt-4 text-gray-600 leading-relaxed">{t('faq.a1')}</p>
-                        </details>
-
-                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
-                                {t('faq.q2')}
-                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <p className="mt-4 text-gray-600 leading-relaxed">{t('faq.a2')}</p>
-                        </details>
-
-                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
-                                {t('faq.q3')}
-                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <p className="mt-4 text-gray-600 leading-relaxed">{t('faq.a3')}</p>
-                        </details>
-
-                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
-                                {t('faq.q4')}
-                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <p className="mt-4 text-gray-600 leading-relaxed">{t('faq.a4')}</p>
-                        </details>
-
-                        <details className="group bg-white rounded-xl p-6 shadow-sm border border-gray-200">
-                            <summary className="flex items-center justify-between cursor-pointer font-semibold text-lg text-gray-900">
-                                {t('faq.q5')}
-                                <span className="text-blue-600 group-open:rotate-180 transition-transform">▼</span>
-                            </summary>
-                            <p className="mt-4 text-gray-600 leading-relaxed">{t('faq.a5')}</p>
-                        </details>
+                        <FaqItem q={t('faq.q1')} a={t('faq.a1')} />
+                        <FaqItem q={t('faq.q2')} a={t('faq.a2')} />
+                        <FaqItem q={t('faq.q3')} a={t('faq.a3')} />
+                        <FaqItem q={t('faq.q4')} a={t('faq.a4')} />
+                        <FaqItem q={t('faq.q5')} a={t('faq.a5')} />
                     </div>
                 </div>
             </section>
 
-            {/* Final CTA */}
-            <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 to-blue-800 text-white">
-                <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl sm:text-5xl font-bold mb-6 text-white">
-                        {t('cta_final.title')}
-                    </h2>
-                    <p className="text-xl sm:text-2xl text-white/90 mb-10 leading-relaxed">
-                        {t('cta_final.subtitle')}
-                    </p>
-                    <Link
-                        href="/is/onboarding"
-                        className="inline-flex items-center gap-2 bg-white text-blue-600 px-10 py-5 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all shadow-xl hover:scale-105"
-                    >
-                        {t('cta_final.button')}
-                        <ArrowRight size={20} />
-                    </Link>
-                    <p className="text-white/80 mt-6 text-sm">
-                        {t('cta_final.fine_print')}
-                    </p>
+            {/* Final CTA - High Impact */}
+            <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
+                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
+                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+                <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6">{t('cta_final.title')}</h2>
+                    <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">{t('cta_final.subtitle')}</p>
+                    <div className="flex flex-col items-center gap-4">
+                        <Link
+                            href="/is/onboarding"
+                            className="px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
+                        >
+                            {t('cta_final.button')}
+                        </Link>
+                        <p className="text-sm text-gray-500">{t('cta_final.fine_print')}</p>
+                    </div>
                 </div>
             </section>
 
             {/* Footer */}
-            <footer className="bg-gray-900 text-gray-300 py-12 px-4 sm:px-6 lg:px-8">
-                <div className="max-w-7xl mx-auto">
-                    <div className="grid md:grid-cols-4 gap-8 mb-8">
-                        <div>
-                            <div className="flex items-center gap-2 mb-4">
-                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                                    <span className="text-white font-bold">B</span>
-                                </div>
-                                <span className="text-xl font-bold text-white">Bekkurinn</span>
-                            </div>
-                            <p className="text-sm text-gray-400">
-                                {t('footer.desc')}
-                            </p>
-                        </div>
-
-                        <div>
-                            <h3 className="font-semibold text-white mb-4">{t('footer.products')}</h3>
-                            <ul className="space-y-2 text-sm">
-                                <li><a href="#features" className="hover:text-white transition-colors">{t('nav.features')}</a></li>
-                                <li><a href="#how" className="hover:text-white transition-colors">{t('nav.how_it_works')}</a></li>
-                                <li><a href="#faq" className="hover:text-white transition-colors">{t('nav.faq')}</a></li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="font-semibold text-white mb-4">{t('footer.support')}</h3>
-                            <ul className="space-y-2 text-sm">
-                                <li><a href="mailto:hjalp@bekkurinn.is" className="hover:text-white transition-colors">{t('footer.contact')}</a></li>
-                                <li><a href="#" className="hover:text-white transition-colors">{t('footer.forgot_password')}</a></li>
-                            </ul>
-                        </div>
-
-                        <div>
-                            <h3 className="font-semibold text-white mb-4">{t('footer.legal')}</h3>
-                            <ul className="space-y-2 text-sm">
-                                <li><a href="#" className="hover:text-white transition-colors">{t('footer.terms')}</a></li>
-                                <li><a href="#" className="hover:text-white transition-colors">{t('footer.privacy')}</a></li>
-                            </ul>
-                        </div>
+            <footer className="bg-gray-50 border-t border-gray-200 py-12">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+                    <div className="flex items-center justify-center gap-2 mb-4">
+                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 font-bold">B</div>
+                        <span className="font-bold text-lg text-gray-900">Bekkurinn</span>
                     </div>
-
-                    <div className="border-t border-gray-800 pt-8 text-center text-sm text-gray-400">
-                        <p>{t('footer.copyright')}</p>
-                        <p className="text-xs text-gray-600 mt-2">{t('footer.ai_disclaimer')}</p>
-                    </div>
+                    <p className="mb-4">{t('footer.copyright')}</p>
+                    <p className="opacity-75">{t('footer.ai_disclaimer')}</p>
                 </div>
             </footer>
+        </div>
+    );
+}
+
+// --- Components for Visual Consistency ---
+
+function NavLink({ href, children }: { href: string; children: React.ReactNode }) {
+    return (
+        <a href={href} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+            {children}
+        </a>
+    );
+}
+
+function FeatureCard({ icon, title, desc, color }: any) {
+    return (
+        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 group">
+            <div className={`w-14 h-14 ${color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+                {icon}
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+            <p className="text-gray-500 leading-relaxed">{desc}</p>
+        </div>
+    );
+}
+
+function StepCard({ number, title, desc }: any) {
+    return (
+        <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-xl">
+            <div className="w-12 h-12 bg-white border-2 border-blue-600 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
+                {number}
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
+            <p className="text-gray-600 leading-relaxed max-w-xs mx-auto">{desc}</p>
+        </div>
+    );
+}
+
+function FaqItem({ q, a }: any) {
+    return (
+        <div className="bg-gray-50 rounded-xl p-6 hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
+            <h3 className="font-bold text-gray-900 mb-2 flex items-start gap-3">
+                <span className="text-blue-600 shrink-0">?</span> {q}
+            </h3>
+            <p className="text-gray-600 pl-6 leading-relaxed text-sm">{a}</p>
         </div>
     );
 }
