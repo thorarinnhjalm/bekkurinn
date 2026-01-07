@@ -281,7 +281,7 @@ export default function LandingPage() {
                         color: 'var(--text-primary)',
                         marginBottom: 'var(--space-sm)'
                     }}>
-                        Gervigreindin okkar sér um matinn
+                        Gervigreindin skipuleggur veitingarnar
                     </h2>
                     <p style={{
                         color: 'var(--text-secondary)',
@@ -425,7 +425,7 @@ export default function LandingPage() {
                     {[
                         {
                             icon: Users,
-                            title: 'Nafnalisti sem uppfærist',
+                            title: 'Alltaf réttur bekkjarlisti',
                             description: 'Aldrei aftur Google-blöð með „Símanúmer_Útgáfa_Final_FINAL_2.xlsx"'
                         },
                         {
@@ -435,7 +435,7 @@ export default function LandingPage() {
                         },
                         {
                             icon: Calendar,
-                            title: 'Vaktir og viðburðir',
+                            title: 'Viðburðir og verkefni',
                             description: 'Foreldrar skrá sig sjálfir. Þú færð áminningar. Ekkert ruglað Google-dagatal.'
                         },
                         {
