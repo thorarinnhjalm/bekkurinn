@@ -152,10 +152,13 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         .sort((a, b) => a.nextBirthday.getTime() - b.nextBirthday.getTime())
         .slice(0, 3);
 
+    // 5. Admin check
+    const isAdmin = classData?.admins?.includes(user?.uid || '');
+
     return (
-        <div className="min-h-screen p-4 space-y-8 pb-24 pt-24">
-            {/* 1. Greeting */}
-            <header className="space-y-1">
+        <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto space-y-6">
+            {/* 1. Greeting (Full Width) */}
+            <header className="space-y-1 mb-2">
                 <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                     {translations.greeting.replace('{name}', firstName)}
                 </h1>
@@ -164,107 +167,146 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 </p>
             </header>
 
-            {/* 2. Primary Call to Action: Latest Announcement */}
-            {latestAnnouncement && (
-                <section className="space-y-3">
-                    <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                            {translations.latest_announcement}
-                        </h2>
-                        <Link href="/is/announcements" className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
-                            Sjá allar <ChevronRight size={16} />
-                        </Link>
-                    </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-                    <div
-                        className="nordic-card p-5 border-l-4"
-                        style={{ borderColor: 'var(--border-light)', borderLeftColor: latestAnnouncement.pinned ? 'var(--amber)' : 'var(--nordic-blue)' }}
-                    >
-                        <div className="flex items-start gap-4">
-                            <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: latestAnnouncement.pinned ? 'var(--amber)20' : 'var(--nordic-blue)20' }}>
-                                <Megaphone size={20} color={latestAnnouncement.pinned ? 'var(--amber-dark)' : 'var(--nordic-blue)'} />
+                {/* --- LEFT COLUMN (Main Content) --- */}
+                <div className="lg:col-span-2 space-y-6">
+
+                    {/* Latest Announcement */}
+                    {latestAnnouncement && (
+                        <section className="space-y-3">
+                            <div className="flex items-center justify-between">
+                                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                    {translations.latest_announcement}
+                                </h2>
+                                <Link href="/is/announcements" className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
+                                    Sjá allar <ChevronRight size={16} />
+                                </Link>
                             </div>
-                            <div className="space-y-1 min-w-0">
-                                <h3 className="font-medium truncate">{latestAnnouncement.title}</h3>
-                                <p className="text-sm line-clamp-2 leading-relaxed" style={{ color: 'var(--text-secondary)' }}>
-                                    {latestAnnouncement.content}
-                                </p>
-                                <p className="text-xs pt-1" style={{ color: 'var(--text-tertiary)' }}>
-                                    {formatDate(latestAnnouncement.createdAt)} • {latestAnnouncement.author || 'Stjórn'}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            )}
 
-            {/* 3. Upcoming Events / What's Next */}
-            <section className="space-y-3">
-                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {translations.whats_next}
-                </h2>
-
-                {upcomingTasks.length > 0 ? (
-                    <div className="space-y-3">
-                        {upcomingTasks.slice(0, 4).map(task => { // Increased to 4 items
-                            const isSchoolEvent = task.type === 'school_event';
-                            return (
-                                <div key={task.id} className="nordic-card p-4 flex items-center gap-4">
-                                    <div className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg flex-shrink-0 ${isSchoolEvent ? 'bg-amber-100' : 'bg-stone-100'}`}>
-                                        <span className={`text-xs font-bold uppercase ${isSchoolEvent ? 'text-amber-700' : 'text-nordic-blue'}`} style={{ color: isSchoolEvent ? 'var(--amber-dark)' : 'var(--nordic-blue)' }}>
-                                            {task.date.toDate().toLocaleDateString('is-IS', { month: 'short' })}
-                                        </span>
-                                        <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>
-                                            {task.date.toDate().getDate()}
-                                        </span>
+                            <div
+                                className="nordic-card p-5 border-l-4 transition-transform hover:scale-[1.01]"
+                                style={{ borderColor: 'var(--border-light)', borderLeftColor: latestAnnouncement.pinned ? 'var(--amber)' : 'var(--nordic-blue)' }}
+                            >
+                                <div className="flex items-start gap-4">
+                                    <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: latestAnnouncement.pinned ? 'var(--amber)20' : 'var(--nordic-blue)20' }}>
+                                        <Megaphone size={20} color={latestAnnouncement.pinned ? 'var(--amber-dark)' : 'var(--nordic-blue)'} />
                                     </div>
-                                    <div>
-                                        <h4 className="font-medium">{task.title}</h4>
-                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                            {isSchoolEvent
-                                                ? 'Skóladagatal'
-                                                : `${task.slotsFilled} af ${task.slotsTotal} skráðir`}
+                                    <div className="space-y-1 min-w-0">
+                                        <h3 className="font-medium truncate">{latestAnnouncement.title}</h3>
+                                        <p className="text-sm line-clamp-2 leading-relaxed text-gray-600">
+                                            {latestAnnouncement.content}
+                                        </p>
+                                        <p className="text-xs pt-1 text-gray-400">
+                                            {formatDate(latestAnnouncement.createdAt)} • {latestAnnouncement.author || 'Stjórn'}
                                         </p>
                                     </div>
                                 </div>
-                            );
-                        })}
-                    </div>
-                ) : (
-                    <div className="nordic-card p-6 text-center" style={{ color: 'var(--text-secondary)' }}>
-                        <Calendar className="mx-auto mb-2 opacity-50" size={24} />
-                        <p>{translations.no_events}</p>
-                    </div>
-                )}
-            </section>
-
-            {/* 4. Upcoming Birthdays */}
-            <section className="space-y-3">
-                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                    {translations.upcoming_birthdays}
-                </h2>
-
-                <div className="grid grid-cols-1 gap-3">
-                    {upcomingBirthdays.length > 0 ? (
-                        upcomingBirthdays.map(student => (
-                            <div key={student.id} className="nordic-card p-3 flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0" style={{ backgroundColor: 'var(--amber)' }}>
-                                    {student.name[0]}
-                                </div>
-                                <div className="flex-1">
-                                    <p className="font-medium">{student.name}</p>
-                                    <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>
-                                        {formatDate(student.nextBirthday as any)}
-                                    </p>
-                                </div>
-                                <Star size={16} className="text-amber-400" fill="currentColor" />
                             </div>
-                        ))
-                    ) : (
-                        <p className="text-sm text-center py-4" style={{ color: 'var(--text-tertiary)' }}>{translations.no_birthdays}</p>
+                        </section>
+                    )}
+
+                    {/* Upcoming Events */}
+                    <section className="space-y-3">
+                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                            {translations.whats_next}
+                        </h2>
+
+                        {upcomingTasks.length > 0 ? (
+                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
+                                {upcomingTasks.slice(0, 4).map(task => { // Increased to 4 items
+                                    const isSchoolEvent = task.type === 'school_event';
+                                    return (
+                                        <div key={task.id} className="nordic-card p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
+                                            <div className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg flex-shrink-0 ${isSchoolEvent ? 'bg-amber-100' : 'bg-blue-50'}`}>
+                                                <span className={`text-xs font-bold uppercase ${isSchoolEvent ? 'text-amber-700' : 'text-blue-600'}`}>
+                                                    {task.date?.toDate ? task.date.toDate().toLocaleDateString('is-IS', { month: 'short' }) : ''}
+                                                </span>
+                                                <span className="text-lg font-bold text-gray-800">
+                                                    {task.date?.toDate ? task.date.toDate().getDate() : ''}
+                                                </span>
+                                            </div>
+                                            <div>
+                                                <h4 className="font-medium text-gray-900">{task.title}</h4>
+                                                <p className="text-sm text-gray-500">
+                                                    {isSchoolEvent
+                                                        ? 'Skóladagatal'
+                                                        : `${task.slotsFilled} af ${task.slotsTotal} skráðir`}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="nordic-card p-8 text-center bg-gray-50 border-dashed border-2 border-gray-200">
+                                <Calendar className="mx-auto mb-2 text-gray-300" size={32} />
+                                <p className="text-gray-500 font-medium mb-2">{translations.no_events}</p>
+                                {isAdmin && (
+                                    <Link href="/is/settings" className="text-sm text-nordic-blue hover:underline">
+                                        Sækja skóladagatal í stillingum →
+                                    </Link>
+                                )}
+                            </div>
+                        )}
+                    </section>
+                </div>
+
+                {/* --- RIGHT COLUMN (Sidebar) --- */}
+                <div className="space-y-6">
+
+                    {/* Upcoming Birthdays */}
+                    <section className="space-y-3">
+                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                            {translations.upcoming_birthdays}
+                        </h2>
+
+                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-50">
+                            {upcomingBirthdays.length > 0 ? (
+                                upcomingBirthdays.map(student => (
+                                    <div key={student.id} className="p-3 flex items-center gap-3 hover:bg-gray-50 transition-colors">
+                                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0 bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm">
+                                            {student.name[0]}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-medium text-sm truncate">{student.name}</p>
+                                            <p className="text-xs text-gray-500">
+                                                {formatDate(student.nextBirthday as any)}
+                                            </p>
+                                        </div>
+                                        <Star size={14} className="text-amber-400" fill="currentColor" />
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-sm text-center py-6 text-gray-400 italic">{translations.no_birthdays}</p>
+                            )}
+                        </div>
+                    </section>
+
+                    {/* ADMIN ACTIONS SIDEBAR */}
+                    {isAdmin && (
+                        <section className="space-y-3">
+                            <h2 className="text-lg font-semibold text-gray-900">
+                                Flýtileiðir
+                            </h2>
+                            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 space-y-2">
+                                <Link href="/is/settings" className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                    <div className="bg-blue-100 p-1.5 rounded-md group-hover:bg-blue-200 transition-colors">
+                                        <Loader2 size={16} className="text-nordic-blue" />
+                                    </div>
+                                    Stillingar & Dagatal
+                                </Link>
+                                <Link href="/is/tasks/new" className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                    <div className="bg-amber-100 p-1.5 rounded-md group-hover:bg-amber-200 transition-colors">
+                                        <Star size={16} className="text-amber-600" />
+                                    </div>
+                                    Búa til viðburð (Rölt)
+                                </Link>
+                            </div>
+                        </section>
                     )}
                 </div>
-            </section>
+            </div>
         </div>
     );
 }

@@ -15,7 +15,7 @@ import { useState } from 'react';
 export function TopHeader() {
     const { user, signOut } = useAuth();
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-    const unreadNotifications = 3; // Mock data
+    const unreadNotifications = 0; // Real notifications coming soon
 
     const handleSignOut = async () => {
         await signOut();
@@ -31,7 +31,7 @@ export function TopHeader() {
                 paddingTop: 'env(safe-area-inset-top, 0px)',
             }}
         >
-            <div className="flex items-center justify-between px-4 py-3">
+            <div className="flex items-center justify-between px-4 py-3 max-w-5xl mx-auto w-full">
                 {/* Logo */}
                 <Link href="/directory" className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--nordic-blue)' }}>

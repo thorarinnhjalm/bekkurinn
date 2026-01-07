@@ -6,7 +6,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { createClass } from '@/services/firestore'; // Assuming these exist or I'll create them
 import { SCHOOLS } from '@/constants/schools';
 import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check } from 'lucide-react';
-import { doc, getFirestore, updateDoc, setDoc, serverTimestamp, collection, addDoc } from 'firebase/firestore';
+import { doc, getFirestore, updateDoc, setDoc, serverTimestamp, collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 // Temporary local implementations until moved to services
@@ -35,6 +35,44 @@ async function createClassLocal(data: any, userId: string) {
     // For now we rely on the user being in the 'admins' array.
 
     return classRef.id;
+}
+
+// Calendar helpers (duplicated from SettingsView for now)
+function parseICS(icsContent: string) {
+    const events: any[] = [];
+    const lines = icsContent.split(/\r\n|\n|\r/);
+    let currentEvent: any = {};
+    let inEvent = false;
+
+    for (const line of lines) {
+        if (line.startsWith('BEGIN:VEVENT')) {
+            inEvent = true;
+            currentEvent = {};
+        } else if (line.startsWith('END:VEVENT')) {
+            inEvent = false;
+            if (currentEvent.summary && currentEvent.dtstart) {
+                events.push(currentEvent);
+            }
+        } else if (inEvent) {
+            if (line.startsWith('SUMMARY:')) {
+                currentEvent.summary = line.substring(8);
+            } else if (line.startsWith('DTSTART;VALUE=DATE:')) {
+                currentEvent.dtstart = line.substring(19);
+                currentEvent.isAllDay = true;
+            } else if (line.startsWith('DTSTART:')) {
+                currentEvent.dtstart = line.substring(8);
+                currentEvent.isAllDay = false;
+            }
+        }
+    }
+    return events;
+}
+
+function parseDate(dateStr: string): Date {
+    const year = parseInt(dateStr.substring(0, 4));
+    const month = parseInt(dateStr.substring(4, 6)) - 1;
+    const day = parseInt(dateStr.substring(6, 8));
+    return new Date(year, month, day);
 }
 
 export default function OnboardingView() {
@@ -80,6 +118,45 @@ export default function OnboardingView() {
                 section: formData.isSplit ? formData.section : null,
                 calendarUrl
             }, user.uid);
+
+            // SYNC CALENDAR AUTOMATICALLY
+            if (calendarUrl) {
+                try {
+                    // Fetch ICS
+                    const res = await fetch(`/api/proxy-calendar?url=${encodeURIComponent(calendarUrl)}`);
+                    if (res.ok) {
+                        const icsText = await res.text();
+                        const events = parseICS(icsText);
+
+                        const keywords = ['Starfsdagur', 'Skipulagsdagur', 'Vetrarfrí', 'Jólafrí', 'Páskafrí', 'Skólasetning', 'Skólaslit', 'Lýðveldisdagurinn', 'Sumardagurinn fyrsti', 'Frídagur'];
+                        const relevantEvents = events.filter((e: any) =>
+                            keywords.some(k => e.summary && e.summary.toLowerCase().includes(k.toLowerCase()))
+                        );
+
+                        // Add events to tasks
+                        const addPromises = relevantEvents.map((event: any) => {
+                            const date = parseDate(event.dtstart);
+                            return addDoc(collection(db, 'tasks'), {
+                                classId: classId, // Use the new classId
+                                type: 'school_event',
+                                title: event.summary,
+                                description: 'Samkvæmt skóladagatali',
+                                date: Timestamp.fromDate(date),
+                                slotsTotal: 0,
+                                slotsFilled: 0,
+                                volunteers: [],
+                                createdBy: user.uid,
+                                createdAt: serverTimestamp(),
+                            });
+                        });
+                        await Promise.all(addPromises);
+                        console.log(`Synced ${relevantEvents.length} calendar events.`);
+                    }
+                } catch (calError) {
+                    console.error("Failed to sync calendar during onboarding:", calError);
+                    // Don't block onboarding success, just log error
+                }
+            }
 
             // Redirect
             router.push('/is/dashboard?welcome=true');
