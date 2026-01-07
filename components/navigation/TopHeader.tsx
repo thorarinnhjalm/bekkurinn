@@ -34,14 +34,14 @@ export function TopHeader() {
             <div className="flex items-center justify-between px-4 py-3">
                 {/* Logo */}
                 <Link href="/directory" className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--sage-green)' }}>
+                    <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--nordic-blue)' }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                             <circle cx="16" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                             <circle cx="12" cy="15" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                         </svg>
                     </div>
-                    <span className="font-bold text-lg" style={{ color: 'var(--sage-green)' }}>
+                    <span className="font-bold text-lg" style={{ color: 'var(--nordic-blue)' }}>
                         Bekkurinn
                     </span>
                 </Link>
@@ -90,7 +90,7 @@ export function TopHeader() {
                                 ) : (
                                     <div
                                         className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold"
-                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                     >
                                         {(user.displayName || user.email || 'U')[0].toUpperCase()}
                                     </div>

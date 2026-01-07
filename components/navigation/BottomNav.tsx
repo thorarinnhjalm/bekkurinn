@@ -89,7 +89,7 @@ export function BottomNav({ translations }: BottomNavProps) {
                                 isActive ? 'scale-105' : 'opacity-60 hover:opacity-100'
                             )}
                             style={{
-                                color: isActive ? 'var(--sage-green)' : 'var(--text-secondary)',
+                                color: isActive ? 'var(--nordic-blue)' : 'var(--text-secondary)',
                             }}
                         >
                             <Icon
@@ -110,7 +110,7 @@ export function BottomNav({ translations }: BottomNavProps) {
                             {isActive && (
                                 <div
                                     className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-t-full"
-                                    style={{ backgroundColor: 'var(--sage-green)' }}
+                                    style={{ backgroundColor: 'var(--nordic-blue)' }}
                                 />
                             )}
                         </Link>
