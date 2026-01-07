@@ -10,8 +10,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
  * Uses Google Gemini (cheaper and easier than Claude!)
  */
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
-
 interface FoodPlannerRequest {
     childAge: number;
     partyTime: string; // ISO datetime
@@ -21,6 +19,19 @@ interface FoodPlannerRequest {
 
 export async function POST(req: NextRequest) {
     try {
+        const apiKey = process.env.GEMINI_API_KEY;
+        if (!apiKey) {
+            console.error('Missing GEMINI_API_KEY environment variable');
+            return NextResponse.json(
+                {
+                    success: false,
+                    error: 'Gervigreind ekki virk (vantar API lykil). Vinsamlegast hafið samband við kerfisstjóra.'
+                },
+                { status: 500 }
+            );
+        }
+
+        const genAI = new GoogleGenerativeAI(apiKey);
         const body: FoodPlannerRequest = await req.json();
         const { childAge, partyTime, allergies, attendeeCount } = body;
 
