@@ -166,20 +166,17 @@ export default function OnboardingView() {
                         {/* Grade */}
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">Árgangur</label>
-                            <div className="flex flex-wrap gap-3 justify-center py-2">
+                            <select
+                                value={formData.grade}
+                                onChange={(e) => setFormData({ ...formData, grade: Number(e.target.value) })}
+                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white text-gray-900"
+                            >
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(g => (
-                                    <button
-                                        key={g}
-                                        onClick={() => setFormData({ ...formData, grade: g })}
-                                        className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold transition-all border
-                                            ${formData.grade === g
-                                                ? 'bg-blue-900 text-white border-blue-900 scale-110 shadow-md'
-                                                : 'bg-white text-gray-900 border-gray-300 hover:bg-gray-50'}`}
-                                    >
-                                        {g}
-                                    </button>
+                                    <option key={g} value={g}>
+                                        {g}. bekkur
+                                    </option>
                                 ))}
-                            </div>
+                            </select>
                         </div>
 
                         {/* Structure Type */}
