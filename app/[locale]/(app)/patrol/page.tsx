@@ -65,7 +65,7 @@ export default function PatrolPage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
                     <p style={{ color: 'var(--text-secondary)' }}>Hleður dagatali...</p>
                 </div>
             </div>
@@ -95,7 +95,7 @@ export default function PatrolPage() {
         <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
             {/* Header */}
             <header className="space-y-3">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                     Dagatal
                 </h1>
                 <p style={{ color: 'var(--text-secondary)' }}>
@@ -111,7 +111,7 @@ export default function PatrolPage() {
                     style={{ backgroundColor: 'var(--stone)' }}
                 >
                     <div className="flex items-center gap-2">
-                        <Users size={20} style={{ color: 'var(--sage-green)' }} />
+                        <Users size={20} style={{ color: 'var(--nordic-blue)' }} />
                         <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                             Foreldrarölt ({patrols.length})
                         </h2>
@@ -170,7 +170,7 @@ export default function PatrolPage() {
                                                 >
                                                     <div
                                                         className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                                     >
                                                         {volunteer.name[0]}
                                                     </div>
@@ -207,7 +207,7 @@ export default function PatrolPage() {
                     style={{ backgroundColor: 'var(--stone)' }}
                 >
                     <div className="flex items-center gap-2">
-                        <Calendar size={20} style={{ color: 'var(--sage-green)' }} />
+                        <Calendar size={20} style={{ color: 'var(--nordic-blue)' }} />
                         <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                             Viðburðir ({events.length})
                         </h2>

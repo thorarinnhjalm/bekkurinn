@@ -79,7 +79,7 @@ export default function DirectoryPage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
                     <p style={{ color: 'var(--text-secondary)' }}>Hleður nemendum...</p>
                 </div>
             </div>
@@ -106,7 +106,7 @@ export default function DirectoryPage() {
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>Skráin</h1>
+                    <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>Skráin</h1>
                     {starredCount > 0 && (
                         <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
                             style={{ backgroundColor: 'var(--amber)20', color: 'var(--amber-dark)' }}>
@@ -174,7 +174,7 @@ export default function DirectoryPage() {
                                     {/* Photo Placeholder */}
                                     <div
                                         className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-2xl font-bold"
-                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                     >
                                         {student.name[0]}
                                     </div>

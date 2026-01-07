@@ -50,7 +50,7 @@ export default function TasksPage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
                     <p style={{ color: 'var(--text-secondary)' }}>Hleður verkefnum...</p>
                 </div>
             </div>
@@ -87,13 +87,13 @@ export default function TasksPage() {
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                    <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                         Skipulag
                     </h1>
                     {upcomingCount > 0 && (
                         <div
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
-                            style={{ backgroundColor: 'var(--sage-green)20', color: 'var(--sage-dark)' }}
+                            style={{ backgroundColor: 'var(--nordic-blue)20', color: 'var(--sage-dark)' }}
                         >
                             <Calendar size={14} />
                             <span>{upcomingCount} í vændum</span>
@@ -188,7 +188,7 @@ export default function TasksPage() {
                                                     width: `${progress}%`,
                                                     backgroundColor: isComplete
                                                         ? 'var(--green-success)'
-                                                        : 'var(--sage-green)',
+                                                        : 'var(--nordic-blue)',
                                                 }}
                                             />
                                         </div>
@@ -210,7 +210,7 @@ export default function TasksPage() {
                                                 >
                                                     <div
                                                         className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                                                        style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                                     >
                                                         {volunteer.name[0]}
                                                     </div>
@@ -253,7 +253,7 @@ export default function TasksPage() {
                 <div className="nordic-card p-5">
                     <div className="grid grid-cols-2 gap-4 text-center">
                         <div>
-                            <div className="text-2xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                            <div className="text-2xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                                 {upcomingCount}
                             </div>
                             <div className="text-sm" style={{ color: 'var(--text-tertiary)' }}>

@@ -52,7 +52,7 @@ export default function AnnouncementsPage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
                     <p style={{ color: 'var(--text-secondary)' }}>Hleður tilkynningum...</p>
                 </div>
             </div>
@@ -78,7 +78,7 @@ export default function AnnouncementsPage() {
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                    <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                         Auglýsingataflan
                     </h1>
                     {pinnedCount > 0 && (
@@ -113,7 +113,7 @@ export default function AnnouncementsPage() {
                                 {/* Author Avatar */}
                                 <div
                                     className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold"
-                                    style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}
+                                    style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                 >
                                     {(announcement.author || 'B')[0]}
                                 </div>

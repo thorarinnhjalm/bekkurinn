@@ -53,7 +53,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     if (authLoading || announcementsLoading || tasksLoading || studentsLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
-                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--sage-green)' }} />
+                <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
             </div>
         );
     }
@@ -99,7 +99,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         <div className="min-h-screen p-4 space-y-8 pb-24 pt-24">
             {/* 1. Greeting */}
             <header className="space-y-1">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                     {translations.greeting.replace('{name}', firstName)}
                 </h1>
                 <p style={{ color: 'var(--text-secondary)' }}>
@@ -114,18 +114,18 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                             {translations.latest_announcement}
                         </h2>
-                        <Link href="/is/announcements" className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--sage-green)' }}>
+                        <Link href="/is/announcements" className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
                             Sjá allar <ChevronRight size={16} />
                         </Link>
                     </div>
 
                     <div
                         className="nordic-card p-5 border-l-4"
-                        style={{ borderColor: 'var(--border-light)', borderLeftColor: latestAnnouncement.pinned ? 'var(--amber)' : 'var(--sage-green)' }}
+                        style={{ borderColor: 'var(--border-light)', borderLeftColor: latestAnnouncement.pinned ? 'var(--amber)' : 'var(--nordic-blue)' }}
                     >
                         <div className="flex items-start gap-4">
-                            <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: latestAnnouncement.pinned ? 'var(--amber)20' : 'var(--sage-green)20' }}>
-                                <Megaphone size={20} color={latestAnnouncement.pinned ? 'var(--amber-dark)' : 'var(--sage-green)'} />
+                            <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: latestAnnouncement.pinned ? 'var(--amber)20' : 'var(--nordic-blue)20' }}>
+                                <Megaphone size={20} color={latestAnnouncement.pinned ? 'var(--amber-dark)' : 'var(--nordic-blue)'} />
                             </div>
                             <div className="space-y-1 min-w-0">
                                 <h3 className="font-medium truncate">{latestAnnouncement.title}</h3>
@@ -152,7 +152,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         {upcomingTasks.map(task => (
                             <div key={task.id} className="nordic-card p-4 flex items-center gap-4">
                                 <div className="flex flex-col items-center justify-center w-12 h-12 rounded-lg bg-stone-100 flex-shrink-0">
-                                    <span className="text-xs font-bold uppercase" style={{ color: 'var(--sage-green)' }}>
+                                    <span className="text-xs font-bold uppercase" style={{ color: 'var(--nordic-blue)' }}>
                                         {task.date.toDate().toLocaleDateString('is-IS', { month: 'short' })}
                                     </span>
                                     <span className="text-lg font-bold" style={{ color: 'var(--text-primary)' }}>

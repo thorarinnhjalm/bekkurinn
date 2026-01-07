@@ -6,67 +6,77 @@
    ======================================== */
 
 :root {
-  /* Primary Colors */
-  --sage-green: #3d7a5d;
-  --sage-green-light: #5a9d7a;
-  --sage-green-dark: #2d5a45;
-  
+  /* Primary Colors - Nordic Blue (Trust & Reliability) */
+  --nordic-blue: #4A7C9E;
+  --nordic-blue-light: #6B9DBF;
+  --nordic-blue-dark: #2E5A75;
+
   /* Backgrounds */
   --stone: #f5f5f4;
   --paper: #fafafa;
   --white: #ffffff;
-  
+
   /* Text */
   --text-primary: #1c1c1c;
   --text-secondary: #525252;
   --text-tertiary: #737373;
-  
+
   /* Alerts & States */
   --amber: #fcd34d;
   --amber-dark: #f59e0b;
   --red: #ef4444;
   --red-dark: #dc2626;
   --green-success: #22c55e;
-  
+
   /* Borders & Dividers */
   --border-light: #e5e5e5;
   --border-medium: #d4d4d4;
   --border-dark: #a3a3a3;
-  
+
   /* Shadows */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
-  
+
   /* Spacing Scale (Nordic Minimalism) */
-  --space-xs: 0.25rem;   /* 4px */
-  --space-sm: 0.5rem;    /* 8px */
-  --space-md: 1rem;      /* 16px */
-  --space-lg: 1.5rem;    /* 24px */
-  --space-xl: 2rem;      /* 32px */
-  --space-2xl: 3rem;     /* 48px */
-  
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+
   /* Touch Targets (Mobile First) */
   --tap-target: 44px;
   --tap-target-lg: 56px;
-  
+
   /* Border Radius */
-  --radius-sm: 0.375rem; /* 6px */
-  --radius-md: 0.5rem;   /* 8px */
-  --radius-lg: 0.75rem;  /* 12px */
-  --radius-xl: 1rem;     /* 16px */
+  --radius-sm: 0.375rem;
+  /* 6px */
+  --radius-md: 0.5rem;
+  /* 8px */
+  --radius-lg: 0.75rem;
+  /* 12px */
+  --radius-xl: 1rem;
+  /* 16px */
 }
 
 @theme inline {
   /* Map to Tailwind variables */
-  --color-sage: var(--sage-green);
-  --color-sage-light: var(--sage-green-light);
-  --color-sage-dark: var(--sage-green-dark);
+  --color-primary: var(--nordic-blue);
+  --color-primary-light: var(--nordic-blue-light);
+  --color-primary-dark: var(--nordic-blue-dark);
   --color-stone: var(--stone);
   --color-paper: var(--paper);
   --color-amber: var(--amber);
   --color-danger: var(--red);
-  
+
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -101,12 +111,13 @@ body {
 
 /* Focus visible for keyboard navigation */
 *:focus-visible {
-  outline: 2px solid var(--sage-green);
+  outline: 2px solid var(--nordic-blue);
   outline-offset: 2px;
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -120,7 +131,12 @@ body {
    TYPOGRAPHY
    ======================================== */
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 600;
   line-height: 1.2;
   margin: 0;
@@ -148,7 +164,7 @@ p {
 }
 
 .nordic-button {
-  background: var(--sage-green);
+  background: var(--nordic-blue);
   color: white;
   border: none;
   border-radius: var(--radius-md);
@@ -160,7 +176,7 @@ p {
 }
 
 .nordic-button:hover {
-  background: var(--sage-green-dark);
+  background: var(--nordic-blue-dark);
   transform: translateY(-1px);
   box-shadow: var(--shadow-md);
 }

@@ -35,7 +35,7 @@ export default function LoginPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <div className="animate-pulse text-lg" style={{ color: 'var(--sage-green)' }}>
+                <div className="animate-pulse text-lg" style={{ color: 'var(--nordic-blue)' }}>
                     Hleður...
                 </div>
             </div>
@@ -51,12 +51,12 @@ export default function LoginPage() {
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
                         <div className="w-20 h-20 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: 'var(--sage-green)' }}>
+                            style={{ backgroundColor: 'var(--nordic-blue)' }}>
                             <Users size={40} color="white" />
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold" style={{ color: 'var(--sage-green)' }}>
+                        <h1 className="text-4xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                             Bekkurinn
                         </h1>
                         <p className="text-lg mt-2" style={{ color: 'var(--text-secondary)' }}>
@@ -73,7 +73,7 @@ export default function LoginPage() {
 
                     <div className="space-y-3">
                         <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}>
+                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
                                 <Users size={20} />
                             </div>
                             <div>
@@ -85,7 +85,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}>
+                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
                                 <Calendar size={20} />
                             </div>
                             <div>
@@ -97,7 +97,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}>
+                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
                                 <MessageSquare size={20} />
                             </div>
                             <div>
@@ -109,7 +109,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--sage-green)', color: 'white' }}>
+                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
                                 <Shield size={20} />
                             </div>
                             <div>
