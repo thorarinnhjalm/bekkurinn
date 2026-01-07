@@ -32,12 +32,9 @@ if (getApps().length === 0) {
     db = getFirestore(app);
     storage = getStorage(app);
 
-    // Log initialization for debugging
-    if (typeof window !== 'undefined') {
-        console.log('🔥 Firebase initialized:', {
-            projectId: firebaseConfig.projectId,
-            authDomain: firebaseConfig.authDomain,
-        });
+    // Log initialization for debugging (development only)
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+        console.log('🔥 Firebase initialized');
     }
 } else {
     app = getApps()[0];

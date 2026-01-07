@@ -8,6 +8,7 @@ import { SCHOOLS } from '@/constants/schools';
 import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check } from 'lucide-react';
 import { doc, getFirestore, updateDoc, setDoc, serverTimestamp, collection, addDoc, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { OnboardingSchema, validateInput } from '@/lib/validation';
 
 // Temporary local implementations until moved to services
 async function createClassLocal(data: any, userId: string) {
@@ -96,8 +97,19 @@ export default function OnboardingView() {
 
     const handleCreate = async () => {
         if (!user) return;
-        if (!formData.schoolName) { setError('Veldu skóla'); return; }
-        if (formData.isSplit && !formData.section) { setError('Skráðu deild (t.d. A eða Hlíð)'); return; }
+
+        // VALIDATE with Zod
+        const validation = validateInput(OnboardingSchema, formData);
+        if (!validation.success) {
+            setError(validation.errors[0]); // Show first error
+            return;
+        }
+
+        // Additional manual checks
+        if (formData.isSplit && !formData.section) {
+            setError('Skráðu deild (t.d. A eða Hlíð)');
+            return;
+        }
 
         setLoading(true);
         setError(null);
@@ -150,7 +162,6 @@ export default function OnboardingView() {
                             });
                         });
                         await Promise.all(addPromises);
-                        console.log(`Synced ${relevantEvents.length} calendar events.`);
                     }
                 } catch (calError) {
                     console.error("Failed to sync calendar during onboarding:", calError);
