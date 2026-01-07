@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { ArrowRight, Users, MessageCircle, Calendar, CheckCircle2, Heart, Shield, Zap } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { AIFoodPlanner } from '@/components/AIFoodPlanner';
 
 /**
  * Landing Page - Sells parents on why they need Bekkurinn
@@ -247,6 +248,56 @@ export default function LandingPage() {
                         />
                     </div>
                 </div>
+            </section>
+
+            {/* AI Interactive Demo */}
+            <section style={{
+                maxWidth: '1200px',
+                margin: '0 auto',
+                padding: '0 var(--space-xl) var(--space-2xl)',
+                marginTop: 'var(--space-2xl)',
+                position: 'relative',
+                zIndex: 10
+            }}>
+                <div style={{
+                    textAlign: 'center',
+                    marginBottom: 'var(--space-xl)'
+                }}>
+                    <div style={{
+                        display: 'inline-block',
+                        padding: '0.5rem 1rem',
+                        background: 'var(--amber)20',
+                        borderRadius: '2rem',
+                        color: 'var(--amber-dark)',
+                        fontWeight: 600,
+                        fontSize: '0.875rem',
+                        marginBottom: 'var(--space-md)'
+                    }}>
+                        PRÓFAÐU NÚNA
+                    </div>
+                    <h2 style={{
+                        fontSize: '2rem',
+                        fontWeight: 'bold',
+                        color: 'var(--text-primary)',
+                        marginBottom: 'var(--space-sm)'
+                    }}>
+                        Gervigreindin okkar sér um matinn
+                    </h2>
+                    <p style={{
+                        color: 'var(--text-secondary)',
+                        maxWidth: '600px',
+                        margin: '0 auto'
+                    }}>
+                        Prófaðu að smella á takkann hér að neðan til að sjá hvernig Bekkurinn leysir flókin veisluvandamál á sekúndum.
+                    </p>
+                </div>
+
+                <AIFoodPlanner
+                    childAge={8}
+                    partyTime={new Date(new Date().setHours(15, 0, 0, 0)).toISOString()}
+                    allergies={['Hnetur', 'Glúten']}
+                    attendeeCount={12}
+                />
             </section>
 
             {/* Pain Points - The Problem */}
