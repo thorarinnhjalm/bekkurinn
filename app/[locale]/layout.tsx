@@ -5,7 +5,7 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ToastContainer } from '@/components/ui/Toast';
-import { setRequestLocale, getMessages } from 'next-intl/server';
+// import { setRequestLocale } from 'next-intl/server'; // Removed to reduce complexity
 import { NextIntlClientProvider } from 'next-intl';
 import { Metadata } from 'next';
 
@@ -20,7 +20,7 @@ import { Metadata } from 'next';
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
-    setRequestLocale(locale);
+    // setRequestLocale(locale);
 
     // Simple localization of metadata based on locale
     const titles: Record<string, string> = {
@@ -55,6 +55,23 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     };
 }
 
+async function getMessages(locale: string) {
+    try {
+        // Dynamically import the locale JSON file
+        // Note: The path must be relative to this file or absolute alias
+        // We use a relative path here assuming layout is in app/[locale] and messages is in root/messages
+        return (await import(`../../../messages/${locale}.json`)).default;
+    } catch (error) {
+        console.error(`Failed to load messages for locale: ${locale}`, error);
+        // Fallback to English if locale not found
+        try {
+            return (await import(`../../../messages/en.json`)).default;
+        } catch (e) {
+            return {}; // Last resort fallback
+        }
+    }
+}
+
 export default async function LocaleLayout({
     children,
     params,
@@ -63,16 +80,15 @@ export default async function LocaleLayout({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
-    setRequestLocale(locale);
+    // setRequestLocale(locale);
 
     // Validate locale
     if (!locales.includes(locale as any)) {
         notFound();
     }
 
-    // Providing all messages to the client
-    // side is the easiest way to get started
-    const messages = await getMessages();
+    // Hand-rolled message fetching to avoid next-intl configuration issues on Vercel
+    const messages = await getMessages(locale);
 
     return (
         <ErrorBoundary>
