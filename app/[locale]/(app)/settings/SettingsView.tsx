@@ -4,11 +4,11 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useClass } from '@/hooks/useFirestore';
 import { updateClass } from '@/services/firestore';
-import { Loader2, Save, School, GraduationCap, AlertTriangle, Check, Calendar, RefreshCw } from 'lucide-react';
+import { Loader2, Save, School, GraduationCap, AlertTriangle, Check, Calendar, RefreshCw, Users, X, UserPlus, Shield } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { SCHOOLS } from '@/constants/schools';
 // Import firestore functions directly for the sync logic
-import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config'; // Ensure db is exported from lib/firebase or services
 
 // Calendar Parsing Logic
@@ -87,6 +87,11 @@ export default function SettingsView() {
     const [isSyncing, setIsSyncing] = useState(false);
     const [syncStatus, setSyncStatus] = useState<string | null>(null);
 
+    // Admin Management State
+    const [adminUsers, setAdminUsers] = useState<Array<{ uid: string; email: string; displayName: string }>>([]);
+    const [newAdminEmail, setNewAdminEmail] = useState('');
+    const [isAddingAdmin, setIsAddingAdmin] = useState(false);
+
     const [formData, setFormData] = useState({
         schoolName: '',
         grade: 1,
@@ -108,6 +113,38 @@ export default function SettingsView() {
                 joinCode: classData.joinCode || ''
             });
         }
+    }, [classData]);
+
+    // Fetch admin users when classData loads
+    useEffect(() => {
+        async function fetchAdminUsers() {
+            if (!classData || !classData.admins || classData.admins.length === 0) return;
+
+            try {
+                const adminData = await Promise.all(
+                    classData.admins.map(async (uid) => {
+                        const userDoc = await getDoc(doc(db, 'users', uid));
+                        if (userDoc.exists()) {
+                            const data = userDoc.data();
+                            return {
+                                uid,
+                                email: data.email || 'Ekkert netfang',
+                                displayName: data.displayName || data.email || 'Notandi'
+                            };
+                        }
+                        return {
+                            uid,
+                            email: 'Óþekkt',
+                            displayName: 'Óþekktur notandi'
+                        };
+                    })
+                );
+                setAdminUsers(adminData);
+            } catch (error) {
+                console.error('Error fetching admin users:', error);
+            }
+        }
+        fetchAdminUsers();
     }, [classData]);
 
     const handleSchoolChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -236,6 +273,76 @@ export default function SettingsView() {
         }
     };
 
+    const handleAddAdmin = async () => {
+        if (!classId || !newAdminEmail.trim()) {
+            alert('Vinsamlegast sláðu inn gilt netfang.');
+            return;
+        }
+
+        setIsAddingAdmin(true);
+        try {
+            // Find user by email
+            const usersRef = collection(db, 'users');
+            const q = query(usersRef, where('email', '==', newAdminEmail.trim().toLowerCase()));
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                alert('Enginn notandi fannst með þetta netfang. Viðkomandi þarf að hafa skráð sig inn í kerfið fyrst.');
+                setIsAddingAdmin(false);
+                return;
+            }
+
+            const userDoc = snapshot.docs[0];
+            const userId = userDoc.id;
+
+            // Check if already admin
+            if (classData?.admins?.includes(userId)) {
+                alert('Þessi notandi er nú þegar með stjórnendaréttindi.');
+                setIsAddingAdmin(false);
+                return;
+            }
+
+            // Add to admins array
+            await updateDoc(doc(db, 'classes', classId), {
+                admins: arrayUnion(userId)
+            });
+
+            await refetch();
+            setNewAdminEmail('');
+            alert('Stjórnendaréttindi veitt!');
+        } catch (error) {
+            console.error('Error adding admin:', error);
+            alert('Villa kom upp við að bæta við stjórnanda.');
+        } finally {
+            setIsAddingAdmin(false);
+        }
+    };
+
+    const handleRemoveAdmin = async (userId: string) => {
+        if (!classId) return;
+
+        // Prevent removing last admin
+        if (classData?.admins && classData.admins.length === 1) {
+            alert('Ekki hægt að fjarlægja síðasta stjórnandann. Bættu við öðrum fyrst.');
+            return;
+        }
+
+        if (!confirm('Ertu viss um að þú viljir afturkalla stjórnendaréttindi þessa notanda?')) {
+            return;
+        }
+
+        try {
+            await updateDoc(doc(db, 'classes', classId), {
+                admins: arrayRemove(userId)
+            });
+            await refetch();
+            alert('Réttindi afturkölluð.');
+        } catch (error) {
+            console.error('Error removing admin:', error);
+            alert('Villa kom upp.');
+        }
+    };
+
     if (authLoading || classLoading) {
         return (
             <div className="flex justify-center pt-20">
@@ -296,6 +403,79 @@ export default function SettingsView() {
                             </button>
                         )}
                     </div>
+                </div>
+            </section>
+
+            {/* Admin Management */}
+            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="p-2 bg-blue-50 rounded-lg">
+                        <Shield className="text-nordic-blue" size={24} />
+                    </div>
+                    <div>
+                        <h2 className="text-xl font-semibold">Stjórnendur bekkjarins</h2>
+                        <p className="text-sm text-gray-500">Aðeins stjórnendur geta breytt stillingum og búið til viðburði</p>
+                    </div>
+                </div>
+
+                {/* Current Admins List */}
+                <div className="space-y-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Núverandi stjórnendur ({adminUsers.length})</label>
+                    <div className="border border-gray-200 rounded-lg divide-y divide-gray-100">
+                        {adminUsers.map((admin) => (
+                            <div key={admin.uid} className="p-3 flex items-center justify-between hover:bg-gray-50">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-full bg-nordic-blue text-white flex items-center justify-center text-sm font-bold">
+                                        {admin.displayName[0]?.toUpperCase() || 'U'}
+                                    </div>
+                                    <div>
+                                        <p className="font-medium text-sm text-gray-900">{admin.displayName}</p>
+                                        <p className="text-xs text-gray-500">{admin.email}</p>
+                                    </div>
+                                </div>
+                                {adminUsers.length > 1 && (
+                                    <button
+                                        onClick={() => handleRemoveAdmin(admin.uid)}
+                                        className="text-red-600 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
+                                        title="Fjarlægja stjórnanda"
+                                    >
+                                        <X size={18} />
+                                    </button>
+                                )}
+                                {adminUsers.length === 1 && (
+                                    <span className="text-xs text-gray-400 italic">Einasti stjórnandi</span>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* Add New Admin */}
+                <div className="pt-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Bæta við stjórnanda</label>
+                    <div className="flex gap-2">
+                        <input
+                            type="email"
+                            value={newAdminEmail}
+                            onChange={(e) => setNewAdminEmail(e.target.value)}
+                            placeholder="netfang@example.com"
+                            className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
+                            onKeyPress={(e) => {
+                                if (e.key === 'Enter') handleAddAdmin();
+                            }}
+                        />
+                        <button
+                            onClick={handleAddAdmin}
+                            disabled={isAddingAdmin || !newAdminEmail.trim()}
+                            className="flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {isAddingAdmin ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
+                            Bæta við
+                        </button>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-2">
+                        ⚠️ Notandinn þarf að hafa skráð sig inn í kerfið áður en þú getur bætt honum við sem stjórnanda.
+                    </p>
                 </div>
             </section>
 

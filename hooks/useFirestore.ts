@@ -37,36 +37,56 @@ export function useUserClasses(userId: string | undefined) {
 
             const classesMap = new Map();
 
-            // 1. Check if admin
+            // 1. Check if admin (PRIORITY - checked first)
             const adminQ = query(collection(db, 'classes'), where('admins', 'array-contains', userId));
             const adminSnap = await getDocs(adminQ);
 
+            console.log('[useUserClasses] Admin check for:', userId);
+            console.log('[useUserClasses] Admin classes found:', adminSnap.docs.length);
+
             adminSnap.docs.forEach(doc => {
-                classesMap.set(doc.id, { id: doc.id, ...doc.data(), role: 'admin' });
+                const classData = { id: doc.id, ...doc.data(), role: 'admin' } as any;
+                classesMap.set(doc.id, classData);
+                console.log('[useUserClasses] Added as ADMIN:', doc.id, 'Class:', classData.name);
             });
 
-            // 2. Check parentLinks
+            // 2. Check parentLinks (ONLY for classes where user is NOT admin)
             const parentQ = query(collection(db, 'parentLinks'), where('userId', '==', userId));
             const parentSnap = await getDocs(parentQ);
 
+            console.log('[useUserClasses] ParentLinks found:', parentSnap.docs.length);
+
             // We need to fetch class details for each parent link
+            // CRITICAL: Filter out classes where user is already admin
             const parentClassIds = parentSnap.docs
                 .map(doc => doc.data().classId)
-                .filter(id => !classesMap.has(id)); // Avoid duplicates if also admin
+                .filter(id => {
+                    const isAlreadyAdmin = classesMap.has(id);
+                    if (isAlreadyAdmin) {
+                        console.log('[useUserClasses] Skipping parentLink for classId', id, '- user is ADMIN');
+                    }
+                    return !isAlreadyAdmin;
+                });
 
-            // Fetch in parallel (could use chunking if many, but unlikely for a parent)
+            // Fetch in parallel
             await Promise.all(parentClassIds.map(async (classId) => {
                 const classDocRef = doc(db, 'classes', classId);
                 const classSnap = await getDoc(classDocRef);
                 if (classSnap.exists()) {
-                    classesMap.set(classSnap.id, { id: classSnap.id, ...classSnap.data(), role: 'parent' });
+                    const classData = { id: classSnap.id, ...classSnap.data(), role: 'parent' } as any;
+                    classesMap.set(classSnap.id, classData);
+                    console.log('[useUserClasses] Added as PARENT:', classSnap.id, 'Class:', classData.name);
                 }
             }));
 
-            return Array.from(classesMap.values());
+            const result = Array.from(classesMap.values());
+            console.log('[useUserClasses] Final result:', result.map(c => ({ id: c.id, role: c.role, name: c.name })));
+
+            return result;
         },
         enabled: !!userId,
-        staleTime: 1000 * 60 * 5,
+        staleTime: 1000 * 60 * 1, // Reduced to 1 minute for faster updates
+        refetchOnMount: 'always', // Always refetch on mount to avoid stale admin status
     });
 }
 
