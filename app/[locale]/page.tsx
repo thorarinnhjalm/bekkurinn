@@ -236,7 +236,6 @@ export default function HomePage() {
                         <span className="font-bold text-lg text-gray-900">Bekkurinn</span>
                     </div>
                     <p className="mb-4">{t('footer.copyright')}</p>
-                    <p className="opacity-75">{t('footer.ai_disclaimer')}</p>
                 </div>
             </footer>
         </div>
@@ -255,7 +254,7 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function FeatureCard({ icon, title, desc, color }: any) {
     return (
-        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-300 group cursor-default">
+        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-300 group cursor-default text-center flex flex-col items-center">
             <div className={`w-14 h-14 ${color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 {icon}
             </div>
