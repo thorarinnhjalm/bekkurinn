@@ -30,10 +30,6 @@ export default function TasksPage() {
     // 2. Fetch Tasks for that Class
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
 
-    // Check Admin status
-    const { data: userClasses } = useUserClasses(user?.uid);
-    const isAdmin = userClasses?.find(c => c.id === classData?.id)?.role === 'admin';
-
     // 3. Mutation for volunteering
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
@@ -95,7 +91,7 @@ export default function TasksPage() {
     };
 
     // Loading state
-    if (authLoading || classLoading || tasksLoading) {
+    if (authLoading || classesLoading || tasksLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
@@ -107,7 +103,7 @@ export default function TasksPage() {
     }
 
     // If no class found
-    if (!classData && !classLoading) {
+    if (!activeClass && !classesLoading) {
         return (
             <div className="min-h-screen p-4 flex items-center justify-center pt-24">
                 <div className="text-center space-y-4">
@@ -166,7 +162,7 @@ export default function TasksPage() {
                         <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                             Skipulag
                         </h1>
-                        <p className="text-sm text-gray-500 mt-1">{classData?.name || 'Bekkurinn'}</p>
+                        <p className="text-sm text-gray-500 mt-1">{activeClass?.name || 'Bekkurinn'}</p>
                     </div>
                     {upcomingCount > 0 && (
                         <div
@@ -258,7 +254,7 @@ export default function TasksPage() {
 
                                     try {
                                         await createTaskMutation.mutateAsync({
-                                            classId: classData?.id || '',
+                                            classId: activeClassId,
                                             type: 'event', // Generic event type for tasks page too
                                             title: createTitle,
                                             description: createDesc,
