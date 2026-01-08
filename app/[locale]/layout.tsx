@@ -1,12 +1,12 @@
 import { ReactNode } from 'react';
-
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n-config';
 import { QueryProvider } from '@/components/providers/QueryProvider';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ToastContainer } from '@/components/ui/Toast';
-import { setRequestLocale } from 'next-intl/server';
+import { setRequestLocale, getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
 import { Metadata } from 'next';
 
 /**
@@ -70,15 +70,19 @@ export default async function LocaleLayout({
         notFound();
     }
 
-
+    // Providing all messages to the client
+    // side is the easiest way to get started
+    const messages = await getMessages();
 
     return (
         <ErrorBoundary>
             <QueryProvider>
-                <AuthProvider>
-                    {children}
-                    <ToastContainer />
-                </AuthProvider>
+                <NextIntlClientProvider messages={messages} locale={locale}>
+                    <AuthProvider>
+                        {children}
+                        <ToastContainer />
+                    </AuthProvider>
+                </NextIntlClientProvider>
             </QueryProvider>
         </ErrorBoundary>
     );
