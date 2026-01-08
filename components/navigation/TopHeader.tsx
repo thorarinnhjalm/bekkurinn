@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useState } from 'react';
+import { useParams } from 'next/navigation';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -16,6 +17,9 @@ export function TopHeader() {
     const { user, signOut } = useAuth();
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const unreadNotifications = 0; // Real notifications coming soon
+    const params = useParams();
+    // Default to 'is' if not found, but it should be available in app router
+    const locale = params.locale || 'is';
 
     const handleSignOut = async () => {
         await signOut();
@@ -33,7 +37,7 @@ export function TopHeader() {
         >
             <div className="flex items-center justify-between px-4 py-3 max-w-5xl mx-auto w-full">
                 {/* Logo */}
-                <Link href="/directory" className="flex items-center gap-2">
+                <Link href={user ? `/${locale}/dashboard` : '/'} className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--nordic-blue)' }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
@@ -109,7 +113,17 @@ export function TopHeader() {
                                     </div>
 
                                     <Link
-                                        href="/is/settings"
+                                        href={`/${locale}/user/profile`}
+                                        className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
+                                        style={{ color: 'var(--text-primary)' }}
+                                        onClick={() => setShowSettingsMenu(false)}
+                                    >
+                                        <UserIcon size={16} />
+                                        <span>Minn Aðgangur</span>
+                                    </Link>
+
+                                    <Link
+                                        href={`/${locale}/settings`}
                                         className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
                                         style={{ color: 'var(--text-primary)' }}
                                         onClick={() => setShowSettingsMenu(false)}

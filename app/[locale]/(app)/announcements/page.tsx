@@ -2,7 +2,7 @@
 
 import { TranslationButton } from '@/components/ui/TranslationButton';
 import { Heart, Pin, Loader2, MessageSquare } from 'lucide-react';
-import { useAnnouncements } from '@/hooks/useFirestore';
+import { useAnnouncements, useUserClasses } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 
@@ -12,14 +12,17 @@ import { useRouter } from 'next/navigation';
  * Announcement feed with pinning and likes
  * Now connected to real Firestore data!
  */
-
-// TODO: Get this from user's class membership
-const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
+// TODO: Get this from user's class membership (Dynamic now)
 
 export default function AnnouncementsPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(CLASS_ID);
+
+    // Dynamic Class ID
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
+    const activeClassId = userClasses?.[0]?.id || '';
+
+    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(activeClassId);
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {

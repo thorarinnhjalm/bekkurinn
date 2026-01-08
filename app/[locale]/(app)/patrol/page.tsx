@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Calendar, ChevronDown, ChevronUp, Loader2, Users, Check } from 'lucide-react';
-import { useTasks } from '@/hooks/useFirestore';
+import { useTasks, useUserClasses } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 
@@ -11,15 +11,18 @@ import { useRouter } from 'next/navigation';
  * 
  * Shows birthdays, class activities, and parent patrols
  * Now connected to real Firestore data!
+// TODO: Get this from user's class membership (Dynamic now)
  */
-
-// TODO: Get this from user's class membership
-const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
 
 export default function PatrolPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
+
+    // Dynamic Class ID
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
+    const activeClassId = userClasses?.[0]?.id || '';
+
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
 
     const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['patrols']));
 
