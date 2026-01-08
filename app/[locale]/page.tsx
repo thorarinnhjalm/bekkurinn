@@ -218,8 +218,8 @@ export default function HomePage() {
                 <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
                 <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
 
-                <div className="max-w-4xl mx-auto px-4 text-center relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6">{t('cta_final.title')}</h2>
+                <div className="max-w-4xl mx-auto px-4 text-center relative z-10 flex flex-col items-center">
+                    <h2 className="text-4xl md:text-5xl font-bold mb-6 text-white">{t('cta_final.title')}</h2>
                     <p className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">{t('cta_final.subtitle')}</p>
                     <div className="flex flex-col items-center gap-4">
                         <Link
@@ -228,7 +228,7 @@ export default function HomePage() {
                         >
                             {t('cta_final.button')}
                         </Link>
-                        <p className="text-sm text-gray-500">{t('cta_final.fine_print')}</p>
+                        <p className="text-sm text-gray-400">{t('cta_final.fine_print')}</p>
                     </div>
                 </div>
             </section>
