@@ -21,12 +21,14 @@ export default function TasksPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
 
-    // 1. Get User's Class
-    const { data: classData, isLoading: classLoading } = useUserClass(user?.uid);
+    // 1. Get User's Classes
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
+    const activeClassId = userClasses?.[0]?.id || '';
+    const activeClass = userClasses?.find(c => c.id === activeClassId);
+    const isAdmin = activeClass?.role === 'admin';
 
     // 2. Fetch Tasks for that Class
-    // 2. Fetch Tasks for that Class
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(classData?.id || null);
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
 
     // Check Admin status
     const { data: userClasses } = useUserClasses(user?.uid);
