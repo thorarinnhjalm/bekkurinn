@@ -668,10 +668,20 @@ export default function OnboardingView() {
                             setIsCreatingStudent(false);
                             setError(null);
                         } else {
-                            setFoundClass(null);
-                            setStep('select');
+                            if (user) {
+                                // If logged in, go back to dashboard/profile instead of 'select' mode
+                                const segments = pathname.split('/');
+                                const locale = segments[1] || 'is';
+                                router.push(`/${locale}/user/profile`);
+                            } else {
+                                setFoundClass(null);
+                                setStep('select');
+                            }
                         }
-                    }} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
+                    }} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 transition-colors font-medium flex items-center gap-1">
+                        <ArrowRight className="rotate-180" size={16} />
+                        Til baka
+                    </button>
 
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <QrCode className="text-nordic-blue" size={32} />
@@ -694,6 +704,18 @@ export default function OnboardingView() {
                                 Sláðu inn kóðann (t.d. SALA-4B) frá fulltrúa.<br />
                                 <span className="opacity-70 text-xs">Stjórnendur notaðu 'Parent Team' aðgangskóða.</span>
                             </p>
+
+                            {user && (
+                                <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-800 flex gap-2 items-start text-left">
+                                    <Globe size={14} className="mt-0.5 flex-shrink-0" />
+                                    <span>
+                                        Ertu að leita að kóðanum þínum? <br />
+                                        <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-blue-900">
+                                            Skoðaðu mælaborðið
+                                        </a>
+                                    </span>
+                                </div>
+                            )}
 
                             {error && (
                                 <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
