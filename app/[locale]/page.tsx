@@ -88,14 +88,14 @@ export default function HomePage() {
                         {t('hero.badge')}
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
+                    <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] text-center animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
                         {t('hero.title_start')}{' '}
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800">
                             {t('hero.title_highlight')}
                         </span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-gray-500 mb-16 max-w-2xl mx-auto leading-relaxed font-light animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                    <p className="text-xl md:text-2xl text-gray-500 mb-16 max-w-3xl mx-auto leading-relaxed font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
                         {t.rich('hero.subtitle', richText)}
                     </p>
 
