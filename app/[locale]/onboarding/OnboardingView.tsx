@@ -86,6 +86,15 @@ export default function OnboardingView() {
     const initialStep = ['language', 'select', 'create', 'join'].includes(paramStep) ? paramStep : 'language';
 
     const [step, setStep] = useState<OnboardingStep>(initialStep);
+
+    // Update step when URL param changes
+    useEffect(() => {
+        const paramStep = searchParams.get('step') as OnboardingStep;
+        if (paramStep && ['language', 'select', 'create', 'join'].includes(paramStep)) {
+            setStep(paramStep);
+        }
+    }, [searchParams]);
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -107,13 +116,66 @@ export default function OnboardingView() {
     });
 
     // Join Class State
-    const [joinCode, setJoinCode] = useState('');
+    const [joinCode, setJoinCode] = useState(searchParams.get('code') || '');
     const [checkingCode, setCheckingCode] = useState(false);
     const [foundClass, setFoundClass] = useState<any>(null);
     const [isAdminCode, setIsAdminCode] = useState(false);
     const [students, setStudents] = useState<any[]>([]);
     const [selectedStudentId, setSelectedStudentId] = useState('');
     const [joining, setJoining] = useState(false);
+
+    // Auto-verify if code is present in URL
+    useEffect(() => {
+        const codeParam = searchParams.get('code');
+        if (codeParam && !foundClass && !checkingCode && !error) {
+            setJoinCode(codeParam);
+            // Trigger verification automatically
+            // We need to call verification logic here, but handleVerifyCode relies on state that might not be set yet.
+            // Better to just set it and let user click Or use a separate effect that calls the logic if code is set.
+            // Actually, let's call it safely.
+            const verify = async () => {
+                // Duplicate logic from handleVerifyCode but using codeParam directly
+                setCheckingCode(true);
+                try {
+                    const q = query(collection(db, 'classes'), where('joinCode', '==', codeParam));
+                    const snapshot = await getDocs(q);
+                    // Admin check
+                    const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', codeParam));
+                    const snapshotAdmin = await getDocs(qAdmin);
+
+                    if (snapshot.empty && snapshotAdmin.empty) {
+                        // Don't show error immediately on auto-check to avoid flashing red if invalid?
+                        // Or show it? Let's show it.
+                        setError('Enginn bekkur fannst með þennan kóða.');
+                        setCheckingCode(false);
+                        return;
+                    }
+
+                    let classDoc;
+                    if (!snapshot.empty) {
+                        classDoc = snapshot.docs[0];
+                    } else {
+                        classDoc = snapshotAdmin.docs[0];
+                        setIsAdminCode(true);
+                    }
+                    const cData = { id: classDoc.id, ...classDoc.data() };
+                    setFoundClass(cData);
+
+                    // Fetch students
+                    const studentsQ = query(collection(db, 'students'), where('classId', '==', classDoc.id));
+                    const studentsSnap = await getDocs(studentsQ);
+                    const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+                    studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                    setStudents(studentsList);
+                } catch (e) {
+                    console.error(e);
+                } finally {
+                    setCheckingCode(false);
+                }
+            };
+            verify();
+        }
+    }, [searchParams]); // Run when params change (e.g. initial load)
 
     // Create Student State (nested in Join flow)
     const [isCreatingStudent, setIsCreatingStudent] = useState(false);

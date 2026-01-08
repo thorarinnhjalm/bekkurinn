@@ -177,7 +177,10 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     // --- SHOW BLOCKING "CREATE STUDENT" UI IF NO PARENT LINK ---
     // Exception: If we just created the class/admin, we still want them to create a student eventually,
     // but the prompt says "if you don't have a child created... it's blank".
-    if (!parentLink && classId) {
+    // Exception: If we just created the class/admin, we still want them to create a student eventually,
+    // but the prompt says "if you don't have a child created... it's blank".
+    // UPDATED: Admins should NOT be blocked by this. They need to see the dashboard to manage things.
+    if (!parentLink && classId && !isAdmin) {
         return (
             <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto flex flex-col items-center justify-center space-y-6 text-center animate-in fade-in duration-500">
                 <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2">
@@ -191,7 +194,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md">
                     <Link
-                        href={`/${locale}/onboarding?step=join`} // Re-route to join/create student flow or we could make a dedicated route
+                        href={`/${locale}/onboarding?step=join${classData?.joinCode ? `&code=${classData.joinCode}` : ''}`} // Re-route to join/create student flow
                         className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-lg shadow-blue-600/20"
                     >
                         <UserPlus size={20} />
@@ -233,7 +236,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             ))}
                             <div className="border-t border-gray-100 mt-1 pt-1">
                                 <Link
-                                    href={`/${locale}/onboarding?step=join`}
+                                    href={`/${locale}/onboarding?step=join${classData?.joinCode ? `&code=${classData.joinCode}` : ''}`}
                                     className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-500 hover:text-gray-900 text-sm flex items-center gap-2"
                                 >
                                     <span>+ Bæta við bekk</span>
