@@ -6,18 +6,21 @@ import { QueryProvider } from '@/components/providers/QueryProvider';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ToastContainer } from '@/components/ui/Toast';
+import { setRequestLocale } from 'next-intl/server';
+import { Metadata } from 'next';
 
 /**
  * Locale Layout
  * Provides messages, React Query, Authentication, Error Handling, and Toast Notifications
  */
 
-export function generateStaticParams() {
-    return locales.map((locale) => ({ locale }));
-}
+// export function generateStaticParams() {
+//    return locales.map((locale) => ({ locale }));
+// }
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }) {
     const { locale } = await params;
+    setRequestLocale(locale);
 
     // Simple localization of metadata based on locale
     const titles: Record<string, string> = {
@@ -60,6 +63,7 @@ export default async function LocaleLayout({
     params: Promise<{ locale: string }>;
 }) {
     const { locale } = await params;
+    setRequestLocale(locale);
 
     // Validate locale
     if (!locales.includes(locale as any)) {
