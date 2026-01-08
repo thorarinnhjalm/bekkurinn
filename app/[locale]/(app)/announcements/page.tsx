@@ -2,9 +2,10 @@
 
 import { TranslationButton } from '@/components/ui/TranslationButton';
 import { Heart, Pin, Loader2, MessageSquare } from 'lucide-react';
-import { useAnnouncements, useUserClasses } from '@/hooks/useFirestore';
+import { useAnnouncements, useUserClasses, useCreateAnnouncement } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 /**
  * Announcements Page - Auglýsingataflan
@@ -22,7 +23,17 @@ export default function AnnouncementsPage() {
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
     const activeClassId = userClasses?.[0]?.id || '';
 
+    const activeClass = userClasses?.find(c => c.id === activeClassId);
+    const isAdmin = activeClass?.role === 'admin';
+
     const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(activeClassId);
+
+    // Create state
+    const [isCreating, setIsCreating] = useState(false);
+    const [newTitle, setNewTitle] = useState('');
+    const [newContent, setNewContent] = useState('');
+    const [newPinned, setNewPinned] = useState(false);
+    const createAnnouncementMutation = useCreateAnnouncement();
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -99,6 +110,100 @@ export default function AnnouncementsPage() {
                     Tilkynningar frá bekkjarformönnum
                 </p>
             </header>
+
+            {/* Admin Actions */}
+            {isAdmin && (
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => setIsCreating(true)}
+                        className="bg-nordic-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        + Ný tilkynning
+                    </button>
+                </div>
+            )}
+
+            {/* Creation Modal */}
+            {isCreating && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
+                        <h2 className="text-xl font-bold text-gray-900">Skrifa nýja tilkynningu</h2>
+
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Fyrirsögn</label>
+                                <input
+                                    type="text"
+                                    value={newTitle}
+                                    onChange={e => setNewTitle(e.target.value)}
+                                    placeholder="t.d. Foreldrafundur í næstu viku"
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Efni</label>
+                                <textarea
+                                    value={newContent}
+                                    onChange={e => setNewContent(e.target.value)}
+                                    placeholder="Skrifaðu skilaboðin hér..."
+                                    className="w-full p-2 border rounded-lg h-32"
+                                />
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                                <input
+                                    type="checkbox"
+                                    id="pin"
+                                    checked={newPinned}
+                                    onChange={e => setNewPinned(e.target.checked)}
+                                    className="w-4 h-4 text-nordic-blue rounded border-gray-300"
+                                />
+                                <label htmlFor="pin" className="text-sm text-gray-700">Festa efst (Mikilvægt)</label>
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-2">
+                            <button
+                                onClick={() => setIsCreating(false)}
+                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
+                            >
+                                Hætta við
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    if (!newTitle || !newContent) return alert('Vinsamlegast fylltu út fyrirsögn og efni');
+
+                                    try {
+                                        await createAnnouncementMutation.mutateAsync({
+                                            classId: activeClassId,
+                                            title: newTitle,
+                                            content: newContent,
+                                            pinned: newPinned,
+                                            createdBy: user?.uid || '',
+                                            author: user?.displayName || 'Stjórn',
+                                        } as any);
+
+                                        setIsCreating(false);
+                                        setNewTitle('');
+                                        setNewContent('');
+                                        setNewPinned(false);
+                                    } catch (e) {
+                                        console.error(e);
+                                        alert('Villa kom upp');
+                                    }
+                                }}
+                                disabled={createAnnouncementMutation.isPending}
+                                className="px-4 py-2 bg-nordic-blue text-white font-bold rounded-lg hover:brightness-110 flex items-center gap-2"
+                            >
+                                {createAnnouncementMutation.isPending && <Loader2 className="animate-spin" size={16} />}
+                                Birta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {/* Announcements Feed */}
             <div className="space-y-4">
