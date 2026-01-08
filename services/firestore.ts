@@ -160,6 +160,18 @@ export async function getParentLinksByStudent(studentId: string): Promise<Parent
     return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as ParentLink));
 }
 
+export async function getParentLinkByUserAndClass(userId: string, classId: string): Promise<ParentLink | null> {
+    const q = query(
+        collection(db, 'parentLinks'),
+        where('userId', '==', userId),
+        where('classId', '==', classId),
+        limit(1)
+    );
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) return null;
+    return { ...snapshot.docs[0].data(), id: snapshot.docs[0].id } as ParentLink;
+}
+
 export async function getPendingParentLinks(classId: string): Promise<ParentLink[]> {
     const q = query(
         collection(db, 'parentLinks'),

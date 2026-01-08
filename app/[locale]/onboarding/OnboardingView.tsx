@@ -18,18 +18,23 @@ async function createClassLocal(data: any, userId: string) {
     const schoolPrefix = data.schoolName.substring(0, 4).toUpperCase();
     const sectionSuffix = data.section ? `-${data.section.toUpperCase().substring(0, 1)}` : '';
     const baseCode = `${schoolPrefix}-${data.grade}${sectionSuffix}`;
-    const uniqueCode = `${baseCode}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const randomSuffix = Math.floor(1000 + Math.random() * 9000);
+    const uniqueCode = `${baseCode}-${randomSuffix}`;
+
+    // Create a special Admin Code for Parent Team members
+    const adminCode = `${uniqueCode}-ADMIN`;
 
     const classRef = await addDoc(collection(db, 'classes'), {
         ...data,
         section: data.section || null,
         joinCode: uniqueCode,
+        parentTeamCode: adminCode, // New field for admin joining
         admins: [userId],
         createdAt: serverTimestamp(),
         confidentialityAgreedAt: serverTimestamp(),
     });
 
-    return classRef.id;
+    return { id: classRef.id, joinCode: uniqueCode, parentTeamCode: adminCode };
 }
 
 // Calendar helpers
@@ -104,9 +109,18 @@ export default function OnboardingView() {
     const [joinCode, setJoinCode] = useState('');
     const [checkingCode, setCheckingCode] = useState(false);
     const [foundClass, setFoundClass] = useState<any>(null);
+    const [isAdminCode, setIsAdminCode] = useState(false);
     const [students, setStudents] = useState<any[]>([]);
     const [selectedStudentId, setSelectedStudentId] = useState('');
     const [joining, setJoining] = useState(false);
+
+    // Create Student State (nested in Join flow)
+    const [isCreatingStudent, setIsCreatingStudent] = useState(false);
+    const [newStudentName, setNewStudentName] = useState('');
+    const [newStudentDob, setNewStudentDob] = useState(''); // YYYY-MM-DD
+
+    // Create Class Result
+    const [createdClassInfo, setCreatedClassInfo] = useState<{ id: string, joinCode: string, parentTeamCode: string } | null>(null);
 
     const handleLanguageSelect = (lang: string) => {
         // Construct new path with selected locale
@@ -131,19 +145,31 @@ export default function OnboardingView() {
         if (!joinCode) return;
         setCheckingCode(true);
         setError(null);
+        setIsAdminCode(false);
 
         try {
-            // Find class by join code
+            // Check for standard join code
             const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode));
             const snapshot = await getDocs(q);
 
-            if (snapshot.empty) {
+            // Also check for Parent Team Code (Admin)
+            const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', joinCode));
+            const snapshotAdmin = await getDocs(qAdmin);
+
+            if (snapshot.empty && snapshotAdmin.empty) {
                 setError('Enginn bekkur fannst með þennan kóða.');
                 setCheckingCode(false);
                 return;
             }
 
-            const classDoc = snapshot.docs[0];
+            let classDoc;
+            if (!snapshot.empty) {
+                classDoc = snapshot.docs[0];
+            } else {
+                classDoc = snapshotAdmin.docs[0];
+                setIsAdminCode(true); // Mark as Admin join
+            }
+
             const classData = { id: classDoc.id, ...classDoc.data() };
             setFoundClass(classData);
 
@@ -164,6 +190,51 @@ export default function OnboardingView() {
         }
     };
 
+    const handleCreateStudentAndJoin = async () => {
+        if (!user || !foundClass) return;
+        if (!newStudentName.trim() || !newStudentDob) {
+            setError('Vinsamlegast fylltu út nafn og fæðingardag.');
+            return;
+        }
+
+        setJoining(true); // Reuse joining loading state
+
+        try {
+            // 1. Create Student
+            const dobDate = new Date(newStudentDob);
+            const studentRef = await addDoc(collection(db, 'students'), {
+                classId: foundClass.id,
+                name: newStudentName,
+                birthDate: Timestamp.fromDate(dobDate),
+                dietaryNeeds: [],
+                photoPermission: 'allow', // Default
+                createdAt: serverTimestamp(),
+            });
+
+            // 2. Link Parent
+            const linkId = `${user.uid}_${foundClass.id}`;
+            await setDoc(doc(db, 'parentLinks', linkId), {
+                userId: user.uid,
+                studentId: studentRef.id, // Link to new student
+                classId: foundClass.id,
+                relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
+                role: isAdminCode ? 'admin' : 'parent', // New Role Logic (supported by updated Firestore rules)
+                status: 'approved', // Auto-approve for MVP launch
+                createdAt: serverTimestamp(),
+            });
+
+            // Redirect
+            const segments = pathname.split('/');
+            const locale = segments[1] || 'is';
+            router.push(`/${locale}/dashboard?welcome=true`);
+
+        } catch (err) {
+            console.error(err);
+            setError('Villa kom upp við að stofna barn. Reyndu aftur.');
+            setJoining(false);
+        }
+    };
+
     const handleJoinClass = async () => {
         if (!user) {
             setError('Þú verður að vera skráð(ur) inn.');
@@ -181,7 +252,8 @@ export default function OnboardingView() {
                 userId: user.uid,
                 studentId: selectedStudentId,
                 classId: foundClass.id,
-                relationship: 'Foreldri', // Default
+                relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
+                role: isAdminCode ? 'admin' : 'parent', // New Role Logic
                 status: 'approved', // Auto-approve for MVP launch
                 createdAt: serverTimestamp(),
             });
@@ -222,13 +294,16 @@ export default function OnboardingView() {
                 ? `${formData.grade}. Bekkur ${formData.section} - ${formData.schoolName}`
                 : `${formData.grade}. Bekkur (Árgangur) - ${formData.schoolName}`;
 
-            const classId = await createClassLocal({
+            const result = await createClassLocal({
                 name: displayName,
                 schoolName: formData.schoolName,
                 grade: Number(formData.grade),
                 section: formData.isSplit ? formData.section : null,
                 calendarUrl
             }, user.uid);
+
+            const classId = result.id;
+            setCreatedClassInfo(result); // Store for success screen
 
             if (calendarUrl) {
                 try {
@@ -263,10 +338,7 @@ export default function OnboardingView() {
                 }
             }
 
-            // Keep current locale in dashboard redirect
-            const segments = pathname.split('/');
-            const locale = segments[1] || 'is';
-            router.push(`/${locale}/dashboard?welcome=true`);
+            // We don't redirect immediately now, we show the codes first!
         } catch (err: any) {
             console.error(err);
             setError('Gat ekki stofnað bekk. Reyndu aftur.');
@@ -371,6 +443,52 @@ export default function OnboardingView() {
 
     // --- STEP 3: CREATE CLASS ---
     if (step === 'create') {
+        // SUCCESS SCREEN AFTER CREATION
+        if (createdClassInfo) {
+            return (
+                <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
+                    <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-6">
+                        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <Check size={40} />
+                        </div>
+
+                        <h2 className="text-2xl font-bold text-gray-900">Bekkur stofnaður!</h2>
+                        <p className="text-gray-600">Til hamingju. Hér eru kóðarnir til að deila:</p>
+
+                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 space-y-4 text-left">
+                            <div>
+                                <p className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-1">Fyrir foreldra (Almennur aðgangur)</p>
+                                <div className="text-3xl font-mono font-bold text-blue-800 bg-white p-3 rounded-lg border border-blue-200 text-center tracking-widest select-all">
+                                    {createdClassInfo.joinCode}
+                                </div>
+                            </div>
+
+                            <hr className="border-blue-200" />
+
+                            <div>
+                                <p className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-1">Fyrir Foreldraráð (Stjórnendur)</p>
+                                <div className="text-xl font-mono font-bold text-purple-800 bg-purple-50 p-3 rounded-lg border border-purple-200 text-center tracking-widest select-all break-all">
+                                    {createdClassInfo.parentTeamCode}
+                                </div>
+                                <p className="text-xs text-purple-700 mt-2">Dulin aðgangsheimild. Veitir stjórnendurréttindi. Deildu varlega.</p>
+                            </div>
+                        </div>
+
+                        <button
+                            onClick={() => {
+                                const segments = pathname.split('/');
+                                const locale = segments[1] || 'is';
+                                router.push(`/${locale}/dashboard?welcome=true`);
+                            }}
+                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg"
+                        >
+                            Áfram á stjórnborð
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
@@ -483,8 +601,13 @@ export default function OnboardingView() {
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6">
                     <button onClick={() => {
-                        setFoundClass(null);
-                        setStep('select');
+                        if (isCreatingStudent) {
+                            setIsCreatingStudent(false);
+                            setError(null);
+                        } else {
+                            setFoundClass(null);
+                            setStep('select');
+                        }
                     }} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
 
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -494,9 +617,6 @@ export default function OnboardingView() {
                     {!foundClass ? (
                         <>
                             <h2 className="text-2xl font-bold">Sláðu inn boðskóða</h2>
-                            <p className="text-gray-500">
-                                Sláðu inn kóðann (t.d. SALA-4B) sem bekkjarfulltrúinn sendi þér.
-                            </p>
 
                             <input
                                 type="text"
@@ -506,6 +626,11 @@ export default function OnboardingView() {
                                 className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none uppercase"
                                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyCode()}
                             />
+
+                            <p className="text-gray-500 text-sm">
+                                Sláðu inn kóðann (t.d. SALA-4B) frá fulltrúa.<br />
+                                <span className="opacity-70 text-xs">Stjórnendur notaðu 'Parent Team' aðgangskóða.</span>
+                            </p>
 
                             {error && (
                                 <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
@@ -528,38 +653,101 @@ export default function OnboardingView() {
                                     {foundClass.name}
                                 </p>
                                 <p className="text-sm opacity-80">{foundClass.schoolName}</p>
+                                {isAdminCode && (
+                                    <div className="mt-2 text-xs font-bold bg-purple-100 text-purple-800 py-1 px-2 rounded-full inline-block">
+                                        Admin / Stjórnandi aðgangur
+                                    </div>
+                                )}
                             </div>
 
-                            <div className="text-left">
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Hvert er barnið þitt?</label>
-                                <select
-                                    value={selectedStudentId}
-                                    onChange={(e) => setSelectedStudentId(e.target.value)}
-                                    className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none"
-                                >
-                                    <option value="">Veldu barn af listanum...</option>
-                                    {students.map(s => (
-                                        <option key={s.id} value={s.id}>{s.name}</option>
-                                    ))}
-                                </select>
-                                <p className="text-xs text-gray-500 mt-2">Ef barnið er ekki á listanum, hafðu samband við bekkjarfulltrúa.</p>
-                            </div>
+                            {!isCreatingStudent ? (
+                                <>
+                                    <div className="text-left">
+                                        <label className="block text-sm font-medium text-gray-700 mb-2">Hvert er barnið þitt?</label>
+                                        <select
+                                            value={selectedStudentId}
+                                            onChange={(e) => setSelectedStudentId(e.target.value)}
+                                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                        >
+                                            <option value="">Veldu barn af listanum...</option>
+                                            {students.map(s => (
+                                                <option key={s.id} value={s.id}>{s.name}</option>
+                                            ))}
+                                        </select>
+                                        <button
+                                            onClick={() => setIsCreatingStudent(true)}
+                                            className="text-sm text-blue-600 hover:text-blue-800 mt-3 flex items-center gap-1 font-medium"
+                                        >
+                                            <Plus size={14} /> Barnið mitt er ekki á listanum (Stofna nýtt)
+                                        </button>
+                                    </div>
 
-                            <button
-                                onClick={handleJoinClass}
-                                disabled={!selectedStudentId || joining}
-                                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
-                            >
-                                {joining && <Loader2 className="animate-spin" size={20} />}
-                                Skrá mig í bekkinn
-                            </button>
+                                    <button
+                                        onClick={handleJoinClass}
+                                        disabled={!selectedStudentId || joining}
+                                        className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                    >
+                                        {joining && <Loader2 className="animate-spin" size={20} />}
+                                        Skrá mig í bekkinn
+                                    </button>
+                                </>
+                            ) : (
+                                <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                                    <div className="text-left">
+                                        <h3 className="font-bold text-lg mb-4">Skráning nýs nemanda</h3>
+
+                                        <div className="space-y-4">
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Fullt nafn barns</label>
+                                                <input
+                                                    type="text"
+                                                    value={newStudentName}
+                                                    onChange={(e) => setNewStudentName(e.target.value)}
+                                                    placeholder="Jón Jónsson"
+                                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                                                    autoFocus
+                                                />
+                                            </div>
+
+                                            <div>
+                                                <label className="block text-sm font-medium text-gray-700 mb-1">Fæðingardagur</label>
+                                                <input
+                                                    type="date"
+                                                    value={newStudentDob}
+                                                    onChange={(e) => setNewStudentDob(e.target.value)}
+                                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {error && (
+                                        <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
+                                    )}
+
+                                    <div className="grid grid-cols-2 gap-3">
+                                        <button
+                                            onClick={() => setIsCreatingStudent(false)}
+                                            className="px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 bg-white"
+                                        >
+                                            Hætta við
+                                        </button>
+                                        <button
+                                            onClick={handleCreateStudentAndJoin}
+                                            disabled={!newStudentName || !newStudentDob || joining}
+                                            className="px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 disabled:opacity-50 flex justify-center items-center gap-2"
+                                        >
+                                            {joining ? <Loader2 className="animate-spin" size={18} /> : 'Skrá og klára'}
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
             </div>
         );
     }
-
     return null;
 }
 

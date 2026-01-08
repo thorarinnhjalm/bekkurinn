@@ -17,6 +17,7 @@ import {
     createAnnouncement,
     toggleAnnouncementPin,
     deleteAnnouncement,
+    getParentLinkByUserAndClass,
     // getClass is already imported above
 } from '@/services/firestore';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
@@ -157,6 +158,14 @@ export function useParentLinks(studentId: string | null) {
         queryKey: ['parentLinks', studentId],
         queryFn: () => (studentId ? getParentLinksByStudent(studentId) : []),
         enabled: !!studentId,
+    });
+}
+
+export function useUserParentLink(userId: string | undefined, classId: string | null) {
+    return useQuery({
+        queryKey: ['parentLink', userId, classId],
+        queryFn: () => (userId && classId ? getParentLinkByUserAndClass(userId, classId) : null),
+        enabled: !!userId && !!classId,
     });
 }
 

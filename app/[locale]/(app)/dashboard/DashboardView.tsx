@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses } from '@/hooks/useFirestore';
-import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown } from 'lucide-react';
+import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink } from '@/hooks/useFirestore';
+import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus } from 'lucide-react';
 // import { db } from '@/lib/firebase/config'; // No longer needed directly
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'; // Removed manual queries
 
@@ -45,6 +45,9 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
     // 2. Fetch Class Data (only if we have an ID)
     const { data: classData, isLoading: classLoading } = useClass(classId);
+
+    // 3. Check for Parent Link (Is my child in this class?)
+    const { data: parentLink, isLoading: parentLinkLoading } = useUserParentLink(user?.uid, classId);
 
     const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId);
     const { data: tasksData, isLoading: tasksLoading } = useTasks(classId);
@@ -107,7 +110,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     };
 
-    if (authLoading || announcementsLoading || tasksLoading || studentsLoading || classLoading || classesLoading) {
+    if (authLoading || announcementsLoading || tasksLoading || studentsLoading || classLoading || classesLoading || parentLinkLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
@@ -169,8 +172,36 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         .sort((a, b) => a.nextBirthday.getTime() - b.nextBirthday.getTime())
         .slice(0, 3);
 
-    // 5. Admin check
-    // const isAdmin = classData?.admins?.includes(user?.uid || ''); // Already calculated above
+    // --- SHOW BLOCKING "CREATE STUDENT" UI IF NO PARENT LINK ---
+    // Exception: If we just created the class/admin, we still want them to create a student eventually,
+    // but the prompt says "if you don't have a child created... it's blank".
+    if (!parentLink && classId) {
+        return (
+            <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto flex flex-col items-center justify-center space-y-6 text-center animate-in fade-in duration-500">
+                <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2">
+                    <UserPlus className="text-nordic-blue" size={40} />
+                </div>
+
+                <h1 className="text-3xl font-bold text-gray-900">Velkomin í {displayClassName}</h1>
+                <p className="text-lg text-gray-600 max-w-md">
+                    Til að sjá viðburði, afmæli og tilkynningar þarftu að skrá barnið þitt.
+                </p>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md">
+                    <Link
+                        href={`/is/onboarding?step=join`} // Re-route to join/create student flow or we could make a dedicated route
+                        className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-lg shadow-blue-600/20"
+                    >
+                        <UserPlus size={20} />
+                        Stofna / Velja Nemanda
+                    </Link>
+                    <p className="text-xs text-gray-400 mt-4">
+                        Þegar þú hefur tengt barnið þitt opnast stjórnborðið sjálfkrafa.
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto space-y-6">
