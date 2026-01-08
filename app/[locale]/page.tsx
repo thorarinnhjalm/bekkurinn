@@ -88,41 +88,30 @@ export default function HomePage() {
                         {t('hero.badge')}
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight mb-8 leading-[1.1] animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
+                    <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
                         {t('hero.title_start')} <br className="hidden md:block" />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800">
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800">
                             {t('hero.title_highlight')}
                         </span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                    <p className="text-xl md:text-2xl text-gray-500 mb-16 max-w-2xl mx-auto leading-relaxed font-light animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
                         {t.rich('hero.subtitle', richText)}
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
                         <Link
                             href={user ? "/is/dashboard" : "/is/onboarding"}
-                            className="w-full sm:w-auto px-8 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-1 shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2"
+                            className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
                         >
                             {t('hero.cta_primary')} <ArrowRight size={20} />
                         </Link>
                         <Link
                             href="#features"
-                            className="w-full sm:w-auto px-8 py-4 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all"
+                            className="w-full sm:w-auto px-10 py-4 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all"
                         >
                             {t('hero.cta_secondary')}
                         </Link>
-                    </div>
-
-                    <div className="mt-12 flex flex-col items-center gap-3 text-sm text-gray-500 animate-in fade-in delay-500">
-                        <div className="flex -space-x-2 overflow-hidden">
-                            {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-200 flex items-center justify-center text-xs font-bold text-gray-600">
-                                    {(String.fromCharCode(64 + i))}
-                                </div>
-                            ))}
-                        </div>
-                        <p>{t('hero.beta_badge')}</p>
                     </div>
                 </div>
             </section>
@@ -266,12 +255,12 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function FeatureCard({ icon, title, desc, color }: any) {
     return (
-        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-100 hover:shadow-xl hover:shadow-blue-900/5 transition-all duration-300 group">
-            <div className={`w-14 h-14 ${color} rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-300 group cursor-default">
+            <div className={`w-14 h-14 ${color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
                 {icon}
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-            <p className="text-gray-500 leading-relaxed">{desc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{title}</h3>
+            <p className="text-gray-500 leading-relaxed text-[15px]">{desc}</p>
         </div>
     );
 }
