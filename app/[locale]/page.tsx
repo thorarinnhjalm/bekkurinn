@@ -97,8 +97,8 @@ export default function HomePage() {
                         </span>
                     </h1>
 
-                    <div className="flex justify-center w-full">
-                        <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-xl leading-normal font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                    <div className="flex justify-center w-full mb-16">
+                        <p className="text-lg md:text-xl text-gray-500 max-w-xl leading-normal font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
                             {t.rich('hero.subtitle', richText)}
                         </p>
                     </div>
