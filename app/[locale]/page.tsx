@@ -95,7 +95,7 @@ export default function HomePage() {
                         </span>
                     </h1>
 
-                    <p className="text-xl md:text-2xl text-gray-500 mb-16 max-w-2xl mx-auto leading-relaxed font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                    <p className="text-xl md:text-2xl text-gray-500 mb-16 max-w-3xl mx-auto leading-relaxed font-light text-center text-balance animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
                         {t.rich('hero.subtitle', richText)}
                     </p>
 
