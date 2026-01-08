@@ -1,9 +1,10 @@
 'use client';
 
 import { Calendar, Users, CheckCircle, Loader2, ListTodo, UserPlus } from 'lucide-react';
-import { useTasks, useUserClass, useClaimTaskSlot } from '@/hooks/useFirestore';
+import { useTasks, useUserClass, useClaimTaskSlot, useCreateTask, useUserClasses } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 /**
  * Tasks Page - Skipulag (Organization/Event Coordination)
@@ -20,10 +21,23 @@ export default function TasksPage() {
     const { data: classData, isLoading: classLoading } = useUserClass(user?.uid);
 
     // 2. Fetch Tasks for that Class
+    // 2. Fetch Tasks for that Class
     const { data: tasksData, isLoading: tasksLoading } = useTasks(classData?.id || null);
+
+    // Check Admin status
+    const { data: userClasses } = useUserClasses(user?.uid);
+    const isAdmin = userClasses?.find(c => c.id === classData?.id)?.role === 'admin';
 
     // 3. Mutation for volunteering
     const claimSlotMutation = useClaimTaskSlot();
+    const createTaskMutation = useCreateTask();
+
+    // Create State
+    const [isCreating, setIsCreating] = useState(false);
+    const [newTaskTitle, setNewTaskTitle] = useState('');
+    const [newTaskDate, setNewTaskDate] = useState('');
+    const [newTaskDesc, setNewTaskDesc] = useState('');
+    const [newTaskSlots, setNewTaskSlots] = useState(1);
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -158,6 +172,112 @@ export default function TasksPage() {
                     Viðburðir og verkefni bekkjarins
                 </p>
             </header>
+
+            {/* Admin Actions */}
+            {isAdmin && (
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => setIsCreating(true)}
+                        className="bg-nordic-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        + Nýtt verkefni / viðburður
+                    </button>
+                </div>
+            )}
+
+            {/* Creation Modal */}
+            {isCreating && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
+                        <h2 className="text-xl font-bold text-gray-900">Skrá nýtt verkefni</h2>
+
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Heiti</label>
+                                <input
+                                    type="text"
+                                    value={newTaskTitle}
+                                    onChange={e => setNewTaskTitle(e.target.value)}
+                                    placeholder="t.d. Söfnun fyrir bekkjarferð"
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Dagsetning / Skilafrestur</label>
+                                <input
+                                    type="datetime-local"
+                                    value={newTaskDate}
+                                    onChange={e => setNewTaskDate(e.target.value)}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Lýsing</label>
+                                <textarea
+                                    value={newTaskDesc}
+                                    onChange={e => setNewTaskDesc(e.target.value)}
+                                    placeholder="Nánari lýsing á verkefninu..."
+                                    className="w-full p-2 border rounded-lg h-24"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Fjöldi sjálfboðaliða sem vantar</label>
+                                <input
+                                    type="number"
+                                    value={newTaskSlots}
+                                    onChange={e => setNewTaskSlots(Number(e.target.value))}
+                                    className="w-full p-2 border rounded-lg"
+                                    min={1}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-2">
+                            <button
+                                onClick={() => setIsCreating(false)}
+                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
+                            >
+                                Hætta við
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    if (!newTaskTitle || !newTaskDate) return alert('Vinsamlegast fylltu út titil og dagsetningu');
+
+                                    try {
+                                        await createTaskMutation.mutateAsync({
+                                            classId: classData?.id || '',
+                                            type: 'event', // Generic event type for tasks page too
+                                            title: newTaskTitle,
+                                            description: newTaskDesc,
+                                            date: new Date(newTaskDate) as any,
+                                            slotsTotal: newTaskSlots,
+                                            createdBy: user?.uid || '',
+                                        } as any);
+
+                                        setIsCreating(false);
+                                        setNewTaskTitle('');
+                                        setNewTaskDate('');
+                                        setNewTaskDesc('');
+                                        setNewTaskSlots(1);
+                                    } catch (e) {
+                                        console.error(e);
+                                        alert('Villa kom upp');
+                                    }
+                                }}
+                                disabled={createTaskMutation.isPending}
+                                className="px-4 py-2 bg-nordic-blue text-white font-bold rounded-lg hover:brightness-110 flex items-center gap-2"
+                            >
+                                {createTaskMutation.isPending && <Loader2 className="animate-spin" size={16} />}
+                                Stofna
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {/* Event Cards */}
             <div className="space-y-4">
