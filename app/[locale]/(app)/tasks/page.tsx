@@ -359,6 +359,35 @@ export default function TasksPage() {
                                             </p>
                                         )}
                                     </div>
+
+                                    {/* Admin Actions */}
+                                    {isAdmin && (
+                                        <div className="flex items-center gap-2">
+                                            <button
+                                                onClick={() => setEditingTask(event)}
+                                                className="text-gray-400 hover:text-blue-600 p-1.5 rounded hover:bg-blue-50 transition-colors"
+                                                title="Breyta"
+                                            >
+                                                <Edit2 size={16} />
+                                            </button>
+                                            <button
+                                                onClick={async () => {
+                                                    if (confirm(`Ertu viss um að þú viljir eyða "${event.title}"?`)) {
+                                                        try {
+                                                            await deleteTaskMutation.mutateAsync(event.id);
+                                                        } catch (error) {
+                                                            console.error('Delete error:', error);
+                                                            alert('Villa kom upp við að eyða');
+                                                        }
+                                                    }
+                                                }}
+                                                className="text-gray-400 hover:text-red-600 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                                title="Eyða"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
 
                                 {/* Progress Bar */}
@@ -478,6 +507,18 @@ export default function TasksPage() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {/* Edit Modal */}
+            {editingTask && (
+                <EditTaskModal
+                    task={editingTask}
+                    isOpen={!!editingTask}
+                    onClose={() => setEditingTask(null)}
+                    onSave={async (taskId, data) => {
+                        await updateTaskMutation.mutateAsync({ taskId, data });
+                    }}
+                />
             )}
         </div>
     );
