@@ -56,6 +56,7 @@ export interface Student {
     birthDate: Timestamp;
     dietaryNeeds: DietaryNeed[];
     photoPermission: PhotoPermission;
+    photoUrl?: string; // URL to storage
     createdAt: Timestamp;
 }
 

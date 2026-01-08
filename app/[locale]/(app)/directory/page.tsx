@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Phone, Mail, Star, ChevronUp, Users, Loader2 } from 'lucide-react';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
-import { useStudents, useClass } from '@/hooks/useFirestore';
+import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import type { Student, DietaryNeed } from '@/types';
@@ -50,6 +50,7 @@ export default function DirectoryPage() {
 
     const { data: classData } = useClass(classId);
     const { data: studentsData, isLoading: studentsLoading, error } = useStudents(classId || '');
+    const { data: parentLink } = useUserParentLink(user?.uid, classId);
 
     const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
@@ -120,6 +121,20 @@ export default function DirectoryPage() {
 
     const starredCount = starredStudents.size;
     const displayName = classData?.name || (classData?.grade ? `${classData.grade}. Bekkur` : 'Bekkurinn');
+
+    // FAIR PHOTO LOGIC
+    // Rule: User can only see photos if:
+    // 1. User has a photo (user.photoURL)
+    // 2. User's child has a photo (myStudent.photoUrl)
+    const myStudent = students.find(s => s.id === parentLink?.studentId);
+    const userHasPhoto = !!user?.photoURL;
+    const childHasPhoto = !!myStudent?.photoUrl;
+
+    // If user is admin (no child linked yet), maybe allow? 
+    // For now, strict adherence to "Fairness" for parents.
+    // If no child linked, canViewPhotos is false (unless we change requirement).
+    // Assuming for now: Must have child + photo to participate in visual directory.
+    const canViewPhotos = userHasPhoto && childHasPhoto;
 
     return (
         <div className="min-h-screen p-4 space-y-6 pb-24 pt-24 max-w-5xl mx-auto">
@@ -193,10 +208,18 @@ export default function DirectoryPage() {
                                 <div className="flex items-start gap-3 pr-10">
                                     {/* Photo Placeholder */}
                                     <div
-                                        className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-2xl font-bold"
+                                        className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-2xl font-bold overflow-hidden bg-gray-200"
                                         style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
                                     >
-                                        {student.name[0]}
+                                        {canViewPhotos && student.photoUrl ? (
+                                            <img
+                                                src={student.photoUrl}
+                                                alt={student.name}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            student.name[0]
+                                        )}
                                     </div>
 
                                     <div className="flex-1 min-w-0">
