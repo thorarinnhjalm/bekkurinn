@@ -122,7 +122,7 @@ export default function HomePage() {
             </section>
 
             {/* Features Grid with Modern Cards */}
-            <section id="features" className="py-24 bg-white relative">
+            <section id="features" className="py-12 bg-white relative">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div className="text-center max-w-3xl mx-auto mb-20">
                         <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase mb-2">{t('features.title')}</h2>
