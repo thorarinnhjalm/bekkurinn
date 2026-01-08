@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink } from '@/hooks/useFirestore';
 import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus } from 'lucide-react';
@@ -27,6 +27,8 @@ interface DashboardViewProps {
 export default function DashboardView({ translations }: DashboardViewProps) {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = params.locale || 'is';
 
     // 1. Find all user classes
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid);
@@ -56,16 +58,16 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     // Auth redirection
     useEffect(() => {
         if (!authLoading && !user) {
-            router.push('/is/login');
+            router.push(`/${locale}/login`);
         }
     }, [authLoading, user, router]);
 
     // Redirect to onboarding only if completely done loading and no class found
     useEffect(() => {
         if (!authLoading && !classesLoading && user && (!userClasses || userClasses.length === 0)) {
-            router.push('/is/onboarding');
+            router.push(`/${locale}/onboarding`);
         }
-    }, [authLoading, classesLoading, user, userClasses, router]);
+    }, [authLoading, classesLoading, user, userClasses, router, locale]);
 
     // Wizard Logic
     const [showWizard, setShowWizard] = useState(false);
@@ -80,7 +82,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     const handleCloseWizard = () => {
         setShowWizard(false);
         // Clean URL
-        router.replace('/is/dashboard');
+        router.replace(`/${locale}/dashboard`);
     };
 
     // Helper to safely convert Firestore Timestamp or Date
@@ -189,7 +191,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                 <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md">
                     <Link
-                        href={`/is/onboarding?step=join`} // Re-route to join/create student flow or we could make a dedicated route
+                        href={`/${locale}/onboarding?step=join`} // Re-route to join/create student flow or we could make a dedicated route
                         className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-lg shadow-blue-600/20"
                     >
                         <UserPlus size={20} />
@@ -231,7 +233,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             ))}
                             <div className="border-t border-gray-100 mt-1 pt-1">
                                 <Link
-                                    href="/is/onboarding?step=join"
+                                    href={`/${locale}/onboarding?step=join`}
                                     className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-500 hover:text-gray-900 text-sm flex items-center gap-2"
                                 >
                                     <span>+ Bæta við bekk</span>
@@ -258,7 +260,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
                                     {translations.latest_announcement}
                                 </h2>
-                                <Link href="/is/announcements" className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
+                                <Link href={`/${locale}/announcements`} className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
                                     Sjá allar <ChevronRight size={16} />
                                 </Link>
                             </div>
@@ -323,7 +325,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <Calendar className="mx-auto mb-2 text-gray-300" size={32} />
                                 <p className="text-gray-500 font-medium mb-2">{translations.no_events}</p>
                                 {isAdmin && (
-                                    <Link href="/is/settings" className="text-sm text-nordic-blue hover:underline">
+                                    <Link href={`/${locale}/settings`} className="text-sm text-nordic-blue hover:underline">
                                         Sækja skóladagatal í stillingum →
                                     </Link>
                                 )}
@@ -370,13 +372,13 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 Flýtileiðir
                             </h2>
                             <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 space-y-2">
-                                <Link href="/is/settings" className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                <Link href={`/${locale}/settings`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
                                     <div className="bg-blue-100 p-1.5 rounded-md group-hover:bg-blue-200 transition-colors">
                                         <Loader2 size={16} className="text-nordic-blue" />
                                     </div>
                                     Stillingar & Dagatal
                                 </Link>
-                                <Link href="/is/tasks/new" className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                <Link href={`/${locale}/tasks/new`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
                                     <div className="bg-amber-100 p-1.5 rounded-md group-hover:bg-amber-200 transition-colors">
                                         <Star size={16} className="text-amber-600" />
                                     </div>

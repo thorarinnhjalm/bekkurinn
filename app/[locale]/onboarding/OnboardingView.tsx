@@ -82,7 +82,8 @@ export default function OnboardingView() {
     const searchParams = useSearchParams();
 
     // Check query param 'step' to see if language is already selected
-    const initialStep = searchParams.get('step') === 'select' ? 'select' : 'language';
+    const paramStep = searchParams.get('step') as OnboardingStep;
+    const initialStep = ['language', 'select', 'create', 'join'].includes(paramStep) ? paramStep : 'language';
 
     const [step, setStep] = useState<OnboardingStep>(initialStep);
     const [loading, setLoading] = useState(false);

@@ -100,7 +100,7 @@
     },
     "features": {
       "title": "Verkfærin sem létta lífið",
-      "subtitle": "Hannað sérstaklega fyrir íslenska foreldra og bekkjarfulltrúa. Einfalt, öruggt og þægilegt.",
+      "subtitle": "Hannað sérstaklega fyrir foreldra og bekkjarfulltrúa. Einfalt, öruggt og þægilegt.",
       "f1_title": "Skóladagatalið alltaf við hendina",
       "f1_desc": "Starfsdagar, frí og viðburðir skrá sig sjálfir. Þú þarft aldrei að elta uppi skóladagatalið aftur – það er sjálfvirkt.",
       "f2_title": "Skilvirkari samskipti",
@@ -108,7 +108,7 @@
       "f3_title": "Röltið skipulagt á augabragði",
       "f3_desc": "Sanngjarnt kerfi sem auðveldar niðurröðun á vöktum. Kerfið sér um áminningar svo þú þurfir ekki að hafa áhyggjur.",
       "f4_title": "Persónuvernd í fyrirrúmi",
-      "f4_desc": "Við pössum upp á gögnin ykkar. Kerfið er hannað með öryggi barnanna og íslensk persónuverndarlög í huga.",
+      "f4_desc": "Við pössum upp á gögnin ykkar. Kerfið er hannað með öryggi barnanna og persónuverndarlög í huga.",
       "f5_title": "Ofnæmi og sérþarfir",
       "f5_desc": "Allir með upplýsingarnar á hreinu fyrir afmæli og veislur. Ekkert stress, bara öryggi.",
       "f6_title": "Minni tími í stjórnun",
@@ -156,7 +156,7 @@
       "fine_print": "Klárt á 2 mínútum"
     },
     "footer": {
-      "desc": "Öruggt og einfalt skipulag fyrir íslenska grunnskóla.",
+      "desc": "Öruggt og einfalt skipulag fyrir grunnskóla.",
       "products": "Vörur",
       "support": "Aðstoð",
       "contact": "Hafa samband",
@@ -164,7 +164,7 @@
       "legal": "Lagalegt",
       "terms": "Skilmálar",
       "privacy": "Persónuverndarstefna",
-      "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn. Hannað og þróað á Íslandi 🇮🇸"
+      "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn."
     }
   }
 }

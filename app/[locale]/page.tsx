@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { ArrowRight, Shield, Calendar, Users, Home, Coffee, MessageCircle, Lock, CheckCircle2, Globe } from 'lucide-react';
 import Link from 'next/link';
@@ -11,6 +11,8 @@ export default function HomePage() {
     const t = useTranslations('landing');
     const { user } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = params.locale || 'is';
 
     const richText = {
         strong: (chunks: React.ReactNode) => <span className="text-blue-600 font-bold">{chunks}</span>
@@ -54,14 +56,14 @@ export default function HomePage() {
 
                             {user ? (
                                 <Link
-                                    href="/is/dashboard"
+                                    href={`/${locale}/dashboard`}
                                     className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-gray-800 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
                                 >
                                     Mælaborð
                                 </Link>
                             ) : (
                                 <Link
-                                    href="/is/login"
+                                    href={`/${locale}/login`}
                                     className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
                                 >
                                     {t('nav.login')}
@@ -106,7 +108,7 @@ export default function HomePage() {
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
                         <Link
-                            href={user ? "/is/dashboard" : "/is/onboarding"}
+                            href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
                             className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
                         >
                             {t('hero.cta_primary')} <ArrowRight size={20} />
@@ -189,7 +191,7 @@ export default function HomePage() {
 
                     <div className="mt-16 text-center">
                         <Link
-                            href={user ? "/is/dashboard" : "/is/onboarding"}
+                            href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
                             className="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-xl text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors"
                         >
                             {t('how.cta')}
@@ -223,7 +225,7 @@ export default function HomePage() {
                     <p className="text-xl !text-gray-300 mb-10 max-w-2xl mx-auto">{t('cta_final.subtitle')}</p>
                     <div className="flex flex-col items-center gap-4">
                         <Link
-                            href="/is/onboarding"
+                            href={`/${locale}/onboarding`}
                             className="px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
                         >
                             {t('cta_final.button')}
