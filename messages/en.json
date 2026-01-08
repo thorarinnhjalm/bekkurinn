@@ -74,7 +74,8 @@
             "features": "Features",
             "how_it_works": "How it Works",
             "faq": "FAQ",
-            "login": "Sign In"
+            "login": "Sign In",
+            "locale": "EN"
         },
         "hero": {
             "badge": "Finally, a proper system for class reps",

@@ -86,14 +86,15 @@
       "features": "Virkni",
       "how_it_works": "Hvernig virkar þetta?",
       "faq": "Spurt & svarað",
-      "login": "Innskráning"
+      "login": "Innskráning",
+      "locale": "IS"
     },
     "hero": {
       "badge": "Loksins almennilegt kerfi fyrir bekkjarfulltrúa",
       "title_start": "Allt sem bekkurinn þarf.",
       "title_highlight": "Á einum stað.",
       "subtitle": "Gleymdu óendanlegum Facebook-þráðum og týndum tölvupóstum. Bekkurinn heldur utan um rölt, viðburði og tengiliði á <strong>öruggan og einfaldan</strong> hátt.",
-      "cta_primary": "Stofna bekk (Frítt)",
+      "cta_primary": "Byrja núna",
       "cta_secondary": "Hvernig virkar þetta?",
       "beta_badge": "Opið fyrir nýskráningar – vertu með frá byrjun!"
     },
@@ -122,14 +123,14 @@
       "step2_desc": "Foreldrar smella á hlekkinn og eru komnir inn. Tekur 30 sekúndur, enginn flækjustig.",
       "step3_title": "Allt klárt",
       "step3_desc": "Dagatal, rölt og tengiliðir eru komin í lag. Kerfið sér um afganginn og heldur utan um hlutina.",
-      "cta": "Prófa frítt — engin binding",
-      "fine_print": "Ekkert greiðslukort krafist · Klárt á 2 mínútum"
+      "cta": "Stofna bekk",
+      "fine_print": "Klárt á 2 mínútum"
     },
     "beta": {
       "title": "Af hverju að byrja núna?",
       "subtitle": "Vertu með í að móta framtíðina og fáðu fríðindi fyrir vikið.",
-      "b1_title": "Frítt fyrir alla framtíð",
-      "b1_desc": "Þeir sem byrja í beta fá ævilangt ókeypis aðgang fyrir sinn bekk, jafnvel þó við bætum við gjaldskyldum fídusum síðar.",
+      "b1_title": "Vertu með frá byrjun",
+      "b1_desc": "Beta notendur fá forgangsstöðu í framtíðinni og sérstakan aðgang að nýjum eiginleikum.",
       "b2_title": "Þín rödd skiptir máli",
       "b2_desc": "Við hlustum á beta-notendur. Vantar þig eitthvað ákveðið í kerfið? Við smíðum það.",
       "b3_title": "Beint samband",
@@ -151,8 +152,8 @@
     "cta_final": {
       "title": "Taktu stjórnina í dag",
       "subtitle": "Gakktu í lið með framsýnum foreldrum og gerðu lífið einfaldara fyrir allan bekkinn.",
-      "button": "Stofna bekk (Frítt)",
-      "fine_print": "Engin binding · Klárt á 2 mínútum · Öruggt"
+      "button": "Byrja núna",
+      "fine_print": "Klárt á 2 mínútum"
     },
     "footer": {
       "desc": "Öruggt og einfalt skipulag fyrir íslenska grunnskóla.",
