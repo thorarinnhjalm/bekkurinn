@@ -1,18 +1,16 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useAnnouncements, useTasks, useStudents, useClass } from '@/hooks/useFirestore';
-import { Loader2, Calendar, Star, Megaphone, ChevronRight } from 'lucide-react';
-import { db } from '@/lib/firebase/config';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses } from '@/hooks/useFirestore';
+import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown } from 'lucide-react';
+// import { db } from '@/lib/firebase/config'; // No longer needed directly
+import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'; // Removed manual queries
 
 import Link from 'next/link';
+import WelcomeWizard from '@/components/dashboard/WelcomeWizard';
 import type { Task, Announcement, Student } from '@/types';
-
-// TODO: Get this from user's class membership
-const CLASS_ID = 'CLQCGsPBSZxKV4Zq6Xsg';
 
 interface DashboardViewProps {
     translations: {
@@ -29,70 +27,28 @@ interface DashboardViewProps {
 export default function DashboardView({ translations }: DashboardViewProps) {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const [classId, setClassId] = useState<string | null>(null);
-    const [findingClass, setFindingClass] = useState(true);
 
-    // 1. Find the user's class
+    // 1. Find all user classes
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid);
+    const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
+
+    // Default to first class if not selected
     useEffect(() => {
-        async function fetchUserClass() {
-            if (!user) return;
-            try {
-                // Check if user is an admin of any class
-                const q = query(
-                    collection(db, 'classes'),
-                    where('admins', 'array-contains', user.uid)
-                );
-                const snapshot = await getDocs(q);
-
-                if (!snapshot.empty) {
-                    // Client-side sort to avoid index requirement
-                    const sortedDocs = snapshot.docs.sort((a, b) => {
-                        const tA = a.data().createdAt?.toMillis() || 0;
-                        const tB = b.data().createdAt?.toMillis() || 0;
-                        return tB - tA; // Newest first
-                    });
-
-                    const userClassDoc = sortedDocs[0];
-                    setClassId(userClassDoc.id);
-                } else {
-                    // Check parentLinks... (Future: not implemented for MVP onboarding yet)
-                    // If no class found, redirect to Onboarding
-                    router.push('/is/onboarding');
-                }
-            } catch (error) {
-                console.error("Error finding class:", error);
-            } finally {
-                setFindingClass(false);
-            }
+        if (userClasses && userClasses.length > 0 && !selectedClassId) {
+            setSelectedClassId(userClasses[0].id);
         }
+    }, [userClasses, selectedClassId]);
 
-        if (!authLoading && user) {
-            fetchUserClass();
-        }
-    }, [user, authLoading, router]);
+    const activeClass = userClasses?.find(c => c.id === selectedClassId) || (userClasses?.[0] || null);
+    const classId = activeClass?.id || null;
+    const isAdmin = activeClass?.role === 'admin';
 
     // 2. Fetch Class Data (only if we have an ID)
-    const { data: classData, isLoading: classLoading } = useClass(classId || 'dummy');
+    const { data: classData, isLoading: classLoading } = useClass(classId);
 
-    // ... Hooks dependent on classId ...
-    // usage: enabled: !!classId
-    // We need to update useStudents, useTasks etc to accept skip/enabled flag or handle null ID
-
-    // TEMPORARY FIX:
-    // Since useTasks etc might crash with null ID, we only render them when classId is set.
-
-    // ... (Hooks below defined normally but we'll conditionally use their data)
-
-    // Re-implement hooks to depend on classId state mostly?
-    // Actually, react-query hooks usually usually handle null well if configured, 
-    // but our custom hooks might pass null to firestore methods.
-
-    // Let's modify the hooks imports or usage? 
-    // Easier: Just conditionally render the whole view.
-
-    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId || '');
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(classId || '');
-    const { data: studentsData, isLoading: studentsLoading } = useStudents(classId || '');
+    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId);
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(classId);
+    const { data: studentsData, isLoading: studentsLoading } = useStudents(classId);
 
     // Auth redirection
     useEffect(() => {
@@ -101,17 +57,57 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         }
     }, [authLoading, user, router]);
 
+    // Redirect to onboarding only if completely done loading and no class found
+    useEffect(() => {
+        if (!authLoading && !classesLoading && user && (!userClasses || userClasses.length === 0)) {
+            router.push('/is/onboarding');
+        }
+    }, [authLoading, classesLoading, user, userClasses, router]);
+
+    // Wizard Logic
+    const [showWizard, setShowWizard] = useState(false);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        if (searchParams.get('welcome') === 'true') {
+            setShowWizard(true);
+        }
+    }, [searchParams]);
+
+    const handleCloseWizard = () => {
+        setShowWizard(false);
+        // Clean URL
+        router.replace('/is/dashboard');
+    };
+
+    // Helper to safely convert Firestore Timestamp or Date
+    const toJsDate = (dateField: any): Date | null => {
+        if (!dateField) return null;
+        if (typeof dateField.toDate === 'function') {
+            return dateField.toDate();
+        }
+        if (dateField instanceof Date) {
+            return dateField;
+        }
+        // Try parsing string or other formats
+        const d = new Date(dateField);
+        return isNaN(d.getTime()) ? null : d;
+    };
+
     // Format helpers
     const formatDate = (timestamp: any) => {
-        if (!timestamp?.toDate) return '';
-        return new Intl.DateTimeFormat('is-IS', {
+        const date = toJsDate(timestamp);
+        if (!date) return '';
+
+        const formatted = new Intl.DateTimeFormat('is-IS', {
             weekday: 'long',
             day: 'numeric',
             month: 'long'
-        }).format(timestamp.toDate());
+        }).format(date);
+        return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     };
 
-    if (authLoading || announcementsLoading || tasksLoading || studentsLoading || classLoading) {
+    if (authLoading || announcementsLoading || tasksLoading || studentsLoading || classLoading || classesLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
@@ -131,6 +127,11 @@ export default function DashboardView({ translations }: DashboardViewProps) {
             : classData.name)
         : 'Bekkurinn';
 
+    // Helper to get simple name for switcher
+    const getSimpleClassName = (c: any) => {
+        return c.schoolName && c.grade ? `${c.grade}. Bekkur ${c.section || ''}` : c.name || 'Bekkur';
+    };
+
     // 3. Latest Pinned Announcement (or just latest)
     const announcements = announcementsData || [];
     const latestAnnouncement = announcements.length > 0
@@ -144,14 +145,18 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     // 3. Upcoming Tasks (Events/Patrols)
     const now = new Date();
     const upcomingTasks = (tasksData || [])
-        .filter(t => t.date?.toDate && t.date.toDate() >= now)
-        .sort((a, b) => a.date.toDate().getTime() - b.date.toDate().getTime())
+        .map(t => ({ ...t, jsDate: toJsDate(t.date) }))
+        .filter(t => t.jsDate && t.jsDate >= now)
+        .sort((a, b) => (a.jsDate?.getTime() || 0) - (b.jsDate?.getTime() || 0))
         .slice(0, 2);
 
     // 4. Upcoming Birthdays (Next 2)
     const upcomingBirthdays = (studentsData || [])
+        .filter(s => s.birthDate) // Filter out missing dates
         .map(s => {
-            const birthDate = s.birthDate.toDate();
+            const birthDate = toJsDate(s.birthDate);
+            if (!birthDate || isNaN(birthDate.getTime())) return null;
+
             // Create date object for this year's birthday
             const thisYearBirthday = new Date(now.getFullYear(), birthDate.getMonth(), birthDate.getDate());
             // If passed, use next year
@@ -160,11 +165,12 @@ export default function DashboardView({ translations }: DashboardViewProps) {
             }
             return { ...s, nextBirthday: thisYearBirthday };
         })
+        .filter((s): s is NonNullable<typeof s> => s !== null) // Remove failed parses
         .sort((a, b) => a.nextBirthday.getTime() - b.nextBirthday.getTime())
         .slice(0, 3);
 
     // 5. Admin check
-    const isAdmin = classData?.admins?.includes(user?.uid || '');
+    // const isAdmin = classData?.admins?.includes(user?.uid || ''); // Already calculated above
 
     return (
         <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto space-y-6">
@@ -173,9 +179,40 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
                     {translations.greeting.replace('{name}', firstName)}
                 </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Velkomin í {displayClassName}
-                </p>
+
+                {userClasses && userClasses.length > 1 ? (
+                    <div className="relative inline-block group">
+                        <button className="flex items-center gap-2 text-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">
+                            Velkomin í {displayClassName}
+                            <ChevronDown size={18} />
+                        </button>
+
+                        <div className="absolute left-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1 hidden group-hover:block z-50">
+                            {userClasses.map((c) => (
+                                <button
+                                    key={c.id}
+                                    onClick={() => setSelectedClassId(c.id)}
+                                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between ${selectedClassId === c.id ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-600'}`}
+                                >
+                                    <span>{getSimpleClassName(c)}</span>
+                                    {selectedClassId === c.id && <div className="w-2 h-2 rounded-full bg-blue-600"></div>}
+                                </button>
+                            ))}
+                            <div className="border-t border-gray-100 mt-1 pt-1">
+                                <Link
+                                    href="/is/onboarding?step=join"
+                                    className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-500 hover:text-gray-900 text-sm flex items-center gap-2"
+                                >
+                                    <span>+ Bæta við bekk</span>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                ) : (
+                    <p style={{ color: 'var(--text-secondary)' }}>
+                        Velkomin í {displayClassName}
+                    </p>
+                )}
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -225,16 +262,17 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                         {upcomingTasks.length > 0 ? (
                             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                                {upcomingTasks.slice(0, 4).map(task => { // Increased to 4 items
+                                {upcomingTasks.slice(0, 4).map((task: any) => { // Increased to 4 items
                                     const isSchoolEvent = task.type === 'school_event';
+                                    const dateObj = task.jsDate; // We mapped this above
                                     return (
                                         <div key={task.id} className="nordic-card p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
                                             <div className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg flex-shrink-0 ${isSchoolEvent ? 'bg-amber-100' : 'bg-blue-50'}`}>
                                                 <span className={`text-xs font-bold uppercase ${isSchoolEvent ? 'text-amber-700' : 'text-blue-600'}`}>
-                                                    {task.date?.toDate ? task.date.toDate().toLocaleDateString('is-IS', { month: 'short' }) : ''}
+                                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }) : ''}
                                                 </span>
                                                 <span className="text-lg font-bold text-gray-800">
-                                                    {task.date?.toDate ? task.date.toDate().getDate() : ''}
+                                                    {dateObj ? dateObj.getDate() : ''}
                                                 </span>
                                             </div>
                                             <div>
@@ -318,6 +356,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     )}
                 </div>
             </div>
+
+            <WelcomeWizard isOpen={showWizard} onClose={handleCloseWizard} />
         </div>
     );
 }

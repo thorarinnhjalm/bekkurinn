@@ -17,7 +17,66 @@ import {
     createAnnouncement,
     toggleAnnouncementPin,
     deleteAnnouncement,
+    // getClass is already imported above
 } from '@/services/firestore';
+import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+
+// ... other hooks ...
+
+// ========================================
+// USER / CONTEXT HOOKS
+// ========================================
+
+export function useUserClasses(userId: string | undefined) {
+    return useQuery({
+        queryKey: ['userClasses', userId],
+        queryFn: async () => {
+            if (!userId) return [];
+
+            const classesMap = new Map();
+
+            // 1. Check if admin
+            const adminQ = query(collection(db, 'classes'), where('admins', 'array-contains', userId));
+            const adminSnap = await getDocs(adminQ);
+
+            adminSnap.docs.forEach(doc => {
+                classesMap.set(doc.id, { id: doc.id, ...doc.data(), role: 'admin' });
+            });
+
+            // 2. Check parentLinks
+            const parentQ = query(collection(db, 'parentLinks'), where('userId', '==', userId));
+            const parentSnap = await getDocs(parentQ);
+
+            // We need to fetch class details for each parent link
+            const parentClassIds = parentSnap.docs
+                .map(doc => doc.data().classId)
+                .filter(id => !classesMap.has(id)); // Avoid duplicates if also admin
+
+            // Fetch in parallel (could use chunking if many, but unlikely for a parent)
+            await Promise.all(parentClassIds.map(async (classId) => {
+                const classDocRef = doc(db, 'classes', classId);
+                const classSnap = await getDoc(classDocRef);
+                if (classSnap.exists()) {
+                    classesMap.set(classSnap.id, { id: classSnap.id, ...classSnap.data(), role: 'parent' });
+                }
+            }));
+
+            return Array.from(classesMap.values());
+        },
+        enabled: !!userId,
+        staleTime: 1000 * 60 * 5,
+    });
+}
+
+export function useUserClass(userId: string | undefined) {
+    // Legacy support: return the first class from the list
+    const { data } = useUserClasses(userId);
+    return {
+        data: data && data.length > 0 ? data[0] : null,
+        isLoading: !data, // Approximated
+    };
+}
 import type {
     CreateStudentInput,
     CreateTaskInput,

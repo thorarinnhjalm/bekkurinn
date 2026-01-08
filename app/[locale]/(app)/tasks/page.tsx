@@ -1,7 +1,7 @@
 'use client';
 
-import { Calendar, Users, CheckCircle, Loader2, ListTodo } from 'lucide-react';
-import { useTasks } from '@/hooks/useFirestore';
+import { Calendar, Users, CheckCircle, Loader2, ListTodo, UserPlus } from 'lucide-react';
+import { useTasks, useUserClass, useClaimTaskSlot } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 
@@ -12,13 +12,18 @@ import { useRouter } from 'next/navigation';
  * Now connected to real Firestore data!
  */
 
-// TODO: Get this from user's class membership
-const CLASS_ID = '0I3MpwErmopmxnREzoV5'; // From seed script
-
 export default function TasksPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(CLASS_ID);
+
+    // 1. Get User's Class
+    const { data: classData, isLoading: classLoading } = useUserClass(user?.uid);
+
+    // 2. Fetch Tasks for that Class
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(classData?.id || null);
+
+    // 3. Mutation for volunteering
+    const claimSlotMutation = useClaimTaskSlot();
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -26,27 +31,47 @@ export default function TasksPage() {
         return null;
     }
 
-    // Format date for display
+    // Format date for display with capitalization
     const formatDate = (timestamp: any) => {
         if (!timestamp?.toDate) return '';
         const date = timestamp.toDate();
-        return new Intl.DateTimeFormat('is-IS', {
+        const formatted = new Intl.DateTimeFormat('is-IS', {
             day: 'numeric',
             month: 'long',
             year: 'numeric',
             weekday: 'long'
         }).format(date);
+
+        // Capitalize first letter
+        return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     };
 
     // Check if date is upcoming or past
     const isUpcoming = (timestamp: any) => {
         if (!timestamp?.toDate) return false;
         const date = timestamp.toDate();
-        return date.getTime() > Date.now();
+        // Reset time to end of day for comparison to keep "today's" events active
+        const now = new Date();
+        now.setHours(0, 0, 0, 0);
+        return date >= now;
+    };
+
+    const handleVolunteer = async (taskId: string) => {
+        if (!user) return;
+        try {
+            await claimSlotMutation.mutateAsync({
+                taskId,
+                userId: user.uid,
+                userName: user.displayName || 'Foreldri',
+            });
+        } catch (err) {
+            console.error("Failed to volunteer:", err);
+            alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+        }
     };
 
     // Loading state
-    if (authLoading || tasksLoading) {
+    if (authLoading || classLoading || tasksLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
@@ -57,13 +82,39 @@ export default function TasksPage() {
         );
     }
 
+    // If no class found
+    if (!classData && !classLoading) {
+        return (
+            <div className="min-h-screen p-4 flex items-center justify-center pt-24">
+                <div className="text-center space-y-4">
+                    <p>Þú ert ekki skráð(ur) í neinn bekk.</p>
+                    <button
+                        onClick={() => router.push('/is/onboarding')}
+                        className="nordic-button"
+                    >
+                        Ganga í bekk
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     const allTasks = tasksData || [];
 
-    // Get only event type tasks
-    const events = allTasks.filter(task => task.type === 'event');
+    // Get only event type tasks and rolt (patrol)
+    // Actually, 'Skipulag' usually shows everything relevant. 
+    // Filter out specific school_events if they clutter too much, but for now show all 'event' and 'rolt'.
+    // The previous implementation filtered: `const events = allTasks.filter(task => task.type === 'event');`
+    // I will stick to that if that was the intention, but user might want to see everything.
+    // Let's broaden it to tasks that require volunteering (rolt + event + gift_collection).
+    // Or just Keep it as 'event' per original code if ONLY events are shown here.
+    // Audit check: "Skipulag (Task List)".
+
+    // Let's filter for visual clarity: all tasks.
+    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection'].includes(t.type));
 
     // Sort by date (upcoming first, then past)
-    const sortedEvents = [...events].sort((a, b) => {
+    const sortedEvents = [...displayTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
         const now = Date.now();
@@ -79,17 +130,20 @@ export default function TasksPage() {
         return aTime - bTime;
     });
 
-    const upcomingCount = events.filter(e => isUpcoming(e.date)).length;
-    const pastCount = events.length - upcomingCount;
+    const upcomingCount = displayTasks.filter(e => isUpcoming(e.date)).length;
+    const pastCount = displayTasks.length - upcomingCount;
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
+        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24 max-w-3xl mx-auto">
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
-                        Skipulag
-                    </h1>
+                    <div>
+                        <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
+                            Skipulag
+                        </h1>
+                        <p className="text-sm text-gray-500 mt-1">{classData?.name || 'Bekkurinn'}</p>
+                    </div>
                     {upcomingCount > 0 && (
                         <div
                             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
@@ -114,14 +168,18 @@ export default function TasksPage() {
                         : 0;
                     const isComplete = event.slotsFilled >= event.slotsTotal;
 
+                    // Check if I specifically have volunteered
+                    const iAmVolunteering = event.volunteers?.some(v => v.userId === user?.uid);
+
                     return (
                         <div
                             key={event.id}
-                            className="nordic-card overflow-hidden"
+                            className="nordic-card overflow-hidden transition-all hover:shadow-md"
                             style={{
                                 opacity: upcoming ? 1 : 0.7,
-                                borderColor: isComplete ? 'var(--green-success)' : 'var(--border-light)',
-                                borderWidth: isComplete ? '2px' : '1px',
+                                borderColor: iAmVolunteering ? 'var(--green-success)' : (isComplete ? 'var(--border-light)' : 'var(--border-light)'),
+                                borderWidth: iAmVolunteering || isComplete ? '1px' : '1px',
+                                boxShadow: iAmVolunteering ? '0 0 0 1px var(--green-success)' : 'none'
                             }}
                         >
                             {/* Event Header */}
@@ -143,13 +201,21 @@ export default function TasksPage() {
                                                     Liðinn
                                                 </span>
                                             )}
-                                            {isComplete && (
+                                            {isComplete && !iAmVolunteering && (
+                                                <div
+                                                    className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600"
+                                                >
+                                                    <CheckCircle size={12} />
+                                                    <span>Fullbókað</span>
+                                                </div>
+                                            )}
+                                            {iAmVolunteering && (
                                                 <div
                                                     className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium"
                                                     style={{ backgroundColor: 'var(--green-success)', color: 'white' }}
                                                 >
                                                     <CheckCircle size={12} />
-                                                    <span>Fullbókað</span>
+                                                    <span>Þú ert skráð(ur)</span>
                                                 </div>
                                             )}
                                         </div>
@@ -186,7 +252,7 @@ export default function TasksPage() {
                                                 className="h-full transition-all duration-300"
                                                 style={{
                                                     width: `${progress}%`,
-                                                    backgroundColor: isComplete
+                                                    backgroundColor: (isComplete || iAmVolunteering)
                                                         ? 'var(--green-success)'
                                                         : 'var(--nordic-blue)',
                                                 }}
@@ -215,7 +281,7 @@ export default function TasksPage() {
                                                         {volunteer.name[0]}
                                                     </div>
                                                     <span style={{ color: 'var(--text-primary)' }}>
-                                                        {volunteer.name}
+                                                        {volunteer.userId === user?.uid ? 'Þú' : volunteer.name}
                                                     </span>
                                                 </div>
                                             ))}
@@ -224,9 +290,23 @@ export default function TasksPage() {
                                 )}
 
                                 {/* Action Button */}
-                                {upcoming && !isComplete && (
-                                    <button className="nordic-button w-full">
+                                {upcoming && !isComplete && !iAmVolunteering && (
+                                    <button
+                                        onClick={() => handleVolunteer(event.id)}
+                                        disabled={claimSlotMutation.isPending}
+                                        className="nordic-button w-full flex items-center justify-center gap-2"
+                                    >
+                                        {claimSlotMutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <UserPlus size={18} />}
                                         Skrá mig
+                                    </button>
+                                )}
+
+                                {iAmVolunteering && upcoming && (
+                                    <button
+                                        onClick={() => {/* Unclaim logic not implemented yet in this view but could be added */ }}
+                                        className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
+                                    >
+                                        Skráður (Hafa samband til að afbóka)
                                     </button>
                                 )}
                             </div>
@@ -236,7 +316,7 @@ export default function TasksPage() {
             </div>
 
             {/* Empty state */}
-            {events.length === 0 && (
+            {displayTasks.length === 0 && (
                 <div className="text-center py-12">
                     <ListTodo size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
                     <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
@@ -248,8 +328,8 @@ export default function TasksPage() {
                 </div>
             )}
 
-            {/* Summary Stats */}
-            {events.length > 0 && (
+            {/* Summary Stats (Only if events exist) */}
+            {displayTasks.length > 0 && (
                 <div className="nordic-card p-5">
                     <div className="grid grid-cols-2 gap-4 text-center">
                         <div>

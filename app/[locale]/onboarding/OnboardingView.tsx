@@ -5,7 +5,7 @@ import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { SCHOOLS } from '@/constants/schools';
 import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check, Globe } from 'lucide-react';
-import { collection, addDoc, serverTimestamp, Timestamp } from 'firebase/firestore';
+import { collection, addDoc, serverTimestamp, Timestamp, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { OnboardingSchema, validateInput } from '@/lib/validation';
 
@@ -71,7 +71,7 @@ function parseDate(dateStr: string): Date {
 }
 
 export default function OnboardingView() {
-    const { user } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -83,6 +83,15 @@ export default function OnboardingView() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Redirect to login if not authenticated
+    useEffect(() => {
+        if (!authLoading && !user) {
+            const segments = pathname.split('/');
+            const locale = segments[1] || 'is';
+            router.push(`/${locale}/login`);
+        }
+    }, [user, authLoading, router, pathname]);
+
     // Create Form State
     const [formData, setFormData] = useState({
         schoolName: '',
@@ -90,6 +99,14 @@ export default function OnboardingView() {
         isSplit: true,
         section: ''
     });
+
+    // Join Class State
+    const [joinCode, setJoinCode] = useState('');
+    const [checkingCode, setCheckingCode] = useState(false);
+    const [foundClass, setFoundClass] = useState<any>(null);
+    const [students, setStudents] = useState<any[]>([]);
+    const [selectedStudentId, setSelectedStudentId] = useState('');
+    const [joining, setJoining] = useState(false);
 
     const handleLanguageSelect = (lang: string) => {
         // Construct new path with selected locale
@@ -107,6 +124,76 @@ export default function OnboardingView() {
         } else {
             // Fallback
             router.push(`/${lang}/onboarding?step=select`);
+        }
+    };
+
+    const handleVerifyCode = async () => {
+        if (!joinCode) return;
+        setCheckingCode(true);
+        setError(null);
+
+        try {
+            // Find class by join code
+            const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode));
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                setError('Enginn bekkur fannst með þennan kóða.');
+                setCheckingCode(false);
+                return;
+            }
+
+            const classDoc = snapshot.docs[0];
+            const classData = { id: classDoc.id, ...classDoc.data() };
+            setFoundClass(classData);
+
+            // Fetch students
+            const studentsQ = query(collection(db, 'students'), where('classId', '==', classDoc.id));
+            const studentsSnap = await getDocs(studentsQ);
+            const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+
+            // Sort students alphabetically
+            studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+            setStudents(studentsList);
+
+        } catch (err) {
+            console.error(err);
+            setError('Villa við að sækja bekk.');
+        } finally {
+            setCheckingCode(false);
+        }
+    };
+
+    const handleJoinClass = async () => {
+        if (!user) {
+            setError('Þú verður að vera skráð(ur) inn.');
+            return;
+        }
+        if (!foundClass || !selectedStudentId) return;
+        setJoining(true);
+
+        try {
+            // Create Parent Link
+            // We use setDoc to enforce the ID format: userId_classId
+            // This is required for security rules (isClassMember) to work correctly
+            const linkId = `${user.uid}_${foundClass.id}`;
+            await setDoc(doc(db, 'parentLinks', linkId), {
+                userId: user.uid,
+                studentId: selectedStudentId,
+                classId: foundClass.id,
+                relationship: 'Foreldri', // Default
+                status: 'approved', // Auto-approve for MVP launch
+                createdAt: serverTimestamp(),
+            });
+
+            // Redirect
+            const segments = pathname.split('/');
+            const locale = segments[1] || 'is';
+            router.push(`/${locale}/dashboard?welcome=true`);
+        } catch (err) {
+            console.error(err);
+            setError('Gat ekki gengið í bekk.');
+            setJoining(false);
         }
     };
 
@@ -395,19 +482,79 @@ export default function OnboardingView() {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6">
-                    <button onClick={() => setStep('select')} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
+                    <button onClick={() => {
+                        setFoundClass(null);
+                        setStep('select');
+                    }} className="absolute top-4 left-4 text-gray-400">← Til baka</button>
+
                     <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
                         <QrCode className="text-nordic-blue" size={32} />
                     </div>
-                    <h2 className="text-2xl font-bold">Sláðu inn boðskóða</h2>
-                    <p className="text-gray-500">
-                        Sláðu inn kóðann sem bekkjarfulltrúinn sendi þér.<br />
-                        (Virknin er í vinnslu - hafðu samband við stjórnanda)
-                    </p>
 
-                    <input disabled type="text" placeholder="XXXX-XXXX" className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-gray-50" />
+                    {!foundClass ? (
+                        <>
+                            <h2 className="text-2xl font-bold">Sláðu inn boðskóða</h2>
+                            <p className="text-gray-500">
+                                Sláðu inn kóðann (t.d. SALA-4B) sem bekkjarfulltrúinn sendi þér.
+                            </p>
 
-                    <button disabled className="w-full bg-gray-300 text-white py-3 rounded-xl font-bold cursor-not-allowed">Ganga í bekk</button>
+                            <input
+                                type="text"
+                                value={joinCode}
+                                onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
+                                placeholder="XXXX-XXXX"
+                                className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none uppercase"
+                                onKeyDown={(e) => e.key === 'Enter' && handleVerifyCode()}
+                            />
+
+                            {error && (
+                                <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
+                            )}
+
+                            <button
+                                onClick={handleVerifyCode}
+                                disabled={!joinCode || checkingCode}
+                                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                            >
+                                {checkingCode && <Loader2 className="animate-spin" size={20} />}
+                                Áfram
+                            </button>
+                        </>
+                    ) : (
+                        <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+                            <div className="bg-green-50 p-4 rounded-xl text-green-800">
+                                <p className="font-bold flex items-center justify-center gap-2">
+                                    <Check size={20} />
+                                    {foundClass.name}
+                                </p>
+                                <p className="text-sm opacity-80">{foundClass.schoolName}</p>
+                            </div>
+
+                            <div className="text-left">
+                                <label className="block text-sm font-medium text-gray-700 mb-2">Hvert er barnið þitt?</label>
+                                <select
+                                    value={selectedStudentId}
+                                    onChange={(e) => setSelectedStudentId(e.target.value)}
+                                    className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                >
+                                    <option value="">Veldu barn af listanum...</option>
+                                    {students.map(s => (
+                                        <option key={s.id} value={s.id}>{s.name}</option>
+                                    ))}
+                                </select>
+                                <p className="text-xs text-gray-500 mt-2">Ef barnið er ekki á listanum, hafðu samband við bekkjarfulltrúa.</p>
+                            </div>
+
+                            <button
+                                onClick={handleJoinClass}
+                                disabled={!selectedStudentId || joining}
+                                className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                            >
+                                {joining && <Loader2 className="animate-spin" size={20} />}
+                                Skrá mig í bekkinn
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         );

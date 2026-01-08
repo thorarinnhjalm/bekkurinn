@@ -8,6 +8,7 @@ import {
     GoogleAuthProvider,
     onAuthStateChanged,
 } from 'firebase/auth';
+import { serverTimestamp } from 'firebase/firestore';
 import { auth } from '@/lib/firebase/config';
 import { createUser, getUser } from '@/services/firestore';
 
@@ -16,6 +17,8 @@ interface AuthContextType {
     userData: any | null;
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
+    signInWithEmail: (email: string, pass: string) => Promise<void>;
+    signUpWithEmail: (email: string, pass: string, name: string) => Promise<void>;
     signOut: () => Promise<void>;
 }
 
@@ -95,11 +98,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
         }
     };
 
+
+
+    const signInWithEmail = async (email: string, pass: string) => {
+        const { signInWithEmailAndPassword } = await import('firebase/auth');
+        await signInWithEmailAndPassword(auth, email, pass);
+    };
+
+    const signUpWithEmail = async (email: string, pass: string, name: string) => {
+        const { createUserWithEmailAndPassword, updateProfile } = await import('firebase/auth');
+        const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+
+        if (userCredential.user) {
+            await updateProfile(userCredential.user, { displayName: name });
+            // Create user document immediately
+            await createUser({
+                uid: userCredential.user.uid,
+                email: email,
+                displayName: name,
+                phone: '',
+                isPhoneVisible: true,
+                language: 'is',
+            });
+        }
+    };
+
     const value = {
         user,
         userData,
         loading,
         signInWithGoogle,
+        signInWithEmail,
+        signUpWithEmail,
         signOut,
     };
 

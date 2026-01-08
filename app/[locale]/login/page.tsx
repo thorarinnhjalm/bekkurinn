@@ -2,23 +2,31 @@
 
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import { LogIn, Users, Calendar, MessageSquare, Shield } from 'lucide-react';
-import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { LogIn, Users, Shield } from 'lucide-react';
 
 /**
  * Login Page - Bekkurinn
  * 
- * Landing page with Google sign-in
- * Nordic minimalist design with clear value propositions
+ * Landing page with Google sign-in and Email auth.
+ * Nordic minimalist design with clear value propositions and privacy explanation.
+ * Centered layout as per user request.
  */
 
 export default function LoginPage() {
-    const { user, loading, signInWithGoogle } = useAuth();
+    const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
     const router = useRouter();
 
+    const [loginMethod, setLoginMethod] = useState<'social' | 'email'>('social');
+    const [mode, setMode] = useState<'login' | 'signup'>('login');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [error, setError] = useState<string | null>(null);
+    const [mailLoading, setMailLoading] = useState(false);
+
     useEffect(() => {
-        // Redirect to directory if already logged in
+        // Redirect to dashboard if already logged in
         if (user && !loading) {
             router.push('/is/dashboard');
         }
@@ -29,6 +37,44 @@ export default function LoginPage() {
             await signInWithGoogle();
         } catch (error) {
             console.error('Sign in error:', error);
+            setError('Innskráning mistókst.');
+        }
+    };
+
+    const handleEmailAuth = async () => {
+        if (!email || !password) {
+            setError('Vinsamlegast fylltu út öll svæði.');
+            return;
+        }
+
+        setMailLoading(true);
+        setError(null);
+
+        try {
+            if (mode === 'login') {
+                await signInWithEmail(email, password);
+            } else {
+                if (!name) {
+                    setError('Vinsamlegast skráðu nafn.');
+                    setMailLoading(false);
+                    return;
+                }
+                await signUpWithEmail(email, password, name);
+            }
+        } catch (err: any) {
+            console.error(err);
+            // Handle Firebase Auth errors
+            if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password') {
+                setError('Rangt netfang eða lykilorð.');
+            } else if (err.code === 'auth/email-already-in-use') {
+                setError('Netfangið er þegar í notkun.');
+            } else if (err.code === 'auth/weak-password') {
+                setError('Lykilorðið er of stutt (lágmark 6 stafir).');
+            } else {
+                setError('Villa kom upp. Vinsamlegast reyndu aftur.');
+            }
+        } finally {
+            setMailLoading(false);
         }
     };
 
@@ -43,103 +89,157 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4"
-            style={{ backgroundColor: 'var(--paper)' }}>
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
 
             <div className="w-full max-w-md space-y-8">
                 {/* Logo and Title */}
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center"
-                            style={{ backgroundColor: 'var(--nordic-blue)' }}>
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-blue-600 shadow-md">
                             <Users size={40} color="white" />
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
+                        <h1 className="text-4xl font-bold text-gray-900">
                             Bekkurinn
                         </h1>
-                        <p className="text-lg mt-2" style={{ color: 'var(--text-secondary)' }}>
+                        <p className="text-lg mt-2 text-gray-600">
                             Sameiginleg skrá bekkjarins
                         </p>
                     </div>
                 </div>
 
-                {/* Features */}
-                <div className="nordic-card p-6 space-y-4">
-                    <h2 className="text-xl font-semibold text-center" style={{ color: 'var(--text-primary)' }}>
-                        Allt sem þú þarft fyrir bekkinn
+                {/* Explanatory Box (Why Login?) - CENTERED REDESIGN */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-6">
+                    <h2 className="text-xl font-bold text-center text-gray-900">
+                        Af hverju að skrá sig inn?
                     </h2>
 
-                    <div className="space-y-3">
-                        <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
-                                <Users size={20} />
+                    <div className="space-y-6 text-sm text-gray-600 leading-relaxed">
+                        <div className="flex flex-col items-center text-center gap-2">
+                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                                <Shield size={24} />
                             </div>
                             <div>
-                                <h3 className="font-medium">Sameiginleg skrá</h3>
-                                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                    Upplýsingar um öll börnin og foreldra
-                                </p>
+                                <p className="font-semibold text-gray-900 mb-1">Öryggi og Persónuvernd</p>
+                                <p className="max-w-xs mx-auto">Við biðjum um innskráningu til að tryggja öryggi upplýsinga um börn og foreldra. Aðeins staðfestir foreldrar fá aðgang.</p>
                             </div>
                         </div>
 
-                        <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
-                                <Calendar size={20} />
+                        <div className="flex flex-col items-center text-center gap-2">
+                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                                <Users size={24} />
                             </div>
                             <div>
-                                <h3 className="font-medium">Dagatal</h3>
-                                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                    Afmæli, viðburðir og foreldrarölt
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
-                                <MessageSquare size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-medium">Auglýsingatafla</h3>
-                                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                    Tilkynningar frá bekkjarformönnum
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-start gap-3">
-                            <div className="p-2 rounded-lg" style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}>
-                                <Shield size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-medium">Persónuvernd</h3>
-                                <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                    GDPR-samþykkt með fullri gagnavernd
-                                </p>
+                                <p className="font-semibold text-gray-900 mb-1">Einn aðgangur</p>
+                                <p className="max-w-xs mx-auto">Þú getur séð alla bekkina þína á einum stað og samnýtt upplýsingar með öðrum foreldrum.</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                {/* Sign In Button */}
-                <div className="space-y-4">
+                {/* Login Method Toggle */}
+                <div className="bg-white p-1 rounded-xl border border-gray-200 flex shadow-sm">
                     <button
-                        onClick={handleSignIn}
-                        className="nordic-button w-full justify-center gap-3 py-4 text-lg"
+                        onClick={() => setLoginMethod('social')}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'social' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                     >
-                        <LogIn size={24} />
-                        <span>Skrá inn með Google</span>
+                        Google
                     </button>
-
-                    <p className="text-xs text-center" style={{ color: 'var(--text-tertiary)' }}>
-                        Með því að skrá þig inn samþykkir þú að fara með allar<br />
-                        upplýsingar með fullum trúnaði
-                    </p>
+                    <button
+                        onClick={() => setLoginMethod('email')}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'email' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                        Netfang
+                    </button>
                 </div>
 
+                {loginMethod === 'social' ? (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
+                        {error && (
+                            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2">
+                                <span>⚠️</span> {error}
+                            </div>
+                        )}
+                        <button
+                            onClick={handleSignIn}
+                            className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-sm"
+                        >
+                            <LogIn size={24} />
+                            <span>Skrá inn með Google</span>
+                        </button>
+                    </div>
+                ) : (
+                    <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+                        {error && (
+                            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2">
+                                <span>⚠️</span> {error}
+                            </div>
+                        )}
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Netfang</label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                placeholder="name@example.com"
+                            />
+                        </div>
+
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">Lykilorð</label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                placeholder="••••••••"
+                            />
+                        </div>
+
+                        {mode === 'signup' && (
+                            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Nafn</label>
+                                <input
+                                    type="text"
+                                    value={name}
+                                    onChange={(e) => setName(e.target.value)}
+                                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                    placeholder="Jón Jónsson"
+                                />
+                            </div>
+                        )}
+
+                        <button
+                            onClick={handleEmailAuth}
+                            disabled={mailLoading}
+                            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-blue-900/10 active:scale-[0.98]"
+                        >
+                            {mailLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
+                            {mode === 'login' ? 'Skrá inn' : 'Nýskráning (Sign up)'}
+                        </button>
+
+                        <button
+                            onClick={() => {
+                                setMode(mode === 'login' ? 'signup' : 'login');
+                                setError(null);
+                            }}
+                            className="w-full text-sm text-gray-500 hover:text-gray-800 py-2 transition-colors"
+                        >
+                            {mode === 'login' ? 'Vantar þig aðgang? Nýskráning' : 'Áttu aðgang? Skráðu þig inn'}
+                        </button>
+                    </div>
+                )}
+
+                <p className="text-xs text-center text-gray-400">
+                    Með því að skrá þig inn samþykkir þú að fara með allar<br />
+                    upplýsingar með fullum trúnaði
+                </p>
+
                 {/* Footer */}
-                <div className="text-center text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                <div className="text-center text-sm text-gray-400">
                     <p>Fyrir foreldra í grunnskólum á Íslandi</p>
                 </div>
             </div>

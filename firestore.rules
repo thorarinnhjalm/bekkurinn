@@ -90,10 +90,9 @@ service cloud.firestore {
                      (request.auth.uid == resource.data.userId || 
                       isClassAdmin(resource.data.classId));
       
-      // Users can create links (status must be 'pending' AND ID must be userId_classId)
+      // Users can create links (any status for now to allow auto-approve MVP logic)
       allow create: if isAuthenticated() &&
                        request.auth.uid == request.resource.data.userId &&
-                       request.resource.data.status == 'pending' &&
                        linkId == request.resource.data.userId + '_' + request.resource.data.classId;
       
       // Only admins can approve links (only update status)

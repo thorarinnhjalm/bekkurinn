@@ -80,12 +80,14 @@ export default function HomePage() {
                 <div className="absolute top-40 left-0 w-[600px] h-[600px] bg-amber-50/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-                        </span>
-                        {t('hero.badge')}
+                    <div className="flex justify-center">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                            </span>
+                            {t('hero.badge')}
+                        </div>
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] text-center animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
@@ -98,6 +100,7 @@ export default function HomePage() {
                     <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-xl mx-auto leading-normal font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
                         {t.rich('hero.subtitle', richText)}
                     </p>
+
 
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
                         <Link
@@ -266,23 +269,24 @@ function FeatureCard({ icon, title, desc, color }: any) {
 
 function StepCard({ number, title, desc }: any) {
     return (
-        <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-xl">
+        <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-xl flex flex-col items-center">
             <div className="w-12 h-12 bg-white border-2 border-blue-600 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
                 {number}
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">{title}</h3>
-            <p className="text-gray-600 leading-relaxed max-w-xs mx-auto">{desc}</p>
+            <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{title}</h3>
+            <p className="text-gray-600 leading-relaxed max-w-xs mx-auto text-center">{desc}</p>
         </div>
     );
 }
 
 function FaqItem({ q, a }: any) {
     return (
-        <div className="bg-gray-50 rounded-xl p-6 hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100">
-            <h3 className="font-bold text-gray-900 mb-2 flex items-start gap-3">
-                <span className="text-blue-600 shrink-0">?</span> {q}
+        <div className="bg-gray-50 rounded-xl p-6 hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100 flex flex-col items-center text-center">
+            <h3 className="font-bold text-gray-900 mb-2 flex flex-col items-center gap-2">
+                <span className="text-blue-600 text-lg bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center">?</span>
+                <span>{q}</span>
             </h3>
-            <p className="text-gray-600 pl-6 leading-relaxed text-sm">{a}</p>
+            <p className="text-gray-600 leading-relaxed text-sm max-w-2xl">{a}</p>
         </div>
     );
 }
