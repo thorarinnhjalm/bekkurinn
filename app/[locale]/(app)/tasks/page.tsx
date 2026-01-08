@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useClass, useTasks, useClaimTaskSlot, useUnclaimTaskSlot, useUserClasses, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/useFirestore';
-import { Edit2, Trash2, Loader2, Calendar, Users, ChevronDown, ChevronUp, Clock, Gift, GraduationCap, School, MapPin, AlertCircle } from 'lucide-react';
+import { Edit2, Trash2, Loader2, Calendar, Users, ChevronDown, ChevronUp, Clock, Gift, GraduationCap, School, MapPin, AlertCircle, CheckCircle, UserPlus, ListTodo } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
@@ -204,8 +204,8 @@ export default function TasksPage() {
                                 <label className="block text-sm font-medium text-gray-700">Heiti</label>
                                 <input
                                     type="text"
-                                    value={newTaskTitle}
-                                    onChange={e => setNewTaskTitle(e.target.value)}
+                                    value={createTitle}
+                                    onChange={e => setCreateTitle(e.target.value)}
                                     placeholder="t.d. Söfnun fyrir bekkjarferð"
                                     className="w-full p-2 border rounded-lg"
                                 />
@@ -215,8 +215,8 @@ export default function TasksPage() {
                                 <label className="block text-sm font-medium text-gray-700">Dagsetning / Skilafrestur</label>
                                 <input
                                     type="datetime-local"
-                                    value={newTaskDate}
-                                    onChange={e => setNewTaskDate(e.target.value)}
+                                    value={createDate}
+                                    onChange={e => setCreateDate(e.target.value)}
                                     className="w-full p-2 border rounded-lg"
                                 />
                             </div>
@@ -224,8 +224,8 @@ export default function TasksPage() {
                             <div>
                                 <label className="block text-sm font-medium text-gray-700">Lýsing</label>
                                 <textarea
-                                    value={newTaskDesc}
-                                    onChange={e => setNewTaskDesc(e.target.value)}
+                                    value={createDesc}
+                                    onChange={e => setCreateDesc(e.target.value)}
                                     placeholder="Nánari lýsing á verkefninu..."
                                     className="w-full p-2 border rounded-lg h-24"
                                 />
@@ -235,8 +235,8 @@ export default function TasksPage() {
                                 <label className="block text-sm font-medium text-gray-700">Fjöldi sjálfboðaliða sem vantar</label>
                                 <input
                                     type="number"
-                                    value={newTaskSlots}
-                                    onChange={e => setNewTaskSlots(Number(e.target.value))}
+                                    value={createSlots}
+                                    onChange={e => setCreateSlots(Number(e.target.value))}
                                     className="w-full p-2 border rounded-lg"
                                     min={1}
                                 />
@@ -252,24 +252,24 @@ export default function TasksPage() {
                             </button>
                             <button
                                 onClick={async () => {
-                                    if (!newTaskTitle || !newTaskDate) return alert('Vinsamlegast fylltu út titil og dagsetningu');
+                                    if (!createTitle || !createDate) return alert('Vinsamlegast fylltu út titil og dagsetningu');
 
                                     try {
                                         await createTaskMutation.mutateAsync({
                                             classId: classData?.id || '',
                                             type: 'event', // Generic event type for tasks page too
-                                            title: newTaskTitle,
-                                            description: newTaskDesc,
-                                            date: new Date(newTaskDate) as any,
-                                            slotsTotal: newTaskSlots,
+                                            title: createTitle,
+                                            description: createDesc,
+                                            date: new Date(createDate) as any,
+                                            slotsTotal: createSlots,
                                             createdBy: user?.uid || '',
                                         } as any);
 
                                         setIsCreating(false);
-                                        setNewTaskTitle('');
-                                        setNewTaskDate('');
-                                        setNewTaskDesc('');
-                                        setNewTaskSlots(1);
+                                        setCreateTitle('');
+                                        setCreateDate('');
+                                        setCreateDesc('');
+                                        setCreateSlots(2);
                                     } catch (e) {
                                         console.error(e);
                                         alert('Villa kom upp');
