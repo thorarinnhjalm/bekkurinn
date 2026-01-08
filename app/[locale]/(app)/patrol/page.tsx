@@ -2,9 +2,10 @@
 
 import { useState } from 'react';
 import { Calendar, ChevronDown, ChevronUp, Loader2, Users, Check } from 'lucide-react';
-import { useTasks, useUserClasses } from '@/hooks/useFirestore';
+import { useTasks, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
+import { Timestamp } from 'firebase/firestore';
 
 /**
  * Patrol Page - Dagatal (Calendar with patrols)
@@ -24,7 +25,20 @@ export default function PatrolPage() {
 
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
 
+    const activeClass = userClasses?.find(c => c.id === activeClassId);
+    const isAdmin = activeClass?.role === 'admin';
+
     const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['patrols']));
+    const [isCreating, setIsCreating] = useState(false);
+    const [createType, setCreateType] = useState<'rolt' | 'event'>('rolt');
+
+    // Form State
+    const [newTitle, setNewTitle] = useState('');
+    const [newDate, setNewDate] = useState('');
+    const [newDesc, setNewDesc] = useState('');
+    const [newSlots, setNewSlots] = useState(2);
+
+    const createTaskMutation = useCreateTask();
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -105,6 +119,120 @@ export default function PatrolPage() {
                     Afmæli, viðburðir og foreldrarölt
                 </p>
             </header>
+
+            {/* Admin Actions */}
+            {isAdmin && (
+                <div className="flex gap-3">
+                    <button
+                        onClick={() => { setIsCreating(true); setCreateType('rolt'); }}
+                        className="bg-nordic-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                    >
+                        + Nýtt rölt
+                    </button>
+                    <button
+                        onClick={() => { setIsCreating(true); setCreateType('event'); }}
+                        className="bg-white border text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition flex items-center gap-2"
+                    >
+                        + Nýr viðburður
+                    </button>
+                </div>
+            )}
+
+            {/* Creation Modal/Form */}
+            {isCreating && (
+                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
+                        <h2 className="text-xl font-bold text-gray-900">
+                            {createType === 'rolt' ? 'Skrá nýtt foreldrarölt' : 'Skrá nýjan viðburð'}
+                        </h2>
+
+                        <div className="space-y-3">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Heiti</label>
+                                <input
+                                    type="text"
+                                    value={newTitle}
+                                    onChange={e => setNewTitle(e.target.value)}
+                                    placeholder={createType === 'rolt' ? "t.d. Rölt í Breiðholti" : "t.d. Jólaklipping"}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Dagsetning</label>
+                                <input
+                                    type="datetime-local"
+                                    value={newDate}
+                                    onChange={e => setNewDate(e.target.value)}
+                                    className="w-full p-2 border rounded-lg"
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Lýsing (valfrjálst)</label>
+                                <textarea
+                                    value={newDesc}
+                                    onChange={e => setNewDesc(e.target.value)}
+                                    className="w-full p-2 border rounded-lg h-24"
+                                />
+                            </div>
+
+                            {createType === 'rolt' && (
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Fjöldi plássa</label>
+                                    <input
+                                        type="number"
+                                        value={newSlots}
+                                        onChange={e => setNewSlots(Number(e.target.value))}
+                                        className="w-full p-2 border rounded-lg"
+                                        min={1}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-2">
+                            <button
+                                onClick={() => setIsCreating(false)}
+                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
+                            >
+                                Hætta við
+                            </button>
+                            <button
+                                onClick={async () => {
+                                    if (!newTitle || !newDate) return alert('Vinsamlegast fylltu út titil og dagsetningu');
+
+                                    try {
+                                        await createTaskMutation.mutateAsync({
+                                            classId: activeClassId,
+                                            type: createType,
+                                            title: newTitle,
+                                            description: newDesc,
+                                            date: new Date(newDate) as any, // Firestore handles JS Date conversion usually, or need Timestamp
+                                            slotsTotal: createType === 'rolt' ? newSlots : 999, // Event usually unlimited or high
+                                            createdBy: user?.uid || '',
+                                        } as any); // Type cast for Timestamp workaround if needed
+
+                                        setIsCreating(false);
+                                        setNewTitle('');
+                                        setNewDate('');
+                                        setNewDesc('');
+                                    } catch (e) {
+                                        console.error(e);
+                                        alert('Villa kom upp');
+                                    }
+                                }}
+                                disabled={createTaskMutation.isPending}
+                                className="px-4 py-2 bg-nordic-blue text-white font-bold rounded-lg hover:brightness-110 flex items-center gap-2"
+                            >
+                                {createTaskMutation.isPending && <Loader2 className="animate-spin" size={16} />}
+                                Stofna
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
 
             {/* Parent Patrols Section */}
             <div className="nordic-card overflow-hidden">
