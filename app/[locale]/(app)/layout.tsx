@@ -29,7 +29,7 @@ export default async function AppLayout({
             </main>
 
             {/* Bottom Navigation */}
-            <BottomNav translations={messages.class} />
+            <BottomNav locale={locale} translations={messages.class} />
         </div>
     );
 }

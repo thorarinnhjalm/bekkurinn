@@ -52,6 +52,7 @@ const navItems = [
 ] as const;
 
 interface BottomNavProps {
+    locale: string;
     translations: {
         home: string;
         directory: string;
@@ -61,7 +62,7 @@ interface BottomNavProps {
     };
 }
 
-export function BottomNav({ translations }: BottomNavProps) {
+export function BottomNav({ locale, translations }: BottomNavProps) {
     const pathname = usePathname();
 
     return (
@@ -75,13 +76,15 @@ export function BottomNav({ translations }: BottomNavProps) {
         >
             <div className="flex items-center justify-around px-2 py-2">
                 {navItems.map((item) => {
-                    const isActive = pathname.startsWith(item.href);
+                    // Construct the full path with locale
+                    const fullPath = `/${locale}${item.href}`;
+                    const isActive = pathname.startsWith(fullPath);
                     const Icon = item.icon;
 
                     return (
                         <Link
                             key={item.key}
-                            href={item.href}
+                            href={fullPath}
                             className={cn(
                                 'flex flex-col items-center justify-center gap-1',
                                 'tap-target rounded-lg transition-all duration-200',
