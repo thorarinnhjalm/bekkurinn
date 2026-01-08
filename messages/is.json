@@ -13,8 +13,8 @@
   "auth": {
     "sign_in": "Skrá inn",
     "sign_out": "Skrá út",
-    "sign_in_with_google": "Skrá inn með Google",
-    "sign_in_with_email": "Skrá inn með tölvupósti",
+    "sign_in_with_google": "Innskráning með Google",
+    "sign_in_with_email": "Innskráning með tölvupósti",
     "email": "Netfang",
     "send_magic_link": "Senda tengil",
     "magic_link_sent": "Við höfum sent þér innskráningartengil á {email}",
@@ -93,7 +93,7 @@
       "badge": "Loksins almennilegt kerfi fyrir bekkjarfulltrúa",
       "title_start": "Allt sem bekkurinn þarf.",
       "title_highlight": "Á einum stað.",
-      "subtitle": "Gleymdu óendanlegum Facebook-þráðum og týndum tölvupóstum. Bekkurinn heldur utan um rölt, viðburði og tengiliði á <strong>öruggan og einfaldan</strong> hátt.",
+      "subtitle": "Einfaldaðu bekkjarstarfið. Bekkurinn heldur utan um rölt, viðburði og tengiliði á <strong>öruggan og þægilegan</strong> hátt fyrir alla.",
       "cta_primary": "Byrja núna",
       "cta_secondary": "Hvernig virkar þetta?",
       "beta_badge": "Opið fyrir nýskráningar – vertu með frá byrjun!"
@@ -101,14 +101,14 @@
     "features": {
       "title": "Verkfærin sem létta lífið",
       "subtitle": "Hannað sérstaklega fyrir íslenska foreldra og bekkjarfulltrúa. Einfalt, öruggt og þægilegt.",
-      "f1_title": "Skóladagatalið beint í símann",
+      "f1_title": "Skóladagatalið alltaf við hendina",
       "f1_desc": "Starfsdagar, frí og viðburðir skrá sig sjálfir. Þú þarft aldrei að elta uppi skóladagatalið aftur – það er sjálfvirkt.",
-      "f2_title": "Samskipti sem virka",
-      "f2_desc": "Slepptu við Facebook-hópana. Þeir uppfylla ekki persónuverndarkröfur. Hér eru samskiptin lögleg og örugg.",
-      "f3_title": "Röltið leyst á núll einni",
-      "f3_desc": "Sanngjarnt kerfi sem deilir niður vöktum. Kerfið sér um að minna fólk á – engin eftirfylgni eða nöldur þörf.",
-      "f4_title": "Ekki láta Zuckerberg eiga gögnin",
-      "f4_desc": "Facebook og WhatsApp nýta gögnin þín. Bekkurinn er 100% GDPR-samhæfður og íslenskur. Gögnin eru ykkar, ekki okkar.",
+      "f2_title": "Skilvirkari samskipti",
+      "f2_desc": "Allar upplýsingar á einum stað. Engir týndir póstar eða óljós skilaboð í hópum.",
+      "f3_title": "Röltið skipulagt á augabragði",
+      "f3_desc": "Sanngjarnt kerfi sem auðveldar niðurröðun á vöktum. Kerfið sér um áminningar svo þú þurfir ekki að hafa áhyggjur.",
+      "f4_title": "Persónuvernd í fyrirrúmi",
+      "f4_desc": "Við pössum upp á gögnin ykkar. Kerfið er hannað með öryggi barnanna og íslensk persónuverndarlög í huga.",
       "f5_title": "Ofnæmi og sérþarfir",
       "f5_desc": "Allir með upplýsingarnar á hreinu fyrir afmæli og veislur. Ekkert stress, bara öryggi.",
       "f6_title": "Minni tími í stjórnun",
@@ -118,9 +118,9 @@
       "title": "Þrjú einföld skref",
       "subtitle": "Það tekur innan við 2 mínútur að byrja",
       "step1_title": "Stofnaðu bekkinn",
-      "step1_desc": "Skráðu skóla og bekk. Færð strax boðskóða sem þú getur sent beint í WhatsApp hópinn.",
+      "step1_desc": "Stofnaðu bekkinn og fáðu sendan aðgangskóða. Það er einfalt og fljótlegt.",
       "step2_title": "Bjóddu foreldrum",
-      "step2_desc": "Foreldrar smella á hlekkinn og eru komnir inn. Tekur 30 sekúndur, enginn flækjustig.",
+      "step2_desc": "Foreldrar skrá sig inn með kóðanum. Það tekur enga stund að komast inn.",
       "step3_title": "Allt klárt",
       "step3_desc": "Dagatal, rölt og tengiliðir eru komin í lag. Kerfið sér um afganginn og heldur utan um hlutina.",
       "cta": "Stofna bekk",
@@ -164,8 +164,7 @@
       "legal": "Lagalegt",
       "terms": "Skilmálar",
       "privacy": "Persónuverndarstefna",
-      "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn. Hannað og þróað á Íslandi 🇮🇸",
-      "ai_disclaimer": "Þýtt með gervigreind."
+      "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn. Hannað og þróað á Íslandi 🇮🇸"
     }
   }
 }
