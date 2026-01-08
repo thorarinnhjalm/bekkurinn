@@ -42,7 +42,7 @@ export default function HomePage() {
                             <div className="relative group">
                                 <button className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
                                     <Globe size={20} />
-                                    <span className="uppercase text-xs font-bold">{t('locale' as any) || 'IS'}</span>
+                                    <span className="uppercase text-xs font-bold">{t('nav.locale')}</span>
                                 </button>
                                 <div className="absolute top-full right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
                                     <a href="/is" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇮🇸 Íslenska</a>
