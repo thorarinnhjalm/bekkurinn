@@ -5,6 +5,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, Save, User, UserPlus } from 'lucide-react';
+import { ImageUploader } from '@/components/upload/ImageUploader';
 
 export default function UserProfilePage({ params }: { params: { locale: string } }) {
     const { user } = useAuth();
@@ -106,15 +107,12 @@ export default function UserProfilePage({ params }: { params: { locale: string }
 
                 <div className="flex flex-col sm:flex-row gap-6 items-start">
                     <div className="space-y-2">
-                        <div className="w-24 h-24 rounded-full bg-gray-100 overflow-hidden relative border-2 border-gray-200">
-                            {userPhotoUrl ? (
-                                <img src={userPhotoUrl} alt="Me" className="w-full h-full object-cover" />
-                            ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                                    <User size={32} />
-                                </div>
-                            )}
-                        </div>
+                        <ImageUploader
+                            currentImageUrl={userPhotoUrl}
+                            onUploadComplete={(url) => setUserPhotoUrl(url)}
+                            storagePath={`users/${user?.uid}/profile`}
+                            label="Prófílmynd"
+                        />
                     </div>
 
                     <div className="flex-1 space-y-4 w-full">
