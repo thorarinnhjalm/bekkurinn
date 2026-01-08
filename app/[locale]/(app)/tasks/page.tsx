@@ -1,10 +1,14 @@
 'use client';
 
-import { Calendar, Users, CheckCircle, Loader2, ListTodo, UserPlus } from 'lucide-react';
-import { useTasks, useUserClass, useClaimTaskSlot, useCreateTask, useUserClasses } from '@/hooks/useFirestore';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useClass, useTasks, useClaimTaskSlot, useUnclaimTaskSlot, useUserClasses, useCreateTask, useUpdateTask, useDeleteTask } from '@/hooks/useFirestore';
+import { Edit2, Trash2, Loader2, Calendar, Users, ChevronDown, ChevronUp, Clock, Gift, GraduationCap, School, MapPin, AlertCircle } from 'lucide-react';
+import { useParams, useRouter } from 'next/navigation';
+import { collection, query, where, getDocs } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+import type { Task } from '@/types';
+import { EditTaskModal } from '@/components/modals/EditTaskModal';
 
 /**
  * Tasks Page - Skipulag (Organization/Event Coordination)
@@ -34,10 +38,14 @@ export default function TasksPage() {
 
     // Create State
     const [isCreating, setIsCreating] = useState(false);
-    const [newTaskTitle, setNewTaskTitle] = useState('');
-    const [newTaskDate, setNewTaskDate] = useState('');
-    const [newTaskDesc, setNewTaskDesc] = useState('');
-    const [newTaskSlots, setNewTaskSlots] = useState(1);
+    const [createTitle, setCreateTitle] = useState('');
+    const [createDate, setCreateDate] = useState('');
+    const [createDesc, setCreateDesc] = useState('');
+    const [createSlots, setCreateSlots] = useState(2);
+
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const updateTaskMutation = useUpdateTask();
+    const deleteTaskMutation = useDeleteTask();
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -118,7 +126,7 @@ export default function TasksPage() {
     // Get only event type tasks and rolt (patrol)
     // Actually, 'Skipulag' usually shows everything relevant. 
     // Filter out specific school_events if they clutter too much, but for now show all 'event' and 'rolt'.
-    // The previous implementation filtered: `const events = allTasks.filter(task => task.type === 'event');`
+    // The previous implementation filtered: `const events = allTasks.filter(task => task.type === 'event'); `
     // I will stick to that if that was the intention, but user might want to see everything.
     // Let's broaden it to tasks that require volunteering (rolt + event + gift_collection).
     // Or just Keep it as 'event' per original code if ONLY events are shown here.
@@ -371,7 +379,7 @@ export default function TasksPage() {
                                             <div
                                                 className="h-full transition-all duration-300"
                                                 style={{
-                                                    width: `${progress}%`,
+                                                    width: `${progress}% `,
                                                     backgroundColor: (isComplete || iAmVolunteering)
                                                         ? 'var(--green-success)'
                                                         : 'var(--nordic-blue)',

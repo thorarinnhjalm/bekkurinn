@@ -260,6 +260,10 @@ export async function unclaimTaskSlot(taskId: string, userId: string): Promise<v
     });
 }
 
+export async function updateTask(taskId: string, data: Partial<Task>): Promise<void> {
+    await updateDoc(doc(db, 'tasks', taskId), data);
+}
+
 export async function deleteTask(taskId: string): Promise<void> {
     await deleteDoc(doc(db, 'tasks', taskId));
 }
@@ -295,6 +299,10 @@ export async function getAnnouncementsByClass(classId: string): Promise<Announce
 
 export async function toggleAnnouncementPin(announcementId: string, pinned: boolean): Promise<void> {
     await updateDoc(doc(db, 'announcements', announcementId), { pinned });
+}
+
+export async function updateAnnouncement(announcementId: string, data: Partial<Announcement>): Promise<void> {
+    await updateDoc(doc(db, 'announcements', announcementId), data);
 }
 
 export async function deleteAnnouncement(announcementId: string): Promise<void> {

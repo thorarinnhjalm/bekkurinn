@@ -10,16 +10,18 @@ import {
     getParentLinksByStudent,
     getTasksByClass,
     createTask,
+    updateTask,
     claimTaskSlot,
     unclaimTaskSlot,
     deleteTask,
     getAnnouncementsByClass,
     createAnnouncement,
+    updateAnnouncement,
     toggleAnnouncementPin,
     deleteAnnouncement,
     getParentLinkByUserAndClass,
-    // getClass is already imported above
 } from '@/services/firestore';
+import type { Task, Announcement } from '@/types';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
@@ -243,6 +245,18 @@ export function useUnclaimTaskSlot() {
     });
 }
 
+export function useUpdateTask() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ taskId, data }: { taskId: string; data: Partial<Task> }) =>
+            updateTask(taskId, data),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['tasks'] });
+        },
+    });
+}
+
 export function useDeleteTask() {
     const queryClient = useQueryClient();
 
@@ -283,6 +297,18 @@ export function useToggleAnnouncementPin() {
     return useMutation({
         mutationFn: ({ announcementId, pinned }: { announcementId: string; pinned: boolean }) =>
             toggleAnnouncementPin(announcementId, pinned),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['announcements'] });
+        },
+    });
+}
+
+export function useUpdateAnnouncement() {
+    const queryClient = useQueryClient();
+
+    return useMutation({
+        mutationFn: ({ announcementId, data }: { announcementId: string; data: Partial<Announcement> }) =>
+            updateAnnouncement(announcementId, data),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['announcements'] });
         },
