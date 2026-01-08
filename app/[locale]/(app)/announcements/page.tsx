@@ -116,7 +116,7 @@ export default function AnnouncementsPage() {
                 <div className="flex gap-3">
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="bg-nordic-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 shadow-sm"
                     >
                         + Ný tilkynning
                     </button>
@@ -194,7 +194,7 @@ export default function AnnouncementsPage() {
                                     }
                                 }}
                                 disabled={createAnnouncementMutation.isPending}
-                                className="px-4 py-2 bg-nordic-blue text-white font-bold rounded-lg hover:brightness-110 flex items-center gap-2"
+                                className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                             >
                                 {createAnnouncementMutation.isPending && <Loader2 className="animate-spin" size={16} />}
                                 Birta

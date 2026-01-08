@@ -125,7 +125,7 @@ export default function PatrolPage() {
                 <div className="flex gap-3">
                     <button
                         onClick={() => { setIsCreating(true); setCreateType('rolt'); }}
-                        className="bg-nordic-blue text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 shadow-sm"
                     >
                         + Nýtt rölt
                     </button>
@@ -223,7 +223,7 @@ export default function PatrolPage() {
                                     }
                                 }}
                                 disabled={createTaskMutation.isPending}
-                                className="px-4 py-2 bg-nordic-blue text-white font-bold rounded-lg hover:brightness-110 flex items-center gap-2"
+                                className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                             >
                                 {createTaskMutation.isPending && <Loader2 className="animate-spin" size={16} />}
                                 Stofna
