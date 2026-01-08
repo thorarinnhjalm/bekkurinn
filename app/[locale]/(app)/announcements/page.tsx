@@ -1,11 +1,13 @@
 'use client';
 
 import { TranslationButton } from '@/components/ui/TranslationButton';
-import { Heart, Pin, Loader2, MessageSquare } from 'lucide-react';
-import { useAnnouncements, useUserClasses, useCreateAnnouncement } from '@/hooks/useFirestore';
+import { Heart, Pin, Loader2, MessageSquare, Edit2, Trash2 } from 'lucide-react';
+import { useAnnouncements, useUserClasses, useCreateAnnouncement, useUpdateAnnouncement, useDeleteAnnouncement } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { EditAnnouncementModal } from '@/components/modals/EditAnnouncementModal';
+import type { Announcement } from '@/types';
 
 /**
  * Announcements Page - Auglýsingataflan
@@ -34,6 +36,21 @@ export default function AnnouncementsPage() {
     const [newContent, setNewContent] = useState('');
     const [newPinned, setNewPinned] = useState(false);
     const createAnnouncementMutation = useCreateAnnouncement();
+
+    // Edit/Delete state
+    const [editingAnnouncement, setEditingAnnouncement] = useState<Announcement | null>(null);
+    const updateAnnouncementMutation = useUpdateAnnouncement();
+    const deleteAnnouncementMutation = useDeleteAnnouncement();
+
+    const handleDeleteAnnouncement = async (id: string, title: string) => {
+        if (!confirm(`Ertu viss um að þú viljir eyða tilkynningunni "${title}"?`)) return;
+        try {
+            await deleteAnnouncementMutation.mutateAsync(id);
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('Villa kom upp við að eyða');
+        }
+    };
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -247,6 +264,26 @@ export default function AnnouncementsPage() {
                                     </p>
                                 </div>
                             </div>
+
+                            {/* Admin Actions */}
+                            {isAdmin && (
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => setEditingAnnouncement(announcement)}
+                                        className="text-gray-400 hover:text-blue-600 p-1.5 rounded hover:bg-blue-50 transition-colors"
+                                        title="Breyta"
+                                    >
+                                        <Edit2 size={16} />
+                                    </button>
+                                    <button
+                                        onClick={() => handleDeleteAnnouncement(announcement.id, announcement.title)}
+                                        className="text-gray-400 hover:text-red-600 p-1.5 rounded hover:bg-red-50 transition-colors"
+                                        title="Eyða"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+                            )}
                         </div>
 
                         {/* Title & Content */}
@@ -287,6 +324,18 @@ export default function AnnouncementsPage() {
                         Bekkjarformaður mun birta tilkynningar hér
                     </p>
                 </div>
+            )}
+
+            {/* Edit Modal */}
+            {editingAnnouncement && (
+                <EditAnnouncementModal
+                    announcement={editingAnnouncement}
+                    isOpen={!!editingAnnouncement}
+                    onClose={() => setEditingAnnouncement(null)}
+                    onSave={async (id, data) => {
+                        await updateAnnouncementMutation.mutateAsync({ announcementId: id, data });
+                    }}
+                />
             )}
         </div>
     );
