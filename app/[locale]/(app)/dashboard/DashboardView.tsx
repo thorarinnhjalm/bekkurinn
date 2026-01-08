@@ -377,15 +377,27 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 space-y-2">
                                 <Link href={`/${locale}/settings`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
                                     <div className="bg-blue-100 p-1.5 rounded-md group-hover:bg-blue-200 transition-colors">
-                                        <Loader2 size={16} className="text-nordic-blue" />
+                                        <div className="w-4 h-4 text-nordic-blue">⚙️</div>
                                     </div>
                                     Stillingar & Dagatal
                                 </Link>
-                                <Link href={`/${locale}/tasks/new`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                <Link href={`/${locale}/announcements`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
                                     <div className="bg-amber-100 p-1.5 rounded-md group-hover:bg-amber-200 transition-colors">
-                                        <Star size={16} className="text-amber-600" />
+                                        <Megaphone size={16} className="text-amber-600" />
                                     </div>
-                                    Búa til viðburð (Rölt)
+                                    Ný tilkynning
+                                </Link>
+                                <Link href={`/${locale}/patrol`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                    <div className="bg-green-100 p-1.5 rounded-md group-hover:bg-green-200 transition-colors">
+                                        <Calendar size={16} className="text-green-600" />
+                                    </div>
+                                    Skrá Foreldrarölt
+                                </Link>
+                                <Link href={`/${locale}/tasks`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
+                                    <div className="bg-purple-100 p-1.5 rounded-md group-hover:bg-purple-200 transition-colors">
+                                        <Star size={16} className="text-purple-600" />
+                                    </div>
+                                    Nýtt verkefni
                                 </Link>
                             </div>
                         </section>
