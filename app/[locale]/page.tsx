@@ -89,7 +89,7 @@ export default function HomePage() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
-                        {t('hero.title_start')} <br className="hidden md:block" />
+                        {t('hero.title_start')}{' '}
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800">
                             {t('hero.title_highlight')}
                         </span>
