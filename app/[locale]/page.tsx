@@ -173,42 +173,7 @@ export default function HomePage() {
                     </div>
                 </section>
 
-                {/* Social Proof - Testimonials */}
-                <section className="py-20 bg-blue-900 text-white relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">
-                        <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
-                    </div>
 
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                        <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('social_proof.title')}</h2>
-                            <p className="text-blue-100 text-lg max-w-2xl mx-auto">{t('social_proof.subtitle')}</p>
-                        </div>
-
-                        <div className="grid md:grid-cols-3 gap-8 mb-16">
-                            <TestimonialCard
-                                quote={t('social_proof.t1_quote')}
-                                author={t('social_proof.t1_author')}
-                            />
-                            <TestimonialCard
-                                quote={t('social_proof.t2_quote')}
-                                author={t('social_proof.t2_author')}
-                            />
-                            <TestimonialCard
-                                quote={t('social_proof.t3_quote')}
-                                author={t('social_proof.t3_author')}
-                            />
-                        </div>
-
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-blue-800 pt-12">
-                            <StatItem value={t('social_proof.stat1_value')} label={t('social_proof.stat1_label')} />
-                            <StatItem value={t('social_proof.stat2_value')} label={t('social_proof.stat2_label')} />
-                            <StatItem value={t('social_proof.stat3_value')} label={t('social_proof.stat3_label')} />
-                            <StatItem value="100%" label="GDPR" />
-                        </div>
-                    </div>
-                </section>
 
                 {/* How It Works - Clean Steps */}
                 <section id="how-it-works" className="py-24 bg-gray-50 border-y border-gray-100">
