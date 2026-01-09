@@ -10,6 +10,7 @@ import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
 
 import Link from 'next/link';
 import WelcomeWizard from '@/components/dashboard/WelcomeWizard';
+import PendingApprovals from '@/components/dashboard/PendingApprovals';
 import type { Task, Announcement, Student } from '@/types';
 
 interface DashboardViewProps {
@@ -174,9 +175,43 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         .sort((a, b) => a.nextBirthday.getTime() - b.nextBirthday.getTime())
         .slice(0, 3);
 
+    // --- SHOW BLOCKING "PENDING APPROVAL" UI ---
+    if (parentLink && parentLink.status === 'pending' && !isAdmin) {
+        return (
+            <div className="min-h-screen p-4 pb-24 pt-24 max-w-lg mx-auto flex flex-col items-center justify-center space-y-6 text-center animate-in fade-in duration-500">
+                <div className="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-2">
+                    <UserPlus className="text-amber-500" size={40} />
+                </div>
+
+                <h1 className="text-3xl font-bold text-gray-900">Beðið eftir samþykki</h1>
+                <p className="text-lg text-gray-600">
+                    Beiðni þín um að tengjast {displayClassName} hefur verið send.
+                    <br /><br />
+                    Foreldrið sem skráði barnið þarf að samþykkja beiðnina áður en þú færð aðgang.
+                </p>
+
+                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full">
+                    <p className="text-sm text-gray-500 mb-4">
+                        Þú færð aðgang um leið og beiðnin er samþykkt.
+                    </p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        className="w-full bg-amber-500 text-white py-3 rounded-xl font-bold hover:bg-amber-600 transition-all"
+                    >
+                        Endurhlaða síðu
+                    </button>
+                    <button
+                        onClick={() => router.push(`/${locale}/user/profile`)}
+                        className="mt-4 text-sm text-gray-400 hover:text-gray-600 underline"
+                    >
+                        Fara á minn prófíl
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     // --- SHOW BLOCKING "CREATE STUDENT" UI IF NO PARENT LINK ---
-    // Exception: If we just created the class/admin, we still want them to create a student eventually,
-    // but the prompt says "if you don't have a child created... it's blank".
     // Exception: If we just created the class/admin, we still want them to create a student eventually,
     // but the prompt says "if you don't have a child created... it's blank".
     // UPDATED: Admins should NOT be blocked by this. They need to see the dashboard to manage things.
@@ -255,6 +290,11 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                 {/* --- LEFT COLUMN (Main Content) --- */}
                 <div className="lg:col-span-2 space-y-6">
+
+                    {/* Pending Approvals (Only for approved parents) */}
+                    {parentLink && parentLink.status === 'approved' && classId && (
+                        <PendingApprovals classId={classId} myStudentId={parentLink.studentId} />
+                    )}
 
                     {/* Latest Announcement */}
                     {latestAnnouncement && (

@@ -87,25 +87,48 @@ service cloud.firestore {
     // PARENT LINKS (Junction Table)
     // ========================================
     
+    // Helper to check if the current user is an APPROVED parent of the same student in the same class
+    // This allows parents to approve/deny other parents for their own child
+    function isParentOfStudent(classId, studentId) {
+      let myLinkId = request.auth.uid + '_' + classId;
+      return exists(/databases/$(database)/documents/parentLinks/$(myLinkId)) &&
+             get(/databases/$(database)/documents/parentLinks/$(myLinkId)).data.studentId == studentId &&
+             get(/databases/$(database)/documents/parentLinks/$(myLinkId)).data.status == 'approved';
+    }
+
     match /parentLinks/{linkId} {
-      // Users can read their own links
+      // Users can read:
+      // 1. Their own links
+      // 2. Class Admins
+      // 3. Parents of the SAME student (to see pending requests)
       allow read: if isAuthenticated() &&
                      (request.auth.uid == resource.data.userId || 
-                      isClassAdmin(resource.data.classId));
+                      isClassAdmin(resource.data.classId) ||
+                      isParentOfStudent(resource.data.classId, resource.data.studentId));
       
-      // Users can create/update their own links (any status/role for MVP prototype)
-      // Ideally, we would validate 'admin' role against a class secret here.
-      allow create, update: if isAuthenticated() &&
+      // Users can create their own links
+      allow create: if isAuthenticated() &&
                        request.auth.uid == request.resource.data.userId &&
                        linkId == request.resource.data.userId + '_' + request.resource.data.classId;
 
-      // Only admins can approve links (if we enforce that elsewhere)
-      // allow update: if isClassAdmin(resource.data.classId) ...
+      // Users can update:
+      // 1. Their own links (e.g. some profile setting?)
+      // 2. Parents of the SAME student (to switch status from pending -> approved)
+      // 3. Admins
+      allow update: if isAuthenticated() && (
+                       request.auth.uid == request.resource.data.userId || 
+                       isParentOfStudent(resource.data.classId, resource.data.studentId) ||
+                       isClassAdmin(resource.data.classId)
+                    );
       
-      // Users can delete their own pending links, admins can delete any
+      // Users can delete:
+      // 1. Their own links (e.g. leave class)
+      // 2. Parents of the SAME student (to deny request)
+      // 3. Admins
       allow delete: if isAuthenticated() &&
                        (request.auth.uid == resource.data.userId || 
-                        isClassAdmin(resource.data.classId));
+                        isClassAdmin(resource.data.classId) ||
+                        isParentOfStudent(resource.data.classId, resource.data.studentId));
     }
     
     // ========================================

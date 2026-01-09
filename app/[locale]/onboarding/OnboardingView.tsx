@@ -307,6 +307,11 @@ export default function OnboardingView() {
         setJoining(true);
 
         try {
+            // Determine status: Admins are auto-approved, others are pending
+            // We check if user is already an admin of the class OR if they used the admin code just now
+            const isClassAdmin = foundClass.admins?.includes(user.uid) || isAdminCode;
+            const initialStatus = isClassAdmin ? 'approved' : 'pending';
+
             // Create Parent Link
             // We use setDoc to enforce the ID format: userId_classId
             // This is required for security rules (isClassMember) to work correctly
@@ -317,14 +322,20 @@ export default function OnboardingView() {
                 classId: foundClass.id,
                 relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
                 role: isAdminCode ? 'admin' : 'parent', // New Role Logic
-                status: 'approved', // Auto-approve for MVP launch
+                status: initialStatus,
                 createdAt: serverTimestamp(),
             });
 
             // Redirect
             const segments = pathname.split('/');
             const locale = segments[1] || 'is';
-            router.push(`/${locale}/dashboard?welcome=true`);
+
+            if (initialStatus === 'pending') {
+                // Show a message or redirect with a flag to show "Waiting for approval"
+                router.push(`/${locale}/dashboard?pending=true`);
+            } else {
+                router.push(`/${locale}/dashboard?welcome=true`);
+            }
         } catch (err) {
             console.error(err);
             setError('Gat ekki gengið í bekk.');
