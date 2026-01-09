@@ -1,50 +1,53 @@
 /**
- * Logger Utility for Bekkurinn
+ * Environment-Aware Logger
  * 
- * Conditional logging that respects environment.
- * Only shows logs in development mode.
+ * Provides conditional logging based on environment.
+ * - Debug logs only in development
+ * - Errors always logged (for production monitoring)
  */
 
-type LogLevel = 'info' | 'warn' | 'error' | 'debug';
+const isDevelopment = process.env.NODE_ENV === 'development';
 
-class Logger {
-    private isDev = process.env.NODE_ENV === 'development';
+export const logger = {
+    /**
+     * Debug-level logs (verbose, only in development)
+     */
+    debug: isDevelopment ? console.log : () => { },
 
-    info(...args: any[]) {
-        if (this.isDev) {
-            console.log('[INFO]', ...args);
-        }
-    }
+    /**
+     * Info-level logs (important but not critical)
+     */
+    info: isDevelopment ? console.info : () => { },
 
-    warn(...args: any[]) {
-        if (this.isDev) {
-            console.warn('[WARN]', ...args);
-        }
-    }
+    /**
+     * Warning logs (always logged)
+     */
+    warn: console.warn,
 
-    error(...args: any[]) {
-        // Always log errors, even in production
-        console.error('[ERROR]', ...args);
-    }
+    /**
+     * Error logs (always logged, can be sent to monitoring service)
+     */
+    error: (message: string, error?: Error | unknown) => {
+        console.error(message, error);
 
-    debug(...args: any[]) {
-        if (this.isDev) {
-            console.log('[DEBUG]', ...args);
-        }
-    }
+        // TODO: Send to error tracking service in production
+        // if (!isDevelopment && typeof window !== 'undefined') {
+        //     Sentry.captureException(error, { extra: { message } });
+        // }
+    },
+};
 
-    // Special security logger - always logs but sanitizes
-    security(message: string, data?: Record<string, any>) {
-        const sanitized = data ? {
-            ...data,
-            // Remove sensitive fields
-            password: undefined,
-            token: undefined,
-            apiKey: undefined,
-        } : {};
+/**
+ * Performance timer for development debugging
+ */
+export function createTimer(label: string) {
+    if (!isDevelopment) return { end: () => { } };
 
-        console.error('[SECURITY]', message, sanitized);
-    }
+    const start = performance.now();
+    return {
+        end: () => {
+            const duration = performance.now() - start;
+            console.log(`⏱️ ${label}: ${duration.toFixed(2)}ms`);
+        },
+    };
 }
-
-export const logger = new Logger();

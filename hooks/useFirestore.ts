@@ -56,20 +56,29 @@ export function useUserClasses(userId: string | undefined) {
             // CRITICAL: Filter out classes where user is already admin
             const parentClassIds = parentSnap.docs
                 .map(doc => doc.data().classId)
-                .filter(id => {
-                    const isAlreadyAdmin = classesMap.has(id);
-                    return !isAlreadyAdmin;
-                });
+                .filter(id => !classesMap.has(id));
 
-            // Fetch in parallel
-            await Promise.all(parentClassIds.map(async (classId) => {
-                const classDocRef = doc(db, 'classes', classId);
-                const classSnap = await getDoc(classDocRef);
-                if (classSnap.exists()) {
-                    const classData = { id: classSnap.id, ...classSnap.data(), role: 'parent' } as any;
-                    classesMap.set(classSnap.id, classData);
+            // Batch fetch classes (max 10 per query due to Firestore 'in' limit)
+            // This fixes the N+1 query problem
+            if (parentClassIds.length > 0) {
+                // Split into batches of 10 (Firestore 'in' limit)
+                const batches = [];
+                for (let i = 0; i < parentClassIds.length; i += 10) {
+                    batches.push(parentClassIds.slice(i, i + 10));
                 }
-            }));
+
+                await Promise.all(batches.map(async (batch) => {
+                    const batchQuery = query(
+                        collection(db, 'classes'),
+                        where('__name__', 'in', batch)
+                    );
+                    const batchSnap = await getDocs(batchQuery);
+                    batchSnap.docs.forEach(doc => {
+                        const classData = { id: doc.id, ...doc.data(), role: 'parent' } as any;
+                        classesMap.set(doc.id, classData);
+                    });
+                }));
+            }
 
             const result = Array.from(classesMap.values());
             return result;

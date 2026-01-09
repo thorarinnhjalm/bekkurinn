@@ -17,6 +17,7 @@ import {
     QueryConstraint,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { logger } from '@/lib/logger';
 import type {
     Class,
     CreateClassInput,
@@ -44,16 +45,26 @@ import type {
 // ========================================
 
 export async function createUser(data: CreateUserInput): Promise<void> {
-    await setDoc(doc(db, 'users', data.uid), {
-        ...data,
-        createdAt: serverTimestamp(),
-    }, { merge: true });
+    try {
+        await setDoc(doc(db, 'users', data.uid), {
+            ...data,
+            createdAt: serverTimestamp(),
+        }, { merge: true });
+    } catch (error) {
+        logger.error('Failed to create user', error);
+        throw new Error('Gat ekki búið til notanda');
+    }
 }
 
 export async function getUser(uid: string): Promise<User | null> {
-    const docSnap = await getDoc(doc(db, 'users', uid));
-    if (!docSnap.exists()) return null;
-    return { ...docSnap.data(), uid: docSnap.id } as User;
+    try {
+        const docSnap = await getDoc(doc(db, 'users', uid));
+        if (!docSnap.exists()) return null;
+        return { ...docSnap.data(), uid: docSnap.id } as User;
+    } catch (error) {
+        logger.error('Failed to get user', error);
+        return null;
+    }
 }
 
 export async function updateUser(uid: string, data: Partial<User>): Promise<void> {
@@ -65,11 +76,16 @@ export async function updateUser(uid: string, data: Partial<User>): Promise<void
 // ========================================
 
 export async function createClass(data: CreateClassInput): Promise<string> {
-    const docRef = await addDoc(collection(db, 'classes'), {
-        ...data,
-        createdAt: serverTimestamp(),
-    });
-    return docRef.id;
+    try {
+        const docRef = await addDoc(collection(db, 'classes'), {
+            ...data,
+            createdAt: serverTimestamp(),
+        });
+        return docRef.id;
+    } catch (error) {
+        logger.error('Failed to create class', error);
+        throw new Error('Gat ekki búið til bekk');
+    }
 }
 
 export async function getClass(classId: string): Promise<Class | null> {

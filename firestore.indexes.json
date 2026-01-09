@@ -13,7 +13,50 @@
                     "order": "DESCENDING"
                 }
             ]
+        },
+        {
+            "collectionGroup": "tasks",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "date",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "announcements",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "students",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "name",
+                    "order": "ASCENDING"
+                }
+            ]
         }
     ],
     "fieldOverrides": []
 }
+```
