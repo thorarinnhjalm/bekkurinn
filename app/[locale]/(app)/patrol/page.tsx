@@ -6,6 +6,8 @@ import { useTasks, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import { Timestamp } from 'firebase/firestore';
+import { EmptyState } from '@/components/ui/EmptyState';
+
 
 /**
  * Patrol Page - Dagatal (Calendar with patrols)
@@ -401,16 +403,25 @@ export default function PatrolPage() {
 
             {/* Empty state */}
             {patrols.length === 0 && events.length === 0 && (
-                <div className="text-center py-12">
-                    <Calendar size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
-                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
-                        Ekkert í dagatalinu enn
-                    </h3>
-                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
-                        Bekkjarformaður mun bæta við viðburðum
-                    </p>
-                </div>
+                isAdmin ? (
+                    <EmptyState
+                        icon={<Calendar size={56} strokeWidth={1.5} />}
+                        title="Ekkert í dagatalinu enn 📅"
+                        description="Bættu við foreldraröltum og viðburðum til að skipuleggja bekkinn.<br/>Foreldrar munu sjá allt hér og geta skráð sig í verkefni með einum smelli!"
+                        actionLabel="Skrá fyrsta röltið"
+                        onAction={() => { setIsCreating(true); setCreateType('rolt'); }}
+                        secondaryLabel="Fara í stillingar"
+                        secondaryHref="/is/settings"
+                    />
+                ) : (
+                    <EmptyState
+                        icon={<Calendar size={56} strokeWidth={1.5} />}
+                        title="Ekkert í dagatalinu enn 📅"
+                        description="Þegar bekkjarformaðurinn bætir við viðburðum og foreldraröltum munt þú sjá þau hér.<br/>Við munum láta þig vita þegar nýtt rölt eða viðburður kemur!"
+                    />
+                )
             )}
+
         </div>
     );
 }

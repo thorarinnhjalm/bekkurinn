@@ -8,6 +8,8 @@ import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { EditAnnouncementModal } from '@/components/modals/EditAnnouncementModal';
 import type { Announcement } from '@/types';
+import { EmptyState } from '@/components/ui/EmptyState';
+
 
 /**
  * Announcements Page - Auglýsingataflan
@@ -315,16 +317,23 @@ export default function AnnouncementsPage() {
 
             {/* Empty state */}
             {announcements.length === 0 && (
-                <div className="text-center py-12">
-                    <MessageSquare size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
-                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
-                        Engar tilkynningar enn
-                    </h3>
-                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
-                        Bekkjarformaður mun birta tilkynningar hér
-                    </p>
-                </div>
+                isAdmin ? (
+                    <EmptyState
+                        icon={<MessageSquare size={56} strokeWidth={1.5} />}
+                        title="Auglýsingataflan er tóm 📢"
+                        description="Deildu fréttum, áminningum og mikilvægum upplýsingum með foreldrum bekkjarins.<br/>Allar tilkynningar birtast hér og allir foreldrar fá strax aðgang."
+                        actionLabel="Skrifa fyrstu tilkynningu"
+                        onAction={() => setIsCreating(true)}
+                    />
+                ) : (
+                    <EmptyState
+                        icon={<MessageSquare size={56} strokeWidth={1.5} />}
+                        title="Engar tilkynningar enn 📭"
+                        description="Þegar bekkjarformaðurinn deilir fréttum munu þær birtast hér.<br/>Þú færð strax tilkynningu þegar eitthvað nýtt kemur."
+                    />
+                )
             )}
+
 
             {/* Edit Modal */}
             {editingAnnouncement && (

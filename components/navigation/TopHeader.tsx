@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -18,6 +18,7 @@ export function TopHeader() {
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const unreadNotifications = 0; // Real notifications coming soon
     const params = useParams();
+    const pathname = usePathname();
     // Default to 'is' if not found, but it should be available in app router
     const locale = params.locale || 'is';
 
@@ -112,6 +113,25 @@ export function TopHeader() {
                                         <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{user.email}</p>
                                     </div>
 
+                                    <div className="px-4 py-2 border-b" style={{ borderColor: 'var(--border-light)' }}>
+                                        <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>Tungumál / Language</p>
+                                        <div className="flex items-center gap-2">
+                                            {['is', 'en', 'pl'].map((l) => (
+                                                <Link
+                                                    key={l}
+                                                    href={`/${l}${pathname ? pathname.replace(/^\/[a-z]{2}/, '') : ''}`}
+                                                    className={`px-2 py-1 text-xs rounded border ${locale === l
+                                                        ? 'bg-nordic-blue text-white border-nordic-blue'
+                                                        : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
+                                                        }`}
+                                                    onClick={() => setShowSettingsMenu(false)}
+                                                >
+                                                    {l.toUpperCase()}
+                                                </Link>
+                                            ))}
+                                        </div>
+                                    </div>
+
                                     <Link
                                         href={`/${locale}/user/profile`}
                                         className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
@@ -144,14 +164,31 @@ export function TopHeader() {
                             )}
                         </div>
                     ) : (
-                        <button
-                            className="tap-target p-2 rounded-lg"
-                            style={{
-                                backgroundColor: 'var(--stone)',
-                            }}
-                        >
-                            <Settings size={20} style={{ color: 'var(--text-primary)' }} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                            {/* Language Switcher for non-logged in users */}
+                            <div className="flex items-center gap-1 bg-stone-100 rounded-lg p-1">
+                                {['is', 'en'].map((l) => (
+                                    <Link
+                                        key={l}
+                                        href={`/${l}${pathname ? pathname.replace(/^\/[a-z]{2}/, '') : ''}`}
+                                        className={`px-2 py-1 text-xs rounded font-medium transition-colors ${locale === l
+                                            ? 'bg-white text-nordic-blue shadow-sm'
+                                            : 'text-gray-500 hover:text-gray-700'
+                                            }`}
+                                    >
+                                        {l.toUpperCase()}
+                                    </Link>
+                                ))}
+                            </div>
+                            <button
+                                className="tap-target p-2 rounded-lg"
+                                style={{
+                                    backgroundColor: 'var(--stone)',
+                                }}
+                            >
+                                <Settings size={20} style={{ color: 'var(--text-primary)' }} />
+                            </button>
+                        </div>
                     )}
                 </div>
             </div>

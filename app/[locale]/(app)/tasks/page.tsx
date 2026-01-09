@@ -9,6 +9,8 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import type { Task } from '@/types';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
+import { EmptyState } from '@/components/ui/EmptyState';
+
 
 /**
  * Tasks Page - Skipulag (Organization/Event Coordination)
@@ -472,16 +474,23 @@ export default function TasksPage() {
 
             {/* Empty state */}
             {displayTasks.length === 0 && (
-                <div className="text-center py-12">
-                    <ListTodo size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
-                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
-                        Engin verkefni enn
-                    </h3>
-                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
-                        Bekkjarformaður mun bæta við viðburðum og verkefnum
-                    </p>
-                </div>
+                isAdmin ? (
+                    <EmptyState
+                        icon={<ListTodo size={56} strokeWidth={1.5} />}
+                        title="Hér er tómt eins og er 📋"
+                        description="Viðburðir og verkefni sem þú býrð til birtast hér.<br/>Byrjaðu með að skrá fyrsta viðburðinn til að skipuleggja bekkinn!"
+                        actionLabel="Stofna fyrsta viðburðinn"
+                        onAction={() => setIsCreating(true)}
+                    />
+                ) : (
+                    <EmptyState
+                        icon={<ListTodo size={56} strokeWidth={1.5} />}
+                        title="Engin verkefni enn 👀"
+                        description="Þegar bekkjarformaðurinn býr til viðburði eða biður um aðstoð munt þú sjá þau hér.<br/>Vertu rólegur – við látum þig vita þegar eitthvað kemur upp!"
+                    />
+                )
             )}
+
 
             {/* Summary Stats (Only if events exist) */}
             {displayTasks.length > 0 && (

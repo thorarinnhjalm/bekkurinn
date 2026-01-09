@@ -10,6 +10,8 @@ import { SCHOOLS } from '@/constants/schools';
 // Import firestore functions directly for the sync logic
 import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config'; // Ensure db is exported from lib/firebase or services
+import { HelpBox } from '@/components/ui/HelpBox';
+
 
 // Calendar Parsing Logic
 function parseICS(icsContent: string) {
@@ -369,6 +371,18 @@ export default function SettingsView() {
                     Vista
                 </button>
             </header>
+
+            {/* Help Box */}
+            <HelpBox
+                title="Vissir þú að...?"
+                variant="tip"
+                tips={[
+                    "Þú getur bætt við fleiri stjórnendum sem geta breytt stillingum og búið til viðburði.",
+                    "Skóladagatalið sækir sjálfkrafa frídaga og viðburði úr dagskrá skólans.",
+                    "Boðskóðinn má deila með öllum foreldrum í bekknum til að bjóða þeim í kerfið."
+                ]}
+            />
+
 
             {/* Invite Code Section */}
             <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 relative overflow-hidden">
