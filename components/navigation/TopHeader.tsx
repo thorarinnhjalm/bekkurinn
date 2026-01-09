@@ -1,11 +1,13 @@
 'use client';
 
-import { Bell, Settings, LogOut, User as UserIcon } from 'lucide-react';
+import { Bell, Settings, LogOut, User as UserIcon, Check, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useState } from 'react';
-import { useParams, usePathname } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
+import { useNotifications } from '@/hooks/useNotifications';
+import { Timestamp } from 'firebase/firestore';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -15,8 +17,10 @@ import { useParams, usePathname } from 'next/navigation';
 
 export function TopHeader() {
     const { user, signOut } = useAuth();
+    const router = useRouter();
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
-    const unreadNotifications = 0; // Real notifications coming soon
+    const [showNotifications, setShowNotifications] = useState(false);
+    const { notifications, unreadCount, markAsRead, markAllAsRead, createNotification, loading } = useNotifications();
     const params = useParams();
     const pathname = usePathname();
     // Default to 'is' if not found, but it should be available in app router
@@ -25,6 +29,24 @@ export function TopHeader() {
     const handleSignOut = async () => {
         await signOut();
         setShowSettingsMenu(false);
+    };
+
+    const handleNotificationClick = async (id: string, link?: string) => {
+        await markAsRead(id);
+        if (link) {
+            router.push(link);
+            setShowNotifications(false);
+        }
+    };
+
+    const sendTestNotification = async () => {
+        if (!user) return;
+        await createNotification(
+            user.uid,
+            'Velkomin(n) í Bekkinn!',
+            'Þetta er prufu-tilkynning. Kerfið virkar!',
+            'system'
+        );
     };
 
     return (
@@ -54,25 +76,43 @@ export function TopHeader() {
                 {/* Actions */}
                 <div className="flex items-center gap-2">
                     {/* Notifications */}
-                    <button
-                        className="relative tap-target p-2 rounded-lg"
-                        style={{
-                            backgroundColor: 'var(--stone)',
-                        }}
-                    >
-                        <Bell size={20} style={{ color: 'var(--text-primary)' }} />
-                        {unreadNotifications > 0 && (
+                    <div className="relative">
+                        <button
+                            onClick={() => setShowNotifications(!showNotifications)}
+                            className="relative tap-target p-2 rounded-lg"
+                            style={{
+                                backgroundColor: showNotifications ? 'var(--nordic-blue-light)' : 'var(--stone)',
+                                color: showNotifications ? 'white' : 'inherit'
+                            }}
+                        >
+                            <Bell size={20} style={{ color: showNotifications ? 'white' : 'var(--text-primary)' }} />
+                            {unreadCount > 0 && (
+                                <div
+                                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
+                                    style={{
+                                        backgroundColor: 'var(--amber)',
+                                        color: 'white'
+                                    }}
+                                >
+                                    {unreadCount}
+                                </div>
+                            )}
+                        </button>
+
+                        {showNotifications && (
                             <div
-                                className="absolute -top-1 -right-1 w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold"
-                                style={{
-                                    backgroundColor: 'var(--amber)',
-                                    color: 'white'
-                                }}
+                                className="absolute right-0 mt-2 w-80 nordic-card shadow-lg z-50 overflow-hidden max-h-[80vh] flex flex-col"
                             >
-                                {unreadNotifications}
+                                <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
+                                    <h3 className="font-semibold text-sm">Tilkynningar</h3>
+                                </div>
+                                <div className="p-8 flex flex-col items-center justify-center text-center text-gray-500">
+                                    <Bell size={32} className="mb-2 opacity-20" />
+                                    <p className="text-sm">Engar nýjar tilkynningar</p>
+                                </div>
                             </div>
                         )}
-                    </button>
+                    </div>
 
                     {/* User / Settings */}
                     {user ? (

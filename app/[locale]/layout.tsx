@@ -47,6 +47,15 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
             type: 'website',
         },
         keywords: ['bekkjarfulltrúi', 'skóli', 'rölt', 'foreldrastarf', 'bekkurinn', 'class representative', 'school app'],
+        manifest: '/manifest.json',
+        appleWebApp: {
+            capable: true,
+            statusBarStyle: 'default',
+            title: 'Bekkurinn',
+        },
+        formatDetection: {
+            telephone: false,
+        },
     };
 }
 

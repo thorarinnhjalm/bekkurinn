@@ -224,7 +224,10 @@ export default function SettingsView() {
         try {
             // 1. Fetch ICS via proxy
             const res = await fetch(`/api/proxy-calendar?url=${encodeURIComponent(formData.calendarUrl)}`);
-            if (!res.ok) throw new Error('Gat ekki sótt dagatal');
+            if (!res.ok) {
+                const data = await res.json().catch(() => ({}));
+                throw new Error(data.error || 'Gat ekki sótt dagatal');
+            }
             const icsText = await res.text();
 
             // 2. Parse ICS
@@ -271,7 +274,10 @@ export default function SettingsView() {
 
         } catch (error) {
             console.error(error);
-            setSyncStatus('Villa kom upp!');
+            const message = error instanceof Error ? error.message : 'Villa kom upp!';
+            setSyncStatus(message);
+            // Reset status after delay
+            setTimeout(() => setSyncStatus(null), 5000);
         } finally {
             setIsSyncing(false);
         }
@@ -367,7 +373,7 @@ export default function SettingsView() {
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="hidden sm:flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-lg hover:bg-nordic-blue-dark transition-colors disabled:opacity-50 shadow-sm"
+                    className="hidden sm:flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 shadow-sm border-none"
                 >
                     {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                     Vista
@@ -409,7 +415,7 @@ export default function SettingsView() {
                                 type="text"
                                 value={formData.joinCode}
                                 readOnly
-                                className="text-2xl sm:text-3xl font-mono font-bold text-nordic-blue tracking-widest bg-transparent outline-none w-full uppercase text-center select-all"
+                                className="text-2xl sm:text-3xl font-mono font-bold text-nordic-blue tracking-widest bg-white border border-blue-200 rounded-lg outline-none w-full uppercase text-center select-all p-2"
                                 placeholder="KÓÐI"
                             />
                         </div>
@@ -454,7 +460,7 @@ export default function SettingsView() {
                                     type="text"
                                     value={formData.parentTeamCode}
                                     readOnly
-                                    className="text-xl sm:text-2xl font-mono font-bold text-purple-800 tracking-widest bg-transparent outline-none w-full uppercase text-center select-all break-all"
+                                    className="text-xl sm:text-2xl font-mono font-bold text-purple-800 tracking-widest bg-white border border-purple-200 rounded-lg outline-none w-full uppercase text-center select-all break-all p-2"
                                 />
                             </div>
                             <div className="flex gap-2 w-full sm:w-auto">
@@ -655,7 +661,7 @@ export default function SettingsView() {
                     <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-lg hover:bg-nordic-blue-dark transition-colors disabled:opacity-50"
+                        className="flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 border-none"
                     >
                         {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                         Vista Breytingar

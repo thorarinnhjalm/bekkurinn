@@ -129,7 +129,9 @@ export async function GET(request: NextRequest) {
         }
 
         if (!response.ok) {
-            throw new Error(`Failed to fetch calendar: ${response.statusText}`);
+            return NextResponse.json({
+                error: `Gat ekki sótt dagatal: ${response.status} ${response.statusText}`
+            }, { status: response.status });
         }
 
         // SECURITY: Validate content type

@@ -170,5 +170,25 @@ service cloud.firestore {
       // Only admins can delete announcements
       allow delete: if isClassAdmin(resource.data.classId);
     }
+    // ========================================
+    // NOTIFICATIONS
+    // ========================================
+    
+    match /notifications/{notificationId} {
+      // Users can only read their own notifications
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      
+      // Users can update (mark as read) their own notifications
+      allow update: if isAuthenticated() && 
+                       resource.data.userId == request.auth.uid &&
+                       request.resource.data.userId == request.auth.uid; // Cannot change owner
+      
+      // System/Admin creation (for now, allow auth users to create for themselves or others if logic permits, 
+      // but ideally this is Cloud Functions. For testing, we allow creation.)
+      allow create: if isAuthenticated();
+      
+      // Users can delete their notifications
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
   }
 }

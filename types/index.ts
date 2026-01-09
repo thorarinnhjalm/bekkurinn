@@ -136,3 +136,20 @@ export type CreateParentLinkInput = Omit<ParentLink, 'id' | 'createdAt' | 'appro
 export type CreateTaskInput = Omit<Task, 'id' | 'createdAt' | 'slotsFilled' | 'volunteers'>;
 
 export type CreateAnnouncementInput = Omit<Announcement, 'id' | 'createdAt'>;
+
+// ========================================
+// NOTIFICATIONS
+// ========================================
+
+export type NotificationType = 'system' | 'reminder' | 'announcement';
+
+export interface Notification {
+    id: string;
+    userId: string;
+    title: string;
+    message: string;
+    type: NotificationType;
+    link?: string; // Deep link to content
+    read: boolean;
+    createdAt: Timestamp;
+}
