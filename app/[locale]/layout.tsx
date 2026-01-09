@@ -7,6 +7,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ToastContainer } from '@/components/ui/Toast';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages } from 'next-intl/server';
+import StructuredData from '@/components/StructuredData';
 
 /**
  * Locale Layout
@@ -72,6 +73,7 @@ export default async function LocaleLayout({
             <QueryProvider>
                 <NextIntlClientProvider messages={messages} locale={locale}>
                     <AuthProvider>
+                        <StructuredData locale={locale} />
                         {children}
                         <ToastContainer />
                     </AuthProvider>

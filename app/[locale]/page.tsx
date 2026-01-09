@@ -75,176 +75,215 @@ export default function HomePage() {
             </nav>
 
             {/* Hero Section with Soft Gradient Background */}
-            <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-                {/* Background Decor */}
-                <div className="absolute top-0 inset-x-0 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-white to-white -z-10" />
-                <div className="absolute top-20 right-0 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
-                <div className="absolute top-40 left-0 w-[600px] h-[600px] bg-amber-50/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
+            <main>
+                <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+                    {/* Background Decor */}
+                    <div className="absolute top-0 inset-x-0 h-full bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-50 via-white to-white -z-10" />
+                    <div className="absolute top-20 right-0 w-[800px] h-[800px] bg-blue-100/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
+                    <div className="absolute top-40 left-0 w-[600px] h-[600px] bg-amber-50/40 rounded-full blur-3xl -z-10 opacity-50 mix-blend-multiply filter" />
 
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
-                    <div className="flex justify-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
-                            <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                        <div className="flex justify-center">
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-700 text-sm font-medium mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                                <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                </span>
+                                {t('hero.badge')}
+                            </div>
+                        </div>
+
+                        <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] text-center animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
+                            {t('hero.title_start')}{' '}
+                            <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 inline-block">
+                                {t('hero.title_highlight')}
                             </span>
-                            {t('hero.badge')}
+                        </h1>
+
+                        <div className="flex justify-center w-full mb-16">
+                            <p className="text-lg md:text-xl text-gray-500 max-w-xl leading-normal font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
+                                {t.rich('hero.subtitle', richText)}
+                            </p>
+                        </div>
+
+
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
+                            <Link
+                                href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
+                                className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
+                            >
+                                {t('hero.cta_primary')} <ArrowRight size={20} />
+                            </Link>
+                            <Link
+                                href="#features"
+                                className="w-full sm:w-auto px-10 py-4 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all"
+                            >
+                                {t('hero.cta_secondary')}
+                            </Link>
                         </div>
                     </div>
+                </section>
 
-                    <h1 className="text-5xl md:text-7xl font-black text-gray-900 tracking-tight mb-8 leading-[1.05] text-center animate-in fade-in slide-in-from-bottom-5 duration-700 delay-100">
-                        {t('hero.title_start')}{' '}
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 inline-block">
-                            {t('hero.title_highlight')}
-                        </span>
-                    </h1>
+                {/* Features Grid with Modern Cards */}
+                <section id="features" className="py-12 bg-white relative">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center max-w-3xl mx-auto mb-20">
+                            <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase mb-2">{t('features.title')}</h2>
+                            <p className="text-3xl md:text-4xl font-bold text-gray-900">{t('features.subtitle')}</p>
+                        </div>
 
-                    <div className="flex justify-center w-full mb-16">
-                        <p className="text-lg md:text-xl text-gray-500 max-w-xl leading-normal font-light text-center animate-in fade-in slide-in-from-bottom-6 duration-700 delay-200">
-                            {t.rich('hero.subtitle', richText)}
-                        </p>
+                        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <FeatureCard
+                                icon={<Calendar className="text-blue-600" size={28} />}
+                                title={t('features.f1_title')}
+                                desc={t('features.f1_desc')}
+                                color="bg-blue-50"
+                            />
+                            <FeatureCard
+                                icon={<Shield className="text-green-600" size={28} />}
+                                title={t('features.f2_title')}
+                                desc={t('features.f2_desc')}
+                                color="bg-green-50"
+                            />
+                            <FeatureCard
+                                icon={<Users className="text-purple-600" size={28} />}
+                                title={t('features.f3_title')}
+                                desc={t('features.f3_desc')}
+                                color="bg-purple-50"
+                            />
+                            <FeatureCard
+                                icon={<Lock className="text-amber-600" size={28} />}
+                                title={t('features.f4_title')}
+                                desc={t('features.f4_desc')}
+                                color="bg-amber-50"
+                            />
+                            <FeatureCard
+                                icon={<CheckCircle2 className="text-teal-600" size={28} />}
+                                title={t('features.f5_title')}
+                                desc={t('features.f5_desc')}
+                                color="bg-teal-50"
+                            />
+                            <FeatureCard
+                                icon={<Coffee className="text-indigo-600" size={28} />}
+                                title={t('features.f6_title')}
+                                desc={t('features.f6_desc')}
+                                color="bg-indigo-50"
+                            />
+                        </div>
+                    </div>
+                </section>
+
+                {/* Social Proof - Testimonials */}
+                <section className="py-20 bg-blue-900 text-white relative overflow-hidden">
+                    <div className="absolute top-0 left-0 w-full h-full overflow-hidden opacity-10">
+                        <div className="absolute top-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
+                        <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-400 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2"></div>
                     </div>
 
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('social_proof.title')}</h2>
+                            <p className="text-blue-100 text-lg max-w-2xl mx-auto">{t('social_proof.subtitle')}</p>
+                        </div>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
-                        <Link
-                            href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                            className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
-                        >
-                            {t('hero.cta_primary')} <ArrowRight size={20} />
-                        </Link>
-                        <Link
-                            href="#features"
-                            className="w-full sm:w-auto px-10 py-4 bg-white text-gray-700 border-2 border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 hover:border-gray-300 transition-all"
-                        >
-                            {t('hero.cta_secondary')}
-                        </Link>
+                        <div className="grid md:grid-cols-3 gap-8 mb-16">
+                            <TestimonialCard
+                                quote={t('social_proof.t1_quote')}
+                                author={t('social_proof.t1_author')}
+                            />
+                            <TestimonialCard
+                                quote={t('social_proof.t2_quote')}
+                                author={t('social_proof.t2_author')}
+                            />
+                            <TestimonialCard
+                                quote={t('social_proof.t3_quote')}
+                                author={t('social_proof.t3_author')}
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-blue-800 pt-12">
+                            <StatItem value={t('social_proof.stat1_value')} label={t('social_proof.stat1_label')} />
+                            <StatItem value={t('social_proof.stat2_value')} label={t('social_proof.stat2_label')} />
+                            <StatItem value={t('social_proof.stat3_value')} label={t('social_proof.stat3_label')} />
+                            <StatItem value="100%" label="GDPR" />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Features Grid with Modern Cards */}
-            <section id="features" className="py-12 bg-white relative">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center max-w-3xl mx-auto mb-20">
-                        <h2 className="text-base text-blue-600 font-semibold tracking-wide uppercase mb-2">{t('features.title')}</h2>
-                        <p className="text-3xl md:text-4xl font-bold text-gray-900">{t('features.subtitle')}</p>
+                {/* How It Works - Clean Steps */}
+                <section id="how-it-works" className="py-24 bg-gray-50 border-y border-gray-100">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <div className="text-center mb-16">
+                            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('how.title')}</h2>
+                            <p className="text-xl text-gray-600">{t('how.subtitle')}</p>
+                        </div>
+
+                        <div className="grid md:grid-cols-3 gap-12 relative">
+                            {/* Connecting Line (Desktop) */}
+                            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gray-200 -z-0" />
+
+                            <StepCard number="1" title={t('how.step1_title')} desc={t('how.step1_desc')} />
+                            <StepCard number="2" title={t('how.step2_title')} desc={t('how.step2_desc')} />
+                            <StepCard number="3" title={t('how.step3_title')} desc={t('how.step3_desc')} />
+                        </div>
+
+                        <div className="mt-16 text-center">
+                            <Link
+                                href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
+                                className="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-xl text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors"
+                            >
+                                {t('how.cta')}
+                            </Link>
+                            <p className="mt-4 text-sm text-gray-500">{t('how.fine_print')}</p>
+                        </div>
                     </div>
+                </section>
 
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        <FeatureCard
-                            icon={<Calendar className="text-blue-600" size={28} />}
-                            title={t('features.f1_title')}
-                            desc={t('features.f1_desc')}
-                            color="bg-blue-50"
-                        />
-                        <FeatureCard
-                            icon={<Shield className="text-green-600" size={28} />}
-                            title={t('features.f2_title')}
-                            desc={t('features.f2_desc')}
-                            color="bg-green-50"
-                        />
-                        <FeatureCard
-                            icon={<Users className="text-purple-600" size={28} />}
-                            title={t('features.f3_title')}
-                            desc={t('features.f3_desc')}
-                            color="bg-purple-50"
-                        />
-                        <FeatureCard
-                            icon={<Lock className="text-amber-600" size={28} />}
-                            title={t('features.f4_title')}
-                            desc={t('features.f4_desc')}
-                            color="bg-amber-50"
-                        />
-                        <FeatureCard
-                            icon={<CheckCircle2 className="text-teal-600" size={28} />}
-                            title={t('features.f5_title')}
-                            desc={t('features.f5_desc')}
-                            color="bg-teal-50"
-                        />
-                        <FeatureCard
-                            icon={<Coffee className="text-indigo-600" size={28} />}
-                            title={t('features.f6_title')}
-                            desc={t('features.f6_desc')}
-                            color="bg-indigo-50"
-                        />
+                {/* FAQ Section */}
+                <section id="faq" className="py-24 bg-white">
+                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                        <h2 className="text-3xl font-bold text-gray-900 text-center mb-16">{t('faq.title')}</h2>
+                        <div className="space-y-6">
+                            <FaqItem q={t('faq.q1')} a={t('faq.a1')} />
+                            <FaqItem q={t('faq.q2')} a={t('faq.a2')} />
+                            <FaqItem q={t('faq.q3')} a={t('faq.a3')} />
+                            <FaqItem q={t('faq.q4')} a={t('faq.a4')} />
+                            <FaqItem q={t('faq.q5')} a={t('faq.a5')} />
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* How It Works - Clean Steps */}
-            <section id="how-it-works" className="py-24 bg-gray-50 border-y border-gray-100">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div className="text-center mb-16">
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{t('how.title')}</h2>
-                        <p className="text-xl text-gray-600">{t('how.subtitle')}</p>
+                {/* Final CTA - High Impact */}
+                <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
+                    <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+                    <div className="max-w-4xl mx-auto px-4 text-center relative z-10 flex flex-col items-center w-full">
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6 !text-white">{t('cta_final.title')}</h2>
+                        <p className="text-xl !text-gray-300 mb-10 max-w-2xl mx-auto">{t('cta_final.subtitle')}</p>
+                        <div className="flex flex-col items-center gap-4">
+                            <Link
+                                href={`/${locale}/onboarding`}
+                                className="px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
+                            >
+                                {t('cta_final.button')}
+                            </Link>
+                            <p className="text-sm !text-gray-400">{t('cta_final.fine_print')}</p>
+                        </div>
                     </div>
+                </section>
 
-                    <div className="grid md:grid-cols-3 gap-12 relative">
-                        {/* Connecting Line (Desktop) */}
-                        <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gray-200 -z-0" />
-
-                        <StepCard number="1" title={t('how.step1_title')} desc={t('how.step1_desc')} />
-                        <StepCard number="2" title={t('how.step2_title')} desc={t('how.step2_desc')} />
-                        <StepCard number="3" title={t('how.step3_title')} desc={t('how.step3_desc')} />
+                {/* Footer */}
+                <footer className="bg-gray-50 border-t border-gray-200 py-12">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
+                        <div className="flex items-center justify-center gap-2 mb-4">
+                            <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 font-bold">B</div>
+                            <span className="font-bold text-lg text-gray-900">Bekkurinn</span>
+                        </div>
+                        <p className="mb-4">{t('footer.copyright')}</p>
                     </div>
-
-                    <div className="mt-16 text-center">
-                        <Link
-                            href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                            className="inline-flex items-center justify-center px-8 py-4 text-base font-bold rounded-xl text-blue-700 bg-blue-50 border border-blue-200 hover:bg-blue-100 transition-colors"
-                        >
-                            {t('how.cta')}
-                        </Link>
-                        <p className="mt-4 text-sm text-gray-500">{t('how.fine_print')}</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* FAQ Section */}
-            <section id="faq" className="py-24 bg-white">
-                <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <h2 className="text-3xl font-bold text-gray-900 text-center mb-16">{t('faq.title')}</h2>
-                    <div className="space-y-6">
-                        <FaqItem q={t('faq.q1')} a={t('faq.a1')} />
-                        <FaqItem q={t('faq.q2')} a={t('faq.a2')} />
-                        <FaqItem q={t('faq.q3')} a={t('faq.a3')} />
-                        <FaqItem q={t('faq.q4')} a={t('faq.a4')} />
-                        <FaqItem q={t('faq.q5')} a={t('faq.a5')} />
-                    </div>
-                </div>
-            </section>
-
-            {/* Final CTA - High Impact */}
-            <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
-                <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl"></div>
-                <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl"></div>
-
-                <div className="max-w-4xl mx-auto px-4 text-center relative z-10 flex flex-col items-center w-full">
-                    <h2 className="text-4xl md:text-5xl font-bold mb-6 !text-white">{t('cta_final.title')}</h2>
-                    <p className="text-xl !text-gray-300 mb-10 max-w-2xl mx-auto">{t('cta_final.subtitle')}</p>
-                    <div className="flex flex-col items-center gap-4">
-                        <Link
-                            href={`/${locale}/onboarding`}
-                            className="px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
-                        >
-                            {t('cta_final.button')}
-                        </Link>
-                        <p className="text-sm !text-gray-400">{t('cta_final.fine_print')}</p>
-                    </div>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="bg-gray-50 border-t border-gray-200 py-12">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-gray-500 text-sm">
-                    <div className="flex items-center justify-center gap-2 mb-4">
-                        <div className="w-8 h-8 bg-gray-200 rounded-lg flex items-center justify-center text-gray-600 font-bold">B</div>
-                        <span className="font-bold text-lg text-gray-900">Bekkurinn</span>
-                    </div>
-                    <p className="mb-4">{t('footer.copyright')}</p>
-                </div>
-            </footer>
+                </footer>
+            </main>
         </div>
     );
 }
@@ -291,6 +330,29 @@ function FaqItem({ q, a }: any) {
                 <span>{q}</span>
             </h3>
             <p className="text-gray-600 leading-relaxed text-sm max-w-2xl">{a}</p>
+        </div>
+    );
+}
+
+function TestimonialCard({ quote, author }: { quote: string; author: string }) {
+    return (
+        <div className="bg-blue-800/50 backdrop-blur-sm p-8 rounded-2xl border border-blue-700/50 hover:bg-blue-800 transition-colors">
+            <div className="flex gap-1 text-yellow-400 mb-4">
+                {[...Array(5)].map((_, i) => (
+                    <svg key={i} className="w-5 h-5 fill-current" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" /></svg>
+                ))}
+            </div>
+            <p className="text-lg text-blue-50 italic mb-6">"{quote}"</p>
+            <p className="font-bold text-white">{author}</p>
+        </div>
+    );
+}
+
+function StatItem({ value, label }: { value: string; label: string }) {
+    return (
+        <div className="text-center">
+            <div className="text-3xl md:text-4xl font-bold text-white mb-1">{value}</div>
+            <div className="text-blue-300 text-sm font-medium uppercase tracking-wider">{label}</div>
         </div>
     );
 }

@@ -102,6 +102,22 @@
             "f6_title": "Less administration time",
             "f6_desc": "You volunteered to help, not for a full-time job. We give you your time back."
         },
+        "social_proof": {
+            "title": "Parents love Bekkurinn",
+            "subtitle": "See what other class representatives have to say",
+            "t1_quote": "Finally a system that works. I was tired of chasing people on Facebook.",
+            "t1_author": "Hildur, Class Rep (4th Grade)",
+            "t2_quote": "Patrol scheduling used to be a nightmare. Now it flows smoothly and everyone participates.",
+            "t2_author": "Gunnar, Parent (2nd Grade)",
+            "t3_quote": "So convenient to have the class directory in my phone. Highly recommended.",
+            "t3_author": "Anna, Mother (7th Grade)",
+            "stat1_value": "100+",
+            "stat1_label": "Classes",
+            "stat2_value": "2000+",
+            "stat2_label": "Parents",
+            "stat3_value": "5000+",
+            "stat3_label": "Patrol Shifts"
+        },
         "how": {
             "title": "Three simple steps",
             "subtitle": "Takes less than 2 minutes to start",
