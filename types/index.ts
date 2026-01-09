@@ -30,6 +30,7 @@ export interface User {
 export interface Class {
     id: string;
     joinCode: string; // Unique, e.g., "SALA-4B"
+    parentTeamCode?: string; // Admin-only invite code
     name: string; // e.g., "Salaskóli 4. Bekkur"
     schoolName: string;
     grade: number;

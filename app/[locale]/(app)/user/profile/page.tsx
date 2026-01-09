@@ -15,6 +15,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     const [userPhone, setUserPhone] = useState('');
     const [userIsPhoneVisible, setUserIsPhoneVisible] = useState(false);
     const [userPhotoUrl, setUserPhotoUrl] = useState('');
+    const [userAddress, setUserAddress] = useState('');
 
     const [links, setLinks] = useState<any[]>([]);
     const [students, setStudents] = useState<any[]>([]);
@@ -52,6 +53,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                 if (d.isPhoneVisible !== undefined) setUserIsPhoneVisible(d.isPhoneVisible);
                 if (d.photoURL) setUserPhotoUrl(d.photoURL);
                 else if (user.photoURL) setUserPhotoUrl(user.photoURL);
+                if (d.address) setUserAddress(d.address);
             } else if (user.photoURL) {
                 setUserPhotoUrl(user.photoURL);
             }
@@ -65,7 +67,8 @@ export default function UserProfilePage({ params }: { params: { locale: string }
             await setDoc(doc(db, 'users', user.uid), {
                 photoURL: userPhotoUrl,
                 phone: userPhone,
-                isPhoneVisible: userIsPhoneVisible
+                isPhoneVisible: userIsPhoneVisible,
+                address: userAddress
             }, { merge: true });
             alert('Upplýsingar vistaðar!');
         } catch (e) {
@@ -80,10 +83,31 @@ export default function UserProfilePage({ params }: { params: { locale: string }
         setIsSaving(true);
         try {
             await updateDoc(doc(db, 'students', studentId), { photoUrl: url });
+            // Update local state
+            setStudents(prev => prev.map(s => s.id === studentId ? { ...s, photoUrl: url } : s));
             alert('Mynd barns uppfærð!');
         } catch (e) {
             console.error(e);
             alert('Villa við vistun á mynd barns');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleSaveStudentName = async (studentId: string, newName: string) => {
+        if (!newName.trim()) {
+            alert('Nafn má ekki vera tómt.');
+            return;
+        }
+        setIsSaving(true);
+        try {
+            await updateDoc(doc(db, 'students', studentId), { name: newName });
+            // Update local state
+            setStudents(prev => prev.map(s => s.id === studentId ? { ...s, name: newName } : s));
+            alert('Nafn uppfært!');
+        } catch (e) {
+            console.error(e);
+            alert('Villa við vistun á nafni');
         } finally {
             setIsSaving(false);
         }
@@ -152,6 +176,30 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                         </div>
 
                         <div>
+                            <label className="block text-sm font-medium text-gray-700">Heimilisfang</label>
+                            <input
+                                type="text"
+                                value={userAddress}
+                                onChange={(e) => setUserAddress(e.target.value)}
+                                placeholder="t.d. Strandgata 12, Kópavogur"
+                                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nordic-blue outline-none"
+                            />
+                            {userAddress && (
+                                <a
+                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(userAddress)}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-nordic-blue hover:underline mt-1 inline-block"
+                                >
+                                    🗺️ Opna í kortum
+                                </a>
+                            )}
+                            <p className="text-xs text-gray-500 mt-1">
+                                Þetta heimilisfang birtist með kort-tengli í bekkjarskránni.
+                            </p>
+                        </div>
+
+                        <div>
                             <label className="block text-sm font-medium text-gray-700">Mynd (Slóð / URL)</label>
                             <div className="flex gap-2">
                                 <input
@@ -191,6 +239,8 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                             key={student.id}
                             student={student}
                             onSave={(url) => handleSaveStudentPhoto(student.id, url)}
+                            onSaveName={(name) => handleSaveStudentName(student.id, name)}
+                            userId={user?.uid || ''}
                         />
                     ))
                 ) : (
@@ -223,10 +273,15 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     );
 }
 
-function StudentCard({ student, onSave }: { student: any, onSave: (url: string) => void }) {
+function StudentCard({ student, onSave, onSaveName, userId }: {
+    student: any,
+    onSave: (url: string) => void,
+    onSaveName: (name: string) => void,
+    userId: string
+}) {
     const [photoUrl, setPhotoUrl] = useState(student.photoUrl || '');
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [isEditing, setIsEditing] = useState(false);
+    const [isEditingName, setIsEditingName] = useState(false);
+    const [editedName, setEditedName] = useState(student.name);
 
     return (
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-6 items-start">
@@ -240,10 +295,62 @@ function StudentCard({ student, onSave }: { student: any, onSave: (url: string) 
 
             <div className="flex-1 w-full space-y-3">
                 <div className="flex justify-between items-start">
-                    <div>
-                        <h3 className="font-bold text-lg">{student.name}</h3>
+                    <div className="flex-1">
+                        {isEditingName ? (
+                            <div className="flex gap-2 items-center">
+                                <input
+                                    type="text"
+                                    value={editedName}
+                                    onChange={(e) => setEditedName(e.target.value)}
+                                    className="text-lg font-bold border-b-2 border-nordic-blue outline-none flex-1"
+                                    autoFocus
+                                />
+                                <button
+                                    onClick={() => {
+                                        onSaveName(editedName);
+                                        setIsEditingName(false);
+                                    }}
+                                    className="text-green-600 hover:text-green-700 text-sm font-medium"
+                                >
+                                    ✓ Vista
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setEditedName(student.name);
+                                        setIsEditingName(false);
+                                    }}
+                                    className="text-gray-500 hover:text-gray-700 text-sm"
+                                >
+                                    ✗
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-2">
+                                <h3 className="font-bold text-lg">{student.name}</h3>
+                                <button
+                                    onClick={() => setIsEditingName(true)}
+                                    className="text-gray-400 hover:text-nordic-blue text-sm"
+                                    title="Breyta nafni"
+                                >
+                                    ✎
+                                </button>
+                            </div>
+                        )}
                         <p className="text-sm text-gray-500">Nemandi</p>
                     </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Mynd barns</label>
+                    <ImageUploader
+                        currentImageUrl={photoUrl}
+                        onUploadComplete={(url) => {
+                            setPhotoUrl(url);
+                            onSave(url);
+                        }}
+                        storagePath={`students/${student.id}/profile`}
+                        label=""
+                    />
                 </div>
 
                 <div>

@@ -100,7 +100,8 @@ export default function SettingsView() {
         section: '',
         name: '',
         calendarUrl: '',
-        joinCode: ''
+        joinCode: '',
+        parentTeamCode: ''
     });
 
     // Populate form when data loads
@@ -112,7 +113,8 @@ export default function SettingsView() {
                 section: classData.section || '',
                 name: classData.name || '',
                 calendarUrl: classData.calendarUrl || '',
-                joinCode: classData.joinCode || ''
+                joinCode: classData.joinCode || '',
+                parentTeamCode: classData.parentTeamCode || ''
             });
         }
     }, [classData]);
@@ -385,39 +387,103 @@ export default function SettingsView() {
 
 
             {/* Invite Code Section */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-nordic-blue" />
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h2 className="text-lg font-semibold text-gray-900 mb-1">Boðskóði fyrir foreldra</h2>
-                        <p className="text-sm text-gray-500 max-w-md">
-                            Sendu þennan kóða á aðra foreldra svo þeir geti gengið í bekkinn.
-                        </p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                        <div className="bg-stone-50 px-4 py-2 rounded-lg border border-stone-200">
+            <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 space-y-6">
+                <div>
+                    <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center gap-2">
+                        <Users className="text-nordic-blue" size={24} />
+                        Boðskóðar fyrir foreldra
+                    </h2>
+                    <p className="text-sm text-gray-500">
+                        Deildu þessum kóðum eða tenglum með foreldrum í bekknum.
+                    </p>
+                </div>
+
+                {/* Standard Join Code */}
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
+                    <label className="block text-sm font-semibold text-blue-900 uppercase tracking-wider mb-2">
+                        Almennur Aðgangskóði
+                    </label>
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                        <div className="bg-white px-4 py-3 rounded-lg border border-blue-200 flex-1 min-w-0">
                             <input
                                 type="text"
                                 value={formData.joinCode}
-                                onChange={(e) => setFormData({ ...formData, joinCode: e.target.value.toUpperCase() })}
-                                className="text-xl font-mono font-bold text-nordic-blue tracking-wider bg-transparent outline-none w-32 uppercase text-center"
+                                readOnly
+                                className="text-2xl sm:text-3xl font-mono font-bold text-nordic-blue tracking-widest bg-transparent outline-none w-full uppercase text-center select-all"
                                 placeholder="KÓÐI"
                             />
                         </div>
-                        {classData.joinCode && (
+                        <div className="flex gap-2 w-full sm:w-auto">
                             <button
                                 onClick={() => {
-                                    navigator.clipboard.writeText(classData.joinCode || '');
+                                    const url = `${window.location.origin}/is/onboarding?step=join&code=${formData.joinCode}`;
+                                    navigator.clipboard.writeText(url);
+                                    alert('Tengill afritaður! \n\n' + url);
+                                }}
+                                className="flex-1 sm:flex-none px-4 py-2 bg-nordic-blue text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                                title="Afrita tengil"
+                            >
+                                📋 Afrita tengil
+                            </button>
+                            <button
+                                onClick={() => {
+                                    navigator.clipboard.writeText(formData.joinCode);
                                     alert('Kóði afritaður!');
                                 }}
-                                className="p-2 text-gray-500 hover:text-nordic-blue transition-colors"
+                                className="px-4 py-2 bg-white text-nordic-blue border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
                                 title="Afrita kóða"
                             >
-                                <Check size={20} />
+                                Afrita kóða
                             </button>
-                        )}
+                        </div>
                     </div>
+                    <p className="text-xs text-blue-700 mt-2">
+                        ℹ️ Foreldrar nota þennan kóða til að tengja sig við barn sitt í bekknum.
+                    </p>
                 </div>
+
+                {/* Admin/Parent Team Code */}
+                {formData.parentTeamCode && (
+                    <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
+                        <label className="block text-sm font-semibold text-purple-900 uppercase tracking-wider mb-2">
+                            Foreldraráð (Stjórnendakóði)
+                        </label>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                            <div className="bg-white px-4 py-3 rounded-lg border border-purple-200 flex-1 min-w-0 overflow-hidden">
+                                <input
+                                    type="text"
+                                    value={formData.parentTeamCode}
+                                    readOnly
+                                    className="text-xl sm:text-2xl font-mono font-bold text-purple-800 tracking-widest bg-transparent outline-none w-full uppercase text-center select-all break-all"
+                                />
+                            </div>
+                            <div className="flex gap-2 w-full sm:w-auto">
+                                <button
+                                    onClick={() => {
+                                        const url = `${window.location.origin}/is/onboarding?step=join&code=${formData.parentTeamCode}`;
+                                        navigator.clipboard.writeText(url);
+                                        alert('Stjórnendatengill afritaður! \n\n' + url);
+                                    }}
+                                    className="flex-1 sm:flex-none px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                                >
+                                    📋 Afrita tengil
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(formData.parentTeamCode);
+                                        alert('Kóði afritaður!');
+                                    }}
+                                    className="px-4 py-2 bg-white text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors text-sm font-medium"
+                                >
+                                    Afrita kóða
+                                </button>
+                            </div>
+                        </div>
+                        <p className="text-xs text-purple-700 mt-2">
+                            ⚠️ Dulin aðgangsheimild. Veitir stjórnendaréttindi. Deildu aðeins með foreldraráði.
+                        </p>
+                    </div>
+                )}
             </section>
 
             {/* Admin Management */}
