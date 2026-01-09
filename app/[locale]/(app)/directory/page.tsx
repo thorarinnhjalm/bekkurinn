@@ -55,6 +55,7 @@ export default function DirectoryPage() {
     const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
     const [searchQuery, setSearchQuery] = useState('');
     const [starredStudents, setStarredStudents] = useState<Set<string>>(new Set());
+    const [parentsMap, setParentsMap] = useState<Map<string, any[]>>(new Map());
 
     // Redirect to login if not authenticated
     useEffect(() => {
@@ -62,6 +63,61 @@ export default function DirectoryPage() {
             router.push('/is/login');
         }
     }, [authLoading, user, router]);
+
+    // Fetch parent data for all students
+    useEffect(() => {
+        async function fetchParents() {
+            if (!studentsData || studentsData.length === 0) return;
+
+            try {
+                const studentIds = studentsData.map(s => s.id);
+
+                // Fetch all parent links for these students
+                const parentLinksQuery = query(
+                    collection(db, 'parentLinks'),
+                    where('studentId', 'in', studentIds),
+                    where('status', '==', 'approved')
+                );
+                const parentLinksSnap = await getDocs(parentLinksQuery);
+                const parentLinks = parentLinksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                // Get unique user IDs
+                const userIds = [...new Set(parentLinks.map((pl: any) => pl.userId))];
+
+                if (userIds.length === 0) {
+                    setParentsMap(new Map());
+                    return;
+                }
+
+                // Fetch user data for all parents
+                const usersQuery = query(
+                    collection(db, 'users'),
+                    where('__name__', 'in', userIds)
+                );
+                const usersSnap = await getDocs(usersQuery);
+                const usersData = new Map();
+                usersSnap.docs.forEach(d => {
+                    usersData.set(d.id, { id: d.id, ...d.data() });
+                });
+
+                // Build map: studentId -> array of parent user objects
+                const newParentsMap = new Map<string, any[]>();
+                parentLinks.forEach((link: any) => {
+                    const parentUser = usersData.get(link.userId);
+                    if (parentUser) {
+                        const existing = newParentsMap.get(link.studentId) || [];
+                        existing.push(parentUser);
+                        newParentsMap.set(link.studentId, existing);
+                    }
+                });
+
+                setParentsMap(newParentsMap);
+            } catch (e) {
+                console.error('Error fetching parents:', e);
+            }
+        }
+        fetchParents();
+    }, [studentsData]);
 
     // Format helpers and event handlers...
     const toggleStar = (studentId: string) => {
@@ -257,9 +313,42 @@ export default function DirectoryPage() {
                                     <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
                                         Foreldrar
                                     </p>
-                                    <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                        Upplýsingar um foreldra verða bættar við þegar þeir skrá sig í kerfið.
-                                    </p>
+                                    {parentsMap.get(student.id) && parentsMap.get(student.id)!.length > 0 ? (
+                                        <div className="space-y-3">
+                                            {parentsMap.get(student.id)!.map((parent: any, idx: number) => (
+                                                <div key={parent.id || idx} className="bg-stone-50 p-3 rounded-lg">
+                                                    <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+                                                        {parent.displayName || 'Nafnlaust'}
+                                                    </p>
+                                                    {parent.phone && parent.isPhoneVisible && (
+                                                        <a
+                                                            href={`tel:${parent.phone}`}
+                                                            className="flex items-center gap-2 text-sm mt-1 hover:underline"
+                                                            style={{ color: 'var(--nordic-blue)' }}
+                                                        >
+                                                            <Phone size={14} />
+                                                            {parent.phone}
+                                                        </a>
+                                                    )}
+                                                    {parent.address && (
+                                                        <a
+                                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="flex items-center gap-2 text-xs mt-1 hover:underline"
+                                                            style={{ color: 'var(--text-secondary)' }}
+                                                        >
+                                                            🗺️ {parent.address}
+                                                        </a>
+                                                    )}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                            Upplýsingar um foreldra verða bættar við þegar þeir skrá sig í kerfið.
+                                        </p>
+                                    )}
                                 </div>
                             )}
                         </div>

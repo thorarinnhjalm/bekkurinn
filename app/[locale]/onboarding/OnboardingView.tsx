@@ -124,6 +124,10 @@ export default function OnboardingView() {
     const [selectedStudentId, setSelectedStudentId] = useState('');
     const [joining, setJoining] = useState(false);
 
+    // Invite join parameters (from spouse invite link)
+    const joinStudentId = searchParams.get('join');
+    const joinClassId = searchParams.get('classId');
+
     // Auto-verify if code is present in URL
     useEffect(() => {
         const codeParam = searchParams.get('code');
@@ -176,6 +180,49 @@ export default function OnboardingView() {
             verify();
         }
     }, [searchParams]); // Run when params change (e.g. initial load)
+
+    // Handle invite link (join + classId parameters)
+    useEffect(() => {
+        async function handleInviteLink() {
+            if (!joinStudentId || !joinClassId || !user) return;
+
+            setCheckingCode(true);
+            try {
+                // Fetch the class directly by ID
+                const classDoc = await getDocs(query(collection(db, 'classes'), where('__name__', '==', joinClassId)));
+                if (classDoc.empty) {
+                    setError('Bekkur fannst ekki.');
+                    return;
+                }
+
+                const cData = { id: classDoc.docs[0].id, ...classDoc.docs[0].data() };
+                setFoundClass(cData);
+
+                // Fetch student by ID to verify it exists
+                const studentDoc = await getDocs(query(collection(db, 'students'), where('__name__', '==', joinStudentId)));
+                if (studentDoc.empty) {
+                    setError('Barn fannst ekki.');
+                    return;
+                }
+
+                // Auto-select this student
+                setSelectedStudentId(joinStudentId);
+
+                // Fetch all students for display
+                const studentsQ = query(collection(db, 'students'), where('classId', '==', joinClassId));
+                const studentsSnap = await getDocs(studentsQ);
+                const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+                studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
+                setStudents(studentsList);
+            } catch (e) {
+                console.error(e);
+                setError('Villa við að sækja gögn');
+            } finally {
+                setCheckingCode(false);
+            }
+        }
+        handleInviteLink();
+    }, [joinStudentId, joinClassId, user]);
 
     // Create Student State (nested in Join flow)
     const [isCreatingStudent, setIsCreatingStudent] = useState(false);

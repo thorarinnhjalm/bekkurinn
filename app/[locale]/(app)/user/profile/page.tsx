@@ -20,6 +20,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     const [links, setLinks] = useState<any[]>([]);
     const [students, setStudents] = useState<any[]>([]);
     const [loadingLinks, setLoadingLinks] = useState(true);
+    const [classId, setClassId] = useState<string>('');
 
     // Fetch user links and students
     useEffect(() => {
@@ -37,6 +38,10 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                 const qStudents = query(collection(db, 'students'), where('__name__', 'in', studentIds));
                 const snapStudents = await getDocs(qStudents);
                 setStudents(snapStudents.docs.map(d => ({ id: d.id, ...d.data() })));
+                // Get classId from first link
+                if (linksData.length > 0) {
+                    setClassId(linksData[0].classId);
+                }
             }
             setLoadingLinks(false);
         }
@@ -111,6 +116,15 @@ export default function UserProfilePage({ params }: { params: { locale: string }
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleCopyInviteLink = (studentId: string) => {
+        const inviteLink = `${window.location.origin}/${params.locale}/onboarding?join=${studentId}&classId=${classId}`;
+        navigator.clipboard.writeText(inviteLink).then(() => {
+            alert('Hlekkur afritaður! Deildu honum með samstarfsaðila.');
+        }).catch(() => {
+            alert('Villa við að afrita hlekk');
+        });
     };
 
     if (!user) return <div>Vinsamlegast skráðu þig inn.</div>;
@@ -201,7 +215,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Mynd (Slóð / URL)</label>
-                            <div className="flex gap-2">
+                            <div className="flex flex-col sm:flex-row gap-2">
                                 <input
                                     type="text"
                                     value={userPhotoUrl}
@@ -212,7 +226,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                                 <button
                                     onClick={handleSaveUser}
                                     disabled={isSaving}
-                                    className="bg-nordic-blue text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-bold shadow-sm"
+                                    className="bg-nordic-blue text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-bold shadow-sm justify-center"
                                 >
                                     {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
                                     Vista
@@ -240,6 +254,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                             student={student}
                             onSave={(url) => handleSaveStudentPhoto(student.id, url)}
                             onSaveName={(name) => handleSaveStudentName(student.id, name)}
+                            onCopyInvite={() => handleCopyInviteLink(student.id)}
                             userId={user?.uid || ''}
                         />
                     ))
@@ -273,10 +288,11 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     );
 }
 
-function StudentCard({ student, onSave, onSaveName, userId }: {
+function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
     student: any,
     onSave: (url: string) => void,
     onSaveName: (name: string) => void,
+    onCopyInvite: () => void,
     userId: string
 }) {
     const [photoUrl, setPhotoUrl] = useState(student.photoUrl || '');
@@ -355,7 +371,7 @@ function StudentCard({ student, onSave, onSaveName, userId }: {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">Mynd barns (Slóð / URL)</label>
-                    <div className="flex gap-2">
+                    <div className="flex flex-col sm:flex-row gap-2">
                         <input
                             type="text"
                             value={photoUrl}
@@ -365,7 +381,7 @@ function StudentCard({ student, onSave, onSaveName, userId }: {
                         />
                         <button
                             onClick={() => onSave(photoUrl)}
-                            className="bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm flex items-center gap-1 font-medium"
+                            className="bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm flex items-center justify-center gap-1 font-medium"
                         >
                             <Save size={14} />
                             Vista
@@ -374,6 +390,24 @@ function StudentCard({ student, onSave, onSaveName, userId }: {
                     <p className="text-xs text-gray-400 mt-1">
                         Þessi mynd birtist í bekkjarlistanum fyrir aðra foreldra (ef þú uppfyllir skilyrði).
                     </p>
+                </div>
+
+                {/* INVITE SPOUSE/PARTNER */}
+                <div className="pt-3 border-t border-gray-100">
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                        <UserPlus size={16} className="text-nordic-blue" />
+                        Bjóða maka/samstarfsaðila
+                    </label>
+                    <p className="text-xs text-gray-500 mb-2">
+                        Deildu þessum hlekk með samstarfsaðila þínum svo hann/hún geti tengst sama barni.
+                    </p>
+                    <button
+                        onClick={onCopyInvite}
+                        className="w-full px-4 py-2 bg-green-50 border border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition flex items-center justify-center gap-2 text-sm font-medium"
+                    >
+                        <UserPlus size={16} />
+                        Afrita boðshlekk
+                    </button>
                 </div>
             </div>
         </div>
