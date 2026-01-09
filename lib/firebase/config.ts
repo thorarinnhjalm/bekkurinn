@@ -32,9 +32,9 @@ if (getApps().length === 0) {
     db = getFirestore(app);
     storage = getStorage(app);
 
-    // Log initialization for debugging (development only)
+    // Initialization complete (silent in production)
     if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
-        console.log('🔥 Firebase initialized');
+        // Firebase ready for development
     }
 } else {
     app = getApps()[0];

@@ -43,20 +43,14 @@ export function useUserClasses(userId: string | undefined) {
             const adminQ = query(collection(db, 'classes'), where('admins', 'array-contains', userId));
             const adminSnap = await getDocs(adminQ);
 
-            console.log('[useUserClasses] Admin check for:', userId);
-            console.log('[useUserClasses] Admin classes found:', adminSnap.docs.length);
-
             adminSnap.docs.forEach(doc => {
                 const classData = { id: doc.id, ...doc.data(), role: 'admin' } as any;
                 classesMap.set(doc.id, classData);
-                console.log('[useUserClasses] Added as ADMIN:', doc.id, 'Class:', classData.name);
             });
 
             // 2. Check parentLinks (ONLY for classes where user is NOT admin)
             const parentQ = query(collection(db, 'parentLinks'), where('userId', '==', userId));
             const parentSnap = await getDocs(parentQ);
-
-            console.log('[useUserClasses] ParentLinks found:', parentSnap.docs.length);
 
             // We need to fetch class details for each parent link
             // CRITICAL: Filter out classes where user is already admin
@@ -64,9 +58,6 @@ export function useUserClasses(userId: string | undefined) {
                 .map(doc => doc.data().classId)
                 .filter(id => {
                     const isAlreadyAdmin = classesMap.has(id);
-                    if (isAlreadyAdmin) {
-                        console.log('[useUserClasses] Skipping parentLink for classId', id, '- user is ADMIN');
-                    }
                     return !isAlreadyAdmin;
                 });
 
@@ -77,13 +68,10 @@ export function useUserClasses(userId: string | undefined) {
                 if (classSnap.exists()) {
                     const classData = { id: classSnap.id, ...classSnap.data(), role: 'parent' } as any;
                     classesMap.set(classSnap.id, classData);
-                    console.log('[useUserClasses] Added as PARENT:', classSnap.id, 'Class:', classData.name);
                 }
             }));
 
             const result = Array.from(classesMap.values());
-            console.log('[useUserClasses] Final result:', result.map(c => ({ id: c.id, role: c.role, name: c.name })));
-
             return result;
         },
         enabled: !!userId,
