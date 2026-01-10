@@ -4,9 +4,17 @@ import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { Loader2, Save, User, UserPlus } from 'lucide-react';
+import { Loader2, Save, User, UserPlus, Check } from 'lucide-react';
 import { ImageUploader } from '@/components/upload/ImageUploader';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
+
+const DIETARY_OPTIONS: { value: string; label: string }[] = [
+    { value: 'peanut', label: 'Jarðhnetur' },
+    { value: 'gluten', label: 'Glúten' },
+    { value: 'dairy', label: 'Mjólk / Laktósa' },
+    { value: 'vegan', label: 'Vegan' },
+    { value: 'pork', label: 'Svínakjöt' },
+];
 
 export default function UserProfilePage({ params }: { params: { locale: string } }) {
     const { user } = useAuth();
@@ -114,6 +122,19 @@ export default function UserProfilePage({ params }: { params: { locale: string }
         } catch (e) {
             console.error(e);
             alert('Villa við vistun á nafni');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const handleSaveStudentDietaryNeeds = async (studentId: string, needs: string[]) => {
+        setIsSaving(true);
+        try {
+            await updateDoc(doc(db, 'students', studentId), { dietaryNeeds: needs });
+            setStudents(prev => prev.map(s => s.id === studentId ? { ...s, dietaryNeeds: needs } : s));
+        } catch (e) {
+            console.error(e);
+            alert('Villa við vistun á mataræði');
         } finally {
             setIsSaving(false);
         }
@@ -258,6 +279,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                             student={student}
                             onSave={(url) => handleSaveStudentPhoto(student.id, url)}
                             onSaveName={(name) => handleSaveStudentName(student.id, name)}
+                            onSaveDietaryNeeds={(needs) => handleSaveStudentDietaryNeeds(student.id, needs)}
                             onCopyInvite={() => handleCopyInviteLink(student.id)}
                             userId={user?.uid || ''}
                         />
@@ -292,16 +314,29 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     );
 }
 
-function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
+function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onCopyInvite, userId }: {
     student: any,
     onSave: (url: string) => void,
     onSaveName: (name: string) => void,
+    onSaveDietaryNeeds: (needs: string[]) => void,
     onCopyInvite: () => void,
     userId: string
 }) {
     const [photoUrl, setPhotoUrl] = useState(student.photoUrl || '');
     const [isEditingName, setIsEditingName] = useState(false);
     const [editedName, setEditedName] = useState(student.name);
+
+    // Dietary Needs State
+    const [dietaryNeeds, setDietaryNeeds] = useState<string[]>(student.dietaryNeeds || []);
+
+    const toggleDietaryNeed = (value: string) => {
+        const newNeeds = dietaryNeeds.includes(value)
+            ? dietaryNeeds.filter(n => n !== value)
+            : [...dietaryNeeds, value];
+
+        setDietaryNeeds(newNeeds);
+        onSaveDietaryNeeds(newNeeds); // Auto-save for better UX on toggles
+    };
 
     return (
         <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 flex flex-col sm:flex-row gap-6 items-start">
@@ -313,7 +348,8 @@ function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
                 )}
             </div>
 
-            <div className="flex-1 w-full space-y-3">
+            <div className="flex-1 w-full space-y-6">
+                {/* NAME & INFO */}
                 <div className="flex justify-between items-start">
                     <div className="flex-1">
                         {isEditingName ? (
@@ -360,40 +396,72 @@ function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
                     </div>
                 </div>
 
+                {/* DIETARY NEEDS */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Mynd barns</label>
-                    <ImageUploader
-                        currentImageUrl={photoUrl}
-                        onUploadComplete={(url) => {
-                            setPhotoUrl(url);
-                            onSave(url);
-                        }}
-                        storagePath={`students/${student.id}/profile`}
-                        label=""
-                    />
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Ofnæmi og mataræði</label>
+                    <div className="flex flex-wrap gap-2">
+                        {DIETARY_OPTIONS.map((option) => {
+                            const isSelected = dietaryNeeds.includes(option.value);
+                            return (
+                                <button
+                                    key={option.value}
+                                    onClick={() => toggleDietaryNeed(option.value)}
+                                    className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-all flex items-center gap-1.5 ${isSelected
+                                        ? 'bg-red-50 border-red-200 text-red-700'
+                                        : 'bg-white border-gray-200 text-gray-600 hover:border-gray-300'
+                                        }`}
+                                >
+                                    {isSelected && <Check size={14} />}
+                                    {option.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                    <p className="text-xs text-gray-400 mt-2">
+                        Veldu það sem við á. Upplýsingar birtast umsjónarkennara og foreldrum í bekknum til að tryggja öryggi (t.d. í afmælum).
+                    </p>
                 </div>
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mynd barns (Slóð / URL)</label>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                        <input
-                            type="text"
-                            value={photoUrl}
-                            onChange={(e) => setPhotoUrl(e.target.value)}
-                            placeholder="https://..."
-                            className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none text-sm"
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                    {/* PHOTO UPLOAD */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Mynd barns (Upphleðsla)</label>
+                        <ImageUploader
+                            currentImageUrl={photoUrl}
+                            onUploadComplete={(url) => {
+                                setPhotoUrl(url);
+                                onSave(url);
+                            }}
+                            storagePath={`students/${student.id}/profile`}
+                            label=""
                         />
-                        <button
-                            onClick={() => onSave(photoUrl)}
-                            className="bg-[#4A7C9E] text-white px-3 py-2 rounded-lg hover:bg-[#2E5A75] transition text-sm flex items-center justify-center gap-1 font-medium shadow-sm"
-                        >
-                            <Save size={14} />
-                            Vista
-                        </button>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                        Þessi mynd birtist í bekkjarlistanum fyrir aðra foreldra (ef þú uppfyllir skilyrði).
-                    </p>
+
+                    {/* PHOTO URL */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Mynd barns (Slóð / URL)</label>
+                        <div className="flex flex-col sm:flex-row gap-2">
+                            <input
+                                type="text"
+                                value={photoUrl}
+                                onChange={(e) => setPhotoUrl(e.target.value)}
+                                placeholder="https://..."
+                                className="flex-1 p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-400 outline-none text-sm"
+                            />
+                            <button
+                                onClick={() => onSave(photoUrl)}
+                                className="bg-[#4A7C9E] text-white px-3 py-2 rounded-lg hover:bg-[#2E5A75] transition text-sm flex items-center justify-center gap-1 font-medium shadow-sm"
+                            >
+                                <Save size={14} />
+                                Vista
+                            </button>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-1">
+                            Þessi mynd birtist í bekkjarlistanum fyrir aðra foreldra (ef þú uppfyllir skilyrði).
+                        </p>
+                    </div>
+
                 </div>
 
                 {/* INVITE SPOUSE/PARTNER */}
