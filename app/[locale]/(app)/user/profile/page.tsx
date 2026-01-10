@@ -6,6 +6,7 @@ import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'fireb
 import { db } from '@/lib/firebase/config';
 import { Loader2, Save, User, UserPlus } from 'lucide-react';
 import { ImageUploader } from '@/components/upload/ImageUploader';
+import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
 export default function UserProfilePage({ params }: { params: { locale: string } }) {
     const { user } = useAuth();
@@ -191,12 +192,15 @@ export default function UserProfilePage({ params }: { params: { locale: string }
 
                         <div>
                             <label className="block text-sm font-medium text-gray-700">Heimilisfang</label>
-                            <input
-                                type="text"
-                                value={userAddress}
-                                onChange={(e) => setUserAddress(e.target.value)}
-                                placeholder="t.d. Strandgata 12, Kópavogur"
-                                className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nordic-blue outline-none"
+                            <AddressAutocomplete
+                                defaultValue={userAddress}
+                                onSelect={(addr) => {
+                                    setUserAddress(addr.fullAddress);
+                                    // Optionally save coordinates if needed later:
+                                    // updateUserLocation(addr.location);
+                                }}
+                                placeholder="Sláðu inn heimilisfang..."
+                                className="w-full"
                             />
                             {userAddress && (
                                 <a
@@ -209,7 +213,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                                 </a>
                             )}
                             <p className="text-xs text-gray-500 mt-1">
-                                Þetta heimilisfang birtist með kort-tengli í bekkjarskránni.
+                                Veldu heimilisfang úr listanum til að fá nákvæma staðsetningu.
                             </p>
                         </div>
 
