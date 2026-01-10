@@ -316,31 +316,46 @@ export default function DirectoryPage() {
                                     {parentsMap.get(student.id) && parentsMap.get(student.id)!.length > 0 ? (
                                         <div className="space-y-3">
                                             {parentsMap.get(student.id)!.map((parent: any, idx: number) => (
-                                                <div key={parent.id || idx} className="bg-stone-50 p-3 rounded-lg">
-                                                    <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
-                                                        {parent.displayName || 'Nafnlaust'}
-                                                    </p>
-                                                    {parent.phone && parent.isPhoneVisible && (
-                                                        <a
-                                                            href={`tel:${parent.phone}`}
-                                                            className="flex items-center gap-2 text-sm mt-1 hover:underline"
-                                                            style={{ color: 'var(--nordic-blue)' }}
-                                                        >
-                                                            <Phone size={14} />
-                                                            {parent.phone}
-                                                        </a>
-                                                    )}
-                                                    {parent.address && (
-                                                        <a
-                                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                            className="flex items-center gap-2 text-xs mt-1 hover:underline"
-                                                            style={{ color: 'var(--text-secondary)' }}
-                                                        >
-                                                            🗺️ {parent.address}
-                                                        </a>
-                                                    )}
+                                                <div key={parent.id || idx} className="bg-stone-50 p-3 rounded-lg flex items-start gap-3">
+                                                    {/* Parent Photo */}
+                                                    <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden flex items-center justify-center text-sm font-bold text-gray-500">
+                                                        {canViewPhotos && parent.photoURL ? (
+                                                            <img
+                                                                src={parent.photoURL}
+                                                                alt={parent.displayName}
+                                                                className="w-full h-full object-cover"
+                                                            />
+                                                        ) : (
+                                                            (parent.displayName || '?')[0]
+                                                        )}
+                                                    </div>
+
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+                                                            {parent.displayName || 'Nafnlaust'}
+                                                        </p>
+                                                        {parent.phone && parent.isPhoneVisible && (
+                                                            <a
+                                                                href={`tel:${parent.phone}`}
+                                                                className="flex items-center gap-2 text-sm mt-1 hover:underline"
+                                                                style={{ color: 'var(--nordic-blue)' }}
+                                                            >
+                                                                <Phone size={14} />
+                                                                {parent.phone}
+                                                            </a>
+                                                        )}
+                                                        {parent.address && (
+                                                            <a
+                                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
+                                                                target="_blank"
+                                                                rel="noopener noreferrer"
+                                                                className="flex items-center gap-2 text-xs mt-1 hover:underline"
+                                                                style={{ color: 'var(--text-secondary)' }}
+                                                            >
+                                                                🗺️ {parent.address}
+                                                            </a>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             ))}
                                         </div>

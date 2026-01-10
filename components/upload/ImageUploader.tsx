@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Upload, X, Loader2, Check } from 'lucide-react';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase/config';
+import { ImageCropper } from './ImageCropper';
 
 interface ImageUploaderProps {
     currentImageUrl?: string;
@@ -26,6 +27,9 @@ export function ImageUploader({
     const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
+    // Cropper State
+    const [cropImageSrc, setCropImageSrc] = useState<string | null>(null);
+
     const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
@@ -43,12 +47,32 @@ export function ImageUploader({
             return;
         }
 
-        // Show preview immediately
+        // Show cropper
         const reader = new FileReader();
         reader.onloadend = () => {
-            setPreviewUrl(reader.result as string);
+            setCropImageSrc(reader.result as string);
+            // Reset input so same file can be selected again if cancelled
+            if (fileInputRef.current) fileInputRef.current.value = '';
         };
         reader.readAsDataURL(file);
+    };
+
+    const handleCropComplete = async (croppedBlob: Blob) => {
+        setCropImageSrc(null);
+        await uploadToFirebase(croppedBlob);
+    };
+
+    const handleCropCancel = () => {
+        setCropImageSrc(null);
+    };
+
+    const uploadToFirebase = async (fileBlob: Blob) => {
+        // Show preview immediately
+        const previewReader = new FileReader();
+        previewReader.onloadend = () => {
+            setPreviewUrl(previewReader.result as string);
+        };
+        previewReader.readAsDataURL(fileBlob);
 
         // Upload to Firebase Storage
         setIsUploading(true);
@@ -57,10 +81,10 @@ export function ImageUploader({
         try {
             // Create unique filename
             const timestamp = Date.now();
-            const filename = `${timestamp}_${file.name}`;
+            const filename = `${timestamp}_profile.jpg`; // Always save as jpg from cropper
             const storageRef = ref(storage, `${storagePath}/${filename}`);
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const uploadTask = uploadBytesResumable(storageRef, fileBlob);
 
             uploadTask.on(
                 'state_changed',
@@ -98,6 +122,15 @@ export function ImageUploader({
     return (
         <div className="space-y-3">
             <label className="block text-sm font-medium text-gray-700">{label}</label>
+
+            {/* Cropper Modal */}
+            {cropImageSrc && (
+                <ImageCropper
+                    imageSrc={cropImageSrc}
+                    onCropComplete={handleCropComplete}
+                    onCancel={handleCropCancel}
+                />
+            )}
 
             {/* Preview or Upload Area */}
             <div className="relative">
@@ -143,7 +176,7 @@ export function ImageUploader({
             <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/jpg"
+                accept="image/jpeg,image/png,image/jpg,image/webp"
                 onChange={handleFileSelect}
                 className="hidden"
             />
@@ -168,3 +201,4 @@ export function ImageUploader({
         </div>
     );
 }
+
