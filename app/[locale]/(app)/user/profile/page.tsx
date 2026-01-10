@@ -226,7 +226,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                                 <button
                                     onClick={handleSaveUser}
                                     disabled={isSaving}
-                                    className="bg-nordic-blue text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-bold shadow-sm justify-center"
+                                    className="bg-[#4A7C9E] text-white px-6 py-2 rounded-lg hover:bg-[#2E5A75] transition flex items-center gap-2 font-bold shadow-sm justify-center"
                                 >
                                     {isSaving ? <Loader2 className="animate-spin" size={16} /> : <Save size={16} />}
                                     Vista
@@ -326,7 +326,7 @@ function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
                                         onSaveName(editedName);
                                         setIsEditingName(false);
                                     }}
-                                    className="text-green-600 hover:text-green-700 text-sm font-medium"
+                                    className="text-[#4A7C9E] hover:text-[#2E5A75] text-sm font-medium"
                                 >
                                     ✓ Vista
                                 </button>
@@ -381,7 +381,7 @@ function StudentCard({ student, onSave, onSaveName, onCopyInvite, userId }: {
                         />
                         <button
                             onClick={() => onSave(photoUrl)}
-                            className="bg-white border border-gray-200 text-gray-700 px-3 py-2 rounded-lg hover:bg-gray-50 transition text-sm flex items-center justify-center gap-1 font-medium"
+                            className="bg-[#4A7C9E] text-white px-3 py-2 rounded-lg hover:bg-[#2E5A75] transition text-sm flex items-center justify-center gap-1 font-medium shadow-sm"
                         >
                             <Save size={14} />
                             Vista

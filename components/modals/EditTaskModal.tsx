@@ -112,7 +112,7 @@ export function EditTaskModal({ task, isOpen, onClose, onSave }: EditTaskModalPr
                     <button
                         onClick={handleSave}
                         disabled={isSaving || !formData.title || !formData.date}
-                        className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 disabled:opacity-50"
+                        className="px-4 py-2 bg-[#4A7C9E] text-white font-bold rounded-lg hover:bg-[#2E5A75] transition-colors flex items-center gap-2 disabled:opacity-50"
                     >
                         {isSaving && <Loader2 className="animate-spin" size={16} />}
                         Vista
