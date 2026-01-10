@@ -396,7 +396,7 @@ export default function SettingsView() {
             <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 space-y-6">
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <Users className="text-nordic-blue" size={24} />
+                        <Users className="text-[#4A7C9E]" size={24} />
                         Boðskóðar fyrir foreldra
                     </h2>
                     <p className="text-sm text-gray-500">
@@ -415,7 +415,7 @@ export default function SettingsView() {
                                 type="text"
                                 value={formData.joinCode}
                                 readOnly
-                                className="text-2xl sm:text-3xl font-mono font-bold text-nordic-blue tracking-widest bg-white border border-blue-200 rounded-lg outline-none w-full uppercase text-center select-all p-2"
+                                className="text-2xl sm:text-3xl font-mono font-bold text-[#4A7C9E] tracking-widest bg-white border border-blue-200 rounded-lg outline-none w-full uppercase text-center select-all p-2"
                                 placeholder="KÓÐI"
                             />
                         </div>
@@ -426,7 +426,7 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(url);
                                     alert('Tengill afritaður! \n\n' + url);
                                 }}
-                                className="flex-1 sm:flex-none px-4 py-2 bg-nordic-blue text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                                className="flex-1 sm:flex-none px-4 py-2 bg-[#4A7C9E] text-white rounded-lg hover:bg-[#2E5A75] transition-colors text-sm font-medium"
                                 title="Afrita tengil"
                             >
                                 📋 Afrita tengil
@@ -436,7 +436,7 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(formData.joinCode);
                                     alert('Kóði afritaður!');
                                 }}
-                                className="px-4 py-2 bg-white text-nordic-blue border border-blue-200 rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
+                                className="px-4 py-2 bg-white text-[#4A7C9E] border border-[#B3CDE0] rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
                                 title="Afrita kóða"
                             >
                                 Afrita kóða
