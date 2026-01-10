@@ -828,7 +828,7 @@ export default function OnboardingView() {
                                     <button
                                         onClick={handleJoinClass}
                                         disabled={!selectedStudentId || joining}
-                                        className="w-full bg-green-600 text-white py-3 rounded-xl font-bold hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                        className="w-full bg-[#4A7C9E] text-white py-3 rounded-xl font-bold hover:bg-[#2E5A75] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                                     >
                                         {joining && <Loader2 className="animate-spin" size={20} />}
                                         Skrá mig í bekkinn
@@ -878,7 +878,7 @@ export default function OnboardingView() {
                                         <button
                                             onClick={handleCreateStudentAndJoin}
                                             disabled={!newStudentName || !newStudentDob || joining}
-                                            className="px-4 py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 disabled:opacity-50 flex justify-center items-center gap-2"
+                                            className="px-4 py-3 bg-[#4A7C9E] text-white rounded-xl font-bold hover:bg-[#2E5A75] disabled:opacity-50 flex justify-center items-center gap-2"
                                         >
                                             {joining ? <Loader2 className="animate-spin" size={18} /> : 'Skrá og klára'}
                                         </button>

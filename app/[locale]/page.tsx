@@ -57,7 +57,7 @@ export default function HomePage() {
                             {user ? (
                                 <Link
                                     href={`/${locale}/dashboard`}
-                                    className="bg-gray-900 text-white px-6 py-2.5 rounded-full font-medium hover:bg-gray-800 transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+                                    className="bg-[#4A7C9E] text-white px-6 py-2.5 rounded-full font-medium hover:bg-[#2E5A75] transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
                                 >
                                     Mælaborð
                                 </Link>
@@ -110,7 +110,7 @@ export default function HomePage() {
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
                             <Link
                                 href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                                className="w-full sm:w-auto px-10 py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto px-10 py-4 bg-[#4A7C9E] text-white rounded-xl font-bold text-lg hover:bg-[#2E5A75] transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
                             >
                                 {t('hero.cta_primary')} <ArrowRight size={20} />
                             </Link>
@@ -229,7 +229,7 @@ export default function HomePage() {
                         <div className="flex flex-col items-center gap-4">
                             <Link
                                 href={`/${locale}/onboarding`}
-                                className="px-10 py-5 bg-white text-gray-900 rounded-xl font-bold text-lg hover:bg-gray-100 transition-all transform hover:scale-105 shadow-2xl"
+                                className="px-10 py-5 bg-[#4A7C9E] text-white rounded-xl font-bold text-lg hover:bg-[#2E5A75] transition-all transform hover:scale-105 shadow-2xl"
                             >
                                 {t('cta_final.button')}
                             </Link>

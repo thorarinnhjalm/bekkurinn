@@ -88,7 +88,7 @@ export default function AdminView() {
                 </div>
                 <button
                     onClick={() => router.push('/is/dashboard')}
-                    className="flex items-center gap-2 bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className="flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors font-medium"
                 >
                     <Users size={20} />
                     Fara í mitt Mælaborð
