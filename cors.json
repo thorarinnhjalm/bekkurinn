@@ -1,0 +1,19 @@
+[
+    {
+        "origin": [
+            "https://bekkurinn.vercel.app",
+            "http://localhost:3000",
+            "https://bekkurinn.app",
+            "https://www.bekkurinn.app"
+        ],
+        "method": [
+            "GET",
+            "PUT",
+            "POST",
+            "DELETE",
+            "HEAD",
+            "OPTIONS"
+        ],
+        "maxAgeSeconds": 3600
+    }
+]
