@@ -19,7 +19,7 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const CLASS_ID = 'CLQCGsPBSZxKV4Zq6Xsg';
-const CALENDAR_URL = 'https://www.kopavogur.is/static/files/Skoladagatol/alfholsskoli_calendar_2025-2026.ics';
+const CALENDAR_URL = 'https://www.kopavogur.is/static/files/skoladagatol/alfholsskoli_calendar_2025-2026.ics';
 
 // Simple ICS Parser Helper
 function parseICS(icsContent: string) {
