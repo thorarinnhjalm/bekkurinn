@@ -244,7 +244,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     }
 
     return (
-        <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto space-y-6">
+        <div className="space-y-6">
             {/* 1. Greeting (Full Width) */}
             <header className="space-y-1 mb-2">
                 <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>

@@ -108,7 +108,7 @@ export default function AnnouncementsPage() {
     const pinnedCount = announcements.filter(a => a.pinned).length;
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
+        <div className="space-y-6">
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">

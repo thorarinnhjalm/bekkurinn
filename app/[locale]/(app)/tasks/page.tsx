@@ -156,7 +156,7 @@ export default function TasksPage() {
     const pastCount = displayTasks.length - upcomingCount;
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24 max-w-3xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -288,7 +288,7 @@ export default function TasksPage() {
 
 
             {/* Event Cards */}
-            <div className="space-y-4">
+            <div className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 auto-rows-fr`}>
                 {sortedEvents.map((event) => {
                     const upcoming = isUpcoming(event.date);
                     const progress = event.slotsTotal > 0
@@ -302,7 +302,7 @@ export default function TasksPage() {
                     return (
                         <div
                             key={event.id}
-                            className="nordic-card overflow-hidden transition-all hover:shadow-md"
+                            className="nordic-card overflow-hidden transition-all hover:shadow-md flex flex-col h-full"
                             style={{
                                 opacity: upcoming ? 1 : 0.7,
                                 borderColor: iAmVolunteering ? 'var(--green-success)' : (isComplete ? 'var(--border-light)' : 'var(--border-light)'),
@@ -311,11 +311,11 @@ export default function TasksPage() {
                             }}
                         >
                             {/* Event Header */}
-                            <div className="p-5 space-y-3">
+                            <div className="p-5 space-y-3 flex-1 flex flex-col">
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-1">
                                         <div className="flex items-center gap-2 flex-wrap mb-2">
-                                            <h2 className="text-xl font-semibold" style={{ color: 'var(--text-primary)' }}>
+                                            <h2 className="text-xl font-semibold line-clamp-2" style={{ color: 'var(--text-primary)' }}>
                                                 {event.title}
                                             </h2>
                                             {!upcoming && (
@@ -354,7 +354,7 @@ export default function TasksPage() {
                                         </div>
 
                                         {event.description && (
-                                            <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                                            <p className="mt-2 text-sm line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
                                                 {event.description}
                                             </p>
                                         )}
@@ -390,82 +390,84 @@ export default function TasksPage() {
                                     )}
                                 </div>
 
-                                {/* Progress Bar */}
-                                {event.slotsTotal > 0 && (
-                                    <div className="space-y-2">
-                                        <div className="flex items-center justify-between text-sm">
-                                            <span style={{ color: 'var(--text-secondary)' }}>
-                                                Þátttakendur
-                                            </span>
-                                            <span style={{ color: 'var(--text-primary)' }} className="font-medium">
-                                                {event.slotsFilled}/{event.slotsTotal}
-                                            </span>
-                                        </div>
-                                        <div
-                                            className="h-2 rounded-full overflow-hidden"
-                                            style={{ backgroundColor: 'var(--stone)' }}
-                                        >
+                                <div className="mt-auto pt-4 space-y-3">
+                                    {/* Progress Bar */}
+                                    {event.slotsTotal > 0 && (
+                                        <div className="space-y-2">
+                                            <div className="flex items-center justify-between text-sm">
+                                                <span style={{ color: 'var(--text-secondary)' }}>
+                                                    Þátttakendur
+                                                </span>
+                                                <span style={{ color: 'var(--text-primary)' }} className="font-medium">
+                                                    {event.slotsFilled}/{event.slotsTotal}
+                                                </span>
+                                            </div>
                                             <div
-                                                className="h-full transition-all duration-300"
-                                                style={{
-                                                    width: `${progress}% `,
-                                                    backgroundColor: (isComplete || iAmVolunteering)
-                                                        ? 'var(--green-success)'
-                                                        : 'var(--nordic-blue)',
-                                                }}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* Volunteers List */}
-                                {event.volunteers && event.volunteers.length > 0 && (
-                                    <div className="space-y-2">
-                                        <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
-                                            Skráðir þátttakendur
-                                        </p>
-                                        <div className="flex flex-wrap gap-2">
-                                            {event.volunteers.map((volunteer, idx) => (
+                                                className="h-2 rounded-full overflow-hidden"
+                                                style={{ backgroundColor: 'var(--stone)' }}
+                                            >
                                                 <div
-                                                    key={idx}
-                                                    className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
-                                                    style={{ backgroundColor: 'var(--stone)' }}
-                                                >
-                                                    <div
-                                                        className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
-                                                    >
-                                                        {volunteer.name[0]}
-                                                    </div>
-                                                    <span style={{ color: 'var(--text-primary)' }}>
-                                                        {volunteer.userId === user?.uid ? 'Þú' : volunteer.name}
-                                                    </span>
-                                                </div>
-                                            ))}
+                                                    className="h-full transition-all duration-300"
+                                                    style={{
+                                                        width: `${progress}% `,
+                                                        backgroundColor: (isComplete || iAmVolunteering)
+                                                            ? 'var(--green-success)'
+                                                            : 'var(--nordic-blue)',
+                                                    }}
+                                                />
+                                            </div>
                                         </div>
-                                    </div>
-                                )}
+                                    )}
 
-                                {/* Action Button */}
-                                {upcoming && !isComplete && !iAmVolunteering && (
-                                    <button
-                                        onClick={() => handleVolunteer(event.id)}
-                                        disabled={claimSlotMutation.isPending}
-                                        className="nordic-button w-full flex items-center justify-center gap-2"
-                                    >
-                                        {claimSlotMutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <UserPlus size={18} />}
-                                        Skrá mig
-                                    </button>
-                                )}
+                                    {/* Volunteers List */}
+                                    {event.volunteers && event.volunteers.length > 0 && (
+                                        <div className="space-y-2">
+                                            <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
+                                                Skráðir þátttakendur
+                                            </p>
+                                            <div className="flex flex-wrap gap-2">
+                                                {event.volunteers.map((volunteer, idx) => (
+                                                    <div
+                                                        key={idx}
+                                                        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
+                                                        style={{ backgroundColor: 'var(--stone)' }}
+                                                    >
+                                                        <div
+                                                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                                                            style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
+                                                        >
+                                                            {volunteer.name[0]}
+                                                        </div>
+                                                        <span style={{ color: 'var(--text-primary)' }}>
+                                                            {volunteer.userId === user?.uid ? 'Þú' : volunteer.name}
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
 
-                                {iAmVolunteering && upcoming && (
-                                    <button
-                                        onClick={() => {/* Unclaim logic not implemented yet in this view but could be added */ }}
-                                        className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
-                                    >
-                                        Skráður (Hafa samband til að afbóka)
-                                    </button>
-                                )}
+                                    {/* Action Button */}
+                                    {upcoming && !isComplete && !iAmVolunteering && (
+                                        <button
+                                            onClick={() => handleVolunteer(event.id)}
+                                            disabled={claimSlotMutation.isPending}
+                                            className="nordic-button w-full flex items-center justify-center gap-2"
+                                        >
+                                            {claimSlotMutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <UserPlus size={18} />}
+                                            Skrá mig
+                                        </button>
+                                    )}
+
+                                    {iAmVolunteering && upcoming && (
+                                        <button
+                                            onClick={() => {/* Unclaim logic not implemented yet in this view but could be added */ }}
+                                            className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
+                                        >
+                                            Skráður (Hafa samband til að afbóka)
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </div>
                     );

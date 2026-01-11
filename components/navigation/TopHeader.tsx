@@ -15,7 +15,7 @@ import { Timestamp } from 'firebase/firestore';
  * Always visible at the top of the app
  */
 
-export function TopHeader() {
+export function TopHeader({ className }: { className?: string }) {
     const { user, signOut } = useAuth();
     const router = useRouter();
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
@@ -51,7 +51,7 @@ export function TopHeader() {
 
     return (
         <header
-            className="fixed top-0 left-0 right-0 z-50 border-b"
+            className={`fixed top-0 left-0 right-0 z-30 border-b transition-all duration-200 ${className || ''}`}
             style={{
                 backgroundColor: 'var(--white)',
                 borderColor: 'var(--border-light)',
@@ -59,8 +59,8 @@ export function TopHeader() {
             }}
         >
             <div className="flex items-center justify-between px-4 py-3 max-w-5xl mx-auto w-full">
-                {/* Logo */}
-                <Link href={user ? `/${locale}/dashboard` : '/'} className="flex items-center gap-2">
+                {/* Logo - Hidden on desktop as it's in the sidebar */}
+                <Link href={user ? `/${locale}/dashboard` : '/'} className="flex items-center gap-2 md:opacity-0 md:pointer-events-none">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--nordic-blue)' }}>
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />

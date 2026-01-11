@@ -193,7 +193,7 @@ export default function DirectoryPage() {
     const canViewPhotos = userHasPhoto && childHasPhoto;
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24 max-w-5xl mx-auto">
+        <div className="space-y-6">
             {/* Header */}
             <header className="space-y-3">
                 <div className="flex items-center justify-between">

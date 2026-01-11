@@ -111,7 +111,7 @@ export default function PatrolPage() {
     });
 
     return (
-        <div className="min-h-screen p-4 space-y-6 pb-24 pt-24">
+        <div className="space-y-6">
             {/* Header */}
             <header className="space-y-3">
                 <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
