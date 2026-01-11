@@ -101,7 +101,8 @@ export default function SettingsView() {
         name: '',
         calendarUrl: '',
         joinCode: '',
-        parentTeamCode: ''
+        parentTeamCode: '',
+        schoolId: ''
     });
 
     // Populate form when data loads
@@ -114,7 +115,8 @@ export default function SettingsView() {
                 name: classData.name || '',
                 calendarUrl: classData.calendarUrl || '',
                 joinCode: classData.joinCode || '',
-                parentTeamCode: classData.parentTeamCode || ''
+                parentTeamCode: classData.parentTeamCode || '',
+                schoolId: classData.schoolId || ''
             });
         }
     }, [classData]);
@@ -157,10 +159,11 @@ export default function SettingsView() {
             setFormData({
                 ...formData,
                 schoolName: selectedSchool.name,
-                calendarUrl: selectedSchool.icsUrl
+                calendarUrl: selectedSchool.icsUrl,
+                schoolId: selectedSchool.id
             });
         } else {
-            setFormData({ ...formData, schoolName: e.target.value });
+            setFormData({ ...formData, schoolName: e.target.value, schoolId: '' });
         }
     };
 
@@ -179,7 +182,8 @@ export default function SettingsView() {
                 section: formData.section,
                 name: displayName,
                 calendarUrl: formData.calendarUrl,
-                joinCode: formData.joinCode
+                joinCode: formData.joinCode,
+                schoolId: formData.schoolId || undefined
             });
             await refetch();
             alert('Stillingar vistaðar!');

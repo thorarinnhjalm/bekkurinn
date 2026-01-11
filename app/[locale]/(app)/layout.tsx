@@ -56,7 +56,7 @@ export default async function AppLayout({
                 <div className="md:pl-64 w-full"> {/* Desktop spacer for fixed sidebar */}
                     <TopHeader className="md:left-64" />
 
-                    <main className="flex-1 w-full max-w-7xl mx-auto pt-20 pb-24 md:pb-12 px-4 sm:px-6 lg:px-8">
+                    <main className="flex-1 w-full max-w-7xl mx-auto pt-24 pb-24 md:pb-12 px-4 sm:px-6 lg:px-8">
                         <ErrorBoundary>
                             {children}
                         </ErrorBoundary>

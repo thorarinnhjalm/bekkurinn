@@ -1,11 +1,15 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Users, Calendar, CheckSquare, Megaphone, Home, Settings, LogOut, User as UserIcon } from 'lucide-react';
+import { Users, Calendar, CheckSquare, Megaphone, Home, Settings, LogOut, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { collection, query, where, getDocs, limit } from 'firebase/firestore';
+import { db } from '@/lib/firebase/config';
+import { useClass } from '@/hooks/useFirestore';
 
 interface DesktopSidebarProps {
     className?: string;
@@ -22,6 +26,36 @@ interface DesktopSidebarProps {
 export function DesktopSidebar({ className, locale, translations }: DesktopSidebarProps) {
     const pathname = usePathname();
     const { user, signOut } = useAuth();
+
+    // Fetch Class for Verified Badge
+    const [classId, setClassId] = useState<string | null>(null);
+    useEffect(() => {
+        async function fetchUserClass() {
+            if (!user) return;
+            try {
+                // Try finding class where user is admin first (most likely scenario for setup)
+                // Or checking a parent link? For now, we reuse the pattern: find class user is admin of.
+                // NOTE: This logic is simplified; real app needs a "Current Class Context".
+                const q = query(
+                    collection(db, 'classes'),
+                    where('admins', 'array-contains', user.uid),
+                    limit(1)
+                );
+                const snapshot = await getDocs(q);
+                if (!snapshot.empty) {
+                    setClassId(snapshot.docs[0].id);
+                } else {
+                    // Fallback: Find class via ParentLink? (Omitted for brevity in this task)
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+        if (user) fetchUserClass();
+    }, [user]);
+
+    const { data: classData } = useClass(classId);
+    const isVerified = Boolean(classData?.schoolId);
 
     const navItems = [
         {
@@ -78,9 +112,14 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                         <span className="font-bold text-xl block" style={{ color: 'var(--nordic-blue)' }}>
                             Bekkurinn
                         </span>
-                        <span className="text-xs text-gray-500 font-medium">
-                            Skólafélagið
-                        </span>
+                        <div className="flex items-center gap-1">
+                            <span className="text-xs text-gray-500 font-medium">
+                                Skólafélagið
+                            </span>
+                            {isVerified && (
+                                <ShieldCheck size={12} className="text-green-600 fill-green-100" />
+                            )}
+                        </div>
                     </div>
                 </Link>
             </div>

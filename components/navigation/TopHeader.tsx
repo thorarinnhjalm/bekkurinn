@@ -58,7 +58,7 @@ export function TopHeader({ className }: { className?: string }) {
                 paddingTop: 'env(safe-area-inset-top, 0px)',
             }}
         >
-            <div className="flex items-center justify-between px-4 py-3 max-w-5xl mx-auto w-full">
+            <div className="flex items-center justify-between px-4 py-3 max-w-7xl mx-auto w-full">
                 {/* Logo - Hidden on desktop as it's in the sidebar */}
                 <Link href={user ? `/${locale}/dashboard` : '/'} className="flex items-center gap-2 md:opacity-0 md:pointer-events-none">
                     <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: 'var(--nordic-blue)' }}>
