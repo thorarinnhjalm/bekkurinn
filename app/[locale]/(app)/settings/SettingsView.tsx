@@ -183,7 +183,7 @@ export default function SettingsView() {
                 name: displayName,
                 calendarUrl: formData.calendarUrl,
                 joinCode: formData.joinCode,
-                schoolId: formData.schoolId || undefined
+                schoolId: formData.schoolId || null
             });
             await refetch();
             alert('Stillingar vistaðar!');

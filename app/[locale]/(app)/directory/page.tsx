@@ -193,46 +193,49 @@ export default function DirectoryPage() {
     const canViewPhotos = userHasPhoto && childHasPhoto;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>Skráin</h1>
-                    {starredCount > 0 && (
-                        <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
-                            style={{ backgroundColor: 'var(--amber)20', color: 'var(--amber-dark)' }}>
-                            <Star size={14} fill="currentColor" />
-                            <span>{starredCount} vinir</span>
-                        </div>
-                    )}
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Skráin</h1>
+                    <p className="text-gray-500 mt-1">
+                        Sameiginleg skrá yfir nemendur í {displayName}
+                    </p>
                 </div>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Sameiginleg skrá yfir nemendur í {displayName}
-                </p>
+                {starredCount > 0 && (
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-100 shadow-sm animate-in zoom-in">
+                        <Star size={16} fill="currentColor" />
+                        <span>{starredCount} vinir</span>
+                    </div>
+                )}
             </header>
 
             {/* Search */}
-            <div className="nordic-card p-4">
+            <div className="relative group">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg className="h-5 w-5 text-gray-400 group-focus-within:text-nordic-blue transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
                 <input
                     type="search"
                     placeholder="Leita að nemanda..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 rounded-lg border outline-none focus:ring-2"
-                    style={{ borderColor: 'var(--border-light)', backgroundColor: 'var(--paper)' }}
+                    className="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all shadow-sm text-lg"
                 />
             </div>
 
             {/* Student Count */}
             {students.length > 0 && (
-                <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 px-1">
                     <Users size={16} />
                     <span>{sortedStudents.length} af {students.length} nemendum</span>
                 </div>
             )}
 
             {/* Student Grid - Responsive */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sortedStudents.map((student) => {
                     const isExpanded = expandedCards.has(student.id);
                     const isStarred = starredStudents.has(student.id);
@@ -240,85 +243,81 @@ export default function DirectoryPage() {
                     return (
                         <div
                             key={student.id}
-                            className="nordic-card overflow-hidden transition-all"
-                            style={{
-                                borderColor: isStarred ? 'var(--amber)' : 'var(--border-light)',
-                                borderWidth: isStarred ? '2px' : '1px'
-                            }}
+                            className={`nordic-card group transition-all duration-300 ${isStarred ? 'ring-2 ring-amber-100 shadow-md transform -translate-y-1' : 'hover:shadow-card-hover hover:-translate-y-1'}`}
                         >
                             {/* Child Info - Clickable to expand */}
                             <div
                                 onClick={() => toggleExpand(student.id)}
-                                className="p-5 cursor-pointer hover:bg-opacity-50 transition-colors relative"
-                                style={{ backgroundColor: isExpanded ? 'var(--stone)' : 'transparent' }}
+                                className="p-6 cursor-pointer relative"
                             >
-                                {/* Star Button - Top Right */}
+                                {/* Star Button - Absolute Top Right */}
                                 <button
                                     onClick={(e) => { e.stopPropagation(); toggleStar(student.id); }}
-                                    className="absolute top-3 right-3 tap-target p-2 rounded-lg transition-colors z-10"
-                                    style={{ color: isStarred ? 'var(--amber)' : 'var(--text-tertiary)' }}
+                                    className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-200 z-10 ${isStarred ? 'text-amber-400 bg-amber-50 hover:bg-amber-100' : 'text-gray-300 hover:text-amber-400 hover:bg-gray-50'}`}
                                 >
-                                    <Star size={20} fill={isStarred ? 'currentColor' : 'none'} />
+                                    <Star size={22} fill={isStarred ? 'currentColor' : 'none'} className="transition-transform active:scale-95" />
                                 </button>
 
-                                <div className="flex items-start gap-3 pr-10">
+                                <div className="flex items-center gap-5">
                                     {/* Photo Placeholder */}
-                                    <div
-                                        className="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 text-2xl font-bold overflow-hidden bg-gray-200"
-                                        style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
-                                    >
-                                        {canViewPhotos && student.photoUrl ? (
-                                            <img
-                                                src={student.photoUrl}
-                                                alt={student.name}
-                                                className="w-full h-full object-cover"
-                                            />
-                                        ) : (
-                                            student.name[0]
-                                        )}
+                                    <div className="relative">
+                                        <div
+                                            className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 text-3xl font-bold overflow-hidden shadow-sm transition-transform group-hover:scale-105 ${student.photoUrl ? 'bg-gray-100' : 'bg-gradient-to-br from-nordic-blue to-blue-600 text-white'}`}
+                                        >
+                                            {canViewPhotos && student.photoUrl ? (
+                                                <img
+                                                    src={student.photoUrl}
+                                                    alt={student.name}
+                                                    className="w-full h-full object-cover"
+                                                />
+                                            ) : (
+                                                student.name[0]
+                                            )}
+                                        </div>
+                                        {/* Status Indicator (Optional idea for later: Online/Active) */}
                                     </div>
 
-                                    <div className="flex-1 min-w-0">
-                                        <h3 className="text-lg font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
+
+                                    <div className="flex-1 min-w-0 py-1">
+                                        <h3 className="text-xl font-bold text-gray-900 truncate mb-1 group-hover:text-nordic-blue transition-colors">
                                             {student.name}
                                         </h3>
-                                        <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                            {formatBirthDate(student.birthDate)}
+                                        <p className="text-sm font-medium text-gray-500 mb-2 flex items-center gap-1">
+                                            🎂 {formatBirthDate(student.birthDate)}
                                         </p>
 
-                                        {/* Dietary Icons */}
+                                        {/* Dietary Icons as small pills */}
                                         {student.dietaryNeeds && student.dietaryNeeds.length > 0 && (
-                                            <div className="flex gap-2 mt-2 flex-wrap">
+                                            <div className="flex gap-1.5 flex-wrap">
                                                 {student.dietaryNeeds.map((type: DietaryNeed) => (
-                                                    <DietaryIcon key={type} type={type} size={14} showLabel={false} />
+                                                    <div key={type} className="opacity-80 hover:opacity-100 transition-opacity" title={type}>
+                                                        <DietaryIcon type={type} size={16} showLabel={false} />
+                                                    </div>
                                                 ))}
                                             </div>
                                         )}
-
-                                        {/* Expansion hint */}
-                                        <div className="flex items-center gap-1 mt-2 text-xs" style={{ color: 'var(--text-tertiary)' }}>
-                                            {isExpanded ? <ChevronUp size={14} /> : <Users size={14} />}
-                                            <span>{isExpanded ? 'Fela foreldra' : 'Smelltu til að sjá foreldra'}</span>
-                                        </div>
                                     </div>
+                                </div>
+
+                                {/* Bottom Action Bar / Hint */}
+                                <div className={`mt-4 pt-4 flex items-center justify-between text-sm font-medium transition-colors border-t border-gray-50 ${isExpanded ? 'text-nordic-blue' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                                    <div className="flex items-center gap-2">
+                                        <Users size={16} />
+                                        <span>Foreldrar</span>
+                                    </div>
+                                    <ChevronUp size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-0' : 'rotate-180'}`} />
                                 </div>
                             </div>
 
                             {/* Parent Info - Expandable */}
-                            {isExpanded && (
-                                <div
-                                    className="border-t px-5 py-4 space-y-3"
-                                    style={{ borderColor: 'var(--border-light)', backgroundColor: 'var(--paper)' }}
-                                >
-                                    <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
-                                        Foreldrar
-                                    </p>
+                            <div className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
+                                <div className="bg-gray-50/50 p-6 pt-2 space-y-3 pb-6 border-t border-gray-100">
                                     {parentsMap.get(student.id) && parentsMap.get(student.id)!.length > 0 ? (
                                         <div className="space-y-3">
                                             {parentsMap.get(student.id)!.map((parent: any, idx: number) => (
-                                                <div key={parent.id || idx} className="bg-stone-50 p-3 rounded-lg flex items-start gap-3">
+                                                <div key={parent.id || idx} className="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 hover:border-blue-200 transition-colors">
                                                     {/* Parent Photo */}
-                                                    <div className="w-10 h-10 rounded-full bg-gray-200 flex-shrink-0 overflow-hidden flex items-center justify-center text-sm font-bold text-gray-500">
+                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center text-sm font-bold text-gray-400 border border-gray-50">
                                                         {canViewPhotos && parent.photoURL ? (
                                                             <img
                                                                 src={parent.photoURL}
@@ -326,46 +325,48 @@ export default function DirectoryPage() {
                                                                 className="w-full h-full object-cover"
                                                             />
                                                         ) : (
-                                                            (parent.displayName || '?')[0]
+                                                            (parent.displayName || '?')[0].toUpperCase()
                                                         )}
                                                     </div>
 
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>
+                                                        <p className="font-semibold text-sm text-gray-900 truncate">
                                                             {parent.displayName || 'Nafnlaust'}
                                                         </p>
-                                                        {parent.phone && parent.isPhoneVisible && (
-                                                            <a
-                                                                href={`tel:${parent.phone}`}
-                                                                className="flex items-center gap-2 text-sm mt-1 hover:underline"
-                                                                style={{ color: 'var(--nordic-blue)' }}
-                                                            >
-                                                                <Phone size={14} />
-                                                                {parent.phone}
-                                                            </a>
-                                                        )}
-                                                        {parent.address && (
-                                                            <a
-                                                                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="flex items-center gap-2 text-xs mt-1 hover:underline"
-                                                                style={{ color: 'var(--text-secondary)' }}
-                                                            >
-                                                                🗺️ {parent.address}
-                                                            </a>
-                                                        )}
+                                                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-0.5">
+                                                            {parent.phone && parent.isPhoneVisible && (
+                                                                <a
+                                                                    href={`tel:${parent.phone}`}
+                                                                    className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-nordic-blue transition-colors"
+                                                                >
+                                                                    <Phone size={12} />
+                                                                    {parent.phone}
+                                                                </a>
+                                                            )}
+                                                            {/* Only show address if available */}
+                                                            {parent.address && (
+                                                                <a
+                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-nordic-blue transition-colors"
+                                                                >
+                                                                    <span>📍</span>
+                                                                    <span className="truncate max-w-[150px]">{parent.address}</span>
+                                                                </a>
+                                                            )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             ))}
                                         </div>
                                     ) : (
-                                        <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                            Upplýsingar um foreldra verða bættar við þegar þeir skrá sig í kerfið.
+                                        <p className="text-sm text-center py-2 text-gray-500 italic bg-white rounded-lg border border-gray-100 border-dashed">
+                                            Engir foreldrar skráðir í kerfið
                                         </p>
                                     )}
                                 </div>
-                            )}
+                            </div>
                         </div>
                     );
                 })}
@@ -373,14 +374,32 @@ export default function DirectoryPage() {
 
             {/* Empty state */}
             {students.length === 0 && (
-                <div className="text-center py-12">
-                    <Users size={48} style={{ color: 'var(--text-tertiary)', margin: '0 auto' }} />
-                    <h3 className="text-lg font-semibold mt-4" style={{ color: 'var(--text-primary)' }}>
-                        Engir nemendur enn
-                    </h3>
-                    <p className="text-sm mt-2" style={{ color: 'var(--text-secondary)' }}>
-                        Bekkjarformaður þarf að bæta nemendum við
+                <div className="min-h-[400px] flex flex-col items-center justify-center text-center p-8 bg-white rounded-3xl border-2 border-dashed border-gray-200">
+                    <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                        <Users size={40} className="text-nordic-blue" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Engir nemendur fundust</h3>
+                    <p className="text-gray-500 max-w-md mx-auto mb-6">
+                        Það lítur út fyrir að engir nemendur séu komnir í bekkinn. Bekkjarfulltrúi þarf að bæta þeim við eða senda út boðsmiða.
                     </p>
+                    {/* Could add CTA here for admins */}
+                </div>
+            )}
+
+            {/* Start your search empty state */}
+            {students.length > 0 && sortedStudents.length === 0 && (
+                <div className="text-center py-12">
+                    <div className="inline-block p-4 rounded-full bg-gray-50 mb-4">
+                        <Users size={32} className="text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900">Engar niðurstöður</h3>
+                    <p className="text-gray-500">Enginn nemandi fannst með nafnið "{searchQuery}"</p>
+                    <button
+                        onClick={() => setSearchQuery('')}
+                        className="mt-4 text-nordic-blue font-medium hover:underline"
+                    >
+                        Hreinsa leit
+                    </button>
                 </div>
             )}
         </div>

@@ -41,7 +41,9 @@ export const metadata: Metadata = {
     images: ['/dashboard-mockup.png'],
   },
   icons: {
-    icon: '/logo.png',
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
   }
 };
 

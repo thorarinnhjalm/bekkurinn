@@ -156,29 +156,21 @@ export default function TasksPage() {
     const pastCount = displayTasks.length - upcomingCount;
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 animate-in fade-in duration-500">
             {/* Header */}
-            <header className="space-y-3">
-                <div className="flex items-center justify-between">
-                    <div>
-                        <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
-                            Skipulag
-                        </h1>
-                        <p className="text-sm text-gray-500 mt-1">{activeClass?.name || 'Bekkurinn'}</p>
-                    </div>
-                    {upcomingCount > 0 && (
-                        <div
-                            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-medium"
-                            style={{ backgroundColor: 'var(--nordic-blue)20', color: 'var(--sage-dark)' }}
-                        >
-                            <Calendar size={14} />
-                            <span>{upcomingCount} í vændum</span>
-                        </div>
-                    )}
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Skipulag</h1>
+                    <p className="text-gray-500 mt-1">
+                        Viðburðir og verkefni bekkjarins
+                    </p>
                 </div>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Viðburðir og verkefni bekkjarins
-                </p>
+                {upcomingCount > 0 && (
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-blue-50 text-blue-700 border border-blue-100 shadow-sm animate-in zoom-in">
+                        <Calendar size={16} className="text-blue-600" />
+                        <span>{upcomingCount} í vændum</span>
+                    </div>
+                )}
             </header>
 
             {/* Admin Actions */}
@@ -186,67 +178,74 @@ export default function TasksPage() {
                 <div className="flex gap-3">
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 shadow-sm"
+                        className="bg-nordic-blue text-white px-5 py-2.5 rounded-xl font-semibold hover:bg-nordic-blue-dark transition-all shadow-sm hover:shadow-md flex items-center gap-2 active:scale-95"
                     >
-                        + Nýtt verkefni / viðburður
+                        <Edit2 size={18} />
+                        Nýtt verkefni / viðburður
                     </button>
                 </div>
             )}
 
             {/* Creation Modal */}
             {isCreating && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
-                        <h2 className="text-xl font-bold text-gray-900">Skrá nýtt verkefni</h2>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-2xl p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-200">
+                        <div className="text-center">
+                            <div className="w-12 h-12 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <Edit2 className="text-nordic-blue" size={24} />
+                            </div>
+                            <h2 className="text-2xl font-bold text-gray-900">Skrá nýtt verkefni</h2>
+                            <p className="text-gray-500 text-sm mt-1">Búðu til viðburð eða verkefni fyrir bekkinn</p>
+                        </div>
 
-                        <div className="space-y-3">
+                        <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Heiti</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Heiti</label>
                                 <input
                                     type="text"
                                     value={createTitle}
                                     onChange={e => setCreateTitle(e.target.value)}
                                     placeholder="t.d. Söfnun fyrir bekkjarferð"
-                                    className="w-full p-2 border rounded-lg"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Dagsetning / Skilafrestur</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Dagsetning / Skilafrestur</label>
                                 <input
                                     type="datetime-local"
                                     value={createDate}
                                     onChange={e => setCreateDate(e.target.value)}
-                                    className="w-full p-2 border rounded-lg"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Lýsing</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Lýsing</label>
                                 <textarea
                                     value={createDesc}
                                     onChange={e => setCreateDesc(e.target.value)}
                                     placeholder="Nánari lýsing á verkefninu..."
-                                    className="w-full p-2 border rounded-lg h-24"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all min-h-[100px]"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-gray-700">Fjöldi sjálfboðaliða sem vantar</label>
+                                <label className="block text-sm font-semibold text-gray-700 mb-1">Fjöldi sjálfboðaliða sem vantar</label>
                                 <input
                                     type="number"
                                     value={createSlots}
                                     onChange={e => setCreateSlots(Number(e.target.value))}
-                                    className="w-full p-2 border rounded-lg"
+                                    className="w-full px-4 py-3 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all"
                                     min={1}
                                 />
                             </div>
                         </div>
 
-                        <div className="flex justify-end gap-3 pt-2">
+                        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
                             <button
                                 onClick={() => setIsCreating(false)}
-                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
+                                className="px-5 py-2.5 text-gray-600 font-semibold hover:bg-gray-50 rounded-xl transition-colors"
                             >
                                 Hætta við
                             </button>
@@ -276,9 +275,9 @@ export default function TasksPage() {
                                     }
                                 }}
                                 disabled={createTaskMutation.isPending}
-                                className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                                className="px-6 py-2.5 bg-nordic-blue text-white font-bold rounded-xl hover:bg-nordic-blue-dark transition-all shadow-md hover:shadow-lg flex items-center gap-2"
                             >
-                                {createTaskMutation.isPending && <Loader2 className="animate-spin" size={16} />}
+                                {createTaskMutation.isPending && <Loader2 className="animate-spin" size={18} />}
                                 Stofna
                             </button>
                         </div>
@@ -302,71 +301,45 @@ export default function TasksPage() {
                     return (
                         <div
                             key={event.id}
-                            className="nordic-card overflow-hidden transition-all hover:shadow-md flex flex-col h-full"
-                            style={{
-                                opacity: upcoming ? 1 : 0.7,
-                                borderColor: iAmVolunteering ? 'var(--green-success)' : (isComplete ? 'var(--border-light)' : 'var(--border-light)'),
-                                borderWidth: iAmVolunteering || isComplete ? '1px' : '1px',
-                                boxShadow: iAmVolunteering ? '0 0 0 1px var(--green-success)' : 'none'
-                            }}
+                            className={`nordic-card group flex flex-col h-full bg-white transition-all duration-300 ${upcoming ? 'hover:shadow-card-hover hover:-translate-y-1' : 'opacity-75 grayscale-[0.5]'} ${iAmVolunteering ? 'ring-2 ring-green-500 ring-offset-2' : ''}`}
                         >
                             {/* Event Header */}
-                            <div className="p-5 space-y-3 flex-1 flex flex-col">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div className="flex-1">
-                                        <div className="flex items-center gap-2 flex-wrap mb-2">
-                                            <h2 className="text-xl font-semibold line-clamp-2" style={{ color: 'var(--text-primary)' }}>
-                                                {event.title}
-                                            </h2>
+                            <div className="p-6 flex-1 flex flex-col space-y-4">
+                                <div className="flex items-start justify-between gap-4">
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2 flex-wrap mb-1">
+                                            {isComplete && !iAmVolunteering && (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-gray-100 text-gray-600 uppercase tracking-wider">
+                                                    Fullbókað
+                                                </span>
+                                            )}
+                                            {iAmVolunteering && (
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-green-100 text-green-700 uppercase tracking-wider">
+                                                    <CheckCircle size={12} />
+                                                    Þú ert skráð(ur)
+                                                </span>
+                                            )}
                                             {!upcoming && (
-                                                <span
-                                                    className="text-xs px-2 py-0.5 rounded"
-                                                    style={{
-                                                        backgroundColor: 'var(--text-tertiary)20',
-                                                        color: 'var(--text-tertiary)'
-                                                    }}
-                                                >
+                                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-bold bg-gray-100 text-gray-500 uppercase tracking-wider">
                                                     Liðinn
                                                 </span>
                                             )}
-                                            {isComplete && !iAmVolunteering && (
-                                                <div
-                                                    className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600"
-                                                >
-                                                    <CheckCircle size={12} />
-                                                    <span>Fullbókað</span>
-                                                </div>
-                                            )}
-                                            {iAmVolunteering && (
-                                                <div
-                                                    className="flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium"
-                                                    style={{ backgroundColor: 'var(--green-success)', color: 'white' }}
-                                                >
-                                                    <CheckCircle size={12} />
-                                                    <span>Þú ert skráð(ur)</span>
-                                                </div>
-                                            )}
                                         </div>
-
-                                        <div className="flex items-center gap-2 text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                            <Calendar size={16} />
-                                            <span>{formatDate(event.date)}</span>
+                                        <h2 className="text-xl font-bold text-gray-900 line-clamp-2 leading-tight group-hover:text-nordic-blue transition-colors">
+                                            {event.title}
+                                        </h2>
+                                        <div className="flex items-center gap-2 text-sm font-medium text-gray-500">
+                                            <Calendar size={16} className="text-nordic-blue" />
+                                            <span className="capitalize">{formatDate(event.date)}</span>
                                         </div>
-
-                                        {event.description && (
-                                            <p className="mt-2 text-sm line-clamp-3" style={{ color: 'var(--text-secondary)' }}>
-                                                {event.description}
-                                            </p>
-                                        )}
                                     </div>
 
-                                    {/* Admin Actions */}
+                                    {/* Edit actions */}
                                     {isAdmin && (
-                                        <div className="flex items-center gap-2">
+                                        <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
                                                 onClick={() => setEditingTask(event)}
-                                                className="text-gray-400 hover:text-blue-600 p-1.5 rounded hover:bg-blue-50 transition-colors"
-                                                title="Breyta"
+                                                className="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
                                             >
                                                 <Edit2 size={16} />
                                             </button>
@@ -381,8 +354,7 @@ export default function TasksPage() {
                                                         }
                                                     }
                                                 }}
-                                                className="text-gray-400 hover:text-red-600 p-1.5 rounded hover:bg-red-50 transition-colors"
-                                                title="Eyða"
+                                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                                             >
                                                 <Trash2 size={16} />
                                             </button>
@@ -390,60 +362,49 @@ export default function TasksPage() {
                                     )}
                                 </div>
 
-                                <div className="mt-auto pt-4 space-y-3">
-                                    {/* Progress Bar */}
+                                {event.description && (
+                                    <p className="text-sm text-gray-600 leading-relaxed line-clamp-3">
+                                        {event.description}
+                                    </p>
+                                )}
+
+                                <div className="mt-auto pt-4 space-y-4 border-t border-gray-50">
+                                    {/* Progress Bar Section */}
                                     {event.slotsTotal > 0 && (
                                         <div className="space-y-2">
-                                            <div className="flex items-center justify-between text-sm">
-                                                <span style={{ color: 'var(--text-secondary)' }}>
-                                                    Þátttakendur
-                                                </span>
-                                                <span style={{ color: 'var(--text-primary)' }} className="font-medium">
-                                                    {event.slotsFilled}/{event.slotsTotal}
+                                            <div className="flex items-center justify-between text-xs font-semibold uppercase tracking-wide text-gray-500">
+                                                <span>Þátttakendur</span>
+                                                <span className={isComplete ? 'text-green-600' : 'text-nordic-blue'}>
+                                                    {event.slotsFilled} / {event.slotsTotal}
                                                 </span>
                                             </div>
-                                            <div
-                                                className="h-2 rounded-full overflow-hidden"
-                                                style={{ backgroundColor: 'var(--stone)' }}
-                                            >
+                                            <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
                                                 <div
-                                                    className="h-full transition-all duration-300"
-                                                    style={{
-                                                        width: `${progress}% `,
-                                                        backgroundColor: (isComplete || iAmVolunteering)
-                                                            ? 'var(--green-success)'
-                                                            : 'var(--nordic-blue)',
-                                                    }}
+                                                    className={`h-full transition-all duration-500 ease-out rounded-full ${isComplete ? 'bg-green-500' : 'bg-nordic-blue'}`}
+                                                    style={{ width: `${progress}%` }}
                                                 />
                                             </div>
                                         </div>
                                     )}
 
-                                    {/* Volunteers List */}
+                                    {/* Volunteers List (Avatars) */}
                                     {event.volunteers && event.volunteers.length > 0 && (
-                                        <div className="space-y-2">
-                                            <p className="text-xs font-medium uppercase tracking-wide" style={{ color: 'var(--text-tertiary)' }}>
-                                                Skráðir þátttakendur
-                                            </p>
-                                            <div className="flex flex-wrap gap-2">
-                                                {event.volunteers.map((volunteer, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
-                                                        style={{ backgroundColor: 'var(--stone)' }}
-                                                    >
-                                                        <div
-                                                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                                                            style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
-                                                        >
-                                                            {volunteer.name[0]}
-                                                        </div>
-                                                        <span style={{ color: 'var(--text-primary)' }}>
-                                                            {volunteer.userId === user?.uid ? 'Þú' : volunteer.name}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
+                                        <div className="flex -space-x-2 overflow-hidden py-1">
+                                            {event.volunteers.slice(0, 5).map((volunteer, idx) => (
+                                                <div
+                                                    key={idx}
+                                                    className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500 shadow-sm"
+                                                    title={volunteer.name}
+                                                    style={{ zIndex: 5 - idx }}
+                                                >
+                                                    {volunteer.name[0]}
+                                                </div>
+                                            ))}
+                                            {event.volunteers.length > 5 && (
+                                                <div className="inline-block h-8 w-8 rounded-full ring-2 ring-white bg-gray-50 flex items-center justify-center text-xs font-bold text-gray-500 shadow-sm" style={{ zIndex: 0 }}>
+                                                    +{event.volunteers.length - 5}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
 
@@ -452,19 +413,20 @@ export default function TasksPage() {
                                         <button
                                             onClick={() => handleVolunteer(event.id)}
                                             disabled={claimSlotMutation.isPending}
-                                            className="nordic-button w-full flex items-center justify-center gap-2"
+                                            className="w-full py-3 rounded-xl bg-nordic-blue text-white font-bold hover:bg-nordic-blue-dark transition-all flex items-center justify-center gap-2 shadow-sm hover:shadow-md active:scale-[0.98]"
                                         >
-                                            {claimSlotMutation.isPending ? <Loader2 className="animate-spin" size={18} /> : <UserPlus size={18} />}
-                                            Skrá mig
+                                            {claimSlotMutation.isPending ? <Loader2 className="animate-spin" size={20} /> : <UserPlus size={20} />}
+                                            Skrá mig í verkefnið
                                         </button>
                                     )}
 
                                     {iAmVolunteering && upcoming && (
                                         <button
-                                            onClick={() => {/* Unclaim logic not implemented yet in this view but could be added */ }}
-                                            className="w-full py-3 rounded-xl border border-gray-200 text-gray-500 font-medium hover:bg-gray-50 flex items-center justify-center gap-2"
+                                            disabled={true}
+                                            className="w-full py-3 rounded-xl border-2 border-green-100 bg-green-50 text-green-700 font-bold flex items-center justify-center gap-2 cursor-default"
                                         >
-                                            Skráður (Hafa samband til að afbóka)
+                                            <CheckCircle size={20} />
+                                            Þú ert skráð(ur)
                                         </button>
                                     )}
                                 </div>
@@ -478,41 +440,43 @@ export default function TasksPage() {
             {displayTasks.length === 0 && (
                 isAdmin ? (
                     <EmptyState
-                        icon={<ListTodo size={56} strokeWidth={1.5} />}
-                        title="Hér er tómt eins og er 📋"
-                        description="Viðburðir og verkefni sem þú býrð til birtast hér.<br/>Byrjaðu með að skrá fyrsta viðburðinn til að skipuleggja bekkinn!"
+                        icon={<ListTodo size={48} className="text-nordic-blue" />}
+                        title="Hér er tómt eins og er"
+                        description="Búðu til fyrsta verkefnið eða viðburðinn til að byrja að skipuleggja bekkinn."
                         actionLabel="Stofna fyrsta viðburðinn"
                         onAction={() => setIsCreating(true)}
                     />
                 ) : (
-                    <EmptyState
-                        icon={<ListTodo size={56} strokeWidth={1.5} />}
-                        title="Engin verkefni enn 👀"
-                        description="Þegar bekkjarformaðurinn býr til viðburði eða biður um aðstoð munt þú sjá þau hér.<br/>Vertu rólegur – við látum þig vita þegar eitthvað kemur upp!"
-                    />
+                    <div className="text-center py-16 bg-white rounded-3xl border-2 border-dashed border-gray-100">
+                        <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <ListTodo size={32} className="text-gray-400" />
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">Engin verkefni í gangi</h3>
+                        <p className="text-gray-500 max-w-sm mx-auto">
+                            Það er ekkert á döfinni hjá bekknum eins og er. Njóttu hvíldarinnar! ☕️
+                        </p>
+                    </div>
                 )
             )}
 
 
             {/* Summary Stats (Only if events exist) */}
             {displayTasks.length > 0 && (
-                <div className="nordic-card p-5">
-                    <div className="grid grid-cols-2 gap-4 text-center">
-                        <div>
-                            <div className="text-2xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
-                                {upcomingCount}
-                            </div>
-                            <div className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                Í vændum
-                            </div>
+                <div className="grid grid-cols-2 gap-4 max-w-lg mx-auto mt-12 opacity-80 hover:opacity-100 transition-opacity">
+                    <div className="bg-white/50 p-6 rounded-2xl text-center border border-gray-100">
+                        <div className="text-3xl font-extrabold text-nordic-blue mb-1">
+                            {upcomingCount}
                         </div>
-                        <div>
-                            <div className="text-2xl font-bold" style={{ color: 'var(--text-tertiary)' }}>
-                                {pastCount}
-                            </div>
-                            <div className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                Liðnir
-                            </div>
+                        <div className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                            Í vændum
+                        </div>
+                    </div>
+                    <div className="bg-white/50 p-6 rounded-2xl text-center border border-gray-100">
+                        <div className="text-3xl font-extrabold text-gray-400 mb-1">
+                            {pastCount}
+                        </div>
+                        <div className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                            Liðnir
                         </div>
                     </div>
                 </div>

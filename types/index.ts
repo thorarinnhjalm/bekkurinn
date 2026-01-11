@@ -33,7 +33,7 @@ export interface Class {
     parentTeamCode?: string; // Admin-only invite code
     name: string; // e.g., "Salaskóli 4. Bekkur"
     schoolName: string;
-    schoolId?: string; // ID from SCHOOLS constant if verified
+    schoolId?: string | null; // ID from SCHOOLS constant if verified
     grade: number;
     section?: string;
     calendarUrl?: string; // ICS URL for school calendar

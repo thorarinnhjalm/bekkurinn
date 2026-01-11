@@ -33,9 +33,10 @@
   --border-medium: #d4d4d4;
   --border-dark: #a3a3a3;
 
-  /* Shadows */
+  /* Shadows - Smoother & Deeper */
   --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --shadow-card: 0 2px 8px -2px rgba(0, 0, 0, 0.05), 0 1px 4px -1px rgba(0, 0, 0, 0.02);
+  --shadow-card-hover: 0 12px 24px -8px rgba(0, 0, 0, 0.08), 0 4px 8px -4px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
 
   /* Spacing Scale (Nordic Minimalism) */
@@ -59,12 +60,12 @@
   /* Border Radius */
   --radius-sm: 0.375rem;
   /* 6px */
-  --radius-md: 0.5rem;
-  /* 8px */
-  --radius-lg: 0.75rem;
-  /* 12px */
-  --radius-xl: 1rem;
-  /* 16px */
+  --radius-md: 0.75rem;
+  /* 12px - Increased for softer feel */
+  --radius-lg: 1rem;
+  /* 16px - Increased */
+  --radius-xl: 1.5rem;
+  /* 24px */
 }
 
 @theme inline {
@@ -94,7 +95,8 @@ html {
 }
 
 body {
-  background: var(--stone);
+  background: #f8f9fa;
+  /* Lighter, cleaner background */
   color: var(--text-primary);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -137,7 +139,10 @@ h3,
 h4,
 h5,
 h6 {
-  font-weight: 600;
+  font-weight: 700;
+  /* Bolder headings */
+  letter-spacing: -0.02em;
+  /* Tighter tracking for headings */
   line-height: 1.2;
   margin: 0;
   color: var(--text-primary);
@@ -159,8 +164,17 @@ p {
 .nordic-card {
   background: var(--white);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--border-light);
+  box-shadow: var(--shadow-card);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  /* Subtler border */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.nordic-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+  border-color: rgba(74, 124, 158, 0.1);
+  /* Subtle blue tint on hover */
 }
 
 .nordic-button {
@@ -169,16 +183,17 @@ p {
   border: none;
   border-radius: var(--radius-md);
   padding: 0.75rem 1.5rem;
-  font-weight: 500;
+  font-weight: 600;
   min-height: var(--tap-target);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 4px rgba(74, 124, 158, 0.2);
 }
 
 .nordic-button:hover {
   background: var(--nordic-blue-dark);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 8px rgba(74, 124, 158, 0.3);
 }
 
 .nordic-button:active {

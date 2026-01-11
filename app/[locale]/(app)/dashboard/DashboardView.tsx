@@ -244,21 +244,26 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-8 animate-in fade-in duration-500">
             {/* 1. Greeting (Full Width) */}
-            <header className="space-y-1 mb-2">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
-                    {translations.greeting.replace('{name}', firstName)}
-                </h1>
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 py-2">
+                <div>
+                    <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
+                        {translations.greeting.replace('{name}', firstName.split(' ')[0])}
+                    </h1>
+                    <p className="text-lg text-gray-500 mt-1">
+                        Yfirlit dagsins á einum stað
+                    </p>
+                </div>
 
                 {userClasses && userClasses.length > 1 ? (
-                    <div className="relative inline-block group">
-                        <button className="flex items-center gap-2 text-lg font-medium text-gray-600 hover:text-gray-900 transition-colors">
-                            Velkomin í {displayClassName}
-                            <ChevronDown size={18} />
+                    <div className="relative inline-block group z-50">
+                        <button className="flex items-center gap-2 bg-white border border-gray-200 shadow-sm px-4 py-2 rounded-full hover:border-blue-300 transition-colors">
+                            <span className="font-medium text-gray-700">{displayClassName}</span>
+                            <ChevronDown size={16} className="text-gray-400" />
                         </button>
 
-                        <div className="absolute left-0 mt-1 w-64 bg-white rounded-xl shadow-lg border border-gray-100 py-1 hidden group-hover:block z-50">
+                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-card border border-gray-100 py-1 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
                             {userClasses.map((c) => (
                                 <button
                                     key={c.id}
@@ -280,50 +285,69 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         </div>
                     </div>
                 ) : (
-                    <p style={{ color: 'var(--text-secondary)' }}>
-                        Velkomin í {displayClassName}
-                    </p>
+                    <div className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
+                        {displayClassName}
+                    </div>
                 )}
             </header>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                {/* --- LEFT COLUMN (Main Content) --- */}
-                <div className="lg:col-span-2 space-y-6">
+                {/* --- LEFT COLUMN (Main Content) - Spans 8 cols --- */}
+                <div className="lg:col-span-8 space-y-8">
 
                     {/* Pending Approvals (Only for approved parents) */}
                     {parentLink && parentLink.status === 'approved' && classId && (
                         <PendingApprovals classId={classId} myStudentId={parentLink.studentId} />
                     )}
 
-                    {/* Latest Announcement */}
+                    {/* Latest Announcement Hero Card */}
                     {latestAnnouncement && (
-                        <section className="space-y-3">
-                            <div className="flex items-center justify-between">
-                                <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                        <section>
+                            <div className="flex items-center justify-between mb-4">
+                                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+                                    <Megaphone className="text-nordic-blue" size={24} />
                                     {translations.latest_announcement}
                                 </h2>
-                                <Link href={`/${locale}/announcements`} className="text-sm font-medium flex items-center gap-1" style={{ color: 'var(--nordic-blue)' }}>
+                                <Link href={`/${locale}/announcements`} className="text-sm font-semibold text-nordic-blue hover:text-blue-800 transition-colors flex items-center gap-1">
                                     Sjá allar <ChevronRight size={16} />
                                 </Link>
                             </div>
 
-                            <div
-                                className="nordic-card p-5 border-l-4 transition-transform hover:scale-[1.01]"
-                                style={{ borderColor: 'var(--border-light)', borderLeftColor: latestAnnouncement.pinned ? 'var(--amber)' : 'var(--nordic-blue)' }}
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="p-2 rounded-full flex-shrink-0" style={{ backgroundColor: latestAnnouncement.pinned ? 'var(--amber)20' : 'var(--nordic-blue)20' }}>
-                                        <Megaphone size={20} color={latestAnnouncement.pinned ? 'var(--amber-dark)' : 'var(--nordic-blue)'} />
+                            <div className="nordic-card p-6 md:p-8 relative overflow-hidden group">
+                                {/* Decorative elements */}
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-full opacity-50 pointer-events-none" />
+
+                                <div className="relative z-10">
+                                    <div className="flex items-start justify-between gap-4 mb-3">
+                                        <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
+                                            <span className="bg-gray-100 px-2 py-0.5 rounded text-xs uppercase tracking-wide">Tilkynning</span>
+                                            <span>•</span>
+                                            <span>{formatDate(latestAnnouncement.createdAt)}</span>
+                                        </div>
+                                        {latestAnnouncement.pinned && (
+                                            <div className="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                                                <Star size={12} fill="currentColor" />
+                                                Mikilvægt
+                                            </div>
+                                        )}
                                     </div>
-                                    <div className="space-y-1 min-w-0">
-                                        <h3 className="font-medium truncate">{latestAnnouncement.title}</h3>
-                                        <p className="text-sm line-clamp-2 leading-relaxed text-gray-600">
-                                            {latestAnnouncement.content}
-                                        </p>
-                                        <p className="text-xs pt-1 text-gray-400">
-                                            {formatDate(latestAnnouncement.createdAt)} • {latestAnnouncement.author || 'Stjórn'}
-                                        </p>
+
+                                    <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
+                                        {latestAnnouncement.title}
+                                    </h3>
+
+                                    <div className="prose prose-blue prose-sm max-w-none text-gray-600 leading-relaxed line-clamp-4">
+                                        {latestAnnouncement.content}
+                                    </div>
+
+                                    <div className="mt-6 flex items-center gap-3 pt-4 border-t border-gray-100">
+                                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">
+                                            {(latestAnnouncement.author || 'S')[0]}
+                                        </div>
+                                        <div className="text-sm">
+                                            <p className="font-medium text-gray-900">{latestAnnouncement.author || 'Stjórn'}</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -331,45 +355,66 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     )}
 
                     {/* Upcoming Events */}
-                    <section className="space-y-3">
-                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    <section>
+                        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <Calendar className="text-nordic-blue" size={24} />
                             {translations.whats_next}
                         </h2>
 
                         {upcomingTasks.length > 0 ? (
-                            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-                                {upcomingTasks.slice(0, 4).map((task: any) => { // Increased to 4 items
+                            <div className="grid gap-4 sm:grid-cols-2">
+                                {upcomingTasks.slice(0, 4).map((task: any) => {
                                     const isSchoolEvent = task.type === 'school_event';
-                                    const dateObj = task.jsDate; // We mapped this above
+                                    const dateObj = task.jsDate;
                                     return (
-                                        <div key={task.id} className="nordic-card p-4 flex items-center gap-4 hover:shadow-md transition-shadow">
-                                            <div className={`flex flex-col items-center justify-center w-12 h-12 rounded-lg flex-shrink-0 ${isSchoolEvent ? 'bg-amber-100' : 'bg-blue-50'}`}>
-                                                <span className={`text-xs font-bold uppercase ${isSchoolEvent ? 'text-amber-700' : 'text-blue-600'}`}>
-                                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }) : ''}
-                                                </span>
-                                                <span className="text-lg font-bold text-gray-800">
-                                                    {dateObj ? dateObj.getDate() : ''}
-                                                </span>
+                                        <div key={task.id} className="nordic-card p-5 hover:shadow-card-hover transition-all group flex flex-col justify-between h-full bg-white border-transparent hover:border-blue-100">
+                                            <div className="flex items-start justify-between mb-3">
+                                                <div className={`w-14 h-14 rounded-xl flex flex-col items-center justify-center shadow-sm ${isSchoolEvent ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
+                                                    <span className="text-xs font-bold uppercase opacity-80">
+                                                        {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }).slice(0, 3) : ''}
+                                                    </span>
+                                                    <span className="text-xl font-bold leading-none">
+                                                        {dateObj ? dateObj.getDate() : ''}
+                                                    </span>
+                                                </div>
+                                                {!isSchoolEvent && (
+                                                    <div className="bg-gray-50 px-2 py-1 rounded text-xs font-medium text-gray-500">
+                                                        {task.slotsFilled}/{task.slotsTotal}
+                                                    </div>
+                                                )}
                                             </div>
+
                                             <div>
-                                                <h4 className="font-medium text-gray-900">{task.title}</h4>
-                                                <p className="text-sm text-gray-500">
-                                                    {isSchoolEvent
-                                                        ? 'Skóladagatal'
-                                                        : `${task.slotsFilled} af ${task.slotsTotal} skráðir`}
+                                                <h4 className="font-bold text-gray-900 group-hover:text-nordic-blue transition-colors line-clamp-2 mb-1">
+                                                    {task.title}
+                                                </h4>
+                                                <p className="text-sm text-gray-500 line-clamp-1">
+                                                    {isSchoolEvent ? 'Skóladagatal' : 'Foreldrastarf'}
                                                 </p>
                                             </div>
                                         </div>
                                     );
                                 })}
+                                {/* 'See all' card */}
+                                <Link href={`/${locale}/tasks`} className="nordic-card p-5 group flex items-center justify-center text-center bg-gray-50 border-dashed border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer">
+                                    <div>
+                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                                            <ChevronRight className="text-gray-400 group-hover:text-blue-500" />
+                                        </div>
+                                        <span className="font-medium text-gray-600 group-hover:text-blue-700">Sjá alla viðburði</span>
+                                    </div>
+                                </Link>
                             </div>
                         ) : (
-                            <div className="nordic-card p-8 text-center bg-gray-50 border-dashed border-2 border-gray-200">
-                                <Calendar className="mx-auto mb-2 text-gray-300" size={32} />
-                                <p className="text-gray-500 font-medium mb-2">{translations.no_events}</p>
+                            <div className="nordic-card p-10 text-center bg-gray-50 border-dashed border-2 border-gray-200">
+                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mx-auto mb-4">
+                                    <Calendar className="text-gray-300" size={32} />
+                                </div>
+                                <h3 className="font-semibold text-gray-900 mb-1">Ekkert á döfinni</h3>
+                                <p className="text-gray-500 text-sm mb-4">{translations.no_events}</p>
                                 {isAdmin && (
-                                    <Link href={`/${locale}/settings`} className="text-sm text-nordic-blue hover:underline">
-                                        Sækja skóladagatal í stillingum →
+                                    <Link href={`/${locale}/settings`} className="inline-flex items-center gap-2 text-sm font-medium text-nordic-blue hover:underline bg-blue-50 px-4 py-2 rounded-lg">
+                                        <span className="text-lg">📅</span> Sækja skóladagatal
                                     </Link>
                                 )}
                             </div>
@@ -377,71 +422,64 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </section>
                 </div>
 
-                {/* --- RIGHT COLUMN (Sidebar) --- */}
-                <div className="space-y-6">
+                {/* --- RIGHT COLUMN (Sidebar) - Spans 4 cols --- */}
+                <div className="lg:col-span-4 space-y-8">
 
-                    {/* Upcoming Birthdays */}
-                    <section className="space-y-3">
-                        <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                            {translations.upcoming_birthdays}
-                        </h2>
-
-                        <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden divide-y divide-gray-50">
-                            {upcomingBirthdays.length > 0 ? (
-                                upcomingBirthdays.map(student => (
-                                    <div key={student.id} className="p-3 flex items-center gap-3 hover:bg-gray-50 transition-colors">
-                                        <div className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold text-white flex-shrink-0 bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm">
-                                            {student.name[0]}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-sm truncate">{student.name}</p>
-                                            <p className="text-xs text-gray-500">
-                                                {formatDate(student.nextBirthday as any)}
-                                            </p>
-                                        </div>
-                                        <Star size={14} className="text-amber-400" fill="currentColor" />
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-sm text-center py-6 text-gray-400 italic">{translations.no_birthdays}</p>
-                            )}
-                        </div>
-                    </section>
-
-                    {/* ADMIN ACTIONS SIDEBAR */}
+                    {/* Quick Actions (Admin only) - Moved up for better access */}
                     {isAdmin && (
-                        <section className="space-y-3">
-                            <h2 className="text-lg font-semibold text-gray-900">
-                                Flýtileiðir
-                            </h2>
-                            <div className="bg-blue-50 rounded-xl p-4 border border-blue-100 space-y-2">
-                                <Link href={`/${locale}/settings`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
-                                    <div className="bg-blue-100 p-1.5 rounded-md group-hover:bg-blue-200 transition-colors">
-                                        <div className="w-4 h-4 text-nordic-blue">⚙️</div>
-                                    </div>
-                                    Stillingar & Dagatal
+                        <section className="bg-gradient-to-br from-nordic-blue to-nordic-blue-dark rounded-2xl p-6 text-white shadow-card relative overflow-hidden">
+                            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full translate-x-10 -translate-y-10" />
+
+                            <h2 className="text-lg font-bold mb-4 relative z-10">Stjórnborð</h2>
+
+                            <div className="space-y-2 relative z-10">
+                                <Link href={`/${locale}/announcements`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
+                                    <Megaphone size={18} className="text-amber-300" />
+                                    <span className="font-medium text-sm">Ný tilkynning</span>
                                 </Link>
-                                <Link href={`/${locale}/announcements`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
-                                    <div className="bg-amber-100 p-1.5 rounded-md group-hover:bg-amber-200 transition-colors">
-                                        <Megaphone size={16} className="text-amber-600" />
-                                    </div>
-                                    Ný tilkynning
+                                <Link href={`/${locale}/tasks`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
+                                    <Calendar size={18} className="text-green-300" />
+                                    <span className="font-medium text-sm">Skrá viðburð</span>
                                 </Link>
-                                <Link href={`/${locale}/patrol`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
-                                    <div className="bg-green-100 p-1.5 rounded-md group-hover:bg-green-200 transition-colors">
-                                        <Calendar size={16} className="text-green-600" />
-                                    </div>
-                                    Skrá Foreldrarölt
-                                </Link>
-                                <Link href={`/${locale}/tasks`} className="flex items-center gap-3 p-2 rounded-lg bg-white border border-blue-100 hover:border-blue-300 transition-colors group text-sm font-medium text-gray-700">
-                                    <div className="bg-purple-100 p-1.5 rounded-md group-hover:bg-purple-200 transition-colors">
-                                        <Star size={16} className="text-purple-600" />
-                                    </div>
-                                    Nýtt verkefni
+                                <Link href={`/${locale}/settings`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
+                                    <div className="w-4 h-4 text-blue-200">⚙️</div>
+                                    <span className="font-medium text-sm">Stillingar</span>
                                 </Link>
                             </div>
                         </section>
                     )}
+
+                    {/* Upcoming Birthdays */}
+                    <section>
+                        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                            <div className="bg-amber-100 p-1.5 rounded-lg text-amber-600">
+                                <Star size={18} fill="currentColor" />
+                            </div>
+                            {translations.upcoming_birthdays}
+                        </h2>
+
+                        <div className="nordic-card divide-y divide-gray-50 overflow-hidden">
+                            {upcomingBirthdays.length > 0 ? (
+                                upcomingBirthdays.map(student => (
+                                    <div key={student.id} className="p-4 flex items-center gap-3 hover:bg-gray-50 transition-colors group">
+                                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm group-hover:scale-110 transition-transform">
+                                            {student.name[0]}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-bold text-gray-900 truncate">{student.name}</p>
+                                            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
+                                                {formatDate(student.nextBirthday as any)}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-8 text-center bg-gray-50/50">
+                                    <p className="text-sm text-gray-500 italic">Engin afmæli á næstunni</p>
+                                </div>
+                            )}
+                        </div>
+                    </section>
                 </div>
             </div>
 
