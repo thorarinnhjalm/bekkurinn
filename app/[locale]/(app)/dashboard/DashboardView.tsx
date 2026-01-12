@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink } from '@/hooks/useFirestore';
-import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus } from 'lucide-react';
+import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus, Users, CheckSquare, Settings } from 'lucide-react';
 // import { db } from '@/lib/firebase/config'; // No longer needed directly
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'; // Removed manual queries
 
@@ -244,246 +244,243 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* 1. Greeting (Full Width) */}
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 py-2">
-                <div>
-                    <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">
-                        {translations.greeting.replace('{name}', firstName.split(' ')[0])}
-                    </h1>
-                    <p className="text-lg text-gray-500 mt-1">
-                        Yfirlit dagsins á einum stað
-                    </p>
+        <div className="space-y-12 animate-in fade-in duration-800 pb-20">
+            {/* 1. Glass Hero Section */}
+            <header className="relative isolate overflow-hidden">
+                {/* Blurry background blobs for depth */}
+                <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl" aria-hidden="true">
+                    <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-20"
+                        style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
+                    />
                 </div>
 
-                {userClasses && userClasses.length > 1 ? (
-                    <div className="relative inline-block group z-50">
-                        <button className="flex items-center gap-2 bg-white border border-gray-200 shadow-sm px-4 py-2 rounded-full hover:border-blue-300 transition-colors">
-                            <span className="font-medium text-gray-700">{displayClassName}</span>
-                            <ChevronDown size={16} className="text-gray-400" />
-                        </button>
+                <div className="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
+                    <div className="space-y-4 max-w-2xl relative z-10">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/50 backdrop-blur border border-white/30 text-xs font-bold text-nordic-blue uppercase tracking-wide">
+                            👋 Velkomin aftur
+                        </div>
+                        <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-gray-900 leading-tight">
+                            Góðan daginn, <span className="text-transparent bg-clip-text bg-gradient-to-r from-nordic-blue to-purple-600">{firstName.split(' ')[0]}</span>.
+                        </h1>
+                        <p className="text-lg md:text-xl text-gray-600 font-medium max-w-lg leading-relaxed">
+                            Þú ert að skoða <span className="font-bold text-gray-900">{displayClassName}</span>. Hér er yfirlit yfir allt sem er framundan í bekknum.
+                        </p>
+                    </div>
 
-                        <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-card border border-gray-100 py-1 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
-                            {userClasses.map((c) => (
-                                <button
-                                    key={c.id}
-                                    onClick={() => setSelectedClassId(c.id)}
-                                    className={`w-full text-left px-4 py-3 hover:bg-gray-50 flex items-center justify-between ${selectedClassId === c.id ? 'font-semibold text-blue-700 bg-blue-50' : 'text-gray-600'}`}
-                                >
-                                    <span>{getSimpleClassName(c)}</span>
-                                    {selectedClassId === c.id && <div className="w-2 h-2 rounded-full bg-blue-600"></div>}
+                    {/* Class Switcher - Floating Pill */}
+                    {userClasses && userClasses.length > 1 && (
+                        <div className="relative z-10">
+                            <div className="relative inline-block group">
+                                <button className="flex items-center gap-3 bg-white/80 backdrop-blur shadow-lg border border-white/50 px-6 py-3 rounded-2xl hover:scale-105 transition-all duration-300">
+                                    <span className="font-bold text-gray-800 text-lg">{getSimpleClassName(activeClass)}</span>
+                                    <ChevronDown size={20} className="text-gray-400" />
                                 </button>
-                            ))}
-                            <div className="border-t border-gray-100 mt-1 pt-1">
-                                <Link
-                                    href={`/${locale}/onboarding?step=join${classData?.joinCode ? `&code=${classData.joinCode}` : ''}`}
-                                    className="w-full text-left px-4 py-3 hover:bg-gray-50 text-gray-500 hover:text-gray-900 text-sm flex items-center gap-2"
-                                >
-                                    <span>+ Bæta við bekk</span>
-                                </Link>
+
+                                <div className="absolute right-0 mt-3 w-72 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 p-2 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
+                                    {userClasses.map((c) => (
+                                        <button
+                                            key={c.id}
+                                            onClick={() => setSelectedClassId(c.id)}
+                                            className={`w-full text-left px-4 py-3 rounded-xl flex items-center justify-between transition-colors ${selectedClassId === c.id ? 'bg-blue-50 text-blue-700 font-bold' : 'hover:bg-white/50 text-gray-600'}`}
+                                        >
+                                            <span>{getSimpleClassName(c)}</span>
+                                            {selectedClassId === c.id && <div className="w-2 h-2 rounded-full bg-blue-600 shadow-glow" />}
+                                        </button>
+                                    ))}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                ) : (
-                    <div className="px-4 py-1.5 bg-blue-50 text-blue-700 rounded-full text-sm font-medium">
-                        {displayClassName}
-                    </div>
-                )}
+                    )}
+                </div>
             </header>
 
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
-                {/* --- LEFT COLUMN (Main Content) - Spans 8 cols --- */}
-                <div className="lg:col-span-8 space-y-8">
+                {/* --- MAIN CONTENT (Left) --- */}
+                <div className="lg:col-span-8 space-y-10">
 
-                    {/* Pending Approvals (Only for approved parents) */}
-                    {parentLink && parentLink.status === 'approved' && classId && (
-                        <PendingApprovals classId={classId} myStudentId={parentLink.studentId} />
-                    )}
-
-                    {/* Latest Announcement Hero Card */}
+                    {/* Latest Announcement */}
                     {latestAnnouncement && (
-                        <section>
-                            <div className="flex items-center justify-between mb-4">
-                                <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                    <Megaphone className="text-nordic-blue" size={24} />
-                                    {translations.latest_announcement}
-                                </h2>
-                                <Link href={`/${locale}/announcements`} className="text-sm font-semibold text-nordic-blue hover:text-blue-800 transition-colors flex items-center gap-1">
-                                    Sjá allar <ChevronRight size={16} />
+                        <section className="space-y-4">
+                            <div className="flex items-center justify-between px-2">
+                                <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Nýjasta tilkynningin</h2>
+                                <Link href={`/${locale}/announcements`} className="text-sm font-bold text-gray-400 hover:text-nordic-blue transition-colors">
+                                    Sjá allar
                                 </Link>
                             </div>
 
-                            <div className="nordic-card p-6 md:p-8 relative overflow-hidden group">
-                                {/* Decorative elements */}
-                                <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-50 to-transparent rounded-bl-full opacity-50 pointer-events-none" />
-
-                                <div className="relative z-10">
-                                    <div className="flex items-start justify-between gap-4 mb-3">
-                                        <div className="flex items-center gap-2 text-sm text-gray-500 font-medium">
-                                            <span className="bg-gray-100 px-2 py-0.5 rounded text-xs uppercase tracking-wide">Tilkynning</span>
-                                            <span>•</span>
-                                            <span>{formatDate(latestAnnouncement.createdAt)}</span>
+                            <div className="glass-card p-8 group cursor-pointer hover:border-blue-200/50 transition-all duration-500">
+                                <div className="flex items-start justify-between gap-6">
+                                    <div className="space-y-4 flex-1">
+                                        <div className="flex items-center gap-3">
+                                            {latestAnnouncement.pinned && (
+                                                <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-extrabold rounded-md uppercase tracking-wider flex items-center gap-1">
+                                                    <Star size={10} fill="currentColor" />
+                                                    Mikilvægt
+                                                </span>
+                                            )}
+                                            <span className="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-md uppercase tracking-wider">
+                                                Nýtt
+                                            </span>
+                                            <span className="text-xs font-medium text-gray-400">
+                                                {formatDate(latestAnnouncement.createdAt)}
+                                            </span>
                                         </div>
-                                        {latestAnnouncement.pinned && (
-                                            <div className="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                                                <Star size={12} fill="currentColor" />
-                                                Mikilvægt
+
+                                        <h3 className="text-2xl font-bold text-gray-900 leading-snug group-hover:text-nordic-blue transition-colors">
+                                            {latestAnnouncement.title}
+                                        </h3>
+
+                                        <p className="text-gray-600 leading-relaxed line-clamp-3">
+                                            {latestAnnouncement.content}
+                                        </p>
+
+                                        <div className="flex items-center gap-3 pt-2">
+                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs ring-2 ring-white">
+                                                {(latestAnnouncement.author || 'S')[0]}
                                             </div>
-                                        )}
+                                            <span className="text-sm font-semibold text-gray-700">{latestAnnouncement.author || 'Stjórn'}</span>
+                                        </div>
                                     </div>
 
-                                    <h3 className="text-2xl font-bold text-gray-900 mb-4 leading-tight">
-                                        {latestAnnouncement.title}
-                                    </h3>
-
-                                    <div className="prose prose-blue prose-sm max-w-none text-gray-600 leading-relaxed line-clamp-4">
-                                        {latestAnnouncement.content}
-                                    </div>
-
-                                    <div className="mt-6 flex items-center gap-3 pt-4 border-t border-gray-100">
-                                        <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold text-sm">
-                                            {(latestAnnouncement.author || 'S')[0]}
-                                        </div>
-                                        <div className="text-sm">
-                                            <p className="font-medium text-gray-900">{latestAnnouncement.author || 'Stjórn'}</p>
-                                        </div>
+                                    <div className="hidden sm:flex h-12 w-12 rounded-2xl bg-blue-50 items-center justify-center text-nordic-blue group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-sm">
+                                        <Megaphone size={24} />
                                     </div>
                                 </div>
                             </div>
                         </section>
                     )}
 
-                    {/* Upcoming Events */}
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <Calendar className="text-nordic-blue" size={24} />
-                            {translations.whats_next}
-                        </h2>
+                    {/* Upcoming Events - Horizontal Scroller or Grid */}
+                    <section className="space-y-4">
+                        <div className="flex items-center justify-between px-2">
+                            <h2 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
+                                Framundan <span className="text-gray-300 font-light text-lg">|</span> <span className="text-lg font-medium text-gray-500">Næstu dagar</span>
+                            </h2>
+                            <Link href={`/${locale}/tasks`} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-nordic-blue hover:shadow-md transition-all">
+                                <ChevronRight size={20} />
+                            </Link>
+                        </div>
 
-                        {upcomingTasks.length > 0 ? (
-                            <div className="grid gap-4 sm:grid-cols-2">
-                                {upcomingTasks.slice(0, 4).map((task: any) => {
-                                    const isSchoolEvent = task.type === 'school_event';
-                                    const dateObj = task.jsDate;
-                                    return (
-                                        <div key={task.id} className="nordic-card p-5 hover:shadow-card-hover transition-all group flex flex-col justify-between h-full bg-white border-transparent hover:border-blue-100">
-                                            <div className="flex items-start justify-between mb-3">
-                                                <div className={`w-14 h-14 rounded-xl flex flex-col items-center justify-center shadow-sm ${isSchoolEvent ? 'bg-amber-50 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
-                                                    <span className="text-xs font-bold uppercase opacity-80">
-                                                        {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }).slice(0, 3) : ''}
-                                                    </span>
-                                                    <span className="text-xl font-bold leading-none">
-                                                        {dateObj ? dateObj.getDate() : ''}
-                                                    </span>
-                                                </div>
-                                                {!isSchoolEvent && (
-                                                    <div className="bg-gray-50 px-2 py-1 rounded text-xs font-medium text-gray-500">
-                                                        {task.slotsFilled}/{task.slotsTotal}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            {upcomingTasks.slice(0, 4).map((task: any, index) => {
+                                const isSchoolEvent = task.type === 'school_event';
+                                const dateObj = task.jsDate;
+                                return (
+                                    <div
+                                        key={task.id}
+                                        className="glass-card p-6 flex flex-col justify-between min-h-[160px] group border-transparent hover:border-white/60 bg-white/60"
+                                        style={{ animationDelay: `${index * 100}ms` }}
+                                    >
+                                        <div className="flex justify-between items-start">
+                                            <div className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center shadow-lg transform group-hover:-translate-y-1 transition-transform duration-300 ${isSchoolEvent ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800' : 'bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800'}`}>
+                                                <span className="text-[10px] font-black uppercase tracking-wider opacity-70">
+                                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }).slice(0, 3) : ''}
+                                                </span>
+                                                <span className="text-xl font-black leading-none">
+                                                    {dateObj ? dateObj.getDate() : ''}
+                                                </span>
+                                            </div>
+
+                                            {!isSchoolEvent && (
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Skráning</span>
+                                                    <div className="flex items-center gap-1">
+                                                        <div className="h-1.5 w-16 bg-gray-200 rounded-full overflow-hidden">
+                                                            <div className="h-full bg-nordic-blue rounded-full" style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }} />
+                                                        </div>
                                                     </div>
-                                                )}
-                                            </div>
-
-                                            <div>
-                                                <h4 className="font-bold text-gray-900 group-hover:text-nordic-blue transition-colors line-clamp-2 mb-1">
-                                                    {task.title}
-                                                </h4>
-                                                <p className="text-sm text-gray-500 line-clamp-1">
-                                                    {isSchoolEvent ? 'Skóladagatal' : 'Foreldrastarf'}
-                                                </p>
-                                            </div>
+                                                </div>
+                                            )}
                                         </div>
-                                    );
-                                })}
-                                {/* 'See all' card */}
-                                <Link href={`/${locale}/tasks`} className="nordic-card p-5 group flex items-center justify-center text-center bg-gray-50 border-dashed border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all cursor-pointer">
-                                    <div>
-                                        <div className="w-10 h-10 bg-white rounded-full shadow-sm flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
-                                            <ChevronRight className="text-gray-400 group-hover:text-blue-500" />
-                                        </div>
-                                        <span className="font-medium text-gray-600 group-hover:text-blue-700">Sjá alla viðburði</span>
-                                    </div>
-                                </Link>
-                            </div>
-                        ) : (
-                            <div className="nordic-card p-10 text-center bg-gray-50 border-dashed border-2 border-gray-200">
-                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mx-auto mb-4">
-                                    <Calendar className="text-gray-300" size={32} />
-                                </div>
-                                <h3 className="font-semibold text-gray-900 mb-1">Ekkert á döfinni</h3>
-                                <p className="text-gray-500 text-sm mb-4">{translations.no_events}</p>
-                                {isAdmin && (
-                                    <Link href={`/${locale}/settings`} className="inline-flex items-center gap-2 text-sm font-medium text-nordic-blue hover:underline bg-blue-50 px-4 py-2 rounded-lg">
-                                        <span className="text-lg">📅</span> Sækja skóladagatal
-                                    </Link>
-                                )}
-                            </div>
-                        )}
-                    </section>
-                </div>
 
-                {/* --- RIGHT COLUMN (Sidebar) - Spans 4 cols --- */}
-                <div className="lg:col-span-4 space-y-8">
-
-                    {/* Quick Actions (Admin only) - Moved up for better access */}
-                    {isAdmin && (
-                        <section className="bg-gradient-to-br from-nordic-blue to-nordic-blue-dark rounded-2xl p-6 text-white shadow-card relative overflow-hidden">
-                            <div className="absolute top-0 right-0 w-40 h-40 bg-white opacity-5 rounded-full translate-x-10 -translate-y-10" />
-
-                            <h2 className="text-lg font-bold mb-4 relative z-10">Stjórnborð</h2>
-
-                            <div className="space-y-2 relative z-10">
-                                <Link href={`/${locale}/announcements`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
-                                    <Megaphone size={18} className="text-amber-300" />
-                                    <span className="font-medium text-sm">Ný tilkynning</span>
-                                </Link>
-                                <Link href={`/${locale}/tasks`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
-                                    <Calendar size={18} className="text-green-300" />
-                                    <span className="font-medium text-sm">Skrá viðburð</span>
-                                </Link>
-                                <Link href={`/${locale}/settings`} className="flex items-center gap-3 p-3 rounded-xl bg-white/10 hover:bg-white/20 transition-all backdrop-blur-sm border border-white/10">
-                                    <div className="w-4 h-4 text-blue-200">⚙️</div>
-                                    <span className="font-medium text-sm">Stillingar</span>
-                                </Link>
-                            </div>
-                        </section>
-                    )}
-
-                    {/* Upcoming Birthdays */}
-                    <section>
-                        <h2 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                            <div className="bg-amber-100 p-1.5 rounded-lg text-amber-600">
-                                <Star size={18} fill="currentColor" />
-                            </div>
-                            {translations.upcoming_birthdays}
-                        </h2>
-
-                        <div className="nordic-card divide-y divide-gray-50 overflow-hidden">
-                            {upcomingBirthdays.length > 0 ? (
-                                upcomingBirthdays.map(student => (
-                                    <div key={student.id} className="p-4 flex items-center gap-3 hover:bg-gray-50 transition-colors group">
-                                        <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold text-white flex-shrink-0 bg-gradient-to-br from-amber-400 to-amber-500 shadow-sm group-hover:scale-110 transition-transform">
-                                            {student.name[0]}
-                                        </div>
-                                        <div className="flex-1 min-w-0">
-                                            <p className="font-bold text-gray-900 truncate">{student.name}</p>
-                                            <p className="text-xs text-gray-500 font-medium uppercase tracking-wide">
-                                                {formatDate(student.nextBirthday as any)}
+                                        <div>
+                                            <h4 className="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-nordic-blue transition-colors">
+                                                {task.title}
+                                            </h4>
+                                            <p className="text-sm text-gray-500 font-medium">
+                                                {isSchoolEvent ? '📚 Skóladagatal' : '🤝 Foreldrastarf'}
                                             </p>
                                         </div>
                                     </div>
-                                ))
-                            ) : (
-                                <div className="p-8 text-center bg-gray-50/50">
-                                    <p className="text-sm text-gray-500 italic">Engin afmæli á næstunni</p>
+                                );
+                            })}
+
+                            {upcomingTasks.length === 0 && (
+                                <div className="col-span-full py-12 text-center rounded-3xl border-2 border-dashed border-gray-200/50 bg-white/30">
+                                    <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
+                                        <Calendar className="text-gray-300" size={24} />
+                                    </div>
+                                    <p className="text-gray-500 font-medium">Ekkert á dagatalinu í augnablikinu</p>
                                 </div>
                             )}
                         </div>
                     </section>
                 </div>
-            </div>
 
-            <WelcomeWizard isOpen={showWizard} onClose={handleCloseWizard} />
+                {/* --- SIDEBAR CONTENT (Right) --- */}
+                <div className="lg:col-span-4 space-y-8">
+
+                    {/* Birthdays Card */}
+                    <div className="glass-card p-6 bg-gradient-to-b from-white to-white/60">
+                        <div className="flex items-center gap-2 mb-6">
+                            <div className="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" /><path d="M4 16s.5-1 2-1 2.5 1.7 3.5 2.5 3.5-2.5 2-2.5 2 1 4 1" /><path d="M2 21h20" /><path d="M7 8v2" /><path d="M12 8v2" /><path d="M17 8v2" /><path d="M7 4h.01" /><path d="M12 4h.01" /><path d="M17 4h.01" /></svg>
+                            </div>
+                            <h3 className="font-bold text-gray-900">{translations.upcoming_birthdays}</h3>
+                        </div>
+
+                        <div className="space-y-4">
+                            {upcomingBirthdays.length > 0 ? (
+                                upcomingBirthdays.map((student) => (
+                                    <div key={student.id} className="flex items-center gap-4 group">
+                                        <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-xl shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+                                            🎂
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-900">{student.name.split(' ')[0]}</p>
+                                            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                                                {student.nextBirthday.toLocaleDateString('is-IS', { day: 'numeric', month: 'long' })}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <p className="text-sm text-gray-500 text-center py-4">Engin afmæli á næstunni</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Quick Access / Class Stats */}
+                    <div className="glass-card p-6 space-y-6">
+                        <h3 className="font-bold text-gray-900 border-b border-gray-100 pb-4">Yfirlit bekkjar</h3>
+
+                        <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 text-center group hover:bg-blue-50 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/directory`)}>
+                            <div className="text-2xl font-black text-nordic-blue mb-1 group-hover:scale-110 transition-transform">{studentsData?.length || 0}</div>
+                            <div className="text-xs font-bold text-blue-600/70 uppercase tracking-wide">Nemendur</div>
+                        </div>
+                        {/* Placeholder for future stat or remove grid-cols-2 if only one item */}
+                        <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100 text-center group hover:bg-purple-50 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/patrol`)}>
+                            <div className="text-2xl font-black text-purple-600 mb-1 group-hover:scale-110 transition-transform">
+                                📅
+                            </div>
+                            <div className="text-xs font-bold text-purple-600/70 uppercase tracking-wide">Dagatal</div>
+                        </div>
+                    </div>
+
+                    {isAdmin && (
+                        <div className="pt-2">
+                            <Link
+                                href={`/${locale}/settings`}
+                                className="btn-premium w-full flex items-center justify-center gap-2"
+                            >
+                                <Settings size={18} />
+                                Stjórna bekk
+                            </Link>
+                        </div>
+                    )}
+                </div>
+            </div>
         </div>
     );
 }

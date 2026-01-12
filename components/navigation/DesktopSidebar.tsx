@@ -93,15 +93,15 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
     return (
         <aside
             className={cn(
-                "hidden md:flex flex-col w-64 h-screen fixed left-0 top-0 border-r z-40 bg-white",
+                "hidden md:flex flex-col w-72 h-screen fixed left-0 top-0 z-40",
+                "bg-white/50 backdrop-blur-xl border-r border-white/20 shadow-lg", // V2 Glass Style
                 className
             )}
-            style={{ borderColor: 'var(--border-light)' }}
         >
             {/* Logo Area */}
-            <div className="p-6 border-b" style={{ borderColor: 'var(--border-light)' }}>
-                <Link href={`/${locale}/dashboard`} className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center shadow-sm" style={{ backgroundColor: 'var(--nordic-blue)' }}>
+            <div className="p-8">
+                <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 group">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-nordic-blue to-nordic-blue-dark flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                             <circle cx="16" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
@@ -109,7 +109,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                         </svg>
                     </div>
                     <div>
-                        <span className="font-bold text-xl block" style={{ color: 'var(--nordic-blue)' }}>
+                        <span className="font-bold text-xl block tracking-tight text-gray-900 group-hover:text-nordic-blue transition-colors">
                             Bekkurinn
                         </span>
                         <div className="flex items-center gap-1">
@@ -125,7 +125,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             </div>
 
             {/* Navigation Links */}
-            <nav className="flex-1 overflow-y-auto py-6 px-3 space-y-1">
+            <nav className="flex-1 overflow-y-auto px-4 space-y-2">
                 {navItems.map((item) => {
                     const fullPath = `/${locale}${item.href}`;
                     const isActive = pathname.startsWith(fullPath);
@@ -136,92 +136,72 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             key={item.key}
                             href={fullPath}
                             className={cn(
-                                'flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group',
+                                'flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 group relative overflow-hidden',
                                 isActive
-                                    ? 'shadow-sm font-medium'
-                                    : 'hover:bg-gray-50'
+                                    ? 'text-nordic-blue font-bold shadow-sm bg-white'
+                                    : 'text-gray-500 hover:text-gray-900 hover:bg-white/40'
                             )}
-                            style={{
-                                backgroundColor: isActive ? 'var(--bg-secondary)' : 'transparent',
-                                color: isActive ? 'var(--nordic-blue)' : 'var(--text-secondary)',
-                            }}
                         >
-                            <Icon
-                                size={20}
-                                strokeWidth={isActive ? 2.5 : 2}
-                                className={cn(
-                                    "transition-colors",
-                                    isActive ? "text-nordic-blue" : "text-gray-400 group-hover:text-gray-600"
-                                )}
-                            />
-                            <span>{item.label}</span>
-
+                            {/* Active Indicator Line */}
                             {isActive && (
-                                <div className="ml-auto w-1.5 h-1.5 rounded-full bg-nordic-blue" />
+                                <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 bg-nordic-blue rounded-r-full" />
                             )}
+
+                            <Icon
+                                size={22}
+                                strokeWidth={isActive ? 2.5 : 2}
+                                className={cn("transition-transform group-hover:scale-110", isActive && "text-nordic-blue")}
+                            />
+                            <span className="text-base">{item.label}</span>
                         </Link>
                     );
                 })}
             </nav>
 
-            {/* User Profile / Footer */}
-            <div className="p-4 border-t bg-gray-50" style={{ borderColor: 'var(--border-light)' }}>
-                {user ? (
-                    <div className="space-y-4">
-                        <Link
-                            href={`/${locale}/user/profile`}
-                            className="flex items-center gap-3 hover:bg-white p-2 rounded-lg transition-colors border border-transparent hover:border-gray-200 hover:shadow-sm"
-                        >
-                            {user.photoURL ? (
-                                <Image
-                                    src={user.photoURL}
-                                    alt={user.displayName || 'User'}
-                                    width={40}
-                                    height={40}
-                                    className="rounded-full shadow-sm"
-                                />
-                            ) : (
-                                <div
-                                    className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold shadow-sm"
-                                    style={{ backgroundColor: 'white', color: 'var(--nordic-blue)', border: '1px solid var(--border-light)' }}
-                                >
-                                    {(user.displayName || user.email || 'U')[0].toUpperCase()}
-                                </div>
-                            )}
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium truncate text-gray-900">
-                                    {user.displayName || 'Notandi'}
-                                </p>
-                                <p className="text-xs text-gray-500 truncate">
-                                    Skoða prófíl
-                                </p>
+            {/* User Profile / Footer - Floating Glass Card */}
+            <div className="p-4">
+                <div className="bg-white/60 backdrop-blur-md rounded-2xl p-4 border border-white/50 shadow-sm">
+                    <div className="flex items-center gap-3 mb-3">
+                        {user?.photoURL ? (
+                            <Image
+                                src={user.photoURL}
+                                alt="Profile"
+                                width={40}
+                                height={40}
+                                className="rounded-full ring-2 ring-white shadow-sm"
+                            />
+                        ) : (
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 font-bold border border-white shadow-inner">
+                                {user?.email?.[0]?.toUpperCase()}
                             </div>
-                        </Link>
-
-                        <div className="grid grid-cols-2 gap-2">
-                            <Link
-                                href={`/${locale}/settings`}
-                                className="flex items-center justify-center gap-2 p-2 rounded-lg text-xs font-medium text-gray-600 hover:bg-white hover:shadow-sm border border-transparent hover:border-gray-200 transition-all"
-                            >
-                                <Settings size={14} />
-                                <span>Stillingar</span>
-                            </Link>
-                            <button
-                                onClick={() => signOut()}
-                                className="flex items-center justify-center gap-2 p-2 rounded-lg text-xs font-medium text-red-600 hover:bg-red-50 hover:shadow-sm border border-transparent hover:border-red-100 transition-all"
-                            >
-                                <LogOut size={14} />
-                                <span>Útskráning</span>
-                            </button>
+                        )}
+                        <div className="flex-1 min-w-0">
+                            <p className="font-bold text-sm text-gray-900 truncate">
+                                {user?.displayName || 'User'}
+                            </p>
+                            <p className="text-xs text-gray-500 truncate">
+                                {user?.email}
+                            </p>
                         </div>
                     </div>
-                ) : (
-                    <div className="text-center">
-                        <Link href={`/${locale}/login`} className="nordic-button w-full justify-center text-sm py-2">
-                            Skrá inn
+
+                    <div className="grid grid-cols-2 gap-2">
+                        <Link
+                            href={`/${locale}/settings`}
+                            className="flex items-center justify-center gap-2 p-2 rounded-xl hover:bg-white/50 text-xs font-medium text-gray-600 transition-colors"
+                        >
+                            <Settings size={14} />
+                            Stillingar
                         </Link>
+                        <button
+                            onClick={() => signOut()}
+                            className="flex items-center justify-center gap-2 p-2 rounded-xl hover:bg-red-50 text-xs font-medium text-red-600 transition-colors"
+                        >
+                            <LogOut size={14} />
+                            Útskrá
+                        </button>
                     </div>
-                )}
+                </div>
             </div>
         </aside>
     );

@@ -1,424 +1,167 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, ChevronDown, ChevronUp, Loader2, Users, Check } from 'lucide-react';
+import { Calendar, Loader2, Users, Plus, Footprints } from 'lucide-react';
 import { useTasks, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
-import { Timestamp } from 'firebase/firestore';
-import { EmptyState } from '@/components/ui/EmptyState';
-
 
 /**
- * Patrol Page - Dagatal (Calendar with patrols)
+ * Patrol Page - V2
  * 
- * Shows birthdays, class activities, and parent patrols
- * Now connected to real Firestore data!
-// TODO: Get this from user's class membership (Dynamic now)
+ * V2: Glass Cards, better list items
  */
 
 export default function PatrolPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
 
-    // Dynamic Class ID
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
     const activeClassId = userClasses?.[0]?.id || '';
-
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
-
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';
 
-    const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['patrols']));
-    const [isCreating, setIsCreating] = useState(false);
-    const [createType, setCreateType] = useState<'rolt' | 'event'>('rolt');
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
 
-    // Form State
+    // State
+    const [isCreating, setIsCreating] = useState(false);
     const [newTitle, setNewTitle] = useState('');
     const [newDate, setNewDate] = useState('');
-    const [newDesc, setNewDesc] = useState('');
     const [newSlots, setNewSlots] = useState(2);
-
     const createTaskMutation = useCreateTask();
 
-    // Redirect to login if not authenticated
     if (!authLoading && !user) {
         router.push('/is/login');
         return null;
     }
 
-    const toggleSection = (sectionId: string) => {
-        const newExpanded = new Set(expandedSections);
-        if (newExpanded.has(sectionId)) {
-            newExpanded.delete(sectionId);
-        } else {
-            newExpanded.add(sectionId);
-        }
-        setExpandedSections(newExpanded);
-    };
-
-    // Format date for display
-    const formatDate = (timestamp: any) => {
-        if (!timestamp?.toDate) return '';
-        const date = timestamp.toDate();
-        return new Intl.DateTimeFormat('is-IS', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }).format(date);
-    };
-
-    // Format date short (for headers)
-    const formatMonth = (timestamp: any) => {
-        if (!timestamp?.toDate) return '';
-        const date = timestamp.toDate();
-        return new Intl.DateTimeFormat('is-IS', {
-            month: 'long',
-            year: 'numeric'
-        }).format(date);
-    };
-
-    // Loading state
     if (authLoading || tasksLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center pt-24">
-                <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
-                    <p style={{ color: 'var(--text-secondary)' }}>Hleður dagatali...</p>
-                </div>
+            <div className="min-h-screen flex items-center justify-center pt-24 text-nordic-blue">
+                <Loader2 size={40} className="animate-spin" />
             </div>
         );
     }
 
-    const allTasks = tasksData || [];
-
-    // Filter patrols (rölt) from tasks
-    const patrols = allTasks.filter(task => task.type === 'rolt');
-    const events = allTasks.filter(task => task.type === 'event');
-
-    // Sort by date (ascending - soonest first)
-    const sortedPatrols = [...patrols].sort((a, b) => {
+    const patrols = (tasksData || []).filter(task => task.type === 'rolt').sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
-        return aTime - bTime;
-    });
-
-    const sortedEvents = [...events].sort((a, b) => {
-        const aTime = a.date?.toDate?.()?.getTime() || 0;
-        const bTime = b.date?.toDate?.()?.getTime() || 0;
+        // Upcoming first
+        const now = Date.now();
+        const aUpcoming = aTime > now;
+        const bUpcoming = bTime > now;
+        if (aUpcoming && !bUpcoming) return -1;
+        if (!aUpcoming && bUpcoming) return 1;
         return aTime - bTime;
     });
 
     return (
-        <div className="space-y-6">
-            {/* Header */}
-            <header className="space-y-3">
-                <h1 className="text-3xl font-bold" style={{ color: 'var(--nordic-blue)' }}>
-                    Dagatal
-                </h1>
-                <p style={{ color: 'var(--text-secondary)' }}>
-                    Afmæli, viðburðir og foreldrarölt
-                </p>
+        <div className="space-y-8 animate-in fade-in duration-500 pb-20">
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Foreldrarölt</h1>
+                    <p className="text-gray-500 mt-1">
+                        Skráðu þig á röltið og taktu þátt í samfélaginu
+                    </p>
+                </div>
+                {isAdmin && (
+                    <button
+                        onClick={() => setIsCreating(true)}
+                        className="btn-premium flex items-center gap-2"
+                    >
+                        <Plus size={18} />
+                        Nýtt rölt
+                    </button>
+                )}
             </header>
 
-            {/* Admin Actions */}
-            {isAdmin && (
-                <div className="flex gap-3">
-                    <button
-                        onClick={() => { setIsCreating(true); setCreateType('rolt'); }}
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition flex items-center gap-2 shadow-sm"
-                    >
-                        + Nýtt rölt
-                    </button>
-                    <button
-                        onClick={() => { setIsCreating(true); setCreateType('event'); }}
-                        className="bg-white border text-gray-700 px-4 py-2 rounded-lg font-medium hover:bg-gray-50 transition flex items-center gap-2"
-                    >
-                        + Nýr viðburður
-                    </button>
-                </div>
-            )}
-
-            {/* Creation Modal/Form */}
-            {isCreating && (
-                <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
-                        <h2 className="text-xl font-bold text-gray-900">
-                            {createType === 'rolt' ? 'Skrá nýtt foreldrarölt' : 'Skrá nýjan viðburð'}
-                        </h2>
-
-                        <div className="space-y-3">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Heiti</label>
-                                <input
-                                    type="text"
-                                    value={newTitle}
-                                    onChange={e => setNewTitle(e.target.value)}
-                                    placeholder={createType === 'rolt' ? "t.d. Rölt í Breiðholti" : "t.d. Jólaklipping"}
-                                    className="w-full p-2 border rounded-lg"
-                                />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {patrols.map((patrol) => {
+                    const dateObj = patrol.date?.toDate?.();
+                    return (
+                        <div key={patrol.id} className="glass-card p-6 flex flex-col justify-between group hover:bg-white/70 transition-colors">
+                            <div className="flex justify-between items-start mb-4">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                                        <Footprints size={24} />
+                                    </div>
+                                    <div>
+                                        <h3 className="font-bold text-gray-900 leading-tight">{patrol.title}</h3>
+                                        <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                                            {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' }) : ''}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Dagsetning</label>
-                                <input
-                                    type="datetime-local"
-                                    value={newDate}
-                                    onChange={e => setNewDate(e.target.value)}
-                                    className="w-full p-2 border rounded-lg"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Lýsing (valfrjálst)</label>
-                                <textarea
-                                    value={newDesc}
-                                    onChange={e => setNewDesc(e.target.value)}
-                                    className="w-full p-2 border rounded-lg h-24"
-                                />
-                            </div>
-
-                            {createType === 'rolt' && (
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700">Fjöldi plássa</label>
-                                    <input
-                                        type="number"
-                                        value={newSlots}
-                                        onChange={e => setNewSlots(Number(e.target.value))}
-                                        className="w-full p-2 border rounded-lg"
-                                        min={1}
+                            <div className="mt-auto">
+                                <div className="flex items-center justify-between text-sm font-bold text-gray-500 mb-2">
+                                    <span>Mættir</span>
+                                    <span>{patrol.slotsFilled} / {patrol.slotsTotal}</span>
+                                </div>
+                                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden mb-4">
+                                    <div
+                                        className="h-full bg-indigo-500 rounded-full"
+                                        style={{ width: `${(patrol.slotsFilled / patrol.slotsTotal) * 100}%` }}
                                     />
                                 </div>
-                            )}
-                        </div>
 
-                        <div className="flex justify-end gap-3 pt-2">
-                            <button
-                                onClick={() => setIsCreating(false)}
-                                className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
-                            >
-                                Hætta við
-                            </button>
+                                <button className="w-full py-2 rounded-xl border-2 border-indigo-100 text-indigo-700 font-bold hover:bg-indigo-50 transition-colors">
+                                    Skoða / Skrá
+                                </button>
+                            </div>
+                        </div>
+                    );
+                })}
+
+                {patrols.length === 0 && (
+                    <div className="col-span-full py-12 text-center border-2 border-dashed border-gray-200 rounded-3xl">
+                        <p className="text-gray-400 font-bold">Engin rölt skráð á næstunni</p>
+                    </div>
+                )}
+            </div>
+
+            {/* Create Modal */}
+            {isCreating && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full space-y-4 shadow-2xl">
+                        <h2 className="text-2xl font-bold">Nýtt rölt</h2>
+                        <input
+                            type="text"
+                            value={newTitle}
+                            onChange={e => setNewTitle(e.target.value)}
+                            className="w-full p-3 bg-gray-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-100"
+                            placeholder="Heiti (t.d. Kvöldrölt)"
+                        />
+                        <input
+                            type="datetime-local"
+                            value={newDate}
+                            onChange={e => setNewDate(e.target.value)}
+                            className="w-full p-3 bg-gray-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-100"
+                        />
+                        <div className="flex gap-2">
+                            <button onClick={() => setIsCreating(false)} className="flex-1 py-3 text-gray-500 font-bold">Hætta við</button>
                             <button
                                 onClick={async () => {
-                                    if (!newTitle || !newDate) return alert('Vinsamlegast fylltu út titil og dagsetningu');
-
-                                    try {
-                                        await createTaskMutation.mutateAsync({
-                                            classId: activeClassId,
-                                            type: createType,
-                                            title: newTitle,
-                                            description: newDesc,
-                                            date: new Date(newDate) as any, // Firestore handles JS Date conversion usually, or need Timestamp
-                                            slotsTotal: createType === 'rolt' ? newSlots : 999, // Event usually unlimited or high
-                                            createdBy: user?.uid || '',
-                                        } as any); // Type cast for Timestamp workaround if needed
-
-                                        setIsCreating(false);
-                                        setNewTitle('');
-                                        setNewDate('');
-                                        setNewDesc('');
-                                    } catch (e) {
-                                        console.error(e);
-                                        alert('Villa kom upp');
-                                    }
+                                    if (!newTitle || !newDate) return;
+                                    await createTaskMutation.mutateAsync({
+                                        classId: activeClassId,
+                                        type: 'rolt',
+                                        title: newTitle,
+                                        date: new Date(newDate),
+                                        slotsTotal: newSlots,
+                                        createdBy: user?.uid || ''
+                                    } as any);
+                                    setIsCreating(false);
                                 }}
-                                disabled={createTaskMutation.isPending}
-                                className="px-4 py-2 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+                                className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg"
                             >
-                                {createTaskMutation.isPending && <Loader2 className="animate-spin" size={16} />}
                                 Stofna
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Parent Patrols Section */}
-                <div className="nordic-card overflow-hidden h-fit">
-                    <button
-                        onClick={() => toggleSection('patrols')}
-                        className="w-full px-5 py-4 flex items-center justify-between hover:bg-opacity-50 transition-colors"
-                        style={{ backgroundColor: 'var(--stone)' }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <Users size={20} style={{ color: 'var(--nordic-blue)' }} />
-                            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                                Foreldrarölt ({patrols.length})
-                            </h2>
-                        </div>
-                        {expandedSections.has('patrols') ? (
-                            <ChevronUp size={20} style={{ color: 'var(--text-tertiary)' }} />
-                        ) : (
-                            <ChevronDown size={20} style={{ color: 'var(--text-tertiary)' }} />
-                        )}
-                    </button>
-
-                    {expandedSections.has('patrols') && (
-                        <div className="divide-y" style={{ borderColor: 'var(--border-light)' }}>
-                            {sortedPatrols.length > 0 ? (
-                                sortedPatrols.map((patrol) => (
-                                    <div key={patrol.id} className="p-5 space-y-2">
-                                        <div className="flex items-start justify-between gap-3">
-                                            <div className="flex-1">
-                                                <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                                                    {patrol.title}
-                                                </h3>
-                                                <p className="text-sm mt-1" style={{ color: 'var(--text-tertiary)' }}>
-                                                    {formatDate(patrol.date)}
-                                                </p>
-                                                {patrol.description && (
-                                                    <p className="text-sm mt-1" style={{ color: 'var(--text-secondary)' }}>
-                                                        {patrol.description}
-                                                    </p>
-                                                )}
-                                            </div>
-                                            <div className="text-right flex-shrink-0">
-                                                <div
-                                                    className="text-xs px-2 py-1 rounded"
-                                                    style={{
-                                                        backgroundColor: patrol.slotsFilled >= patrol.slotsTotal
-                                                            ? 'var(--green-success)20'
-                                                            : 'var(--amber)20',
-                                                        color: patrol.slotsFilled >= patrol.slotsTotal
-                                                            ? 'var(--green-success)'
-                                                            : 'var(--amber-dark)'
-                                                    }}
-                                                >
-                                                    {patrol.slotsFilled}/{patrol.slotsTotal}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Volunteers */}
-                                        {patrol.volunteers && patrol.volunteers.length > 0 && (
-                                            <div className="flex flex-wrap gap-2 mt-3">
-                                                {patrol.volunteers.map((volunteer, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        className="flex items-center gap-2 px-3 py-1.5 rounded-full text-sm"
-                                                        style={{ backgroundColor: 'var(--stone)' }}
-                                                    >
-                                                        <div
-                                                            className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                                                            style={{ backgroundColor: 'var(--nordic-blue)', color: 'white' }}
-                                                        >
-                                                            {volunteer.name[0]}
-                                                        </div>
-                                                        <span style={{ color: 'var(--text-primary)' }}>
-                                                            {volunteer.name}
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-
-                                        {/* Check if user is already volunteering for THIS patrol */}
-                                        {(() => {
-                                            const isVolunteeringForThis = patrol.volunteers?.some((v: any) => v.uid === user?.uid);
-                                            const isVolunteeringAnywhere = patrols.some(p => p.volunteers?.some((v: any) => v.uid === user?.uid));
-
-                                            if (patrol.slotsFilled < patrol.slotsTotal && !isVolunteeringAnywhere) {
-                                                return (
-                                                    <button className="nordic-button mt-3 text-sm">
-                                                        Bjóðast
-                                                    </button>
-                                                );
-                                            }
-
-                                            if (isVolunteeringForThis) {
-                                                return (
-                                                    <div className="mt-3 text-sm font-medium text-green-700 flex items-center gap-1">
-                                                        <Check size={16} /> Þú ert skráð(ur) á þessa vakt
-                                                    </div>
-                                                );
-                                            }
-
-                                            return null;
-                                        })()}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="p-5 text-center" style={{ color: 'var(--text-secondary)' }}>
-                                    Engin rölt áætluð
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-
-                {/* Events Section */}
-                <div className="nordic-card overflow-hidden h-fit">
-                    <button
-                        onClick={() => toggleSection('events')}
-                        className="w-full px-5 py-4 flex items-center justify-between hover:bg-opacity-50 transition-colors"
-                        style={{ backgroundColor: 'var(--stone)' }}
-                    >
-                        <div className="flex items-center gap-2">
-                            <Calendar size={20} style={{ color: 'var(--nordic-blue)' }} />
-                            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
-                                Viðburðir ({events.length})
-                            </h2>
-                        </div>
-                        {expandedSections.has('events') ? (
-                            <ChevronUp size={20} style={{ color: 'var(--text-tertiary)' }} />
-                        ) : (
-                            <ChevronDown size={20} style={{ color: 'var(--text-tertiary)' }} />
-                        )}
-                    </button>
-
-                    {expandedSections.has('events') && (
-                        <div className="divide-y" style={{ borderColor: 'var(--border-light)' }}>
-                            {sortedEvents.length > 0 ? (
-                                sortedEvents.map((event) => (
-                                    <div key={event.id} className="p-5 space-y-2">
-                                        <h3 className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                                            {event.title}
-                                        </h3>
-                                        <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
-                                            {formatDate(event.date)}
-                                        </p>
-                                        {event.description && (
-                                            <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>
-                                                {event.description}
-                                            </p>
-                                        )}
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="p-5 text-center" style={{ color: 'var(--text-secondary)' }}>
-                                    Engir viðburðir áætlaðir
-                                </div>
-                            )}
-                        </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Empty state */}
-            {patrols.length === 0 && events.length === 0 && (
-                isAdmin ? (
-                    <EmptyState
-                        icon={<Calendar size={56} strokeWidth={1.5} />}
-                        title="Ekkert í dagatalinu enn 📅"
-                        description="Bættu við foreldraröltum og viðburðum til að skipuleggja bekkinn.<br/>Foreldrar munu sjá allt hér og geta skráð sig í verkefni með einum smelli!"
-                        actionLabel="Skrá fyrsta röltið"
-                        onAction={() => { setIsCreating(true); setCreateType('rolt'); }}
-                        secondaryLabel="Fara í stillingar"
-                        secondaryHref="/is/settings"
-                    />
-                ) : (
-                    <EmptyState
-                        icon={<Calendar size={56} strokeWidth={1.5} />}
-                        title="Ekkert í dagatalinu enn 📅"
-                        description="Þegar bekkjarformaðurinn bætir við viðburðum og foreldraröltum munt þú sjá þau hér.<br/>Við munum láta þig vita þegar nýtt rölt eða viðburður kemur!"
-                    />
-                )
-            )}
-
         </div>
     );
 }

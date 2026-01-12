@@ -1,20 +1,19 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Phone, Mail, Star, ChevronUp, Users, Loader2 } from 'lucide-react';
+import { Phone, Mail, Star, ChevronUp, Users, Loader2, Search } from 'lucide-react';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter } from 'next/navigation';
 import type { Student, DietaryNeed } from '@/types';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 /**
  * Directory Page - Sameiginleg skrá bekkjarins
  * 
- * Child-focused cards with expandable parent info
- * Now connected to real Firestore data!
+ * V2: Glass Cards, Floating Search, Animated Interactions
  */
 
 export default function DirectoryPage() {
@@ -49,7 +48,7 @@ export default function DirectoryPage() {
     }, [user, authLoading]);
 
     const { data: classData } = useClass(classId);
-    const { data: studentsData, isLoading: studentsLoading, error } = useStudents(classId || '');
+    const { data: studentsData, isLoading: studentsLoading } = useStudents(classId || '');
     const { data: parentLink } = useUserParentLink(user?.uid, classId);
 
     const [expandedCards, setExpandedCards] = useState<Set<string>>(new Set());
@@ -179,227 +178,169 @@ export default function DirectoryPage() {
     const displayName = classData?.name || (classData?.grade ? `${classData.grade}. Bekkur` : 'Bekkurinn');
 
     // FAIR PHOTO LOGIC
-    // Rule: User can only see photos if:
-    // 1. User has a photo (user.photoURL)
-    // 2. User's child has a photo (myStudent.photoUrl)
     const myStudent = students.find(s => s.id === parentLink?.studentId);
     const userHasPhoto = !!user?.photoURL;
     const childHasPhoto = !!myStudent?.photoUrl;
-
-    // If user is admin (no child linked yet), maybe allow? 
-    // For now, strict adherence to "Fairness" for parents.
-    // If no child linked, canViewPhotos is false (unless we change requirement).
-    // Assuming for now: Must have child + photo to participate in visual directory.
     const canViewPhotos = userHasPhoto && childHasPhoto;
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500">
-            {/* Header */}
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+        <div className="space-y-8 animate-in fade-in duration-500 pb-20">
+            {/* Header with Glass Effect */}
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 relative">
+                {/* Decorative background blur */}
+                <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
+
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Skráin</h1>
-                    <p className="text-gray-500 mt-1">
-                        Sameiginleg skrá yfir nemendur í {displayName}
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Skráin</h1>
+                    <p className="text-lg text-gray-500 max-w-lg">
+                        Allir vinirnir í <span className="font-semibold text-nordic-blue">{displayName}</span> á einum stað.
                     </p>
                 </div>
                 {starredCount > 0 && (
-                    <div className="flex items-center gap-2 px-4 py-2 rounded-full text-sm font-semibold bg-amber-50 text-amber-700 border border-amber-100 shadow-sm animate-in zoom-in">
-                        <Star size={16} fill="currentColor" />
-                        <span>{starredCount} vinir</span>
+                    <div className="glass-card px-5 py-2 flex items-center gap-2 text-amber-600 font-bold animate-in zoom-in bg-amber-50/50 border-amber-100">
+                        <Star size={18} fill="currentColor" />
+                        <span>{starredCount} vinir í uppáhaldi</span>
                     </div>
                 )}
             </header>
 
-            {/* Search */}
-            <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                    <svg className="h-5 w-5 text-gray-400 group-focus-within:text-nordic-blue transition-colors" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+            {/* Floating Search Bar */}
+            <div className="sticky top-4 z-20">
+                <div className="relative group max-w-2xl mx-auto shadow-2xl shadow-blue-900/5 rounded-2xl">
+                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+                        <Search className="h-5 w-5 text-gray-400 group-focus-within:text-nordic-blue transition-colors" />
+                    </div>
+                    <input
+                        type="search"
+                        placeholder="Leita að nemanda..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full pl-12 pr-6 py-4 rounded-2xl border-none outline-none ring-1 ring-black/5 bg-white/90 backdrop-blur-xl focus:ring-2 focus:ring-nordic-blue/50 focus:bg-white transition-all text-lg placeholder:text-gray-400"
+                    />
                 </div>
-                <input
-                    type="search"
-                    placeholder="Leita að nemanda..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-11 pr-4 py-4 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-blue-100 focus:border-nordic-blue transition-all shadow-sm text-lg"
-                />
             </div>
 
             {/* Student Count */}
             {students.length > 0 && (
-                <div className="flex items-center gap-2 text-sm font-medium text-gray-500 px-1">
-                    <Users size={16} />
+                <div className="flex items-center justify-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
+                    <Users size={14} />
                     <span>{sortedStudents.length} af {students.length} nemendum</span>
                 </div>
             )}
 
-            {/* Student Grid - Responsive */}
+            {/* Student Grid - Glass Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {sortedStudents.map((student) => {
                     const isExpanded = expandedCards.has(student.id);
                     const isStarred = starredStudents.has(student.id);
+                    const parents = parentsMap.get(student.id) || [];
 
                     return (
                         <div
                             key={student.id}
-                            className={`nordic-card group transition-all duration-300 ${isStarred ? 'ring-2 ring-amber-100 shadow-md transform -translate-y-1' : 'hover:shadow-card-hover hover:-translate-y-1'}`}
+                            className={`glass-card group relative overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-nordic-blue/20 bg-white' : 'hover:bg-white/60'} ${isStarred ? 'ring-2 ring-amber-100 bg-amber-50/10' : ''}`}
                         >
+                            {/* Star Button */}
+                            <button
+                                onClick={(e) => { e.stopPropagation(); toggleStar(student.id); }}
+                                className={`absolute top-4 right-4 p-2 rounded-full transition-all z-10 ${isStarred ? 'text-amber-400 bg-amber-50 scale-110' : 'text-gray-300 hover:text-amber-400 hover:bg-amber-50'}`}
+                            >
+                                <Star size={20} fill={isStarred ? "currentColor" : "none"} />
+                            </button>
+
                             {/* Child Info - Clickable to expand */}
                             <div
                                 onClick={() => toggleExpand(student.id)}
-                                className="p-6 cursor-pointer relative"
+                                className="p-6 cursor-pointer"
                             >
-                                {/* Star Button - Absolute Top Right */}
-                                <button
-                                    onClick={(e) => { e.stopPropagation(); toggleStar(student.id); }}
-                                    className={`absolute top-4 right-4 p-2 rounded-full transition-all duration-200 z-10 ${isStarred ? 'text-amber-400 bg-amber-50 hover:bg-amber-100' : 'text-gray-300 hover:text-amber-400 hover:bg-gray-50'}`}
-                                >
-                                    <Star size={22} fill={isStarred ? 'currentColor' : 'none'} className="transition-transform active:scale-95" />
-                                </button>
-
                                 <div className="flex items-center gap-5">
-                                    {/* Photo Placeholder */}
-                                    <div className="relative">
-                                        <div
-                                            className={`w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 text-3xl font-bold overflow-hidden shadow-sm transition-transform group-hover:scale-105 ${student.photoUrl ? 'bg-gray-100' : 'bg-gradient-to-br from-nordic-blue to-blue-600 text-white'}`}
-                                        >
-                                            {canViewPhotos && student.photoUrl ? (
-                                                <img
-                                                    src={student.photoUrl}
-                                                    alt={student.name}
-                                                    className="w-full h-full object-cover"
-                                                />
-                                            ) : (
-                                                student.name[0]
-                                            )}
-                                        </div>
-                                        {/* Status Indicator (Optional idea for later: Online/Active) */}
-                                    </div>
-
-
-                                    <div className="flex-1 min-w-0 py-1">
-                                        <h3 className="text-xl font-bold text-gray-900 truncate mb-1 group-hover:text-nordic-blue transition-colors">
-                                            {student.name}
-                                        </h3>
-                                        <p className="text-sm font-medium text-gray-500 mb-2 flex items-center gap-1">
-                                            🎂 {formatBirthDate(student.birthDate)}
-                                        </p>
-
-                                        {/* Dietary Icons as small pills */}
-                                        {student.dietaryNeeds && student.dietaryNeeds.length > 0 && (
-                                            <div className="flex gap-1.5 flex-wrap">
-                                                {student.dietaryNeeds.map((type: DietaryNeed) => (
-                                                    <div key={type} className="opacity-80 hover:opacity-100 transition-opacity" title={type}>
-                                                        <DietaryIcon type={type} size={16} showLabel={false} />
-                                                    </div>
-                                                ))}
-                                            </div>
+                                    {/* Avatar */}
+                                    <div className="relative w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-sm transition-transform duration-500 group-hover:scale-105 bg-gradient-to-br from-blue-100 to-indigo-50 text-blue-600">
+                                        {canViewPhotos && student.photoUrl ? (
+                                            <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover rounded-2xl" />
+                                        ) : (
+                                            <span>{student.name[0]}</span>
                                         )}
+                                        {/* Dietary Badge */}
+                                        {student.dietaryNeeds?.length ? (
+                                            <div className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md border border-gray-50" title={student.dietaryNeeds.join(', ')}>
+                                                <div className="w-5 h-5">
+                                                    <DietaryIcon type={student.dietaryNeeds[0] as DietaryNeed} />
+                                                </div>
+                                            </div>
+                                        ) : null}
                                     </div>
-                                </div>
 
-                                {/* Bottom Action Bar / Hint */}
-                                <div className={`mt-4 pt-4 flex items-center justify-between text-sm font-medium transition-colors border-t border-gray-50 ${isExpanded ? 'text-nordic-blue' : 'text-gray-400 group-hover:text-gray-600'}`}>
-                                    <div className="flex items-center gap-2">
-                                        <Users size={16} />
-                                        <span>Foreldrar</span>
+                                    <div className="flex-1 min-w-0">
+                                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-nordic-blue transition-colors truncate">
+                                            {student.name.split(' ')[0]} <span className="text-gray-400 font-normal">{student.name.split(' ').slice(1).join(' ')}</span>
+                                        </h3>
+                                        <p className="text-sm font-medium text-gray-500 mt-1 flex items-center gap-1.5">
+                                            <span>🎂</span>
+                                            {student.birthDate ? formatBirthDate(student.birthDate) : 'Vantar afmælisdag'}
+                                        </p>
                                     </div>
-                                    <ChevronUp size={16} className={`transition-transform duration-300 ${isExpanded ? 'rotate-0' : 'rotate-180'}`} />
                                 </div>
                             </div>
 
-                            {/* Parent Info - Expandable */}
-                            <div className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-in-out ${isExpanded ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}`}>
-                                <div className="bg-gray-50/50 p-6 pt-2 space-y-3 pb-6 border-t border-gray-100">
-                                    {parentsMap.get(student.id) && parentsMap.get(student.id)!.length > 0 ? (
-                                        <div className="space-y-3">
-                                            {parentsMap.get(student.id)!.map((parent: any, idx: number) => (
-                                                <div key={parent.id || idx} className="bg-white p-3.5 rounded-xl border border-gray-100 shadow-sm flex items-center gap-3 hover:border-blue-200 transition-colors">
-                                                    {/* Parent Photo */}
-                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex-shrink-0 overflow-hidden flex items-center justify-center text-sm font-bold text-gray-400 border border-gray-50">
-                                                        {canViewPhotos && parent.photoURL ? (
-                                                            <img
-                                                                src={parent.photoURL}
-                                                                alt={parent.displayName}
-                                                                className="w-full h-full object-cover"
-                                                            />
-                                                        ) : (
-                                                            (parent.displayName || '?')[0].toUpperCase()
-                                                        )}
+                            {/* Expanded Parent Info */}
+                            {isExpanded && (
+                                <div className="bg-gray-50/50 border-t border-gray-100 p-6 animate-in slide-in-from-top-2">
+                                    <div className="space-y-4">
+                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Foreldrar & Aðstandendur</h4>
+                                        {parents.length > 0 ? (
+                                            parents.map((parent) => (
+                                                <div key={parent.id} className="flex items-start gap-4 p-3 rounded-xl bg-white border border-gray-100 shadow-sm">
+                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600 flex-shrink-0">
+                                                        {parent.displayName?.[0] || 'F'}
                                                     </div>
-
                                                     <div className="flex-1 min-w-0">
-                                                        <p className="font-semibold text-sm text-gray-900 truncate">
-                                                            {parent.displayName || 'Nafnlaust'}
-                                                        </p>
-                                                        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-0.5">
-                                                            {parent.phone && parent.isPhoneVisible && (
-                                                                <a
-                                                                    href={`tel:${parent.phone}`}
-                                                                    className="flex items-center gap-1.5 text-xs font-medium text-gray-500 hover:text-nordic-blue transition-colors"
-                                                                >
-                                                                    <Phone size={12} />
-                                                                    {parent.phone}
+                                                        <p className="font-bold text-gray-900 text-sm">{parent.displayName}</p>
+                                                        <p className="text-xs text-gray-500 mb-2">{parent.role === 'admin' ? 'Kennari / Stjórnandi' : 'Foreldri'}</p>
+
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {parent.phoneNumber && (
+                                                                <a href={`tel:${parent.phoneNumber}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-bold hover:bg-green-100 transition-colors">
+                                                                    <Phone size={12} /> Hringja
                                                                 </a>
                                                             )}
-                                                            {/* Only show address if available */}
-                                                            {parent.address && (
-                                                                <a
-                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-nordic-blue transition-colors"
-                                                                >
-                                                                    <span>📍</span>
-                                                                    <span className="truncate max-w-[150px]">{parent.address}</span>
-                                                                </a>
-                                                            )}
+                                                            <a href={`mailto:${parent.email}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold hover:bg-blue-100 transition-colors">
+                                                                <Mail size={12} /> Senda póst
+                                                            </a>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <p className="text-sm text-center py-2 text-gray-500 italic bg-white rounded-lg border border-gray-100 border-dashed">
-                                            Engir foreldrar skráðir í kerfið
-                                        </p>
-                                    )}
+                                            ))
+                                        ) : (
+                                            <div className="text-center py-4 bg-white/50 rounded-xl border border-dashed border-gray-200">
+                                                <p className="text-sm text-gray-400">Engir foreldrar skráðir ennþá</p>
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    {/* Collapse Button */}
+                                    <button
+                                        onClick={() => toggleExpand(student.id)}
+                                        className="w-full mt-4 flex items-center justify-center gap-2 text-gray-400 hover:text-gray-600 py-2 transition-colors"
+                                    >
+                                        <ChevronUp size={16} />
+                                        <span className="text-xs font-bold uppercase">Loka</span>
+                                    </button>
                                 </div>
-                            </div>
+                            )}
                         </div>
                     );
                 })}
             </div>
 
-            {/* Empty state */}
-            {students.length === 0 && (
-                <div className="min-h-[400px] flex flex-col items-center justify-center text-center p-8 bg-white rounded-3xl border-2 border-dashed border-gray-200">
-                    <div className="w-24 h-24 bg-blue-50 rounded-full flex items-center justify-center mb-6">
-                        <Users size={40} className="text-nordic-blue" />
+            {/* Empty State */}
+            {sortedStudents.length === 0 && (
+                <div className="glass-card p-12 text-center max-w-lg mx-auto mt-12 bg-white/50">
+                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Users className="text-gray-300" size={40} />
                     </div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-2">Engir nemendur fundust</h3>
-                    <p className="text-gray-500 max-w-md mx-auto mb-6">
-                        Það lítur út fyrir að engir nemendur séu komnir í bekkinn. Bekkjarfulltrúi þarf að bæta þeim við eða senda út boðsmiða.
-                    </p>
-                    {/* Could add CTA here for admins */}
-                </div>
-            )}
-
-            {/* Start your search empty state */}
-            {students.length > 0 && sortedStudents.length === 0 && (
-                <div className="text-center py-12">
-                    <div className="inline-block p-4 rounded-full bg-gray-50 mb-4">
-                        <Users size={32} className="text-gray-400" />
-                    </div>
-                    <h3 className="text-lg font-medium text-gray-900">Engar niðurstöður</h3>
-                    <p className="text-gray-500">Enginn nemandi fannst með nafnið "{searchQuery}"</p>
-                    <button
-                        onClick={() => setSearchQuery('')}
-                        className="mt-4 text-nordic-blue font-medium hover:underline"
-                    >
-                        Hreinsa leit
-                    </button>
+                    <h3 className="text-xl font-bold text-gray-900">Engir nemendur fundust</h3>
+                    <p className="text-gray-500 mt-2">Prófaðu að breyta leitarskilyrðum eða hafðu samband við stjórnanda.</p>
                 </div>
             )}
         </div>
