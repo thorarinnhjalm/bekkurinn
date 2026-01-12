@@ -51,9 +51,8 @@ export function TopHeader({ className }: { className?: string }) {
 
     return (
         <header
-            className={`fixed top-0 left-0 right-0 z-30 border-b transition-all duration-200 ${className || ''}`}
+            className={`fixed top-0 left-0 right-0 z-30 border-b transition-all duration-200 bg-white/90 backdrop-blur-md ${className || ''}`}
             style={{
-                backgroundColor: 'var(--white)',
                 borderColor: 'var(--border-light)',
                 paddingTop: 'env(safe-area-inset-top, 0px)',
             }}
