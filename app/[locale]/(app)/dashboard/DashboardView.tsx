@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink } from '@/hooks/useFirestore';
-import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus, Users, CheckSquare, Settings } from 'lucide-react';
+import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus, Users, CheckSquare, Settings, Copy, Check } from 'lucide-react';
 // import { db } from '@/lib/firebase/config'; // No longer needed directly
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'; // Removed manual queries
 
@@ -84,6 +84,18 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         setShowWizard(false);
         // Clean URL
         router.replace(`/${locale}/dashboard`);
+    };
+
+    // --- Share Class Logic ---
+    const [copied, setCopied] = useState(false);
+
+    const handleCopyJoinLink = () => {
+        if (!classData?.joinCode || !user?.uid) return;
+        const link = `${window.location.origin}/${locale}/onboarding?step=join&code=${classData.joinCode}&inviterId=${user.uid}`;
+        navigator.clipboard.writeText(link).then(() => {
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+        });
     };
 
     // Helper to safely convert Firestore Timestamp or Date
@@ -474,6 +486,45 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 📅
                             </div>
                             <div className="text-xs font-bold text-purple-600/70 uppercase tracking-wide">Dagatal</div>
+                        </div>
+                    </div>
+
+                    {/* INVITE CARD */}
+                    <div className="glass-card p-6 bg-gradient-to-br from-nordic-blue to-blue-700 text-white border-none shadow-xl shadow-blue-900/20 relative overflow-hidden group">
+                        {/* Decorative Circles */}
+                        <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
+                        <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-blue-400/20 rounded-full blur-xl" />
+
+                        <div className="relative z-10 space-y-4">
+                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-2">
+                                <UserPlus size={24} className="text-white" />
+                            </div>
+                            <div>
+                                <h3 className="text-xl font-bold text-white">Stækka hópinn?</h3>
+                                <p className="text-blue-100 text-sm font-medium mt-1 leading-relaxed">
+                                    Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
+                                </p>
+                            </div>
+
+                            <button
+                                onClick={handleCopyJoinLink}
+                                className={`w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all duration-300 ${copied
+                                    ? 'bg-green-500 text-white'
+                                    : 'bg-white text-nordic-blue hover:bg-blue-50 hover:shadow-lg'
+                                    }`}
+                            >
+                                {copied ? (
+                                    <>
+                                        <Check size={18} />
+                                        <span>Afritað!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy size={18} />
+                                        <span>Afrita hlekk</span>
+                                    </>
+                                )}
+                            </button>
                         </div>
                     </div>
 

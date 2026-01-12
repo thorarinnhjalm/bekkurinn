@@ -72,9 +72,9 @@ export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder =
 
                 const q = query(
                     addressesRef,
-                    where('streetName', '>=', qCap),
-                    where('streetName', '<=', qCap + '\uf8ff'),
-                    limit(5)
+                    where('fullAddress', '>=', qCap),
+                    where('fullAddress', '<=', qCap + '\uf8ff'),
+                    limit(20)
                 );
 
                 const querySnapshot = await getDocs(q);

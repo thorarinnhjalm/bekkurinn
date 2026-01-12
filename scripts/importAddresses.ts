@@ -3,6 +3,11 @@ import { getFirestore, collection, writeBatch, GeoPoint, doc } from 'firebase/fi
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const envPath = path.resolve(process.cwd(), '.env.local');
 console.log('🔧 CWD:', process.cwd());
@@ -70,6 +75,9 @@ async function importAddresses() {
     let processedCount = 0;
     let batch = writeBatch(db);
     let batchCount = 0;
+
+    // Get total lines for progress tracking
+    const totalLines = 137796; // We already checked this with wc -l
 
     // Indices
     let idx_HEITI_NF = -1;
@@ -167,9 +175,12 @@ async function importAddresses() {
 
             if (batchCount >= BATCH_SIZE) {
                 await batch.commit();
-                console.log(`💾 Saved batch. Total processed: ${processedCount}`);
+                const percent = ((processedCount / totalLines) * 100).toFixed(1);
+                console.log(`💾 Saved batch. Progress: ${processedCount} / ${totalLines} (${percent}%)`);
                 batch = writeBatch(db);
                 batchCount = 0;
+                // Add a small delay to avoid RESOURCE_EXHAUSTED
+                await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
         } catch (e) {
