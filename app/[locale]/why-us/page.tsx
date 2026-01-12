@@ -1,22 +1,24 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { ArrowRight, Check, X, Shield, Users, Globe, Lock, Calendar, Search } from 'lucide-react';
 import Link from 'next/link';
 
 export default function WhyUsPage() {
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
 
     return (
         <div className="min-h-screen bg-stone-50 font-sans selection:bg-blue-100 selection:text-blue-900">
             {/* Header */}
             <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-                    <Link href="/is" className="flex items-center gap-2 font-bold text-xl text-nordic-blue hover:opacity-80 transition-opacity">
+                    <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl text-nordic-blue hover:opacity-80 transition-opacity">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white">B</div>
                         <span>Bekkurinn</span>
                     </Link>
-                    <Link href="/is/login" className="px-5 py-2 bg-nordic-blue text-white rounded-full font-medium hover:bg-nordic-blue-dark transition-colors text-sm">
+                    <Link href={`/${locale}/login`} className="px-5 py-2 bg-nordic-blue text-white rounded-full font-medium hover:bg-nordic-blue-dark transition-colors text-sm">
                         Skrá sig inn
                     </Link>
                 </div>
@@ -163,7 +165,7 @@ export default function WhyUsPage() {
                     <h2 className="text-3xl font-bold mb-4">Prófaðu kerfið í dag</h2>
                     <p className="text-gray-400 mb-8 max-w-xl mx-auto">Enginn kostnaður, engin skuldbinding. Einfaldaðu utanumhaldið.</p>
                     <Link
-                        href="/is/onboarding"
+                        href={`/${locale}/onboarding`}
                         className="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-colors"
                     >
                         Stofna Bekk

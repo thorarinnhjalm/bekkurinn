@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LogIn, Users, Shield } from 'lucide-react';
 
@@ -16,6 +16,8 @@ import { LogIn, Users, Shield } from 'lucide-react';
 export default function LoginPage() {
     const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
 
     const [loginMethod, setLoginMethod] = useState<'social' | 'email'>('social');
     const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -28,7 +30,7 @@ export default function LoginPage() {
     useEffect(() => {
         // Redirect to dashboard if already logged in
         if (user && !loading) {
-            router.push('/is/dashboard');
+            router.push(`/${locale}/dashboard`);
         }
     }, [user, loading, router]);
 

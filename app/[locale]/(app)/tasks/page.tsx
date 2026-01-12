@@ -45,7 +45,7 @@ export default function TasksPage() {
 
     // Redirect
     if (!authLoading && !user) {
-        router.push('/is/login');
+        router.push(`/${locale}/login`);
         return null;
     }
 

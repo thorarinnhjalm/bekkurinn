@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { useParams } from 'next/navigation';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, Save, User, UserPlus, Check } from 'lucide-react';
@@ -16,8 +17,10 @@ const DIETARY_OPTIONS: { value: string; label: string }[] = [
     { value: 'pork', label: 'Svínakjöt' },
 ];
 
-export default function UserProfilePage({ params }: { params: { locale: string } }) {
+export default function UserProfilePage() {
     const { user } = useAuth();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
     const [isSaving, setIsSaving] = useState(false);
 
     // State for user profile details
@@ -141,7 +144,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
     };
 
     const handleCopyInviteLink = (studentId: string) => {
-        const inviteLink = `${window.location.origin}/${params.locale}/onboarding?join=${studentId}&classId=${classId}`;
+        const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}`;
         navigator.clipboard.writeText(inviteLink).then(() => {
             alert('Hlekkur afritaður! Deildu honum með samstarfsaðila.');
         }).catch(() => {
@@ -288,7 +291,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
                     <div className="text-center bg-gray-50 p-8 rounded-xl border-dashed border-2 border-gray-200">
                         <p className="text-gray-500 mb-4">Engin börn tengd við aðganginn þinn</p>
                         <a
-                            href={`/${params.locale || 'is'}/onboarding?step=join`}
+                            href={`/${locale}/onboarding?step=join`}
                             className="inline-flex items-center gap-2 text-nordic-blue font-bold hover:underline"
                         >
                             <UserPlus size={18} />
@@ -302,7 +305,7 @@ export default function UserProfilePage({ params }: { params: { locale: string }
             {students.length > 0 && (
                 <div className="text-center pt-4">
                     <a
-                        href={`/${params.locale || 'is'}/onboarding?step=join`}
+                        href={`/${locale}/onboarding?step=join`}
                         className="inline-flex items-center gap-2 text-gray-500 hover:text-nordic-blue transition font-medium"
                     >
                         <UserPlus size={18} />

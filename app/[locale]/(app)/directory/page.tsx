@@ -5,7 +5,7 @@ import { Phone, Mail, Star, ChevronUp, Users, Loader2, Search } from 'lucide-rea
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import type { Student, DietaryNeed } from '@/types';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
@@ -19,6 +19,8 @@ import { db } from '@/lib/firebase/config';
 export default function DirectoryPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
     const [classId, setClassId] = useState<string | null>(null);
 
     // 1. Fetch User Class (Newest)
@@ -59,7 +61,7 @@ export default function DirectoryPage() {
     // Redirect to login if not authenticated
     useEffect(() => {
         if (!authLoading && !user) {
-            router.push('/is/login');
+            router.push(`/${locale}/login`);
         }
     }, [authLoading, user, router]);
 

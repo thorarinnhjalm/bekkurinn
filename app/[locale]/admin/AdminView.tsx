@@ -5,7 +5,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X, Calendar, Trash2, Megaphone } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask } from '@/services/firestore';
 import { useSchoolTasks } from '@/hooks/useFirestore';
 import type { School, User, Task } from '@/types';
@@ -28,6 +28,7 @@ interface ClassData {
 export default function AdminView() {
     const { user, loading } = useAuth();
     const router = useRouter();
+    const params = useParams();
 
     // Core Data
     const [classes, setClasses] = useState<ClassData[]>([]);
@@ -146,7 +147,7 @@ export default function AdminView() {
                     </div>
 
                     <button
-                        onClick={() => router.push('/is/dashboard')}
+                        onClick={() => router.push(`/${params.locale || 'is'}/dashboard`)}
                         className="flex items-center gap-2 bg-white/80 backdrop-blur border border-white/50 text-gray-700 px-6 py-3 rounded-2xl hover:scale-105 transition-all shadow-lg font-bold"
                     >
                         <Users size={20} />

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Calendar, Loader2, Users, Plus, Footprints } from 'lucide-react';
 import { useTasks, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 
 /**
  * Patrol Page - V2
@@ -15,6 +15,8 @@ import { useRouter } from 'next/navigation';
 export default function PatrolPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
 
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
     const activeClassId = userClasses?.[0]?.id || '';
@@ -31,7 +33,7 @@ export default function PatrolPage() {
     const createTaskMutation = useCreateTask();
 
     if (!authLoading && !user) {
-        router.push('/is/login');
+        router.push(`/${locale}/login`);
         return null;
     }
 
