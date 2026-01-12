@@ -36,6 +36,9 @@ export default function HomePage() {
 
                         {/* Desktop Links */}
                         <div className="hidden md:flex items-center gap-8">
+                            <Link href={`/${locale}/why-us`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                                {t('nav.why_us') || "Af hverju Bekkurinn?"}
+                            </Link>
                             <NavLink href="#features">{t('nav.features')}</NavLink>
                             <NavLink href="#how-it-works">{t('nav.how_it_works')}</NavLink>
                             <NavLink href="#faq">{t('nav.faq')}</NavLink>

@@ -1,6 +1,7 @@
 'use client';
 
-import { Bell, Settings, LogOut, User as UserIcon, Check, X } from 'lucide-react';
+import { Bell, Settings, LogOut, User as UserIcon, Check, X, HelpCircle } from 'lucide-react';
+import { AboutModal } from '@/components/ui/AboutModal';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -20,6 +21,7 @@ export function TopHeader({ className }: { className?: string }) {
     const router = useRouter();
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
     const { notifications, unreadCount, markAsRead, markAllAsRead, createNotification, loading } = useNotifications();
     const params = useParams();
     const pathname = usePathname();
@@ -74,6 +76,15 @@ export function TopHeader({ className }: { className?: string }) {
 
                 {/* Actions */}
                 <div className="flex items-center gap-2">
+                    {/* Help Button */}
+                    <button
+                        onClick={() => setShowAbout(true)}
+                        className="tap-target p-2 rounded-lg hover:bg-stone-100 text-gray-500 hover:text-nordic-blue transition-colors"
+                        title="Hvað er þetta?"
+                    >
+                        <HelpCircle size={20} />
+                    </button>
+
                     {/* Notifications */}
                     <div className="relative">
                         <button
@@ -231,6 +242,8 @@ export function TopHeader({ className }: { className?: string }) {
                     )}
                 </div>
             </div>
+
+            <AboutModal isOpen={showAbout} onClose={() => setShowAbout(false)} />
         </header>
     );
 }
