@@ -1,10 +1,11 @@
 'use client';
 
-import { Heart, Pin, Loader2, MessageSquare, Edit2, Plus, Megaphone } from 'lucide-react';
+import { Heart, Pin, Loader2, MessageSquare, Edit2, Plus, Megaphone, Info } from 'lucide-react';
 import { useAnnouncements, useUserClasses, useCreateAnnouncement, useDeleteAnnouncement, useSchool } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
+import { Babelfish } from '@/components/Babelfish';
 
 /**
  * Announcements Page - Auglýsingataflan V2
@@ -15,6 +16,8 @@ import { useState } from 'react';
 export default function AnnouncementsPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
 
     // Dynamic Class ID
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
@@ -41,7 +44,7 @@ export default function AnnouncementsPage() {
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
-        router.push('/is/login');
+        router.push(`/${locale}/login`);
         return null;
     }
 
@@ -109,6 +112,16 @@ export default function AnnouncementsPage() {
                 )}
             </header>
 
+            {/* Global Translation Notice (if not Icelandic) */}
+            {locale !== 'is' && (
+                <div className="max-w-4xl mx-auto p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex items-start gap-3">
+                    <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-blue-700 leading-relaxed italic">
+                        <strong>Translation Notice:</strong> Messages are automatically translated into your language. Original text is preserved for accuracy.
+                    </p>
+                </div>
+            )}
+
             {/* Announcements Feed */}
             <div className="space-y-8 max-w-4xl mx-auto pt-6">
                 {sortedAnnouncements.length === 0 && (
@@ -143,10 +156,17 @@ export default function AnnouncementsPage() {
                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg shadow-sm ${announcement.pinned ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
                                     {(announcement.author || 'S')[0]}
                                 </div>
-                                <div>
-                                    <p className="font-bold text-gray-900 leading-tight">
-                                        {announcement.author || (announcement.scope === 'school' ? 'Foreldrafélag' : 'Stjórn')}
-                                    </p>
+                                <div className="flex-1">
+                                    <div className="flex items-center gap-2">
+                                        <p className="font-bold text-gray-900 leading-tight">
+                                            {announcement.author || (announcement.scope === 'school' ? 'Foreldrafélag' : 'Stjórn')}
+                                        </p>
+                                        {announcement.originalLanguage && announcement.originalLanguage !== 'is' && (
+                                            <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
+                                                {announcement.originalLanguage}
+                                            </span>
+                                        )}
+                                    </div>
                                     <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-0.5">
                                         {formatDate(announcement.createdAt)}
                                     </p>
@@ -160,6 +180,13 @@ export default function AnnouncementsPage() {
                             <div className="prose prose-lg prose-gray max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
                                 {announcement.content}
                             </div>
+
+                            {/* BABELFISH TRANSLATION */}
+                            <Babelfish
+                                text={announcement.content}
+                                originalLanguage={announcement.originalLanguage || 'is'}
+                                targetLanguage={locale}
+                            />
 
                             {(isAdmin || isSchoolAdmin) && (
                                 <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
@@ -256,7 +283,8 @@ export default function AnnouncementsPage() {
                                         content: newContent,
                                         pinned: newPinned,
                                         createdBy: user?.uid || '',
-                                        author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn')
+                                        author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn'),
+                                        originalLanguage: locale
                                     } as any);
 
                                     setIsCreating(false);

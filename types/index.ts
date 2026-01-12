@@ -116,6 +116,7 @@ export interface Task {
     volunteers: TaskVolunteer[];
     createdAt: Timestamp;
     createdBy: string; // Admin UID
+    originalLanguage?: string; // Babelfish feature
 }
 
 // ========================================
@@ -134,6 +135,7 @@ export interface Announcement {
     createdAt: Timestamp;
     createdBy: string; // Admin UID
     author: string; // Display name
+    originalLanguage?: string; // Babelfish feature
 }
 
 // ========================================

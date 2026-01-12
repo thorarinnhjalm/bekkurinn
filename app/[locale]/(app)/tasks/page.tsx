@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool } from '@/hooks/useFirestore';
-import { Edit2, Loader2, Calendar, Clock, MapPin, Plus } from 'lucide-react'; // Users removed if unused
-import { useRouter } from 'next/navigation';
+import { Edit2, Loader2, Calendar, Clock, MapPin, Plus, Info } from 'lucide-react'; // Users removed if unused
+import { useRouter, useParams } from 'next/navigation';
 import type { Task } from '@/types';
+import { Babelfish } from '@/components/Babelfish';
 
 /**
  * Tasks Page - Skipulag V2
@@ -16,6 +17,8 @@ import type { Task } from '@/types';
 export default function TasksPage() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
 
     // 1. Get User's Classes
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
@@ -125,6 +128,16 @@ export default function TasksPage() {
                 )}
             </header>
 
+            {/* Global Translation Notice (if not Icelandic) */}
+            {locale !== 'is' && (
+                <div className="max-w-4xl mx-auto p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex items-start gap-3">
+                    <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-blue-700 leading-relaxed italic">
+                        <strong>Translation Notice:</strong> Task descriptions are automatically translated into your language. Original text is preserved for accuracy.
+                    </p>
+                </div>
+            )}
+
             {/* Events Grid */}
             <div className="grid grid-cols-1 gap-6">
                 {sortedEvents.map((task, index) => {
@@ -176,9 +189,19 @@ export default function TasksPage() {
                                     {task.type === 'gift_collection' && <span className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-lg uppercase tracking-wide">Söfnun</span>}
                                 </div>
 
-                                <p className="text-gray-600 leading-relaxed mb-6 max-w-2xl">
+                                <p className="text-gray-600 leading-relaxed mb-4 max-w-2xl">
                                     {task.description || "Engin lýsing."}
                                 </p>
+
+                                {task.description && (
+                                    <div className="mb-6">
+                                        <Babelfish
+                                            text={task.description}
+                                            originalLanguage={task.originalLanguage}
+                                            targetLanguage={locale}
+                                        />
+                                    </div>
+                                )}
 
                                 {/* Progress / Action Area */}
                                 <div className="mt-auto">
@@ -318,6 +341,7 @@ export default function TasksPage() {
                                         date: new Date(createDate) as any,
                                         slotsTotal: createSlots,
                                         createdBy: user?.uid || '',
+                                        originalLanguage: locale,
                                     } as any);
                                     setIsCreating(false);
                                     setCreateTitle(''); setCreateDesc(''); setScope('class');
