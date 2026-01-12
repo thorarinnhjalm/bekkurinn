@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
+import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool } from '@/hooks/useFirestore';
 import { Edit2, Loader2, Calendar, Clock, MapPin, Plus } from 'lucide-react'; // Users removed if unused
 import { useRouter } from 'next/navigation';
 import type { Task } from '@/types';
@@ -23,8 +23,12 @@ export default function TasksPage() {
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';
 
-    // 2. Fetch Tasks
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
+    // School Context
+    const { data: school } = useSchool(activeClass?.schoolId);
+    const isSchoolAdmin = school?.admins?.includes(user?.uid || '');
+
+    // 2. Fetch Tasks (Class + School)
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
 
@@ -34,6 +38,7 @@ export default function TasksPage() {
     const [createDate, setCreateDate] = useState('');
     const [createDesc, setCreateDesc] = useState('');
     const [createSlots, setCreateSlots] = useState(2);
+    const [scope, setScope] = useState<'class' | 'school'>('class');
 
     // Redirect
     if (!authLoading && !user) {
@@ -74,7 +79,11 @@ export default function TasksPage() {
 
     // Filter & Sort
     const allTasks = tasksData || [];
-    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection'].includes(t.type));
+    // Display 'event', 'rolt', 'gift_collection' AND now 'school_event' (mapped from 'event' with scope='school')
+    // Ideally we just check if it's NOT a patrol event if we wanted to hide those, but let's show all types relevant.
+    // The previous filter was: ['event', 'rolt', 'gift_collection'].includes(t.type)
+    // We should ensure 'event' type covers school events or check for scope.
+    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection', 'school_event'].includes(t.type));
 
     const sortedEvents = [...displayTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
@@ -87,8 +96,6 @@ export default function TasksPage() {
         return aTime - bTime;
     });
 
-    const upcomingCount = displayTasks.filter(e => isUpcoming(e.date)).length;
-
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-20 relative">
             {/* Background blobs */}
@@ -100,14 +107,14 @@ export default function TasksPage() {
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-blue-700 uppercase tracking-wide mb-3 animate-in fade-in slide-in-from-left-2">
                         <Calendar size={12} />
-                        Skipulag bekkjarins
+                        Skipulag skólans
                     </div>
                     <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Verkefni & Viðburðir</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
                         Hér er yfirlit yfir allt sem þarf að gera. Skráðu þig sem sjálfboðaliða og taktu þátt!
                     </p>
                 </div>
-                {isAdmin && (
+                {(isAdmin || isSchoolAdmin) && (
                     <button
                         onClick={() => setIsCreating(true)}
                         className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
@@ -131,6 +138,11 @@ export default function TasksPage() {
                             className={`glass-card p-0 flex flex-col md:flex-row overflow-hidden group ${!isTaskUpcoming ? 'opacity-70 grayscale-[0.5] hover:grayscale-0' : ''}`}
                             style={{ animationDelay: `${index * 100}ms` }}
                         >
+                            {/* Scope Strip */}
+                            {task.scope === 'school' && (
+                                <div className="md:w-2 bg-purple-500 w-full h-2 md:h-auto" />
+                            )}
+
                             {/* Date Column */}
                             <div className="md:w-48 bg-gray-50/50 border-b md:border-b-0 md:border-r border-gray-100 p-6 flex flex-col justify-center items-center text-center group-hover:bg-blue-50/30 transition-colors">
                                 <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">
@@ -159,6 +171,7 @@ export default function TasksPage() {
                                         </h3>
                                     </div>
                                     {/* Status Badge */}
+                                    {task.scope === 'school' && <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg uppercase tracking-wide">Allur Skólinn</span>}
                                     {task.type === 'rolt' && <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg uppercase tracking-wide">Rölt</span>}
                                     {task.type === 'gift_collection' && <span className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-lg uppercase tracking-wide">Söfnun</span>}
                                 </div>
@@ -169,37 +182,33 @@ export default function TasksPage() {
 
                                 {/* Progress / Action Area */}
                                 <div className="mt-auto">
-                                    {task.type !== 'school_event' ? (
-                                        <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
-                                            <div className="flex-1">
-                                                <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
-                                                    <span>Sjálfboðaliðar</span>
-                                                    <span>{task.slotsFilled} / {task.slotsTotal}</span>
-                                                </div>
-                                                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                                                    <div
-                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-nordic-blue'}`}
-                                                        style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
-                                                    />
-                                                </div>
+                                    {/* Always show volunteer button, even for school events, unless logic dictates otherwise */}
+                                    {/* Note: logic in previous code hid it for school_event, but now school events are fully functional tasks */}
+                                    <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
+                                        <div className="flex-1">
+                                            <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
+                                                <span>Sjálfboðaliðar</span>
+                                                <span>{task.slotsFilled} / {task.slotsTotal}</span>
                                             </div>
+                                            <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                                <div
+                                                    className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-nordic-blue'}`}
+                                                    style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
+                                                />
+                                            </div>
+                                        </div>
 
-                                            <button
-                                                onClick={() => handleVolunteer(task.id)}
-                                                disabled={isFull || !isTaskUpcoming}
-                                                className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
-                                                    ? 'bg-green-100 text-green-700 cursor-default'
-                                                    : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
-                                                    }`}
-                                            >
-                                                {isFull ? 'Fullmannað' : 'Skrá mig'}
-                                            </button>
-                                        </div>
-                                    ) : (
-                                        <div className="text-sm text-gray-500 font-medium italic">
-                                            ℹ️ Þessi viðburður er á vegum skólans.
-                                        </div>
-                                    )}
+                                        <button
+                                            onClick={() => handleVolunteer(task.id)}
+                                            disabled={isFull || !isTaskUpcoming}
+                                            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
+                                                ? 'bg-green-100 text-green-700 cursor-default'
+                                                : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
+                                                }`}
+                                        >
+                                            {isFull ? 'Fullmannað' : 'Skrá mig'}
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -231,6 +240,24 @@ export default function TasksPage() {
                         </div>
 
                         <div className="space-y-4">
+                            {/* Scope Selector */}
+                            {isSchoolAdmin && (
+                                <div className="flex bg-gray-100 p-1 rounded-xl">
+                                    <button
+                                        onClick={() => setScope('class')}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                    >
+                                        Bekkur
+                                    </button>
+                                    <button
+                                        onClick={() => setScope('school')}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                    >
+                                        Allur Skólinn
+                                    </button>
+                                </div>
+                            )}
+
                             <div>
                                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Heiti</label>
                                 <input
@@ -282,8 +309,10 @@ export default function TasksPage() {
                                 onClick={async () => {
                                     if (!createTitle || !createDate) return;
                                     await createTaskMutation.mutateAsync({
-                                        classId: activeClassId,
-                                        type: 'event', // simplified
+                                        classId: scope === 'class' ? activeClassId : undefined,
+                                        schoolId: scope === 'school' ? activeClass?.schoolId : undefined,
+                                        scope: scope,
+                                        type: 'event',
                                         title: createTitle,
                                         description: createDesc,
                                         date: new Date(createDate) as any,
@@ -291,7 +320,7 @@ export default function TasksPage() {
                                         createdBy: user?.uid || '',
                                     } as any);
                                     setIsCreating(false);
-                                    setCreateTitle(''); setCreateDesc('');
+                                    setCreateTitle(''); setCreateDesc(''); setScope('class');
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >

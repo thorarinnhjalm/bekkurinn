@@ -20,8 +20,11 @@ import {
     toggleAnnouncementPin,
     deleteAnnouncement,
     getParentLinkByUserAndClass,
+    getSchool,
+    getAnnouncementsBySchool,
+    getTasksBySchool
 } from '@/services/firestore';
-import type { Task, Announcement } from '@/types';
+import type { Task, Announcement, CreateStudentInput, CreateTaskInput, CreateAnnouncementInput } from '@/types';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
@@ -97,18 +100,15 @@ export function useUserClass(userId: string | undefined) {
         isLoading: !data, // Approximated
     };
 }
-import type {
-    CreateStudentInput,
-    CreateTaskInput,
-    CreateAnnouncementInput,
-} from '@/types';
 
-/**
- * React Query Hooks for Bekkurinn
- * 
- * Configured with aggressive caching (5min stale time)
- * to minimize Firestore reads
- */
+
+export function useSchool(schoolId: string | undefined | null) {
+    return useQuery({
+        queryKey: ['school', schoolId],
+        queryFn: () => (schoolId ? getSchool(schoolId) : null),
+        enabled: !!schoolId,
+    });
+}
 
 // ========================================
 // CLASS HOOKS
@@ -169,6 +169,10 @@ export function useDeleteStudent() {
 }
 
 // ========================================
+// SCHOOL HOOKS
+// ========================================
+
+// ========================================
 // PARENT LINK HOOKS
 // ========================================
 
@@ -192,11 +196,22 @@ export function useUserParentLink(userId: string | undefined, classId: string | 
 // TASK HOOKS (Patrol & Events)
 // ========================================
 
-export function useTasks(classId: string | null) {
+export function useTasks(classId: string | null, schoolId?: string | null) {
     return useQuery({
-        queryKey: ['tasks', classId],
-        queryFn: () => (classId ? getTasksByClass(classId) : []),
-        enabled: !!classId,
+        queryKey: ['tasks', classId, schoolId],
+        queryFn: async () => {
+            const classTasks = classId ? await getTasksByClass(classId) : [];
+            const schoolTasks = schoolId ? await getTasksBySchool(schoolId) : [];
+
+            // Merge and sort
+            const allTasks = [...classTasks, ...schoolTasks].sort((a, b) => {
+                const aTime = a.date?.seconds || 0;
+                const bTime = b.date?.seconds || 0;
+                return bTime - aTime;
+            });
+            return allTasks;
+        },
+        enabled: !!classId || !!schoolId,
     });
 }
 
@@ -206,7 +221,7 @@ export function useCreateTask() {
     return useMutation({
         mutationFn: (data: CreateTaskInput) => createTask(data),
         onSuccess: (_, variables) => {
-            queryClient.invalidateQueries({ queryKey: ['tasks', variables.classId] });
+            queryClient.invalidateQueries({ queryKey: ['tasks'] }); // Invalidate all tasks queries
         },
     });
 }
@@ -269,11 +284,25 @@ export function useDeleteTask() {
 // ANNOUNCEMENT HOOKS
 // ========================================
 
-export function useAnnouncements(classId: string | null) {
+export function useAnnouncements(classId: string | null, schoolId?: string | null) {
     return useQuery({
-        queryKey: ['announcements', classId],
-        queryFn: () => (classId ? getAnnouncementsByClass(classId) : []),
-        enabled: !!classId,
+        queryKey: ['announcements', classId, schoolId],
+        queryFn: async () => {
+            const classAnnouncements = classId ? await getAnnouncementsByClass(classId) : [];
+            const schoolAnnouncements = schoolId ? await getAnnouncementsBySchool(schoolId) : [];
+
+            // Merge and Sort: Pinned first, then by date
+            const all = [...classAnnouncements, ...schoolAnnouncements];
+
+            return all.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                const aTime = a.createdAt?.toDate?.()?.getTime() || 0;
+                const bTime = b.createdAt?.toDate?.()?.getTime() || 0;
+                return bTime - aTime;
+            });
+        },
+        enabled: !!classId || !!schoolId,
     });
 }
 

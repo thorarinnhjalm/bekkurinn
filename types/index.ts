@@ -80,6 +80,16 @@ export interface ParentLink {
 }
 
 // ========================================
+// SCHOOL
+// ========================================
+
+export interface School {
+    id: string;
+    name: string;
+    admins: string[]; // List of UIDs (Foreldrafélag members)
+}
+
+// ========================================
 // TASK (Polymorphic)
 // ========================================
 
@@ -93,7 +103,10 @@ export interface TaskVolunteer {
 
 export interface Task {
     id: string;
-    classId: string;
+    classId?: string; // Optional for school-wide events
+    schoolId?: string;
+    scope: 'class' | 'school';
+
     type: TaskType;
     title: string;
     description?: string;
@@ -111,7 +124,10 @@ export interface Task {
 
 export interface Announcement {
     id: string;
-    classId: string;
+    classId?: string; // Optional for school-wide events
+    schoolId?: string;
+    scope: 'class' | 'school';
+
     title: string;
     content: string;
     pinned: boolean;

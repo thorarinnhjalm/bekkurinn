@@ -31,6 +31,7 @@ import type {
     CreateAnnouncementInput,
     User,
     CreateUserInput,
+    School,
 } from '@/types';
 
 /**
@@ -69,6 +70,44 @@ export async function getUser(uid: string): Promise<User | null> {
 
 export async function updateUser(uid: string, data: Partial<User>): Promise<void> {
     await updateDoc(doc(db, 'users', uid), data);
+}
+
+export async function searchUsersByEmail(email: string): Promise<User[]> {
+    const q = query(
+        collection(db, 'users'),
+        where('email', '>=', email),
+        where('email', '<=', email + '\uf8ff'),
+        limit(5)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id } as User));
+}
+
+// ========================================
+// SCHOOLS
+// ========================================
+
+export async function getSchool(schoolId: string): Promise<School | null> {
+    const docSnap = await getDoc(doc(db, 'schools', schoolId));
+    if (!docSnap.exists()) return null;
+    return { ...docSnap.data(), id: docSnap.id } as School;
+}
+
+export async function createSchool(schoolId: string, name: string): Promise<void> {
+    await setDoc(doc(db, 'schools', schoolId), {
+        name,
+        admins: []
+    });
+}
+
+export async function updateSchoolAdmins(schoolId: string, admins: string[]): Promise<void> {
+    await updateDoc(doc(db, 'schools', schoolId), { admins });
+}
+
+export async function getAllSchools(): Promise<School[]> {
+    const q = query(collection(db, 'schools'), orderBy('name'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as School));
 }
 
 // ========================================
@@ -313,6 +352,18 @@ export async function getAnnouncementsByClass(classId: string): Promise<Announce
     return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Announcement));
 }
 
+export async function getAnnouncementsBySchool(schoolId: string): Promise<Announcement[]> {
+    const q = query(
+        collection(db, 'announcements'),
+        where('schoolId', '==', schoolId),
+        where('scope', '==', 'school'),
+        orderBy('createdAt', 'desc'),
+        limit(50)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as Announcement));
+}
+
 export async function toggleAnnouncementPin(announcementId: string, pinned: boolean): Promise<void> {
     await updateDoc(doc(db, 'announcements', announcementId), { pinned });
 }
@@ -323,4 +374,24 @@ export async function updateAnnouncement(announcementId: string, data: Partial<A
 
 export async function deleteAnnouncement(announcementId: string): Promise<void> {
     await deleteDoc(doc(db, 'announcements', announcementId));
+}
+
+// ========================================
+// SCHOOL EVENTS (Tasks variant)
+// ========================================
+
+export async function getTasksBySchool(schoolId: string): Promise<Task[]> {
+    const q = query(
+        collection(db, 'tasks'),
+        where('schoolId', '==', schoolId),
+        where('scope', '==', 'school')
+    );
+    const snapshot = await getDocs(q);
+    const tasks = snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id } as Task));
+
+    return tasks.sort((a, b) => {
+        const aTime = a.date?.seconds || 0;
+        const bTime = b.date?.seconds || 0;
+        return bTime - aTime;
+    });
 }

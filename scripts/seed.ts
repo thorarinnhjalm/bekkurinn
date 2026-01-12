@@ -97,6 +97,7 @@ async function seed() {
                 date: Timestamp.fromDate(date),
                 slotsTotal: 2,
                 createdBy: 'demo-admin-uid',
+                scope: 'class'
             });
             console.log(`✓ Patrol task created: ${date.toLocaleDateString('is-IS')} (${taskId})`);
         }
@@ -112,6 +113,7 @@ async function seed() {
             date: Timestamp.fromDate(new Date('2026-12-20')),
             slotsTotal: 5,
             createdBy: 'demo-admin-uid',
+            scope: 'class'
         });
         console.log(`✓ Event created: ${eventId}\n`);
 
@@ -145,6 +147,7 @@ async function seed() {
                 pinned: announcement.pinned,
                 createdBy: 'demo-admin-uid',
                 author: 'Guðrún (Formaður)',
+                scope: 'class'
             });
             console.log(`✓ Announcement created: ${announcement.title} (${announcementId})`);
         }
