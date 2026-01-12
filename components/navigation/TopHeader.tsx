@@ -111,14 +111,54 @@ export function TopHeader({ className }: { className?: string }) {
 
                         {showNotifications && (
                             <div
-                                className="absolute right-0 mt-2 w-80 nordic-card shadow-lg z-50 overflow-hidden max-h-[80vh] flex flex-col"
+                                className="absolute right-0 mt-2 w-80 nordic-card shadow-lg z-50 overflow-hidden max-h-[80vh] flex flex-col bg-white"
                             >
                                 <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
                                     <h3 className="font-semibold text-sm">Tilkynningar</h3>
+                                    {unreadCount > 0 && (
+                                        <button
+                                            onClick={() => markAllAsRead()}
+                                            className="text-[11px] font-bold text-nordic-blue hover:text-nordic-blue-dark transition-colors uppercase tracking-wider"
+                                        >
+                                            Lesa allt
+                                        </button>
+                                    )}
                                 </div>
-                                <div className="p-8 flex flex-col items-center justify-center text-center text-gray-500">
-                                    <Bell size={32} className="mb-2 opacity-20" />
-                                    <p className="text-sm">Engar nýjar tilkynningar</p>
+
+                                <div className="overflow-y-auto max-h-[60vh]">
+                                    {notifications.length > 0 ? (
+                                        <div className="divide-y divide-gray-50">
+                                            {notifications.map((n) => (
+                                                <button
+                                                    key={n.id}
+                                                    onClick={() => handleNotificationClick(n.id, n.link)}
+                                                    className={`w-full text-left p-4 hover:bg-stone-50 transition-colors flex gap-3 items-start relative ${!n.read ? 'bg-blue-50/30' : ''}`}
+                                                >
+                                                    {!n.read && (
+                                                        <div className="absolute left-2 top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full bg-nordic-blue" />
+                                                    )}
+                                                    <div className="flex-1">
+                                                        <p className={`text-sm leading-snug mb-1 ${!n.read ? 'font-bold text-gray-900' : 'text-gray-600'}`}>
+                                                            {n.title}
+                                                        </p>
+                                                        <p className="text-xs text-gray-400 line-clamp-2">
+                                                            {n.message}
+                                                        </p>
+                                                        {n.createdAt && (
+                                                            <p className="text-[10px] text-gray-400 mt-1 uppercase font-medium">
+                                                                {n.createdAt.toDate().toLocaleDateString('is-IS', { hour: '2-digit', minute: '2-digit' })}
+                                                            </p>
+                                                        )}
+                                                    </div>
+                                                </button>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <div className="p-8 flex flex-col items-center justify-center text-center text-gray-500">
+                                            <Bell size={32} className="mb-2 opacity-20" />
+                                            <p className="text-sm">Engar nýjar tilkynningar</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         )}
