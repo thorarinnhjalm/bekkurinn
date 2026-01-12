@@ -136,6 +136,7 @@ export interface Announcement {
     createdAt: Timestamp;
     createdBy: string; // Admin UID
     author: string; // Display name
+    isCritical?: boolean;
     originalLanguage?: string; // Babelfish feature
 }
 

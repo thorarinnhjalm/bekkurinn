@@ -37,6 +37,9 @@ export default function AnnouncementsPage() {
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [newPinned, setNewPinned] = useState(false);
+    const [isCritical, setIsCritical] = useState(false);
+    const [showNuclearConfirm, setShowNuclearConfirm] = useState(false);
+    const [nuclearKeyword, setNuclearKeyword] = useState('');
     const [scope, setScope] = useState<'class' | 'school'>('class');
 
     const createAnnouncementMutation = useCreateAnnouncement();
@@ -256,11 +259,25 @@ export default function AnnouncementsPage() {
                                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none h-40 resize-none font-medium text-gray-600"
                             />
 
-                            <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100 cursor-pointer" onClick={() => setNewPinned(!newPinned)}>
-                                <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${newPinned ? 'bg-amber-500 border-amber-500 text-white' : 'border-amber-300 bg-white'}`}>
-                                    {newPinned && <Pin size={14} />}
+                            <div className="flex border-t border-gray-100 pt-4 flex-col gap-3">
+                                <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100 cursor-pointer flex-1" onClick={() => setNewPinned(!newPinned)}>
+                                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${newPinned ? 'bg-amber-500 border-amber-500 text-white' : 'border-amber-300 bg-white'}`}>
+                                        {newPinned && <Pin size={14} />}
+                                    </div>
+                                    <span className="font-bold text-amber-900 text-sm">Festa efst sem mikilvægt</span>
                                 </div>
-                                <span className="font-bold text-amber-900 text-sm">Festa efst sem mikilvægt</span>
+
+                                {(isAdmin || isSchoolAdmin) && (
+                                    <div className="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100 cursor-pointer flex-1" onClick={() => setIsCritical(!isCritical)}>
+                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${isCritical ? 'bg-red-500 border-red-500 text-white' : 'border-red-300 bg-white'}`}>
+                                            {isCritical && <Megaphone size={14} />}
+                                        </div>
+                                        <div className="flex-1">
+                                            <span className="font-bold text-red-900 text-sm block">Kjarnorku sending</span>
+                                            <span className="text-[10px] text-red-600 font-medium leading-tight">Senda sem tölvupóst á alla (trompar stillingar)</span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
@@ -275,6 +292,11 @@ export default function AnnouncementsPage() {
                                 onClick={async () => {
                                     if (!newTitle || !newContent) return alert("Vinsamlegast fylltu út reitina");
 
+                                    if (isCritical) {
+                                        setShowNuclearConfirm(true);
+                                        return;
+                                    }
+
                                     await createAnnouncementMutation.mutateAsync({
                                         classId: scope === 'class' ? activeClassId : null,
                                         schoolId: scope === 'school' ? (activeClass?.schoolId || null) : (activeClass?.schoolId || null),
@@ -288,11 +310,94 @@ export default function AnnouncementsPage() {
                                     } as any);
 
                                     setIsCreating(false);
-                                    setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class');
+                                    setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class'); setIsCritical(false);
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >
                                 Birta
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Nuclear Confirmation Modal */}
+            {showNuclearConfirm && (
+                <div className="fixed inset-0 bg-red-900/80 backdrop-blur-xl flex items-center justify-center p-4 z-[60] animate-in fade-in duration-300">
+                    <div className="bg-white rounded-[2rem] p-10 max-w-md w-full space-y-8 shadow-2xl relative overflow-hidden border-4 border-red-500">
+                        <div className="text-center space-y-4">
+                            <div className="w-20 h-20 bg-red-100 rounded-3xl flex items-center justify-center mx-auto text-red-600 animate-pulse">
+                                <Megaphone size={40} />
+                            </div>
+                            <h2 className="text-3xl font-black text-gray-900 tracking-tight italic uppercase">VARÚÐ!</h2>
+                            <p className="text-gray-600 font-bold leading-relaxed">
+                                Þessi tilkynning verður send sem tölvupóstur á <span className="text-red-600 underline text-lg">alla foreldra</span> í hópnum.
+                                <br /><br />
+                                Þetta trompar allar stillingar notenda og er ekki hægt að afturkalla.
+                            </p>
+                        </div>
+
+                        <div className="space-y-4">
+                            <p className="text-center text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Skrifaðu staðfestingarorðið hér að neðan</p>
+                            <input
+                                type="text"
+                                value={nuclearKeyword}
+                                onChange={e => setNuclearKeyword(e.target.value)}
+                                placeholder="SENDA"
+                                className="w-full text-center px-6 py-4 rounded-2xl bg-gray-50 border-4 border-gray-100 focus:border-red-500 focus:bg-white transition-all outline-none font-black text-2xl tracking-[0.3em] uppercase placeholder:opacity-20 translate-z-0"
+                                autoFocus
+                            />
+                        </div>
+
+                        <div className="flex flex-col gap-3 pt-4">
+                            <button
+                                onClick={async () => {
+                                    if (nuclearKeyword.toUpperCase() !== 'SENDA') return alert("Vinsamlegast skrifaðu SENDA til að staðfesta");
+
+                                    const announcement = {
+                                        classId: scope === 'class' ? activeClassId : null,
+                                        schoolId: scope === 'school' ? (activeClass?.schoolId || null) : (activeClass?.schoolId || null),
+                                        scope: scope,
+                                        title: newTitle,
+                                        content: newContent,
+                                        pinned: newPinned,
+                                        isCritical: true,
+                                        createdBy: user?.uid || '',
+                                        author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn'),
+                                        originalLanguage: locale
+                                    };
+
+                                    await createAnnouncementMutation.mutateAsync(announcement as any);
+
+                                    // Trigger Email API
+                                    try {
+                                        await fetch('/api/send-critical-announcement', {
+                                            method: 'POST',
+                                            headers: { 'Content-Type': 'application/json' },
+                                            body: JSON.stringify(announcement)
+                                        });
+                                    } catch (err) {
+                                        console.error("Failed to send emails:", err);
+                                        // We don't block the UI here as the announcement is already created in Firestore
+                                    }
+
+                                    setIsCreating(false);
+                                    setShowNuclearConfirm(false);
+                                    setNuclearKeyword('');
+                                    setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class'); setIsCritical(false);
+                                }}
+                                disabled={nuclearKeyword.toUpperCase() !== 'SENDA'}
+                                className="w-full py-5 rounded-2xl font-black text-white bg-red-600 shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:bg-red-700 active:scale-95 transition-all disabled:opacity-30 disabled:grayscale disabled:pointer-events-none text-xl"
+                            >
+                                SENDA NÚNA
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setShowNuclearConfirm(false);
+                                    setNuclearKeyword('');
+                                }}
+                                className="w-full py-4 rounded-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors"
+                            >
+                                Hætta við
                             </button>
                         </div>
                     </div>

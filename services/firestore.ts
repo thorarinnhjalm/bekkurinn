@@ -395,3 +395,49 @@ export async function getTasksBySchool(schoolId: string): Promise<Task[]> {
         return bTime - aTime;
     });
 }
+// ========================================
+// EMAIL & MEMBERSHIP HELPERS
+// ========================================
+
+export async function getClassMemberEmails(classId: string): Promise<string[]> {
+    const q = query(
+        collection(db, 'parentLinks'),
+        where('classId', '==', classId),
+        where('status', '==', 'approved')
+    );
+    const snapshot = await getDocs(q);
+    const userIds = Array.from(new Set(snapshot.docs.map(doc => doc.data().userId)));
+
+    if (userIds.length === 0) return [];
+
+    const emails: string[] = [];
+    // Firestore 'in' query supports max 10/30 depending on version, let's batch by 10
+    for (let i = 0; i < userIds.length; i += 10) {
+        const batch = userIds.slice(i, i + 10);
+        const usersQ = query(collection(db, 'users'), where('uid', 'in', batch));
+        const usersSnap = await getDocs(usersQ);
+        usersSnap.forEach(doc => {
+            const data = doc.data();
+            if (data.email) emails.push(data.email);
+        });
+    }
+
+    return Array.from(new Set(emails));
+}
+
+export async function getSchoolMemberEmails(schoolId: string): Promise<string[]> {
+    // 1. Get all classes in school
+    const q = query(collection(db, 'classes'), where('schoolId', '==', schoolId));
+    const snapshot = await getDocs(q);
+    const classIds = snapshot.docs.map(doc => doc.id);
+
+    if (classIds.length === 0) return [];
+
+    let allEmails: string[] = [];
+    for (const classId of classIds) {
+        const emails = await getClassMemberEmails(classId);
+        allEmails = [...allEmails, ...emails];
+    }
+
+    return Array.from(new Set(allEmails));
+}
