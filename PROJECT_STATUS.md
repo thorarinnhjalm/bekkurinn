@@ -115,6 +115,16 @@
 - [x] Proper spacing and padding throughout
 - [x] Header visibility fixed (pt-24 on all pages)
 
+### 12. **Super Admin Hub (Redesign)** ✅
+- [x] **Premium Glassmorphism UI**: Blob backgrounds, blur effects, smooth animations.
+- [x] **School Management**: Create schools, view IDs, manage admins.
+- [x] **User Search**: Instant email search to assigning School Admins.
+- [x] **Access Control**: Restricted to Super Admins (hardcoded list).
+
+### 13. **Localization Fixes** ✅
+- [x] **Default Locale**: Disabled `localeDetection` to force `/is` as default.
+- [x] **Middleware**: Optimized matcher configuration.
+
 ---
 
 ## 📂 FILE STRUCTURE

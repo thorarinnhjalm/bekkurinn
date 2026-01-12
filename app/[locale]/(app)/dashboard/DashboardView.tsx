@@ -479,6 +479,19 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             </Link>
                         </div>
                     )}
+
+                    {/* SUPER ADMIN SWITCHER */}
+                    {user?.email === 'thorarinnhjalmarsson@gmail.com' && (
+                        <div className="pt-2">
+                            <Link
+                                href={`/${locale}/admin`}
+                                className="w-full bg-gray-900 text-white flex items-center justify-center gap-2 py-3 rounded-xl font-bold hover:bg-black transition-all shadow-lg border border-gray-700"
+                            >
+                                <Users size={18} />
+                                Kerfisstjórn
+                            </Link>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
