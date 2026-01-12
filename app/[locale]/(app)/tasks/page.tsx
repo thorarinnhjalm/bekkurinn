@@ -39,8 +39,10 @@ export default function TasksPage() {
     const [isCreating, setIsCreating] = useState(false);
     const [createTitle, setCreateTitle] = useState('');
     const [createDate, setCreateDate] = useState('');
+    const [createTime, setCreateTime] = useState('12:00');
     const [createDesc, setCreateDesc] = useState('');
     const [createSlots, setCreateSlots] = useState(2);
+    const [createIsAllDay, setCreateIsAllDay] = useState(false);
     const [scope, setScope] = useState<'class' | 'school'>('class');
 
     // Redirect
@@ -143,7 +145,8 @@ export default function TasksPage() {
                 {sortedEvents.map((task, index) => {
                     const dateObj = task.date?.toDate?.();
                     const isTaskUpcoming = isUpcoming(task.date);
-                    const isFull = task.slotsFilled >= task.slotsTotal;
+                    const isFull = task.slotsTotal > 0 && task.slotsFilled >= task.slotsTotal;
+                    const isAllDay = task.isAllDay || task.type === 'school_event';
 
                     return (
                         <div
@@ -167,10 +170,15 @@ export default function TasksPage() {
                                 <span className="text-lg font-medium text-nordic-blue">
                                     {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }) : '---'}
                                 </span>
-                                {dateObj && (
+                                {dateObj && !isAllDay && (
                                     <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
                                         <Clock size={12} />
                                         {dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                )}
+                                {isAllDay && (
+                                    <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                                        Allan daginn
                                     </div>
                                 )}
                             </div>
@@ -205,33 +213,37 @@ export default function TasksPage() {
 
                                 {/* Progress / Action Area */}
                                 <div className="mt-auto">
-                                    {/* Always show volunteer button, even for school events, unless logic dictates otherwise */}
-                                    {/* Note: logic in previous code hid it for school_event, but now school events are fully functional tasks */}
-                                    <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
-                                        <div className="flex-1">
-                                            <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
-                                                <span>Sjálfboðaliðar</span>
-                                                <span>{task.slotsFilled} / {task.slotsTotal}</span>
+                                    {(task.slotsTotal > 0) ? (
+                                        <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
+                                            <div className="flex-1">
+                                                <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
+                                                    <span>Sjálfboðaliðar</span>
+                                                    <span>{task.slotsFilled} / {task.slotsTotal}</span>
+                                                </div>
+                                                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                                    <div
+                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-nordic-blue'}`}
+                                                        style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
+                                                    />
+                                                </div>
                                             </div>
-                                            <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
-                                                <div
-                                                    className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-nordic-blue'}`}
-                                                    style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
-                                                />
-                                            </div>
-                                        </div>
 
-                                        <button
-                                            onClick={() => handleVolunteer(task.id)}
-                                            disabled={isFull || !isTaskUpcoming}
-                                            className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
-                                                ? 'bg-green-100 text-green-700 cursor-default'
-                                                : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
-                                                }`}
-                                        >
-                                            {isFull ? 'Fullmannað' : 'Skrá mig'}
-                                        </button>
-                                    </div>
+                                            <button
+                                                onClick={() => handleVolunteer(task.id)}
+                                                disabled={isFull || !isTaskUpcoming}
+                                                className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
+                                                    ? 'bg-green-100 text-green-700 cursor-default'
+                                                    : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
+                                                    }`}
+                                            >
+                                                {isFull ? 'Fullmannað' : 'Skrá mig'}
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div className="py-2 text-sm text-gray-400 font-medium italic">
+                                            Engin skráning nauðsynleg.
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -291,14 +303,35 @@ export default function TasksPage() {
                                     placeholder="t.d. Kökubasar"
                                 />
                             </div>
-                            <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Dagsetning</label>
+                            <div className="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Dagsetning</label>
+                                    <input
+                                        type="date"
+                                        value={createDate}
+                                        onChange={e => setCreateDate(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                    />
+                                </div>
+                                <div className={createIsAllDay ? 'opacity-30 pointer-events-none' : ''}>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Klukkan</label>
+                                    <input
+                                        type="time"
+                                        value={createTime}
+                                        onChange={e => setCreateTime(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex items-center gap-2 px-1">
                                 <input
-                                    type="datetime-local"
-                                    value={createDate}
-                                    onChange={e => setCreateDate(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                    type="checkbox"
+                                    id="isAllDay"
+                                    checked={createIsAllDay}
+                                    onChange={(e) => setCreateIsAllDay(e.target.checked)}
+                                    className="w-5 h-5 rounded border-gray-300 text-nordic-blue focus:ring-nordic-blue"
                                 />
+                                <label htmlFor="isAllDay" className="text-sm font-bold text-gray-700 cursor-pointer">Allan daginn</label>
                             </div>
                             <div>
                                 <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Lýsing</label>
@@ -309,15 +342,22 @@ export default function TasksPage() {
                                     placeholder="Nánari upplýsingar..."
                                 />
                             </div>
-                            <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Fjöldi sjálfboðaliða</label>
-                                <input
-                                    type="number"
-                                    value={createSlots}
-                                    onChange={e => setCreateSlots(Number(e.target.value))}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
-                                    min={1}
-                                />
+                            <div className="flex items-center justify-between gap-4">
+                                <div className="flex-1">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Fjöldi sjálfboðaliða</label>
+                                    <input
+                                        type="number"
+                                        value={createSlots}
+                                        onChange={e => setCreateSlots(Number(e.target.value))}
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                        min={0}
+                                    />
+                                </div>
+                                <div className="pt-5">
+                                    <span className="text-xs text-gray-400 font-medium leading-tight inline-block max-w-[140px]">
+                                        Settu 0 ef þetta er aðeins upplýsinga-viðburður.
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -331,15 +371,20 @@ export default function TasksPage() {
                             <button
                                 onClick={async () => {
                                     if (!createTitle || !createDate) return;
+                                    const finalDate = createIsAllDay
+                                        ? new Date(`${createDate}T00:00:00`)
+                                        : new Date(`${createDate}T${createTime}:00`);
+
                                     await createTaskMutation.mutateAsync({
-                                        classId: scope === 'class' ? activeClassId : undefined,
-                                        schoolId: scope === 'school' ? activeClass?.schoolId : undefined,
+                                        classId: scope === 'class' ? activeClassId : null,
+                                        schoolId: scope === 'school' ? (activeClass?.schoolId || null) : (activeClass?.schoolId || null),
                                         scope: scope,
                                         type: 'event',
                                         title: createTitle,
                                         description: createDesc,
-                                        date: new Date(createDate) as any,
+                                        date: finalDate as any,
                                         slotsTotal: createSlots,
+                                        isAllDay: createIsAllDay,
                                         createdBy: user?.uid || '',
                                         originalLanguage: locale,
                                     } as any);

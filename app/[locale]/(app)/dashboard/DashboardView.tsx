@@ -403,7 +403,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                                 </span>
                                             </div>
 
-                                            {!isSchoolEvent && (
+                                            {(task.slotsTotal > 0 && !isSchoolEvent) && (
                                                 <div className="flex flex-col items-end">
                                                     <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Skráning</span>
                                                     <div className="flex items-center gap-1">
@@ -421,6 +421,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                             </h4>
                                             <p className="text-sm text-gray-500 font-medium">
                                                 {isSchoolEvent ? '📚 Skóladagatal' : '🤝 Foreldrastarf'}
+                                                {(task.isAllDay || isSchoolEvent) && <span className="ml-2 text-blue-600">• Allan daginn</span>}
                                             </p>
                                         </div>
                                     </div>

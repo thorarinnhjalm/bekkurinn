@@ -39,6 +39,13 @@ function parseICS(icsContent: string) {
             } else if (line.startsWith('DTSTART:')) {
                 currentEvent.dtstart = line.substring(8);
                 currentEvent.isAllDay = false;
+            } else if (line.startsWith('DTSTART;TZID=')) {
+                // Handle DTSTART;TZID=...:20240101T080000
+                const parts = line.split(':');
+                if (parts.length > 1) {
+                    currentEvent.dtstart = parts[1];
+                    currentEvent.isAllDay = parts[1].length <= 8; // Date only format is usually 8 chars YYYYMMDD
+                }
             }
         }
     }
@@ -262,10 +269,12 @@ export default function SettingsView() {
 
                 return addDoc(collection(db, 'tasks'), {
                     classId: classId,
+                    schoolId: classData?.schoolId || null,
                     type: 'school_event',
                     title: event.summary,
                     description: 'Samkvæmt skóladagatali',
                     date: Timestamp.fromDate(date),
+                    isAllDay: event.isAllDay ?? true,
                     slotsTotal: 0,
                     slotsFilled: 0,
                     volunteers: [],

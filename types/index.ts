@@ -114,6 +114,7 @@ export interface Task {
     slotsTotal: number;
     slotsFilled: number;
     volunteers: TaskVolunteer[];
+    isAllDay?: boolean;
     createdAt: Timestamp;
     createdBy: string; // Admin UID
     originalLanguage?: string; // Babelfish feature
