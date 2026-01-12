@@ -276,8 +276,8 @@ export default function AnnouncementsPage() {
                                     if (!newTitle || !newContent) return alert("Vinsamlegast fylltu út reitina");
 
                                     await createAnnouncementMutation.mutateAsync({
-                                        classId: scope === 'class' ? activeClassId : undefined,
-                                        schoolId: scope === 'school' ? activeClass?.schoolId : undefined,
+                                        classId: scope === 'class' ? activeClassId : null,
+                                        schoolId: scope === 'school' ? (activeClass?.schoolId || null) : (activeClass?.schoolId || null),
                                         scope: scope,
                                         title: newTitle,
                                         content: newContent,
