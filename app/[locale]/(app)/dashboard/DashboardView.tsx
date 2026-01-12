@@ -490,7 +490,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </div>
 
                     {/* INVITE CARD */}
-                    <div className="glass-card p-6 bg-gradient-to-br from-nordic-blue to-blue-700 text-white border-none shadow-xl shadow-blue-900/20 relative overflow-hidden group">
+                    <div className="p-6 bg-gradient-to-br from-nordic-blue to-blue-700 text-white rounded-[24px] shadow-xl shadow-blue-900/20 relative overflow-hidden group">
                         {/* Decorative Circles */}
                         <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
                         <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-blue-400/20 rounded-full blur-xl" />
@@ -500,7 +500,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white">Stækka hópinn?</h3>
+                                <h3 className="text-xl font-bold text-white tracking-tight">Stækka hópinn?</h3>
                                 <p className="text-blue-100 text-sm font-medium mt-1 leading-relaxed">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
@@ -508,9 +508,9 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                             <button
                                 onClick={handleCopyJoinLink}
-                                className={`w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all duration-300 ${copied
+                                className={`w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all duration-300 shadow-lg ${copied
                                     ? 'bg-green-500 text-white'
-                                    : 'bg-white text-nordic-blue hover:bg-blue-50 hover:shadow-lg'
+                                    : 'bg-white text-nordic-blue hover:bg-blue-50 active:scale-95'
                                     }`}
                             >
                                 {copied ? (
