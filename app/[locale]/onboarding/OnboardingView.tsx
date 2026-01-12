@@ -101,9 +101,9 @@ export default function OnboardingView() {
     // Redirect to login if not authenticated
     useEffect(() => {
         if (!authLoading && !user) {
-            const segments = pathname.split('/');
-            const locale = segments[1] || 'is';
-            router.push(`/${locale}/login`);
+            const locale = pathname.split('/')[1] || 'is';
+            const returnTo = encodeURIComponent(pathname + (window.location.search || ''));
+            router.push(`/${locale}/login?returnTo=${returnTo}`);
         }
     }, [user, authLoading, router, pathname]);
 

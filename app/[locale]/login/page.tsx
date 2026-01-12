@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useRouter, useParams } from 'next/navigation';
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LogIn, Users, Shield } from 'lucide-react';
 
@@ -17,7 +17,18 @@ export default function LoginPage() {
     const { user, loading, signInWithGoogle, signInWithEmail, signUpWithEmail } = useAuth();
     const router = useRouter();
     const params = useParams();
+    const searchParams = useSearchParams();
     const locale = (params.locale as string) || 'is';
+    const returnTo = searchParams.get('returnTo');
+
+    const [isIAB, setIsIAB] = useState(false);
+
+    useEffect(() => {
+        const ua = navigator.userAgent;
+        if (ua.includes('FBAN') || ua.includes('FBAV') || ua.includes('Instagram') || ua.includes('Messenger')) {
+            setIsIAB(true);
+        }
+    }, []);
 
     const [loginMethod, setLoginMethod] = useState<'social' | 'email'>('social');
     const [mode, setMode] = useState<'login' | 'signup'>('login');
@@ -30,9 +41,13 @@ export default function LoginPage() {
     useEffect(() => {
         // Redirect to dashboard if already logged in
         if (user && !loading) {
-            router.push(`/${locale}/dashboard`);
+            if (returnTo) {
+                router.push(returnTo);
+            } else {
+                router.push(`/${locale}/dashboard`);
+            }
         }
-    }, [user, loading, router]);
+    }, [user, loading, router, returnTo, locale]);
 
     const handleSignIn = async () => {
         try {
@@ -91,7 +106,16 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 flex-col gap-4">
+            {isIAB && (
+                <div className="w-full max-w-md bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4">
+                    <span className="text-xl">⚠️</span>
+                    <div className="text-sm text-amber-900">
+                        <p className="font-bold">In-App vafri greindur</p>
+                        <p className="">Google innskráning gæti hrunið hér. Mælt er með að opna þessa síðu í <strong>Safari</strong> eða <strong>Chrome</strong> fyrir bestu upplifun.</p>
+                    </div>
+                </div>
+            )}
 
             <div className="w-full max-w-md space-y-8">
                 {/* Logo and Title */}
