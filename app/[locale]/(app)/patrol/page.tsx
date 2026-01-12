@@ -21,7 +21,7 @@ export default function PatrolPage() {
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';
 
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId);
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
 
     // State
     const [isCreating, setIsCreating] = useState(false);

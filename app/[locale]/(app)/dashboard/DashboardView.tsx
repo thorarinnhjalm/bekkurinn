@@ -52,8 +52,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     // 3. Check for Parent Link (Is my child in this class?)
     const { data: parentLink, isLoading: parentLinkLoading } = useUserParentLink(user?.uid, classId);
 
-    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId);
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(classId);
+    const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId, activeClass?.schoolId);
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(classId, activeClass?.schoolId);
     const { data: studentsData, isLoading: studentsLoading } = useStudents(classId);
 
     // Auth redirection
