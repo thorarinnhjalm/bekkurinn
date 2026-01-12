@@ -1,15 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Loader2, Users, Plus, Footprints } from 'lucide-react';
-import { useTasks, useUserClasses, useCreateTask } from '@/hooks/useFirestore';
+import { Calendar, Loader2, Users, Plus, Footprints, Clock, Check } from 'lucide-react';
+import { useTasks, useUserClasses, useCreateTask, useClaimTaskSlot } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
 
 /**
- * Patrol Page - V2
+ * PatrolPage - V2
  * 
- * V2: Glass Cards, better list items
+ * V2: Glass Cards, better list items, improved date UX and functional registration
  */
 
 export default function PatrolPage() {
@@ -24,18 +24,34 @@ export default function PatrolPage() {
     const isAdmin = activeClass?.role === 'admin';
 
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
+    const claimSlotMutation = useClaimTaskSlot();
+    const createTaskMutation = useCreateTask();
 
     // State
     const [isCreating, setIsCreating] = useState(false);
-    const [newTitle, setNewTitle] = useState('');
+    const [newTitle, setNewTitle] = useState('Foreldrarölt');
     const [newDate, setNewDate] = useState('');
+    const [newTime, setNewTime] = useState('20:00');
     const [newSlots, setNewSlots] = useState(2);
-    const createTaskMutation = useCreateTask();
 
     if (!authLoading && !user) {
         router.push(`/${locale}/login`);
         return null;
     }
+
+    const handleVolunteer = async (taskId: string) => {
+        if (!user) return;
+        try {
+            await claimSlotMutation.mutateAsync({
+                taskId,
+                userId: user.uid,
+                userName: user.displayName || 'Foreldri',
+            });
+        } catch (err) {
+            console.error("Failed to volunteer:", err);
+            alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+        }
+    };
 
     if (authLoading || tasksLoading) {
         return (
@@ -48,7 +64,6 @@ export default function PatrolPage() {
     const patrols = (tasksData || []).filter(task => task.type === 'rolt').sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
-        // Upcoming first
         const now = Date.now();
         const aUpcoming = aTime > now;
         const bUpcoming = bTime > now;
@@ -80,6 +95,9 @@ export default function PatrolPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {patrols.map((patrol) => {
                     const dateObj = patrol.date?.toDate?.();
+                    const isFull = patrol.slotsFilled >= patrol.slotsTotal;
+                    const isJoined = patrol.volunteers?.some((v: any) => v.userId === user?.uid);
+
                     return (
                         <div key={patrol.id} className="glass-card p-6 flex flex-col justify-between group hover:bg-white/70 transition-colors">
                             <div className="flex justify-between items-start mb-4">
@@ -90,7 +108,7 @@ export default function PatrolPage() {
                                     <div>
                                         <h3 className="font-bold text-gray-900 leading-tight">{patrol.title}</h3>
                                         <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                                            {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' }) : ''}
+                                            {dateObj ? `${dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' })} kl. ${dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}` : ''}
                                         </p>
                                     </div>
                                 </div>
@@ -103,13 +121,31 @@ export default function PatrolPage() {
                                 </div>
                                 <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden mb-4">
                                     <div
-                                        className="h-full bg-indigo-500 rounded-full"
+                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-indigo-500'}`}
                                         style={{ width: `${(patrol.slotsFilled / patrol.slotsTotal) * 100}%` }}
                                     />
                                 </div>
 
-                                <button className="w-full py-2 rounded-xl border-2 border-indigo-100 text-indigo-700 font-bold hover:bg-indigo-50 transition-colors">
-                                    Skoða / Skrá
+                                <button
+                                    onClick={() => !isJoined && handleVolunteer(patrol.id)}
+                                    disabled={isJoined || isFull}
+                                    className={`w-full py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${isJoined
+                                        ? 'bg-green-50 text-green-600 border-2 border-green-100'
+                                        : isFull
+                                            ? 'bg-gray-50 text-gray-400 border-2 border-gray-100'
+                                            : 'border-2 border-indigo-100 text-indigo-700 hover:bg-indigo-50 active:scale-95'
+                                        }`}
+                                >
+                                    {isJoined ? (
+                                        <>
+                                            <Check size={18} />
+                                            <span>Mæti!</span>
+                                        </>
+                                    ) : isFull ? (
+                                        'Fullmannað'
+                                    ) : (
+                                        'Skrá mig á rölt'
+                                    )}
                                 </button>
                             </div>
                         </div>
@@ -125,38 +161,84 @@ export default function PatrolPage() {
 
             {/* Create Modal */}
             {isCreating && (
-                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full space-y-4 shadow-2xl">
-                        <h2 className="text-2xl font-bold">Nýtt rölt</h2>
-                        <input
-                            type="text"
-                            value={newTitle}
-                            onChange={e => setNewTitle(e.target.value)}
-                            className="w-full p-3 bg-gray-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-100"
-                            placeholder="Heiti (t.d. Kvöldrölt)"
-                        />
-                        <input
-                            type="datetime-local"
-                            value={newDate}
-                            onChange={e => setNewDate(e.target.value)}
-                            className="w-full p-3 bg-gray-50 rounded-xl font-bold outline-none focus:ring-2 focus:ring-indigo-100"
-                        />
-                        <div className="flex gap-2">
-                            <button onClick={() => setIsCreating(false)} className="flex-1 py-3 text-gray-500 font-bold">Hætta við</button>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
+                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300">
+                        <div className="text-center">
+                            <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
+                                <Footprints size={28} />
+                            </div>
+                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">Nýtt rölt</h2>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Heiti</label>
+                                <input
+                                    type="text"
+                                    value={newTitle}
+                                    onChange={e => setNewTitle(e.target.value)}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium"
+                                    placeholder="t.d. Kvöldrölt"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Dagsetning</label>
+                                    <input
+                                        type="date"
+                                        value={newDate}
+                                        onChange={e => setNewDate(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium text-sm"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Klukkan</label>
+                                    <input
+                                        type="time"
+                                        value={newTime}
+                                        onChange={e => setNewTime(e.target.value)}
+                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium text-sm"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Fjöldi foreldra</label>
+                                <input
+                                    type="number"
+                                    value={newSlots}
+                                    onChange={e => setNewSlots(Number(e.target.value))}
+                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-indigo-500 focus:bg-white transition-all outline-none font-medium"
+                                    min={1}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex gap-3 pt-4 border-t border-gray-100">
+                            <button
+                                onClick={() => setIsCreating(false)}
+                                className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                            >
+                                Hætta við
+                            </button>
                             <button
                                 onClick={async () => {
                                     if (!newTitle || !newDate) return;
+                                    const finalDate = new Date(`${newDate}T${newTime}:00`);
+
                                     await createTaskMutation.mutateAsync({
                                         classId: activeClassId,
+                                        schoolId: activeClass?.schoolId || null,
                                         type: 'rolt',
                                         title: newTitle,
-                                        date: new Date(newDate),
+                                        date: finalDate as any,
                                         slotsTotal: newSlots,
                                         createdBy: user?.uid || ''
                                     } as any);
                                     setIsCreating(false);
                                 }}
-                                className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg"
+                                className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 active:scale-95 transition-all"
                             >
                                 Stofna
                             </button>
