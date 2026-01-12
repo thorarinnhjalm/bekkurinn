@@ -5,7 +5,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useClass } from '@/hooks/useFirestore';
 import { updateClass } from '@/services/firestore';
 import { Loader2, Save, School, GraduationCap, AlertTriangle, Check, Calendar, RefreshCw, Users, X, UserPlus, Shield } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { SCHOOLS } from '@/constants/schools';
 // Import firestore functions directly for the sync logic
 import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
@@ -84,6 +84,8 @@ export default function SettingsView() {
 
     const { data: classData, isLoading: classLoading, refetch } = useClass(classId);
     const router = useRouter();
+    const params = useParams();
+    const locale = params?.locale || 'is';
 
     const [isSaving, setIsSaving] = useState(false);
     const [isSyncing, setIsSyncing] = useState(false);
@@ -426,7 +428,7 @@ export default function SettingsView() {
                         <div className="flex gap-2 w-full sm:w-auto">
                             <button
                                 onClick={() => {
-                                    const url = `${window.location.origin}/is/onboarding?step=join&code=${formData.joinCode}`;
+                                    const url = `${window.location.origin}/${locale}/onboarding?step=join&code=${formData.joinCode}`;
                                     navigator.clipboard.writeText(url);
                                     alert('Tengill afritaður! \n\n' + url);
                                 }}
@@ -470,7 +472,7 @@ export default function SettingsView() {
                             <div className="flex gap-2 w-full sm:w-auto">
                                 <button
                                     onClick={() => {
-                                        const url = `${window.location.origin}/is/onboarding?step=join&code=${formData.parentTeamCode}`;
+                                        const url = `${window.location.origin}/${locale}/onboarding?step=join&code=${formData.parentTeamCode}`;
                                         navigator.clipboard.writeText(url);
                                         alert('Stjórnendatengill afritaður! \n\n' + url);
                                     }}
