@@ -263,9 +263,9 @@ export default function DirectoryPage() {
                                         )}
                                         {/* Dietary Badge */}
                                         {student.dietaryNeeds?.length ? (
-                                            <div className="absolute -bottom-2 -right-2 bg-white p-1 rounded-full shadow-md border border-gray-50" title={student.dietaryNeeds.join(', ')}>
-                                                <div className="w-5 h-5">
-                                                    <DietaryIcon type={student.dietaryNeeds[0] as DietaryNeed} />
+                                            <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md border border-gray-50 z-20" title={student.dietaryNeeds.join(', ')}>
+                                                <div className="w-6 h-6">
+                                                    <DietaryIcon type={student.dietaryNeeds[0] as DietaryNeed} showLabel={false} size={16} />
                                                 </div>
                                             </div>
                                         ) : null}
