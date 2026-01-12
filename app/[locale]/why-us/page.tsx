@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { ArrowRight, X, Check, Smartphone, Shield, Zap, Lock, Heart, Clock } from 'lucide-react';
+import { ArrowRight, X, Check, Smartphone, Shield, Zap, Lock, Heart, Clock, School, Globe, Users } from 'lucide-react';
 
 /**
  * Why Us Page - Differentiation from free alternatives
@@ -410,6 +410,73 @@ export default function WhyUsPage() {
                 </div>
             </section>
 
+
+
+            {/* Special Section: Parent Associations */}
+            <section style={{
+                background: 'var(--nordic-blue)',
+                padding: 'var(--space-2xl) var(--space-xl)',
+                color: 'white'
+            }}>
+                <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                    <div style={{ textAlign: 'center', marginBottom: 'var(--space-2xl)' }}>
+                        <School size={48} style={{ margin: '0 auto var(--space-lg)', color: 'white', opacity: 0.9 }} />
+                        <h2 style={{
+                            fontSize: '2rem',
+                            fontWeight: 'bold',
+                            marginBottom: 'var(--space-md)',
+                        }}>
+                            Fyrir Foreldrafélög (og alla stjórnendur)
+                        </h2>
+                        <p style={{
+                            fontSize: '1.25rem',
+                            opacity: 0.9,
+                            lineHeight: 1.6,
+                            maxWidth: '700px',
+                            margin: '0 auto'
+                        }}>
+                            Bekkurinn er ekki bara fyrir einstaka bekkjarfulltrúa. Þetta er tæki til að styrkja og tengja allt skólasamfélagið.
+                        </p>
+                    </div>
+
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: 'var(--space-xl)'
+                    }}>
+                        <div style={{ background: 'rgba(255,255,255,0.1)', padding: 'var(--space-xl)', borderRadius: 'var(--radius-lg)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+                                <Globe size={28} />
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Fjölmenningarleg Samheldni</h3>
+                            </div>
+                            <p style={{ lineHeight: 1.6, opacity: 0.9 }}>
+                                Ekki skilja neinn útundan vegna tungumáls. Kerfið styður íslensku, ensku, pólsku og fleiri mál frá fyrsta degi. Allir foreldrar skilja það sem er í gangi.
+                            </p>
+                        </div>
+
+                        <div style={{ background: 'rgba(255,255,255,0.1)', padding: 'var(--space-xl)', borderRadius: 'var(--radius-lg)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+                                <Users size={28} />
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Beinn Aðgangur</h3>
+                            </div>
+                            <p style={{ lineHeight: 1.6, opacity: 0.9 }}>
+                                Fáðu beinan aðgang að öllum foreldrum. Engir "týndir" aðilar í lokuðum Facebook hópum eða úreltum tölvupóstlistum. Sjálfkrafa uppfært.
+                            </p>
+                        </div>
+
+                        <div style={{ background: 'rgba(255,255,255,0.1)', padding: 'var(--space-xl)', borderRadius: 'var(--radius-lg)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)', marginBottom: 'var(--space-md)' }}>
+                                <Heart size={28} />
+                                <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>Betri Skólabragur</h3>
+                            </div>
+                            <p style={{ lineHeight: 1.6, opacity: 0.9 }}>
+                                Þegar bekkjarfulltrúar hafa verkfærin til að halda góða viðburði án þess að brenna út, þá græða börnin. Meiri gleði, minna stress.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
             {/* Pricing Philosophy */}
             <section style={{
                 background: 'white',
@@ -519,6 +586,6 @@ export default function WhyUsPage() {
                     © 2026 Bekkurinn. Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi.
                 </p>
             </footer>
-        </div>
+        </div >
     );
 }
