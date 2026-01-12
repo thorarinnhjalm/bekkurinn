@@ -83,6 +83,7 @@
   },
   "landing": {
     "nav": {
+      "why_us": "Samanburður",
       "features": "Virkni",
       "how_it_works": "Hvernig virkar þetta?",
       "faq": "Spurt & svarað",

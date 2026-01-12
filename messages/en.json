@@ -71,6 +71,7 @@
     },
     "landing": {
         "nav": {
+            "why_us": "Comparison",
             "features": "Features",
             "how_it_works": "How it Works",
             "faq": "FAQ",
