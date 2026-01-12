@@ -6,7 +6,10 @@ export default createMiddleware({
     locales,
 
     // Used when no locale matches
-    defaultLocale
+    defaultLocale,
+
+    // Disable automatic locale detection based on Accept-Language header
+    localeDetection: false
 });
 
 export const config = {
