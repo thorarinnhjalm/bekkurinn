@@ -215,6 +215,17 @@ export function useTasks(classId: string | null, schoolId?: string | null) {
     });
 }
 
+export function useSchoolTasks(schoolId: string | undefined | null) {
+    return useQuery({
+        queryKey: ['schoolTasks', schoolId],
+        queryFn: async () => {
+            if (!schoolId) return [];
+            return await getTasksBySchool(schoolId);
+        },
+        enabled: !!schoolId,
+    });
+}
+
 export function useCreateTask() {
     const queryClient = useQueryClient();
 

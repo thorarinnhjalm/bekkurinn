@@ -4,10 +4,12 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X } from 'lucide-react';
+import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X, Calendar, Trash2, Megaphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail } from '@/services/firestore';
-import type { School, User } from '@/types';
+import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask } from '@/services/firestore';
+import { useSchoolTasks } from '@/hooks/useFirestore';
+import type { School, User, Task } from '@/types';
+import { Timestamp } from 'firebase/firestore';
 
 const SUPER_ADMINS = [
     'thorarinnhjalmarsson@gmail.com'
@@ -41,30 +43,11 @@ export default function AdminView() {
     const [newSchoolName, setNewSchoolName] = useState('');
     const [isCreatingSchool, setIsCreatingSchool] = useState(false);
 
-    // Add Admin State (Modified for Search)
-    const [adminSearch, setAdminSearch] = useState('');
-    const [searchResults, setSearchResults] = useState<User[]>([]);
-    const [selectedSchoolId, setSelectedSchoolId] = useState<string | null>(null); // Which school are we adding to?
-
     useEffect(() => {
         if (!loading && user) {
-            // Check auth (simplified for client-side, real check in rules)
             fetchData();
         }
     }, [user, loading]);
-
-    // Debounced Search
-    useEffect(() => {
-        const timer = setTimeout(async () => {
-            if (adminSearch.length > 2) {
-                const results = await searchUsersByEmail(adminSearch.toLowerCase());
-                setSearchResults(results);
-            } else {
-                setSearchResults([]);
-            }
-        }, 300);
-        return () => clearTimeout(timer);
-    }, [adminSearch]);
 
     const fetchData = async () => {
         setIsFetching(true);
@@ -76,8 +59,17 @@ export default function AdminView() {
             setClasses(classData);
 
             // Fetch Schools
-            const schoolData = await getAllSchools();
-            setSchools(schoolData);
+            const allSchools = await getAllSchools();
+
+            const isSuperAdmin = user && SUPER_ADMINS.includes(user.email || '');
+
+            if (isSuperAdmin) {
+                setSchools(allSchools);
+            } else {
+                // Filter schools where user is admin
+                const mySchools = allSchools.filter(s => s.admins.includes(user?.uid || ''));
+                setSchools(mySchools);
+            }
 
         } catch (error) {
             console.error(error);
@@ -113,34 +105,21 @@ export default function AdminView() {
         }
     };
 
-    const handleAddAdmin = async (userId: string) => {
-        if (!selectedSchoolId) return;
-        try {
-            const school = schools.find(s => s.id === selectedSchoolId);
-            if (!school) return;
-
-            const newAdmins = [...school.admins, userId];
-            await updateSchoolAdmins(selectedSchoolId, newAdmins);
-
-            setSelectedSchoolId(null);
-            setAdminSearch('');
-            setSearchResults([]);
-            fetchData(); // Refresh
-        } catch (e) {
-            alert('Villa við að bæta við stjórnanda');
-        }
-    };
-
     if (loading || isFetching) return <div className="flex justify-center pt-20"><Loader2 className="animate-spin text-nordic-blue" /></div>;
 
-    if (!user || (!SUPER_ADMINS.includes(user.email || ''))) {
-        return (
-            <div className="p-8 text-center text-red-600">
-                <Shield className="mx-auto mb-4" size={48} />
-                <h1 className="text-2xl font-bold">Aðgangur bannaður</h1>
-                <p>Þú hefur ekki réttindi til að skoða þessa síðu ({user?.email}).</p>
-            </div>
-        )
+    const isSuperAdmin = user && SUPER_ADMINS.includes(user.email || '');
+
+    // Access Check (After Fetching)
+    if (!isFetching && !loading) {
+        if (!isSuperAdmin && schools.length === 0) {
+            return (
+                <div className="p-8 text-center text-red-600">
+                    <Shield className="mx-auto mb-4" size={48} />
+                    <h1 className="text-2xl font-bold">Aðgangur bannaður</h1>
+                    <p>Þú hefur ekki réttindi til að skoða þessa síðu ({user?.email}).</p>
+                </div>
+            );
+        }
     }
 
     return (
@@ -198,16 +177,18 @@ export default function AdminView() {
             {activeTab === 'schools' && (
                 <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 max-w-5xl mx-auto">
 
-                    {/* Actions Bar */}
-                    <div className="flex justify-end">
-                        <button
-                            onClick={() => setIsCreatingSchool(!isCreatingSchool)}
-                            className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center gap-2 shadow-lg"
-                        >
-                            {isCreatingSchool ? <X size={20} /> : <Plus size={20} />}
-                            {isCreatingSchool ? 'Hætta við' : 'Stofna nýjan skóla'}
-                        </button>
-                    </div>
+                    {/* Actions Bar - SUPER ADMIN ONLY */}
+                    {isSuperAdmin && (
+                        <div className="flex justify-end">
+                            <button
+                                onClick={() => setIsCreatingSchool(!isCreatingSchool)}
+                                className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center gap-2 shadow-lg"
+                            >
+                                {isCreatingSchool ? <X size={20} /> : <Plus size={20} />}
+                                {isCreatingSchool ? 'Hætta við' : 'Stofna nýjan skóla'}
+                            </button>
+                        </div>
+                    )}
 
                     {/* Create School Form */}
                     {isCreatingSchool && (
@@ -251,94 +232,7 @@ export default function AdminView() {
                     {/* School List */}
                     <div className="grid gap-6">
                         {schools.map(school => (
-                            <div key={school.id} className="glass-card p-0 overflow-hidden group hover:border-blue-200 transition-all">
-                                <div className="p-8 pb-4">
-                                    <div className="flex justify-between items-start mb-4">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-blue-700 shadow-inner">
-                                                <GraduationCap size={32} />
-                                            </div>
-                                            <div>
-                                                <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{school.name}</h3>
-                                                <code className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md">{school.id}</code>
-                                            </div>
-                                        </div>
-                                        <div className="flex -space-x-2">
-                                            {school.admins.slice(0, 3).map((uid, i) => (
-                                                <div key={i} title={uid} className="w-10 h-10 rounded-full bg-gray-200 border-2 border-white flex items-center justify-center text-xs font-bold text-gray-500">
-                                                    {uid.substring(0, 2)}
-                                                </div>
-                                            ))}
-                                            {school.admins.length > 3 && (
-                                                <div className="w-10 h-10 rounded-full bg-gray-100 border-2 border-white flex items-center justify-center text-xs font-bold text-gray-500">
-                                                    +{school.admins.length - 3}
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Admin Management Section (Light Gray Background) */}
-                                <div className="bg-gray-50/80 p-6 border-t border-gray-100">
-                                    <div className="flex items-center justify-between mb-4">
-                                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
-                                            <Shield size={14} /> Stjórnendur ({school.admins.length})
-                                        </h4>
-                                        {selectedSchoolId === school.id ? (
-                                            <button onClick={() => setSelectedSchoolId(null)} className="text-sm font-bold text-gray-400 hover:text-gray-600">Loka</button>
-                                        ) : (
-                                            <button onClick={() => setSelectedSchoolId(school.id)} className="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1">
-                                                <SchoolIcon size={14} /> Bæta við stjórnanda
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {selectedSchoolId === school.id && (
-                                        <div className="mb-6 animate-in fade-in slide-in-from-top-2">
-                                            <div className="relative">
-                                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                                                <input
-                                                    type="text"
-                                                    placeholder="Leita eftir netfangi..."
-                                                    value={adminSearch}
-                                                    onChange={e => setAdminSearch(e.target.value)}
-                                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
-                                                    autoFocus
-                                                />
-                                            </div>
-
-                                            {searchResults.length > 0 && (
-                                                <div className="mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden divide-y divide-gray-50">
-                                                    {searchResults.map(u => (
-                                                        <button
-                                                            key={u.uid}
-                                                            onClick={() => handleAddAdmin(u.uid)}
-                                                            className="w-full p-3 text-left hover:bg-blue-50 transition-colors flex items-center justify-between group"
-                                                        >
-                                                            <div>
-                                                                <p className="font-bold text-gray-900">{u.displayName}</p>
-                                                                <p className="text-xs text-gray-500">{u.email}</p>
-                                                            </div>
-                                                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                                <Plus size={16} />
-                                                            </div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
-                                        </div>
-                                    )}
-
-                                    <div className="flex flex-wrap gap-2">
-                                        {school.admins.map((uid, i) => (
-                                            <div key={i} className="bg-white border text-gray-600 text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2">
-                                                {uid}
-                                                {/* In future: Remove button */}
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
+                            <SchoolCard key={school.id} school={school} refreshData={fetchData} />
                         ))}
                     </div>
                 </div>
@@ -402,6 +296,222 @@ export default function AdminView() {
                     })}
                 </div>
             )}
+        </div>
+    );
+}
+
+function SchoolCard({ school, refreshData }: { school: School; refreshData: () => void }) {
+    const { data: schoolTasks } = useSchoolTasks(school.id);
+    const [adminSearch, setAdminSearch] = useState('');
+    const [searchResults, setSearchResults] = useState<User[]>([]);
+    const [isAddingAdmin, setIsAddingAdmin] = useState(false);
+
+    // Event State
+    const [isCreatingEvent, setIsCreatingEvent] = useState(false);
+    const [newEventTitle, setNewEventTitle] = useState('');
+    const [newEventDate, setNewEventDate] = useState('');
+
+    // Admin Search Debounce
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (adminSearch.length > 2) {
+                const results = await searchUsersByEmail(adminSearch.toLowerCase());
+                setSearchResults(results);
+            } else {
+                setSearchResults([]);
+            }
+        }, 300);
+        return () => clearTimeout(timer);
+    }, [adminSearch]);
+
+    const handleAddAdmin = async (userId: string) => {
+        try {
+            const newAdmins = [...school.admins, userId];
+            await updateSchoolAdmins(school.id, newAdmins);
+            setIsAddingAdmin(false);
+            setAdminSearch('');
+            setSearchResults([]);
+            refreshData();
+        } catch (e) {
+            alert('Villa við að bæta við stjórnanda');
+        }
+    };
+
+    const handleCreateEvent = async () => {
+        if (!newEventTitle || !newEventDate) return;
+        try {
+            await createTask({
+                type: 'school_event',
+                title: newEventTitle,
+                date: Timestamp.fromDate(new Date(newEventDate)),
+                slotsTotal: 0,
+                createdBy: 'admin-console',
+                scope: 'school',
+                schoolId: school.id
+            });
+            setNewEventTitle('');
+            setNewEventDate('');
+            setIsCreatingEvent(false);
+            // Tasks auto-refresh via React Query cache invalidation usually, but we might need to wait?
+            // useSchoolTasks uses caching. useCreateTask invalidates 'tasks'.
+            // Since we are using manual createTask from service here (not hook), we must rely on refetch or query invalidation.
+            // But AdminView doesn't use query client directly? 
+            // Ideally we should use the hook `useCreateTask` but we are not in a hook context that allows easy access without passing query client?
+            // Actually, `useSchoolTasks` will NOT auto-update if we don't invalidate.
+            // For now, refreshing the whole page is nuclear option, but we can't easily do it here.
+            // Proper way: Use `useCreateTask` hook in this component.
+            window.location.reload(); // Temporary lazy refresh for events
+        } catch (e) {
+            alert('Villa við að búa til viðburð');
+        }
+    };
+
+    return (
+        <div className="glass-card p-0 overflow-hidden group hover:border-blue-200 transition-all">
+            <div className="p-8 pb-4">
+                <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center gap-4">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-blue-700 shadow-inner">
+                            <GraduationCap size={32} />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{school.name}</h3>
+                            <code className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md">{school.id}</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* MANAGEMENT SECTIONS */}
+            <div className="divide-y divide-gray-100">
+
+                {/* 1. ADMINS */}
+                <div className="bg-gray-50/80 p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                            <Shield size={14} /> Stjórnendur ({school.admins.length})
+                        </h4>
+                        <button
+                            onClick={() => setIsAddingAdmin(!isAddingAdmin)}
+                            className="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                        >
+                            <Plus size={14} strokeWidth={3} /> {isAddingAdmin ? 'Loka' : 'Bæta við'}
+                        </button>
+                    </div>
+
+                    {isAddingAdmin && (
+                        <div className="mb-6 animate-in fade-in slide-in-from-top-2">
+                            <div className="relative">
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <input
+                                    type="text"
+                                    placeholder="Leita eftir netfangi..."
+                                    value={adminSearch}
+                                    onChange={e => setAdminSearch(e.target.value)}
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
+                                    autoFocus
+                                />
+                            </div>
+
+                            {searchResults.length > 0 && (
+                                <div className="mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden divide-y divide-gray-50">
+                                    {searchResults.map(u => (
+                                        <button
+                                            key={u.uid}
+                                            onClick={() => handleAddAdmin(u.uid)}
+                                            className="w-full p-3 text-left hover:bg-blue-50 transition-colors flex items-center justify-between group"
+                                        >
+                                            <div>
+                                                <p className="font-bold text-gray-900">{u.displayName}</p>
+                                                <p className="text-xs text-gray-500">{u.email}</p>
+                                            </div>
+                                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                <Plus size={16} />
+                                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    <div className="flex flex-wrap gap-2">
+                        {school.admins.map((uid, i) => (
+                            <div key={i} className="bg-white border text-gray-600 text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
+                                {uid}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* 2. SCHOOL EVENTS */}
+                <div className="bg-white p-6">
+                    <div className="flex items-center justify-between mb-4">
+                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                            <Calendar size={14} /> Viðburðir skóla ({schoolTasks?.length || 0})
+                        </h4>
+                        <button
+                            onClick={() => setIsCreatingEvent(!isCreatingEvent)}
+                            className="text-sm font-bold text-nordic-blue hover:text-blue-800 flex items-center gap-1"
+                        >
+                            <Megaphone size={14} strokeWidth={3} /> {isCreatingEvent ? 'Loka' : 'Nýr viðburður'}
+                        </button>
+                    </div>
+
+                    {isCreatingEvent && (
+                        <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100 animate-in fade-in">
+                            <div className="space-y-3">
+                                <input
+                                    type="text"
+                                    placeholder="Heiti viðburðar (t.d. Árshátíð)"
+                                    value={newEventTitle}
+                                    onChange={e => setNewEventTitle(e.target.value)}
+                                    className="w-full p-2 rounded-lg border border-gray-200"
+                                />
+                                <input
+                                    type="datetime-local"
+                                    value={newEventDate}
+                                    onChange={e => setNewEventDate(e.target.value)}
+                                    className="w-full p-2 rounded-lg border border-gray-200"
+                                />
+                                <button
+                                    onClick={handleCreateEvent}
+                                    disabled={!newEventTitle || !newEventDate}
+                                    className="w-full bg-nordic-blue text-white py-2 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
+                                >
+                                    Vista viðburð
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="space-y-2">
+                        {schoolTasks && schoolTasks.length > 0 ? (
+                            schoolTasks.map((task) => (
+                                <div key={task.id} className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-lg bg-white flex flex-col items-center justify-center text-xs font-bold text-gray-600 border border-gray-200">
+                                            <span>
+                                                {task.date?.toDate ? task.date.toDate().getDate() : ''}
+                                            </span>
+                                            <span className="text-[9px] uppercase opacity-70">
+                                                {task.date?.toDate ? task.date.toDate().toLocaleDateString('is-IS', { month: 'short' }) : ''}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <p className="font-bold text-gray-800">{task.title}</p>
+                                            <p className="text-xs text-gray-500">Skólaviðburður</p>
+                                        </div>
+                                    </div>
+                                    {/* Future: Add Delete button */}
+                                </div>
+                            ))
+                        ) : (
+                            <div className="text-center py-4 text-xs text-gray-400 italic">Engir viðburðir skráðir</div>
+                        )}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
