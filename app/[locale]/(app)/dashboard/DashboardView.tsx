@@ -299,6 +299,15 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 {/* --- MAIN CONTENT (Left) --- */}
                 <div className="lg:col-span-8 space-y-10">
 
+                    {/* Pending Approvals (For Admins or Parents of specific matching students) */}
+                    {classId && (
+                        <PendingApprovals
+                            classId={classId}
+                            myStudentId={parentLink?.studentId}
+                            isAdmin={isAdmin}
+                        />
+                    )}
+
                     {/* Latest Announcement */}
                     {latestAnnouncement && (
                         <section className="space-y-4">

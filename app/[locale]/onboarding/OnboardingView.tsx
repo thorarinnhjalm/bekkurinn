@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useRouter, usePathname, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
+import { useNotifications } from '@/hooks/useNotifications';
 import { SCHOOLS } from '@/constants/schools';
 import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check, Globe } from 'lucide-react';
 import { collection, addDoc, serverTimestamp, Timestamp, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
@@ -79,7 +80,10 @@ export default function OnboardingView() {
     const { user, loading: authLoading } = useAuth();
     const router = useRouter();
     const pathname = usePathname();
+    const params = useParams();
     const searchParams = useSearchParams();
+    const { createNotification } = useNotifications();
+    const locale = (params.locale as string) || 'is';
 
     // Check query param 'step' to see if language is already selected
     const paramStep = searchParams.get('step') as OnboardingStep;
@@ -127,6 +131,7 @@ export default function OnboardingView() {
     // Invite join parameters (from spouse invite link)
     const joinStudentId = searchParams.get('join');
     const joinClassId = searchParams.get('classId');
+    const inviterId = searchParams.get('inviterId');
 
     // Auto-verify if code is present in URL
     useEffect(() => {
@@ -370,13 +375,23 @@ export default function OnboardingView() {
                 relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
                 role: isAdminCode ? 'admin' : 'parent', // New Role Logic
                 status: initialStatus,
+                invitedBy: inviterId || null,
                 createdAt: serverTimestamp(),
             });
 
-            // Redirect
-            const segments = pathname.split('/');
-            const locale = segments[1] || 'is';
+            // If joined via invite link, notify the inviter
+            if (inviterId && initialStatus === 'pending') {
+                const studentName = students.find(s => s.id === selectedStudentId)?.name || 'Barnið sitt';
+                await createNotification(
+                    inviterId,
+                    'Ný beiðni um aðgang',
+                    `${user.displayName || 'Einhver'} vill tengjast ${studentName} í ${foundClass.name}.`,
+                    'system',
+                    `/${locale}/dashboard`
+                );
+            }
 
+            // Redirect
             if (initialStatus === 'pending') {
                 // Show a message or redirect with a flag to show "Waiting for approval"
                 router.push(`/${locale}/dashboard?pending=true`);

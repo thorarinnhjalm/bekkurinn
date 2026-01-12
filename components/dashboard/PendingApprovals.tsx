@@ -8,28 +8,32 @@ import type { ParentLink } from '@/types';
 
 interface PendingApprovalsProps {
     classId: string;
-    myStudentId: string;
+    myStudentId?: string;
+    isAdmin?: boolean;
 }
 
-export default function PendingApprovals({ classId, myStudentId }: PendingApprovalsProps) {
+export default function PendingApprovals({ classId, myStudentId, isAdmin }: PendingApprovalsProps) {
     const [requests, setRequests] = useState<(ParentLink & { requesterName?: string })[]>([]);
     const [loading, setLoading] = useState(true);
     const [processingId, setProcessingId] = useState<string | null>(null);
 
     useEffect(() => {
         async function fetchRequests() {
-            if (!classId || !myStudentId) return;
+            if (!classId) return;
+            if (!isAdmin && !myStudentId) return;
 
             try {
-                // Find all pending links for this class and this student
-                // We rely on querying by classId and filtering, or composite index
-                // Let's try simple query first.
-                const q = query(
+                // Base query: All pending for this class
+                let q = query(
                     collection(db, 'parentLinks'),
                     where('classId', '==', classId),
-                    where('studentId', '==', myStudentId),
                     where('status', '==', 'pending')
                 );
+
+                // If not an admin, filter specifically to my student(s)
+                if (!isAdmin && myStudentId) {
+                    q = query(q, where('studentId', '==', myStudentId));
+                }
 
                 const snapshot = await getDocs(q);
                 const pendingLinks = snapshot.docs.map(d => ({ id: d.id, ...d.data() } as ParentLink));

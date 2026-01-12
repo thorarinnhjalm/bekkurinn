@@ -144,9 +144,9 @@ export default function UserProfilePage() {
     };
 
     const handleCopyInviteLink = (studentId: string) => {
-        const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}`;
+        const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}&inviterId=${user?.uid}`;
         navigator.clipboard.writeText(inviteLink).then(() => {
-            alert('Hlekkur afritaður! Deildu honum með samstarfsaðila.');
+            alert('Hlekkur afritaður! Deildu honum með hinu foreldrinu eða maka.');
         }).catch(() => {
             alert('Villa við að afrita hlekk');
         });
@@ -471,10 +471,10 @@ function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onCopyIn
                 <div className="pt-3 border-t border-gray-100">
                     <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                         <UserPlus size={16} className="text-nordic-blue" />
-                        Bjóða maka/samstarfsaðila
+                        Bjóða maka / hinu foreldrinu
                     </label>
                     <p className="text-xs text-gray-500 mb-2">
-                        Deildu þessum hlekk með samstarfsaðila þínum svo hann/hún geti tengst sama barni.
+                        Deildu þessum hlekk með hinu foreldrinu eða maka svo hann/hún geti tengst sama barni.
                     </p>
                     <button
                         onClick={onCopyInvite}
