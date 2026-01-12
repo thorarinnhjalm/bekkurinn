@@ -1,6 +1,6 @@
 'use client';
 
-import { X, Calendar, Search, Bell } from 'lucide-react';
+import { X, UserPlus, Cake, ShieldCheck, HelpCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface AboutModalProps {
@@ -9,7 +9,6 @@ interface AboutModalProps {
 }
 
 export function AboutModal({ isOpen, onClose }: AboutModalProps) {
-    // No router needed as we stay in-app
     if (!isOpen) return null;
 
     return (
@@ -21,9 +20,9 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-lg bg-white rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
                 {/* Header */}
-                <div className="bg-nordic-blue p-6 text-white relative overflow-hidden">
+                <div className="bg-nordic-blue p-6 text-white relative overflow-hidden flex-shrink-0">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-10 -translate-y-10" />
 
                     <button
@@ -33,56 +32,66 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
                         <X size={20} />
                     </button>
 
-                    <h2 className="text-2xl font-bold mb-2">Hvernig virkar Bekkurinn?</h2>
-                    <p className="text-blue-100/90 text-sm">
-                        Stutt leiðarvísir til að koma þér af stað.
-                    </p>
+                    <div className="flex items-center gap-3 mb-2">
+                        <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center backdrop-blur-md">
+                            <HelpCircle className="text-white" size={24} />
+                        </div>
+                        <h2 className="text-2xl font-bold">Hjálp & Leiðbeiningar</h2>
+                    </div>
                 </div>
 
-                {/* Content */}
-                <div className="p-6 space-y-6">
-                    <div className="space-y-4">
-                        <div className="flex gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center text-orange-600 flex-shrink-0">
-                                <Search size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900">Skráin</h3>
-                                <p className="text-sm text-gray-500">
-                                    Finndu upplýsingar um foreldra og börn. Smelltu á nöfnin til að sjá nánar.
-                                </p>
-                            </div>
-                        </div>
+                {/* Content - Scrollable */}
+                <div className="p-6 space-y-6 overflow-y-auto">
 
-                        <div className="flex gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600 flex-shrink-0">
-                                <Calendar size={20} />
+                    {/* Topic 1: Spouses */}
+                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                        <div className="flex gap-3 mb-2">
+                            <div className="bg-green-100 p-2 rounded-lg text-green-700 h-fit">
+                                <UserPlus size={20} />
                             </div>
                             <div>
-                                <h3 className="font-semibold text-gray-900">Verkefni & Viðburðir</h3>
-                                <p className="text-sm text-gray-500">
-                                    Skráðu þig í verkefni þegar bekkjarfulltrúar óska eftir aðstoð. Það tekur bara einn smell!
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <div className="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600 flex-shrink-0">
-                                <Bell size={20} />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold text-gray-900">Tilkynningar</h3>
-                                <p className="text-sm text-gray-500">
-                                    Mikilvæg skilaboð birtast hér. Þú getur stjórnað hvernig þú færð tilkynningar í stillingum.
+                                <h3 className="font-bold text-gray-900">Hvernig býð ég maka?</h3>
+                                <p className="text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Farðu í <strong>Stillingar</strong> (prófílmyndin þín). Þar finnurðu barnið þitt og hnappinn <span className="text-green-700 font-medium">„Afrita boðshlekk“</span>. Sendu hlekkinn á makann til að tengja hann við sama barn.
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <div className="pt-4 flex gap-3">
+                    {/* Topic 2: Birthdays */}
+                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                        <div className="flex gap-3 mb-2">
+                            <div className="bg-amber-100 p-2 rounded-lg text-amber-700 h-fit">
+                                <Cake size={20} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-gray-900">Hvernig skrái ég afmæli?</h3>
+                                <p className="text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Afmælisdagurinn er skráður <strong>þegar barni er bætt við</strong> (við nýskráningu eða í stillingum). Þetta birtist í bekkjarlistanum svo enginn gleymist á afmælisdaginn!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Topic 3: Data Privacy */}
+                    <div className="bg-stone-50 p-4 rounded-xl border border-stone-100">
+                        <div className="flex gap-3 mb-2">
+                            <div className="bg-blue-100 p-2 rounded-lg text-blue-700 h-fit">
+                                <ShieldCheck size={20} />
+                            </div>
+                            <div>
+                                <h3 className="font-bold text-gray-900">Hvaða upplýsingar sjást?</h3>
+                                <p className="text-sm text-stone-600 mt-1 leading-relaxed">
+                                    Aðrir foreldrar sjá <strong>nöfn, símanúmer (ef þú leyfir) og afmælisdaga</strong>. Kennarar/stjórnendur sjá einnig upplýsingar um ofnæmi til öryggis. Engin gögn eru seld þriðja aðila.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="pt-2">
                         <button
                             onClick={onClose}
-                            className="flex-1 py-3 px-4 bg-nordic-blue hover:bg-nordic-blue-dark text-white font-medium rounded-xl transition-colors shadow-sm"
+                            className="w-full py-3 px-4 bg-nordic-blue hover:bg-nordic-blue-dark text-white font-medium rounded-xl transition-colors shadow-sm"
                         >
                             Ég skil, loka glugga
                         </button>
