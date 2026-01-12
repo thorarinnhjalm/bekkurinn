@@ -267,7 +267,8 @@ export default function AnnouncementsPage() {
                                     <span className="font-bold text-amber-900 text-sm">Festa efst sem mikilvægt</span>
                                 </div>
 
-                                {(isAdmin || isSchoolAdmin) && (
+                                {/* Kjarnorku sending - DISABLED FOR NOW */}
+                                {/* {(isAdmin || isSchoolAdmin) && (
                                     <div className="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100 cursor-pointer flex-1" onClick={() => setIsCritical(!isCritical)}>
                                         <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${isCritical ? 'bg-red-500 border-red-500 text-white' : 'border-red-300 bg-white'}`}>
                                             {isCritical && <Megaphone size={14} />}
@@ -277,7 +278,7 @@ export default function AnnouncementsPage() {
                                             <span className="text-[10px] text-red-600 font-medium leading-tight">Senda sem tölvupóst á alla (trompar stillingar)</span>
                                         </div>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </div>
 
