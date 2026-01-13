@@ -21,7 +21,9 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
     const [step, setStep] = useState<1 | 2>(1);
 
     // Details State
+    const [birthdayHostIds, setBirthdayHostIds] = useState<Set<string>>(new Set());
     const [title, setTitle] = useState('');
+    const [isHostSelectOpen, setIsHostSelectOpen] = useState(false);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('14:00');
     const [location, setLocation] = useState('');
@@ -46,6 +48,30 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
             students.filter(s => s.gender === 'girl').forEach(s => newSet.add(s.id));
         }
         setSelectedStudentIds(newSet);
+        setSelectedStudentIds(newSet);
+    };
+
+    const toggleHost = (studentId: string) => {
+        const newSet = new Set(birthdayHostIds);
+        if (newSet.has(studentId)) {
+            newSet.delete(studentId);
+        } else {
+            newSet.add(studentId);
+        }
+        setBirthdayHostIds(newSet);
+
+        // Auto-generate title
+        if (newSet.size === 0) {
+            setTitle('');
+        } else {
+            const names = Array.from(newSet).map(id => students?.find(s => s.id === id)?.name.split(' ')[0]);
+            if (names.length === 1) setTitle(`${names[0]}`);
+            else if (names.length === 2) setTitle(`${names[0]} og ${names[1]}`);
+            else {
+                const last = names.pop();
+                setTitle(`${names.join(', ')} og ${last}`);
+            }
+        }
     };
 
     const toggleStudent = (studentId: string) => {
@@ -62,6 +88,10 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
     const handleSubmit = async () => {
         try {
             const finalDate = new Date(`${date}T${time}:00`);
+
+            // Ensure hosts are invited
+            const allInvitees = new Set([...Array.from(selectedStudentIds), ...Array.from(birthdayHostIds)]);
+
             await createTaskMutation.mutateAsync({
                 classId,
                 schoolId: schoolId || undefined,
@@ -74,12 +104,14 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                 isAllDay: false,
                 createdBy: user?.uid || '',
                 originalLanguage: 'is',
-                invitees: Array.from(selectedStudentIds),
+                invitees: Array.from(allInvitees),
                 isPrivate: true,
             });
+
             onClose();
             // Reset for next time
             setStep(1);
+            setBirthdayHostIds(new Set());
             setTitle('');
             setDate('');
             setLocation('');
@@ -116,14 +148,48 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                 <div className="flex-1 overflow-y-auto p-6">
                     {step === 1 ? (
                         <div className="space-y-5 animate-in slide-in-from-left-4 duration-300">
-                            <div>
+                            <div className="relative">
                                 <label className="label-modern">Hver á afmæli?</label>
-                                <input
-                                    value={title} onChange={e => setTitle(e.target.value)}
-                                    placeholder="t.d. Jón Þór"
-                                    className="input-modern"
-                                    autoFocus
-                                />
+                                <div
+                                    onClick={() => setIsHostSelectOpen(!isHostSelectOpen)}
+                                    className="input-modern flex flex-wrap gap-2 items-center cursor-pointer min-h-[50px]"
+                                >
+                                    {birthdayHostIds.size === 0 && <span className="text-gray-400">Veldu afmælisbarn...</span>}
+                                    {Array.from(birthdayHostIds).map(id => {
+                                        const s = students?.find(st => st.id === id);
+                                        return (
+                                            <span key={id} className="bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                                                {s?.name.split(' ')[0]}
+                                                <X size={12} className="hover:text-blue-900" onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    toggleHost(id);
+                                                }} />
+                                            </span>
+                                        );
+                                    })}
+                                    <ChevronDown size={16} className="ml-auto text-gray-400" />
+                                </div>
+
+                                {isHostSelectOpen && (
+                                    <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 z-10 max-h-60 overflow-y-auto p-2">
+                                        {students?.map(student => (
+                                            <div
+                                                key={student.id}
+                                                onClick={() => {
+                                                    toggleHost(student.id);
+                                                    setIsHostSelectOpen(false);
+                                                }}
+                                                className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer ${birthdayHostIds.has(student.id) ? 'bg-blue-50' : ''}`}
+                                            >
+                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${birthdayHostIds.has(student.id) ? 'bg-nordic-blue text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                                    {student.name[0]}
+                                                </div>
+                                                <span className="text-sm font-medium text-gray-700">{student.name}</span>
+                                                {birthdayHostIds.has(student.id) && <Check size={14} className="ml-auto text-nordic-blue" />}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-2 gap-4">
@@ -213,8 +279,8 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                                             key={student.id}
                                             onClick={() => toggleStudent(student.id)}
                                             className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedStudentIds.has(student.id)
-                                                    ? 'bg-blue-50/50 border-blue-200 shadow-sm'
-                                                    : 'bg-white border-gray-100 hover:border-gray-200'
+                                                ? 'bg-blue-50/50 border-blue-200 shadow-sm'
+                                                : 'bg-white border-gray-100 hover:border-gray-200'
                                                 }`}
                                         >
                                             <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedStudentIds.has(student.id) ? 'bg-nordic-blue text-white' : 'bg-gray-100 text-gray-400'

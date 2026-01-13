@@ -78,7 +78,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
         },
         {
             key: 'tasks',
-            href: '/tasks',
+            href: '/calendar',
             icon: CheckSquare,
             label: translations.tasks,
         },

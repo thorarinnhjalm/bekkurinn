@@ -39,7 +39,7 @@ const navItems = [
     },
     {
         key: 'tasks',
-        href: '/tasks',
+        href: '/calendar',
         icon: CheckSquare,
         labelKey: 'class.tasks',
     },
