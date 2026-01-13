@@ -301,8 +301,8 @@ export default function DirectoryPage() {
                                                         <p className="text-xs text-gray-500 mb-2">{parent.role === 'admin' ? 'Kennari / Stjórnandi' : 'Foreldri'}</p>
 
                                                         <div className="flex flex-wrap gap-2">
-                                                            {parent.phoneNumber && (
-                                                                <a href={`tel:${parent.phoneNumber}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-bold hover:bg-green-100 transition-colors">
+                                                            {parent.phone && parent.isPhoneVisible && (
+                                                                <a href={`tel:${parent.phone}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-bold hover:bg-green-100 transition-colors">
                                                                     <Phone size={12} /> Hringja
                                                                 </a>
                                                             )}

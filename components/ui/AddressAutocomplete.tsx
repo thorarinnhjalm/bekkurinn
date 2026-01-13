@@ -37,6 +37,13 @@ export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder =
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
+    // Sync with defaultValue when it changes (e.g. after loading from Firestore)
+    useEffect(() => {
+        if (defaultValue) {
+            setSearchTerm(defaultValue);
+        }
+    }, [defaultValue]);
+
     useEffect(() => {
         const timer = setTimeout(async () => {
             if (searchTerm.length < 3) {
