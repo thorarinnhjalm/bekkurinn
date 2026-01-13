@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Phone, Mail, Star, ChevronUp, Users, Loader2, Search } from 'lucide-react';
+import { Phone, Mail, Star, ChevronUp, Users, Loader2, Search, MapPin } from 'lucide-react';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -310,6 +310,22 @@ export default function DirectoryPage() {
                                                                 <Mail size={12} /> Senda póst
                                                             </a>
                                                         </div>
+
+                                                        {parent.address && (
+                                                            <div className="mt-3">
+                                                                <a
+                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
+                                                                    target="_blank"
+                                                                    rel="noopener noreferrer"
+                                                                    className="flex items-start gap-1.5 text-xs text-gray-500 hover:text-nordic-blue transition-colors group/addr"
+                                                                >
+                                                                    <MapPin size={14} className="mt-0.5 text-gray-400 group-hover/addr:text-nordic-blue" />
+                                                                    <span className="flex-1 underline-offset-2 group-hover/addr:underline">
+                                                                        {parent.address}
+                                                                    </span>
+                                                                </a>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                             ))
