@@ -322,6 +322,14 @@ export default function OnboardingView() {
         setJoining(true); // Reuse joining loading state
 
         try {
+            // 0. Check for duplicates (Simple case-insensitive name check)
+            const duplicate = students.find(s => s.name.toLowerCase().trim() === newStudentName.toLowerCase().trim());
+            if (duplicate) {
+                setError(`Barn með nafninu "${newStudentName}" er þegar í bekknum. Vinsamlegast veldu það af listanum eða hafðu samband við fulltrúa ef þetta er annað barn með sama nafn.`);
+                setJoining(false);
+                return;
+            }
+
             // 1. Create Student
             const dobDate = new Date(newStudentDob);
             const studentRef = await addDoc(collection(db, 'students'), {
