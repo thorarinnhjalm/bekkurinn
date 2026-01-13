@@ -1,10 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { Calendar, Loader2, Users, Plus, Footprints, Clock, Check } from 'lucide-react';
-import { useTasks, useUserClasses, useCreateTask, useClaimTaskSlot } from '@/hooks/useFirestore';
+import { Calendar, Loader2, Users, Plus, Footprints, Clock, Check, Edit2, Trash2 } from 'lucide-react';
+import { useTasks, useUserClasses, useCreateTask, useClaimTaskSlot, useUpdateTask, useDeleteTask, useSchool } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
+import { EditTaskModal } from '@/components/modals/EditTaskModal';
+import type { Task } from '@/types';
 
 /**
  * PatrolPage - V2
@@ -26,9 +28,16 @@ export default function PatrolPage() {
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
+    const updateTaskMutation = useUpdateTask();
+    const deleteTaskMutation = useDeleteTask();
+
+    // School Context (for scope toggle in modal if needed)
+    const { data: school } = useSchool(activeClass?.schoolId);
+    const isSchoolAdmin = school?.admins?.includes(user?.uid || '');
 
     // State
     const [isCreating, setIsCreating] = useState(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [newTitle, setNewTitle] = useState('Foreldrarölt');
     const [newDate, setNewDate] = useState('');
     const [newTime, setNewTime] = useState('20:00');
@@ -50,6 +59,16 @@ export default function PatrolPage() {
         } catch (err) {
             console.error("Failed to volunteer:", err);
             alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+        }
+    };
+
+    const handleDelete = async (taskId: string) => {
+        if (!window.confirm('Ertu viss um að þú viljir eyða þessu rölti?')) return;
+        try {
+            await deleteTaskMutation.mutateAsync(taskId);
+        } catch (err) {
+            console.error("Failed to delete patrol:", err);
+            alert("Gat ekki eytt rölti.");
         }
     };
 
@@ -101,16 +120,38 @@ export default function PatrolPage() {
                     return (
                         <div key={patrol.id} className="glass-card p-6 flex flex-col justify-between group hover:bg-white/70 transition-colors">
                             <div className="flex justify-between items-start mb-4">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
-                                        <Footprints size={24} />
+                                <div className="flex-1 flex items-center justify-between">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-12 h-12 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+                                            <Footprints size={24} />
+                                        </div>
+                                        <div>
+                                            <h3 className="font-bold text-gray-900 leading-tight">{patrol.title}</h3>
+                                            <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+                                                {dateObj ? `${dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' })} kl. ${dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}` : ''}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <h3 className="font-bold text-gray-900 leading-tight">{patrol.title}</h3>
-                                        <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                                            {dateObj ? `${dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' })} kl. ${dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}` : ''}
-                                        </p>
-                                    </div>
+
+                                    {/* Admin Controls */}
+                                    {isAdmin && (
+                                        <div className="flex items-center gap-1 ml-2">
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); setEditingTask(patrol); }}
+                                                className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-all"
+                                                title="Breyta"
+                                            >
+                                                <Edit2 size={18} />
+                                            </button>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); handleDelete(patrol.id); }}
+                                                className="p-2 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-xl transition-all"
+                                                title="Eyða"
+                                            >
+                                                <Trash2 size={18} />
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
 
@@ -245,6 +286,19 @@ export default function PatrolPage() {
                         </div>
                     </div>
                 </div>
+            )}
+            {/* Edit Modal */}
+            {editingTask && (
+                <EditTaskModal
+                    task={editingTask}
+                    isOpen={!!editingTask}
+                    isSchoolAdmin={isSchoolAdmin}
+                    onClose={() => setEditingTask(null)}
+                    onSave={async (id, data) => {
+                        await updateTaskMutation.mutateAsync({ taskId: id, data });
+                        setEditingTask(null);
+                    }}
+                />
             )}
         </div>
     );

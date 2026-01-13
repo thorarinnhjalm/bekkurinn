@@ -2,11 +2,12 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool } from '@/hooks/useFirestore';
-import { Edit2, Loader2, Calendar, Clock, MapPin, Plus, Info } from 'lucide-react'; // Users removed if unused
+import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool, useUpdateTask, useDeleteTask } from '@/hooks/useFirestore';
+import { Edit2, Loader2, Calendar, Clock, MapPin, Plus, Info, Trash2 } from 'lucide-react'; // Users removed if unused
 import { useRouter, useParams } from 'next/navigation';
 import type { Task } from '@/types';
 import { Babelfish } from '@/components/Babelfish';
+import { EditTaskModal } from '@/components/modals/EditTaskModal';
 
 /**
  * Tasks Page - Skipulag V2
@@ -34,9 +35,12 @@ export default function TasksPage() {
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
+    const updateTaskMutation = useUpdateTask();
+    const deleteTaskMutation = useDeleteTask();
 
     // State
     const [isCreating, setIsCreating] = useState(false);
+    const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [createTitle, setCreateTitle] = useState('');
     const [createDate, setCreateDate] = useState('');
     const [createTime, setCreateTime] = useState('12:00');
@@ -71,6 +75,16 @@ export default function TasksPage() {
         } catch (err) {
             console.error("Failed to volunteer:", err);
             alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+        }
+    };
+
+    const handleDelete = async (taskId: string) => {
+        if (!window.confirm('Ertu viss um að þú viljir eyða þessu verkefni?')) return;
+        try {
+            await deleteTaskMutation.mutateAsync(taskId);
+        } catch (err) {
+            console.error("Failed to delete task:", err);
+            alert("Gat ekki eytt verkefni.");
         }
     };
 
@@ -186,15 +200,38 @@ export default function TasksPage() {
                             {/* Content Column */}
                             <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
                                 <div className="flex items-start justify-between gap-4 mb-2">
-                                    <div>
+                                    <div className="flex-1">
                                         <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-nordic-blue transition-colors">
                                             {task.title}
                                         </h3>
                                     </div>
-                                    {/* Status Badge */}
-                                    {task.scope === 'school' && <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg uppercase tracking-wide">Allur Skólinn</span>}
-                                    {task.type === 'rolt' && <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg uppercase tracking-wide">Rölt</span>}
-                                    {task.type === 'gift_collection' && <span className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-lg uppercase tracking-wide">Söfnun</span>}
+
+                                    <div className="flex items-center gap-2">
+                                        {/* Status Badge */}
+                                        {task.scope === 'school' && <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg uppercase tracking-wide">Allur Skólinn</span>}
+                                        {task.type === 'rolt' && <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg uppercase tracking-wide">Rölt</span>}
+                                        {task.type === 'gift_collection' && <span className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-lg uppercase tracking-wide">Söfnun</span>}
+
+                                        {/* Admin Controls */}
+                                        {(isAdmin || isSchoolAdmin) && (
+                                            <div className="flex items-center gap-1 ml-2">
+                                                <button
+                                                    onClick={() => setEditingTask(task)}
+                                                    className="p-1.5 text-gray-400 hover:text-nordic-blue hover:bg-blue-50 rounded-lg transition-all"
+                                                    title="Breyta"
+                                                >
+                                                    <Edit2 size={16} />
+                                                </button>
+                                                <button
+                                                    onClick={() => handleDelete(task.id)}
+                                                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                                    title="Eyða"
+                                                >
+                                                    <Trash2 size={16} />
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <p className="text-gray-600 leading-relaxed mb-4 max-w-2xl">
@@ -398,6 +435,19 @@ export default function TasksPage() {
                         </div>
                     </div>
                 </div>
+            )}
+            {/* Edit Modal */}
+            {editingTask && (
+                <EditTaskModal
+                    task={editingTask}
+                    isOpen={!!editingTask}
+                    isSchoolAdmin={isSchoolAdmin}
+                    onClose={() => setEditingTask(null)}
+                    onSave={async (id, data) => {
+                        await updateTaskMutation.mutateAsync({ taskId: id, data });
+                        setEditingTask(null);
+                    }}
+                />
             )}
         </div>
     );
