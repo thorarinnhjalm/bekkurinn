@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool, useUpdateTask, useDeleteTask } from '@/hooks/useFirestore';
+import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool, useUpdateTask, useDeleteTask, useUserStudentIds } from '@/hooks/useFirestore';
 import { Edit2, Loader2, Calendar, Clock, MapPin, Plus, Info, Trash2 } from 'lucide-react'; // Users removed if unused
 import { useRouter, useParams } from 'next/navigation';
 import type { Task } from '@/types';
 import { Babelfish } from '@/components/Babelfish';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
+import { CreateBirthdayModal } from '@/components/modals/CreateBirthdayModal';
 
 /**
  * Tasks Page - Skipulag V2
@@ -32,7 +33,8 @@ export default function TasksPage() {
     const isSchoolAdmin = school?.admins?.includes(user?.uid || '');
 
     // 2. Fetch Tasks (Class + School)
-    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
+    const { data: myStudentIds } = useUserStudentIds(user?.uid, activeClassId);
+    const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId, myStudentIds, user?.uid);
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
     const updateTaskMutation = useUpdateTask();
@@ -40,6 +42,7 @@ export default function TasksPage() {
 
     // State
     const [isCreating, setIsCreating] = useState(false);
+    const [isBirthdayModalOpen, setIsBirthdayModalOpen] = useState(false);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [createTitle, setCreateTitle] = useState('');
     const [createDate, setCreateDate] = useState('');
@@ -98,11 +101,8 @@ export default function TasksPage() {
 
     // Filter & Sort
     const allTasks = tasksData || [];
-    // Display 'event', 'rolt', 'gift_collection' AND now 'school_event' (mapped from 'event' with scope='school')
-    // Ideally we just check if it's NOT a patrol event if we wanted to hide those, but let's show all types relevant.
-    // The previous filter was: ['event', 'rolt', 'gift_collection'].includes(t.type)
-    // We should ensure 'event' type covers school events or check for scope.
-    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection', 'school_event'].includes(t.type));
+    // Display 'event', 'rolt', 'gift_collection', 'school_event' AND 'birthday'
+    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection', 'school_event', 'birthday'].includes(t.type));
 
     const sortedEvents = [...displayTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
@@ -142,6 +142,15 @@ export default function TasksPage() {
                         Nýr viðburður
                     </button>
                 )}
+
+                {/* Birthday Button - Visible to everyone */}
+                <button
+                    onClick={() => setIsBirthdayModalOpen(true)}
+                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-pink-50 text-pink-600 font-bold hover:bg-pink-100 transition-all ml-2"
+                >
+                    <span className="text-xl">🎂</span>
+                    Nýtt afmælisboð
+                </button>
             </header>
 
             {/* Global Translation Notice (if not Icelandic) */}
@@ -449,6 +458,14 @@ export default function TasksPage() {
                     }}
                 />
             )}
+
+            {/* Birthday Modal */}
+            <CreateBirthdayModal
+                isOpen={isBirthdayModalOpen}
+                onClose={() => setIsBirthdayModalOpen(false)}
+                classId={activeClassId}
+                schoolId={activeClass?.schoolId}
+            />
         </div>
     );
 }

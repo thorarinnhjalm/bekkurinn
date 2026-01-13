@@ -50,11 +50,13 @@ export interface Class {
 
 export type DietaryNeed = 'peanut' | 'gluten' | 'pork' | 'vegan' | 'dairy';
 export type PhotoPermission = 'allow' | 'deny';
+export type Gender = 'boy' | 'girl' | 'other';
 
 export interface Student {
     id: string;
     classId: string;
     name: string;
+    gender?: Gender;
     birthDate: Timestamp;
     dietaryNeeds: DietaryNeed[];
     photoPermission: PhotoPermission;
@@ -93,7 +95,7 @@ export interface School {
 // TASK (Polymorphic)
 // ========================================
 
-export type TaskType = 'rolt' | 'event' | 'gift_collection' | 'school_event';
+export type TaskType = 'rolt' | 'event' | 'gift_collection' | 'school_event' | 'birthday';
 
 export interface TaskVolunteer {
     userId: string;
@@ -118,6 +120,10 @@ export interface Task {
     createdAt: Timestamp;
     createdBy: string; // Admin UID
     originalLanguage?: string; // Babelfish feature
+
+    // Birthday Features
+    invitees?: string[]; // Array of Student IDs
+    isPrivate?: boolean; // If true, only visible to invitees
 }
 
 // ========================================

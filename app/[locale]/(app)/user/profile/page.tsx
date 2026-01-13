@@ -143,6 +143,19 @@ export default function UserProfilePage() {
         }
     };
 
+    const handleSaveStudentGender = async (studentId: string, gender: string) => {
+        setIsSaving(true);
+        try {
+            await updateDoc(doc(db, 'students', studentId), { gender });
+            setStudents(prev => prev.map(s => s.id === studentId ? { ...s, gender } : s));
+        } catch (e) {
+            console.error(e);
+            alert('Villa við vistun á kyni');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const handleCopyInviteLink = (studentId: string) => {
         const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}&inviterId=${user?.uid}`;
         navigator.clipboard.writeText(inviteLink).then(() => {
@@ -283,6 +296,7 @@ export default function UserProfilePage() {
                             onSave={(url) => handleSaveStudentPhoto(student.id, url)}
                             onSaveName={(name) => handleSaveStudentName(student.id, name)}
                             onSaveDietaryNeeds={(needs) => handleSaveStudentDietaryNeeds(student.id, needs)}
+                            onSaveGender={(gender) => handleSaveStudentGender(student.id, gender)}
                             onCopyInvite={() => handleCopyInviteLink(student.id)}
                             userId={user?.uid || ''}
                         />
@@ -317,11 +331,12 @@ export default function UserProfilePage() {
     );
 }
 
-function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onCopyInvite, userId }: {
+function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onSaveGender, onCopyInvite, userId }: {
     student: any,
     onSave: (url: string) => void,
     onSaveName: (name: string) => void,
     onSaveDietaryNeeds: (needs: string[]) => void,
+    onSaveGender: (gender: string) => void,
     onCopyInvite: () => void,
     userId: string
 }) {
@@ -397,6 +412,32 @@ function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onCopyIn
                         )}
                         <p className="text-sm text-gray-500">Nemandi</p>
                     </div>
+                </div>
+
+                {/* GENDER SELECTOR */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Kyn</label>
+                    <div className="flex bg-gray-50 p-1 rounded-lg inline-flex">
+                        {[
+                            { value: 'boy', label: 'Strákur' },
+                            { value: 'girl', label: 'Stelpa' },
+                            { value: 'other', label: 'Annað / Kvár' }
+                        ].map((option) => (
+                            <button
+                                key={option.value}
+                                onClick={() => onSaveGender(option.value)}
+                                className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all ${student.gender === option.value
+                                    ? 'bg-white text-nordic-blue shadow-sm'
+                                    : 'text-gray-500 hover:text-gray-700'
+                                    }`}
+                            >
+                                {option.label}
+                            </button>
+                        ))}
+                    </div>
+                    <p className="text-xs text-gray-400 mt-1">
+                        Notað til að bjóða í afmæli (t.d. "Bjóða öllum strákum").
+                    </p>
                 </div>
 
                 {/* DIETARY NEEDS */}

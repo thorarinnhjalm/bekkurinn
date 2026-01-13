@@ -22,7 +22,8 @@ import {
     getParentLinkByUserAndClass,
     getSchool,
     getAnnouncementsBySchool,
-    getTasksBySchool
+    getTasksBySchool,
+    getParentLinksByUser
 } from '@/services/firestore';
 import type { Task, Announcement, CreateStudentInput, CreateTaskInput, CreateAnnouncementInput } from '@/types';
 import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
@@ -192,24 +193,61 @@ export function useUserParentLink(userId: string | undefined, classId: string | 
     });
 }
 
+export function useUserStudentIds(userId: string | undefined, classId: string | null) {
+    return useQuery({
+        queryKey: ['userStudentIds', userId, classId],
+        queryFn: async () => {
+            if (!userId || !classId) return [];
+            // Get all links for user
+            const links = await getParentLinksByUser(userId);
+            // Filter by class and map to studentId
+            return links
+                .filter(link => link.classId === classId)
+                .map(link => link.studentId);
+        },
+        enabled: !!userId && !!classId,
+    });
+}
+
 // ========================================
 // TASK HOOKS (Patrol & Events)
 // ========================================
 
-export function useTasks(classId: string | null, schoolId?: string | null) {
+export function useTasks(classId: string | null, schoolId?: string | null, myStudentIds?: string[], currentUserId?: string) {
     return useQuery({
-        queryKey: ['tasks', classId, schoolId],
+        queryKey: ['tasks', classId, schoolId, myStudentIds, currentUserId],
         queryFn: async () => {
             const classTasks = classId ? await getTasksByClass(classId) : [];
             const schoolTasks = schoolId ? await getTasksBySchool(schoolId) : [];
 
-            // Merge and sort
-            const allTasks = [...classTasks, ...schoolTasks].sort((a, b) => {
+            // Merge
+            let allTasks = [...classTasks, ...schoolTasks];
+
+            // Filter Private Tasks
+            if (currentUserId && myStudentIds) {
+                allTasks = allTasks.filter(task => {
+                    // Public tasks are visible to everyone in class/school
+                    if (!task.isPrivate) return true;
+
+                    // Creator always sees their own tasks
+                    if (task.createdBy === currentUserId) return true;
+
+                    // Invited?
+                    // Check if any of my students are in the invitee list
+                    if (task.invitees && task.invitees.some(id => myStudentIds.includes(id))) {
+                        return true;
+                    }
+
+                    return false;
+                });
+            }
+
+            // Sort
+            return allTasks.sort((a, b) => {
                 const aTime = a.date?.seconds || 0;
                 const bTime = b.date?.seconds || 0;
                 return bTime - aTime;
             });
-            return allTasks;
         },
         enabled: !!classId || !!schoolId,
     });
