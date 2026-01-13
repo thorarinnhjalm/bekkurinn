@@ -128,7 +128,7 @@ export default function TasksPage() {
                         <Calendar size={12} />
                         Skipulag skólans
                     </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Verkefni & Viðburðir</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Viðburðadagatal</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
                         Hér er yfirlit yfir allt sem þarf að gera. Skráðu þig sem sjálfboðaliða og taktu þátt!
                     </p>
