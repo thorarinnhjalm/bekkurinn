@@ -147,7 +147,8 @@ async function seed() {
                 pinned: announcement.pinned,
                 createdBy: 'demo-admin-uid',
                 author: 'Guðrún (Formaður)',
-                scope: 'class'
+                scope: 'class',
+                schoolId: null // Added to satisfy new type definition
             });
             console.log(`✓ Announcement created: ${announcement.title} (${announcementId})`);
         }
