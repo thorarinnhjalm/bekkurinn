@@ -100,11 +100,27 @@ export default function TasksPage() {
     }
 
     // Filter & Sort
+    const [filter, setFilter] = useState<'all' | 'rolt' | 'birthday' | 'event'>('all');
+
     const allTasks = tasksData || [];
     // Display 'event', 'rolt', 'gift_collection', 'school_event' AND 'birthday'
-    const displayTasks = allTasks.filter(t => ['event', 'rolt', 'gift_collection', 'school_event', 'birthday'].includes(t.type));
 
-    const sortedEvents = [...displayTasks].sort((a, b) => {
+    // 1. Filter by Type
+    const filteredTasks = allTasks.filter(t => {
+        // Base allowed types
+        const allowedTypes = ['event', 'rolt', 'gift_collection', 'school_event', 'birthday'];
+        if (!allowedTypes.includes(t.type)) return false;
+
+        // Specific Filter Logic
+        if (filter === 'all') return true;
+        if (filter === 'rolt') return t.type === 'rolt';
+        if (filter === 'birthday') return t.type === 'birthday';
+        if (filter === 'event') return ['event', 'school_event', 'gift_collection'].includes(t.type);
+
+        return true;
+    });
+
+    const sortedEvents = [...filteredTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
         const now = Date.now();
@@ -124,34 +140,59 @@ export default function TasksPage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-blue-700 uppercase tracking-wide mb-3 animate-in fade-in slide-in-from-left-2">
-                        <Calendar size={12} />
-                        Skipulag skólans
-                    </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Viðburðadagatal</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Dagatal</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
-                        Hér er yfirlit yfir allt sem þarf að gera. Skráðu þig sem sjálfboðaliða og taktu þátt!
+                        Yfirlit yfir allt sem er framundan hjá bekknum.
                     </p>
                 </div>
-                {(isAdmin || isSchoolAdmin) && (
+                <div className="flex gap-2">
+                    {(isAdmin || isSchoolAdmin) && (
+                        <button
+                            onClick={() => setIsCreating(true)}
+                            className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                        >
+                            <Plus size={20} />
+                            Nýr viðburður
+                        </button>
+                    )}
+                    {/* Birthday Button - Visible to everyone */}
                     <button
-                        onClick={() => setIsCreating(true)}
-                        className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                        onClick={() => setIsBirthdayModalOpen(true)}
+                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-pink-50 text-pink-600 font-bold hover:bg-pink-100 transition-all border border-pink-100"
                     >
-                        <Plus size={20} />
-                        Nýr viðburður
+                        <span className="text-xl">🎂</span>
+                        Skrá afmæli
                     </button>
-                )}
-
-                {/* Birthday Button - Visible to everyone */}
-                <button
-                    onClick={() => setIsBirthdayModalOpen(true)}
-                    className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-pink-50 text-pink-600 font-bold hover:bg-pink-100 transition-all ml-2"
-                >
-                    <span className="text-xl">🎂</span>
-                    Nýtt afmælisboð
-                </button>
+                </div>
             </header>
+
+            {/* Filter Tabs */}
+            <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                <button
+                    onClick={() => setFilter('all')}
+                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'all' ? 'bg-gray-900 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                    Allt
+                </button>
+                <button
+                    onClick={() => setFilter('event')}
+                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'event' ? 'bg-nordic-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                    Viðburðir
+                </button>
+                <button
+                    onClick={() => setFilter('rolt')}
+                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'rolt' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                    Rölt
+                </button>
+                <button
+                    onClick={() => setFilter('birthday')}
+                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'birthday' ? 'bg-pink-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
+                >
+                    Afmæli
+                </button>
+            </div>
 
             {/* Global Translation Notice (if not Icelandic) */}
             {locale !== 'is' && (
@@ -171,19 +212,44 @@ export default function TasksPage() {
                     const isFull = task.slotsTotal > 0 && task.slotsFilled >= task.slotsTotal;
                     const isAllDay = task.isAllDay || task.type === 'school_event';
 
+                    // Type Logic
+                    const isSchool = task.type === 'school_event' || (task.schoolId && !task.classId);
+                    const isBirthday = task.type === 'birthday';
+                    const isRolt = task.type === 'rolt';
+
+                    // Styling Strategy
+                    let borderClass = "border-l-4 border-gray-200"; // Default
+                    let bgClass = "bg-white";
+                    let badgeLabel = "";
+                    let badgeColor = "";
+
+                    if (isSchool) {
+                        borderClass = "border-l-4 border-purple-500";
+                        badgeLabel = "Skóla viðburður";
+                        badgeColor = "bg-purple-100 text-purple-700";
+                    } else if (isBirthday) {
+                        borderClass = "border-l-4 border-pink-400";
+                        badgeLabel = "Afmæli";
+                        badgeColor = "bg-pink-100 text-pink-700";
+                    } else if (isRolt) {
+                        borderClass = "border-l-4 border-indigo-500";
+                        badgeLabel = "Rölt";
+                        badgeColor = "bg-indigo-100 text-indigo-700";
+                    } else {
+                        // Class Event
+                        borderClass = "border-l-4 border-nordic-blue";
+                        badgeLabel = "Bekkjarviðburður";
+                        badgeColor = "bg-blue-100 text-blue-700";
+                    }
+
                     return (
                         <div
                             key={task.id}
-                            className={`glass-card p-0 flex flex-col md:flex-row overflow-hidden group ${!isTaskUpcoming ? 'opacity-70 grayscale-[0.5] hover:grayscale-0' : ''}`}
+                            className={`glass-card p-0 flex flex-col md:flex-row overflow-hidden group ${!isTaskUpcoming ? 'opacity-70 grayscale-[0.5] hover:grayscale-0' : ''} ${borderClass}`}
                             style={{ animationDelay: `${index * 100}ms` }}
                         >
-                            {/* Scope Strip */}
-                            {task.scope === 'school' && (
-                                <div className="md:w-2 bg-purple-500 w-full h-2 md:h-auto" />
-                            )}
-
                             {/* Date Column */}
-                            <div className="md:w-48 bg-gray-50/50 border-b md:border-b-0 md:border-r border-gray-100 p-6 flex flex-col justify-center items-center text-center group-hover:bg-blue-50/30 transition-colors">
+                            <div className="md:w-48 bg-gray-50/50 md:border-r border-gray-100 p-6 flex flex-col justify-center items-center text-center group-hover:bg-blue-50/30 transition-colors">
                                 <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">
                                     {dateObj ? dateObj.toLocaleDateString('is-IS', { weekday: 'short' }) : '---'}
                                 </span>
@@ -210,16 +276,23 @@ export default function TasksPage() {
                             <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
                                 <div className="flex items-start justify-between gap-4 mb-2">
                                     <div className="flex-1">
+
+                                        {/* Type Badge Header */}
+                                        <div className="flex items-center gap-2 mb-2">
+                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${badgeColor}`}>
+                                                {badgeLabel}
+                                            </span>
+                                            {task.scope === 'school' && !isSchool && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase tracking-wider">Allur Skólinn</span>}
+                                        </div>
+
                                         <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-nordic-blue transition-colors">
                                             {task.title}
                                         </h3>
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                        {/* Status Badge */}
-                                        {task.scope === 'school' && <span className="px-3 py-1 bg-purple-50 text-purple-700 text-xs font-bold rounded-lg uppercase tracking-wide">Allur Skólinn</span>}
-                                        {task.type === 'rolt' && <span className="px-3 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-lg uppercase tracking-wide">Rölt</span>}
-                                        {task.type === 'gift_collection' && <span className="px-3 py-1 bg-pink-50 text-pink-700 text-xs font-bold rounded-lg uppercase tracking-wide">Söfnun</span>}
+                                        {/* Additional Context Badges */}
+                                        {task.type === 'gift_collection' && <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg uppercase tracking-wide">💵 Söfnun</span>}
 
                                         {/* Admin Controls */}
                                         {(isAdmin || isSchoolAdmin) && (
@@ -286,7 +359,8 @@ export default function TasksPage() {
                                             </button>
                                         </div>
                                     ) : (
-                                        <div className="py-2 text-sm text-gray-400 font-medium italic">
+                                        <div className="py-2 text-sm text-gray-400 font-medium italic flex items-center gap-2">
+                                            <Info size={14} />
                                             Engin skráning nauðsynleg.
                                         </div>
                                     )}
@@ -301,8 +375,16 @@ export default function TasksPage() {
                         <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Calendar className="text-gray-300" size={40} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900">Ekkert á dagskrá</h3>
-                        <p className="text-gray-500">Njóttu þess að hafa ekkert fyrir stafni!</p>
+                        <h3 className="text-2xl font-bold text-gray-900">Ekkert fannst</h3>
+                        <p className="text-gray-500">Engir viðburðir fundust með þessum leitarskilyrðum.</p>
+                        {filter !== 'all' && (
+                            <button
+                                onClick={() => setFilter('all')}
+                                className="mt-4 text-nordic-blue font-bold hover:underline"
+                            >
+                                Sýna allt
+                            </button>
+                        )}
                     </div>
                 )}
             </div>

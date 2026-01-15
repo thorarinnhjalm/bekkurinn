@@ -32,15 +32,9 @@ const navItems = [
         labelKey: 'class.directory',
     },
     {
-        key: 'patrol',
-        href: '/patrol',
-        icon: Calendar,
-        labelKey: 'class.patrol',
-    },
-    {
         key: 'tasks',
         href: '/calendar',
-        icon: CheckSquare,
+        icon: Calendar, // Changed icon to Calendar
         labelKey: 'class.tasks',
     },
     {

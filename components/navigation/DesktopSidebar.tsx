@@ -71,16 +71,10 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             label: translations.directory,
         },
         {
-            key: 'patrol',
-            href: '/patrol',
-            icon: Calendar,
-            label: translations.patrol,
-        },
-        {
             key: 'tasks',
             href: '/calendar',
-            icon: CheckSquare,
-            label: translations.tasks,
+            icon: Calendar,
+            label: translations.tasks, // Maps to "Dagatal" now
         },
         {
             key: 'announcements',
@@ -191,7 +185,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             className="flex items-center justify-center gap-2 p-2 rounded-xl hover:bg-white/50 text-xs font-medium text-gray-600 transition-colors"
                         >
                             <Settings size={14} />
-                            Stillingar
+                            Bekkjarstjórn
                         </Link>
                         <button
                             onClick={() => signOut()}

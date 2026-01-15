@@ -90,7 +90,17 @@ export default function SettingsView() {
     }, [user, authLoading]);
 
     const { data: classData, isLoading: classLoading, refetch } = useClass(classId);
+
+    // Security Redirect
+    const isAdmin = classData?.admins?.includes(user?.uid || '');
     const router = useRouter();
+
+    useEffect(() => {
+        if (!classLoading && !authLoading && user && classData && !isAdmin) {
+            router.push('/dashboard');
+        }
+    }, [classLoading, authLoading, user, classData, isAdmin, router]);
+
     const params = useParams();
     const locale = params?.locale || 'is';
 
