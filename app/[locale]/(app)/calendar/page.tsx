@@ -51,6 +51,8 @@ export default function TasksPage() {
     const [createSlots, setCreateSlots] = useState(2);
     const [createIsAllDay, setCreateIsAllDay] = useState(false);
     const [scope, setScope] = useState<'class' | 'school'>('class');
+    const [filter, setFilter] = useState<'all' | 'rolt' | 'birthday' | 'event'>('all');
+
 
     // Redirect
     if (!authLoading && !user) {
@@ -100,7 +102,7 @@ export default function TasksPage() {
     }
 
     // Filter & Sort
-    const [filter, setFilter] = useState<'all' | 'rolt' | 'birthday' | 'event'>('all');
+
 
     const allTasks = tasksData || [];
     // Display 'event', 'rolt', 'gift_collection', 'school_event' AND 'birthday'
