@@ -1,11 +1,12 @@
 'use client';
 
-import { Heart, Pin, Loader2, MessageSquare, Edit2, Plus, Megaphone, Info } from 'lucide-react';
-import { useAnnouncements, useUserClasses, useCreateAnnouncement, useDeleteAnnouncement, useSchool } from '@/hooks/useFirestore';
+import { Heart, Pin, Loader2, MessageSquare, Edit2, Plus, Megaphone, Info, BarChart2, CheckCircle, XCircle, PlusCircle, MinusCircle } from 'lucide-react';
+import { useAnnouncements, useUserClasses, useCreateAnnouncement, useDeleteAnnouncement, useSchool, useVoteAnnouncement } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
 import { Babelfish } from '@/components/Babelfish';
+import { PollOption } from '@/types';
 
 /**
  * Announcements Page - Auglýsingataflan V2
@@ -42,8 +43,24 @@ export default function AnnouncementsPage() {
     const [nuclearKeyword, setNuclearKeyword] = useState('');
     const [scope, setScope] = useState<'class' | 'school'>('class');
 
+    // Poll State
+    const [isPoll, setIsPoll] = useState(false);
+    const [pollOptions, setPollOptions] = useState<{ id: string, text: string }[]>([]);
+    const [newOptionText, setNewOptionText] = useState('');
+
     const createAnnouncementMutation = useCreateAnnouncement();
     const deleteAnnouncementMutation = useDeleteAnnouncement();
+    const voteMutation = useVoteAnnouncement();
+
+    const addPollOption = () => {
+        if (!newOptionText) return;
+        setPollOptions([...pollOptions, { id: crypto.randomUUID(), text: newOptionText }]);
+        setNewOptionText('');
+    };
+
+    const removePollOption = (id: string) => {
+        setPollOptions(pollOptions.filter(opt => opt.id !== id));
+    };
 
     // Redirect to login if not authenticated
     if (!authLoading && !user) {
@@ -191,6 +208,67 @@ export default function AnnouncementsPage() {
                                 targetLanguage={locale}
                             />
 
+                            {/* POLL UI */}
+                            {announcement.pollOptions && announcement.pollOptions.length > 0 && (
+                                <div className="mt-6 bg-gray-50 rounded-xl p-6 space-y-4 border border-gray-100">
+                                    <div className="flex items-center gap-2 text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
+                                        <BarChart2 size={16} />
+                                        <span>Könnun</span>
+                                    </div>
+
+                                    {announcement.pollOptions.map(option => {
+                                        const totalVotes = announcement.pollOptions?.reduce((acc, curr) => acc + (curr.votes?.length || 0), 0) || 0;
+                                        const votes = option.votes?.length || 0;
+                                        const percentage = totalVotes > 0 ? Math.round((votes / totalVotes) * 100) : 0;
+                                        const hasVoted = option.votes?.includes(user?.uid || '');
+
+                                        return (
+                                            <div
+                                                key={option.id}
+                                                onClick={() => {
+                                                    voteMutation.mutate({
+                                                        announcementId: announcement.id,
+                                                        optionId: option.id,
+                                                        userId: user?.uid || '',
+                                                        toggle: hasVoted
+                                                    });
+                                                }}
+                                                className={`relative overflow-hidden rounded-lg border-2 cursor-pointer transition-all group
+                                                    ${hasVoted ? 'border-nordic-blue bg-blue-50' : 'border-gray-200 hover:border-gray-300 bg-white'}
+                                                `}
+                                            >
+                                                {/* Progress Bar Background */}
+                                                <div
+                                                    className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out opacity-20
+                                                        ${hasVoted ? 'bg-nordic-blue' : 'bg-gray-400'}
+                                                    `}
+                                                    style={{ width: `${percentage}%` }}
+                                                />
+
+                                                <div className="relative p-3 flex items-center justify-between z-10">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
+                                                            ${hasVoted ? 'border-nordic-blue bg-nordic-blue text-white' : 'border-gray-300'}
+                                                        `}>
+                                                            {hasVoted && <CheckCircle size={12} />}
+                                                        </div>
+                                                        <span className={`font-medium ${hasVoted ? 'text-nordic-blue font-bold' : 'text-gray-700'}`}>
+                                                            {option.text}
+                                                        </span>
+                                                    </div>
+                                                    <span className="text-xs font-bold text-gray-500">
+                                                        {percentage}% ({votes})
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                    <p className="text-center text-xs text-gray-400 font-medium pt-2">
+                                        {announcement.pollOptions?.reduce((acc, curr) => acc + (curr.votes?.length || 0), 0)} atkvæði samtals
+                                    </p>
+                                </div>
+                            )}
+
                             {(isAdmin || isSchoolAdmin) && (
                                 <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
                                     <button
@@ -280,6 +358,51 @@ export default function AnnouncementsPage() {
                                     </div>
                                 )} */}
                             </div>
+
+                            {/* Poll Creator */}
+                            <div className="pt-2">
+                                <button
+                                    onClick={() => setIsPoll(!isPoll)}
+                                    className={`flex items-center gap-2 text-sm font-bold transition-colors ${isPoll ? 'text-nordic-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                                >
+                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${isPoll ? 'border-nordic-blue bg-nordic-blue text-white' : 'border-gray-300'}`}>
+                                        {isPoll && <CheckCircle size={14} />}
+                                    </div>
+                                    Búa til könnun
+                                </button>
+
+                                {isPoll && (
+                                    <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100 animate-in slide-in-from-top-2">
+                                        <label className="text-xs font-bold text-gray-500 uppercase">Svarmöguleikar</label>
+
+                                        {pollOptions.map((opt) => (
+                                            <div key={opt.id} className="flex gap-2 animate-in fade-in">
+                                                <div className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">
+                                                    {opt.text}
+                                                </div>
+                                                <button onClick={() => removePollOption(opt.id)} className="text-red-400 hover:text-red-600">
+                                                    <MinusCircle size={20} />
+                                                </button>
+                                            </div>
+                                        ))}
+
+                                        <div className="flex gap-2">
+                                            <input
+                                                value={newOptionText}
+                                                onChange={(e) => setNewOptionText(e.target.value)}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === 'Enter') addPollOption();
+                                                }}
+                                                placeholder="Bæta við valmöguleika..."
+                                                className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-nordic-blue"
+                                            />
+                                            <button onClick={addPollOption} className="text-nordic-blue hover:text-blue-700">
+                                                <PlusCircle size={32} />
+                                            </button>
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
 
                         <div className="flex gap-3 pt-4 border-t border-gray-100">
@@ -298,20 +421,30 @@ export default function AnnouncementsPage() {
                                         return;
                                     }
 
-                                    await createAnnouncementMutation.mutateAsync({
-                                        classId: scope === 'class' ? activeClassId : null,
-                                        schoolId: scope === 'school' ? (activeClass?.schoolId || null) : (activeClass?.schoolId || null),
-                                        scope: scope,
-                                        title: newTitle,
-                                        content: newContent,
-                                        pinned: newPinned,
-                                        createdBy: user?.uid || '',
-                                        author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn'),
-                                        originalLanguage: locale
-                                    } as any);
-
-                                    setIsCreating(false);
-                                    setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class'); setIsCritical(false);
+                                    if (newTitle && newContent) {
+                                        await createAnnouncementMutation.mutateAsync({
+                                            classId: scope === 'class' ? activeClassId : null,
+                                            schoolId: activeClass?.schoolId || '',
+                                            scope,
+                                            title: newTitle,
+                                            content: newContent,
+                                            pinned: false,
+                                            isCritical: false, // Default to false
+                                            originalLanguage: locale,
+                                            pollOptions: isPoll ? pollOptions.map(opt => ({ ...opt, votes: [] })) : [],
+                                            allowMultipleVotes: false,
+                                            createdBy: user?.uid || '',
+                                            author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn'),
+                                        });
+                                        setNewTitle('');
+                                        setNewContent('');
+                                        setIsCreating(false);
+                                        setNuclearKeyword('');
+                                        setIsCritical(false); // Assuming setIsNuclear was a typo for setIsCritical
+                                        // Reset Poll
+                                        setIsPoll(false);
+                                        setPollOptions([]);
+                                    }
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >

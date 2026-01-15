@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Users, Calendar, CheckSquare, Megaphone, Home, Settings, LogOut, ShieldCheck } from 'lucide-react';
+import { Home, Users, Settings, LogOut, CheckSquare, Megaphone, ShieldCheck, Calendar, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -20,6 +20,7 @@ interface DesktopSidebarProps {
         patrol: string;
         tasks: string;
         announcements: string;
+        lost_found: string;
     };
 }
 
@@ -81,6 +82,12 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             href: '/announcements',
             icon: Megaphone,
             label: translations.announcements,
+        },
+        {
+            key: 'lost-found',
+            href: '/lost-found',
+            icon: Camera,
+            label: translations.lost_found,
         },
     ] as const;
 

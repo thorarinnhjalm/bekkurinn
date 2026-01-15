@@ -35,7 +35,7 @@ export function Babelfish({ text, originalLanguage = 'is', targetLanguage, class
             return data.translation as string;
         },
         staleTime: Infinity, // Translations don't change
-        enabled: !!text && originalLanguage !== targetLanguage
+        enabled: !!text && originalLanguage !== targetLanguage && targetLanguage !== 'is' // Logic: Don't translate if languages match or if target is default (is)
     });
 
     if (isLoading) {

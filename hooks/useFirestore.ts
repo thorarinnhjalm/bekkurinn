@@ -25,8 +25,23 @@ import {
     getTasksBySchool,
     getParentLinksByUser
 } from '@/services/firestore';
-import type { Task, Announcement, CreateStudentInput, CreateTaskInput, CreateAnnouncementInput } from '@/types';
-import { collection, query, where, getDocs, doc, getDoc } from 'firebase/firestore';
+import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput } from '@/types';
+import { Class, Student, Task, Announcement, ParentLink, LostItem } from '@/types';
+import {
+    collection,
+    doc,
+    getDoc,
+    getDocs,
+    query,
+    where,
+    addDoc,
+    updateDoc,
+    deleteDoc,
+    serverTimestamp,
+    DocumentData,
+    Timestamp,
+    orderBy
+} from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
 // ... other hooks ...
@@ -400,3 +415,120 @@ export function useDeleteAnnouncement() {
         },
     });
 }
+// ==========================================
+// Lost & Found Hooks
+// ==========================================
+
+export const useLostItems = (schoolId: string, classId: string) => {
+    return useQuery({
+        queryKey: ['lostItems', schoolId, classId],
+        queryFn: async () => {
+            if (!schoolId && !classId) return [];
+
+            // We want:
+            // 1. All 'found' items for the SCHOOL (scope: 'school')
+            // 2. All 'lost' items for the CLASS (scope: 'class')
+
+            // Note: Firebase OR queries are limited. We might need two queries or one broad query.
+            // Let's try fetching school-scoped items for now, and filter in UI if needed, 
+            // OR fetch all items for the school if scope is school.
+
+            // Strategy: Fetch all items where schoolId == schoolId.
+            // Then filter in memory or valid security rules.
+            // Assuming we just want to see everything for the school for now to be safe.
+
+            const q = query(
+                collection(db, 'lost_items'),
+                where('schoolId', '==', schoolId),
+                orderBy('createdAt', 'desc')
+            );
+
+            const snapshot = await getDocs(q);
+            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LostItem));
+        },
+        enabled: !!schoolId
+    });
+};
+
+export const useCreateLostItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (item: Omit<LostItem, 'id'>) => {
+            const docRef = await addDoc(collection(db, 'lost_items'), {
+                ...item,
+                createdAt: serverTimestamp()
+            });
+            return docRef.id;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['lostItems'] });
+        }
+    });
+};
+
+export const useUpdateLostItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ id, data }: { id: string; data: Partial<LostItem> }) => {
+            const docRef = doc(db, 'lost_items', id);
+            await updateDoc(docRef, data);
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['lostItems'] });
+        }
+    });
+};
+
+export const useDeleteLostItem = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async (id: string) => {
+            await deleteDoc(doc(db, 'lost_items', id));
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['lostItems'] });
+        }
+    });
+};
+
+export const useVoteAnnouncement = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: async ({ announcementId, optionId, userId, toggle }: { announcementId: string; optionId: string; userId: string; toggle: boolean }) => {
+            const docRef = doc(db, 'announcements', announcementId);
+            const snapshot = await getDoc(docRef);
+            if (!snapshot.exists()) throw new Error("Announcement not found");
+
+            const data = snapshot.data() as Announcement;
+            const options = data.pollOptions || [];
+
+            const newOptions = options.map(opt => {
+                let newVotes = opt.votes || [];
+
+                // If single choice (and we are adding a vote), remove from others first
+                if (!data.allowMultipleVotes && !toggle && opt.id !== optionId) {
+                    newVotes = newVotes.filter(uid => uid !== userId);
+                }
+
+                if (opt.id === optionId) {
+                    if (toggle) {
+                        // Remove vote
+                        return { ...opt, votes: newVotes.filter(uid => uid !== userId) };
+                    } else {
+                        // Add vote (if not already there)
+                        if (!newVotes.includes(userId)) {
+                            return { ...opt, votes: [...newVotes, userId] };
+                        }
+                    }
+                }
+
+                return { ...opt, votes: newVotes };
+            });
+
+            await updateDoc(docRef, { pollOptions: newOptions });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['announcements'] });
+        }
+    });
+};

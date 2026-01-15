@@ -1,0 +1,130 @@
+'use client';
+
+import { LostItem } from '@/types';
+import { useAuth } from '@/components/providers/AuthProvider';
+import { useDeleteLostItem, useUpdateLostItem } from '@/hooks/useFirestore';
+import { Trash2, CheckCircle, MapPin, Calendar, User } from 'lucide-react';
+import Image from 'next/image';
+
+interface LostItemCardProps {
+    item: LostItem;
+    isAdmin: boolean;
+}
+
+export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
+    const { user } = useAuth();
+    const deleteMutation = useDeleteLostItem();
+    const updateMutation = useUpdateLostItem();
+
+    // Check if current user is the author
+    const isAuthor = user?.uid === item.createdBy;
+    const canManage = isAdmin || isAuthor;
+
+    const handleDelete = async () => {
+        if (confirm('Ertu viss um að þú viljir eyða þessu?')) {
+            await deleteMutation.mutateAsync(item.id);
+        }
+    };
+
+    const handleClaim = async () => {
+        if (confirm('Er þetta fundið/komið í leitirnar?')) {
+            await updateMutation.mutateAsync({
+                id: item.id,
+                data: { isClaimed: true, claimedBy: user?.uid }
+            });
+        }
+    };
+
+    const isLost = item.type === 'lost';
+
+    return (
+        <div className={`
+            relative overflow-hidden group transition-all duration-300
+            bg-white border rounded-2xl
+            ${item.isClaimed ? 'opacity-60 grayscale' : 'hover:shadow-lg hover:-translate-y-1'}
+            ${isLost ? 'border-red-100' : 'border-blue-100'}
+        `}>
+            {/* Image (if exists) */}
+            {item.imageUrl ? (
+                <div className="aspect-square relative bg-gray-50">
+                    <Image
+                        src={item.imageUrl}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                    />
+                    {item.isClaimed && (
+                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+                            <span className="px-3 py-1 bg-green-500 text-white font-bold rounded-full text-sm shadow-sm">
+                                FUNDIÐ!
+                            </span>
+                        </div>
+                    )}
+                </div>
+            ) : (
+                <div className={`aspect-square flex flex-col items-center justify-center p-6 text-center
+                    ${isLost ? 'bg-red-50 text-red-400' : 'bg-blue-50 text-blue-400'}
+                `}>
+                    <span className="text-4xl mb-2">{isLost ? '❓' : '🎒'}</span>
+                    <span className="text-xs font-bold uppercase tracking-wide opacity-70">
+                        {isLost ? 'Týnt' : 'Fundið'}
+                    </span>
+                </div>
+            )}
+
+            {/* Content */}
+            <div className="p-4 space-y-3">
+                {/* Header Badge */}
+                <div className="flex items-center justify-between">
+                    <span className={`
+                        text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded
+                        ${isLost ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
+                    `}>
+                        {isLost ? 'Týnt (Óskast)' : 'Fundið (Óskilamunir)'}
+                    </span>
+                    <span className="text-[10px] text-gray-400 font-medium">
+                        {new Date(item.createdAt?.seconds * 1000).toLocaleDateString('is-IS')}
+                    </span>
+                </div>
+
+                <div>
+                    <h3 className="font-bold text-gray-900 leading-tight mb-1">{item.title}</h3>
+                    <p className="text-sm text-gray-500 line-clamp-2">{item.description}</p>
+                </div>
+
+                {/* Metadata */}
+                <div className="flex flex-wrap gap-2 text-xs text-gray-400 pt-2 border-t border-gray-50">
+                    {item.location && (
+                        <div className="flex items-center gap-1">
+                            <MapPin size={12} />
+                            <span>{item.location}</span>
+                        </div>
+                    )}
+                    <div className="flex items-center gap-1">
+                        <User size={12} />
+                        <span>{item.author}</span>
+                    </div>
+                </div>
+
+                {/* Actions */}
+                {canManage && !item.isClaimed && (
+                    <div className="flex gap-2 pt-2">
+                        <button
+                            onClick={handleClaim}
+                            className="flex-1 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center gap-1"
+                        >
+                            <CheckCircle size={12} />
+                            {isLost ? 'Málið leyst' : 'Ég á þetta!'}
+                        </button>
+                        <button
+                            onClick={handleDelete}
+                            className="w-8 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                        >
+                            <Trash2 size={12} />
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}

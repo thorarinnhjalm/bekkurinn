@@ -11,6 +11,25 @@ import { Timestamp } from 'firebase/firestore';
 
 export type UserLanguage = 'is' | 'en' | 'pl';
 
+// Lost & Found
+export interface LostItem {
+    id: string;
+    classId: string;
+    schoolId: string;
+    scope: 'class' | 'school'; // 'school' = found items (admin), 'class' = lost requests (parents)
+    type: 'lost' | 'found';
+    title: string;
+    description: string;
+    imageUrl?: string;
+    location?: string; // e.g. "Sports Hall"
+    isClaimed: boolean;
+    claimedBy?: string;
+    createdAt: any; // Timestamp
+    createdBy: string;
+    author: string;
+    authorImage?: string;
+}
+
 export interface User {
     uid: string;
     displayName: string;
@@ -130,20 +149,27 @@ export interface Task {
 // ANNOUNCEMENT
 // ========================================
 
+export interface PollOption {
+    id: string;
+    text: string;
+    votes: string[]; // Array of user IDs
+}
+
 export interface Announcement {
     id: string;
-    classId?: string; // Optional for school-wide events
-    schoolId?: string;
+    classId: string | null;
+    schoolId: string | null;
     scope: 'class' | 'school';
-
     title: string;
     content: string;
     pinned: boolean;
-    createdAt: Timestamp;
-    createdBy: string; // Admin UID
-    author: string; // Display name
-    isCritical?: boolean;
-    originalLanguage?: string; // Babelfish feature
+    isCritical?: boolean; // For "nuclear" emails
+    originalLanguage?: string;
+    pollOptions?: PollOption[]; // New: Poll Support
+    allowMultipleVotes?: boolean; // New: Poll Configuration
+    createdAt: any;
+    createdBy: string;
+    author: string;
 }
 
 // ========================================
