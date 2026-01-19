@@ -55,6 +55,64 @@
                     "order": "ASCENDING"
                 }
             ]
+        },
+        {
+            "collectionGroup": "pickupOffers",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "isActive",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "pickupOffers",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "sentToParents",
+                    "arrayConfig": "CONTAINS"
+                },
+                {
+                    "fieldPath": "isActive",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
+        },
+        {
+            "collectionGroup": "pickupOffers",
+            "queryScope": "COLLECTION",
+            "fields": [
+                {
+                    "fieldPath": "classId",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "offeredBy",
+                    "order": "ASCENDING"
+                },
+                {
+                    "fieldPath": "createdAt",
+                    "order": "DESCENDING"
+                }
+            ]
         }
     ],
     "fieldOverrides": []

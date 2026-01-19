@@ -198,6 +198,74 @@ service cloud.firestore {
       allow update, delete: if (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
                                (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId));
     }
+    
+    // ========================================
+    // PICKUP OFFERS
+    // ========================================
+    
+    match /pickupOffers/{offerId} {
+      // Read permissions:
+      // 1. Offer creator can read
+      // 2. Recipients (in sentToParents array) can read
+      allow read: if isAuthenticated() && (
+        resource.data.offeredBy == request.auth.uid ||
+        resource.data.sentToParents.hasAny([request.auth.uid])
+      );
+      
+      // Create permissions:
+      // 1. Must be authenticated
+      // 2. Must be offering for yourself (offeredBy == auth.uid)
+      // 3. Must have valid classId
+      allow create: if isAuthenticated() && 
+                       request.resource.data.offeredBy == request.auth.uid &&
+                       request.resource.data.classId != null &&
+                       request.resource.data.isActive == true &&
+                       request.resource.data.acceptances.size() == 0; // Start with empty acceptances
+      
+      // Update permissions:
+      // 1. Offer creator can update (e.g., cancel by setting isActive = false)
+      // 2. Recipients can update ONLY to add their acceptance to the array
+      allow update: if isAuthenticated() && (
+        // Creator can update (cancel offer)
+        (resource.data.offeredBy == request.auth.uid) ||
+        
+        // Recipient can accept: only modifying acceptances array
+        (resource.data.sentToParents.hasAny([request.auth.uid]) &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acceptances']) &&
+         request.resource.data.acceptances.size() > resource.data.acceptances.size() && // Only adding
+         request.resource.data.acceptances.size() <= request.resource.data.availableSlots) // Respect slots limit
+      );
+      
+      // Delete permissions: Only creator can delete
+      allow delete: if isAuthenticated() && resource.data.offeredBy == request.auth.uid;
+    }
+    
+    // ========================================
+    // LOST & FOUND ITEMS
+    // ========================================
+    
+    match /lostItems/{itemId} {
+      // Read: Anyone authenticated (class or school wide)
+      allow read: if isAuthenticated();
+      
+      // Create: Authenticated users
+      allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
+      
+      // Update: Creator or admins
+      allow update: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
+        (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId))
+      );
+      
+      // Delete: Creator or admins
+      allow delete: if isAuthenticated() && (
+        resource.data.createdBy == request.auth.uid ||
+        (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
+        (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId))
+      );
+    }
+    
     // ========================================
     // NOTIFICATIONS
     // ========================================

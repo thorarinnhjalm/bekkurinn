@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Phone, Mail, Star, ChevronUp, Users, Loader2, Search, MapPin } from 'lucide-react';
+import { addStarredStudent, removeStarredStudent, getStarredStudents } from '@/services/firestore';
 import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -58,12 +59,26 @@ export default function DirectoryPage() {
     const [starredStudents, setStarredStudents] = useState<Set<string>>(new Set());
     const [parentsMap, setParentsMap] = useState<Map<string, any[]>>(new Map());
 
+    // Load starred students from Firestore
+    useEffect(() => {
+        async function loadStarredStudents() {
+            if (!user?.uid) return;
+            try {
+                const starred = await getStarredStudents(user.uid);
+                setStarredStudents(new Set(starred));
+            } catch (error) {
+                console.error('Error loading starred students:', error);
+            }
+        }
+        if (user?.uid) loadStarredStudents();
+    }, [user?.uid]);
+
     // Redirect to login if not authenticated
     useEffect(() => {
         if (!authLoading && !user) {
             router.push(`/${locale}/login`);
         }
-    }, [authLoading, user, router]);
+    }, [authLoading, user, router, locale]);
 
     // Fetch parent data for all students
     useEffect(() => {
@@ -121,14 +136,33 @@ export default function DirectoryPage() {
     }, [studentsData]);
 
     // Format helpers and event handlers...
-    const toggleStar = (studentId: string) => {
+    const toggleStar = async (studentId: string) => {
+        if (!user?.uid) return;
+
         const newStarred = new Set(starredStudents);
-        if (newStarred.has(studentId)) {
+        const isCurrentlyStarred = newStarred.has(studentId);
+
+        if (isCurrentlyStarred) {
             newStarred.delete(studentId);
         } else {
             newStarred.add(studentId);
         }
+
+        // Update UI optimistically
         setStarredStudents(newStarred);
+
+        // Persist to Firestore
+        try {
+            if (isCurrentlyStarred) {
+                await removeStarredStudent(user.uid, studentId);
+            } else {
+                await addStarredStudent(user.uid, studentId);
+            }
+        } catch (error) {
+            console.error('Error toggling star:', error);
+            // Revert on error
+            setStarredStudents(starredStudents);
+        }
     };
 
     const toggleExpand = (studentId: string) => {

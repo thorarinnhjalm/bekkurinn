@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, Users, Settings, LogOut, CheckSquare, Megaphone, ShieldCheck, Calendar, Camera } from 'lucide-react';
+import { Home, Users, Settings, LogOut, CheckSquare, Megaphone, ShieldCheck, Calendar, Camera, Car } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
@@ -88,6 +88,12 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             href: '/lost-found',
             icon: Camera,
             label: translations.lost_found,
+        },
+        {
+            key: 'pickup-offers',
+            href: '/pickup-offers',
+            icon: Car,
+            label: 'Skutl', // TODO: Add to translations
         },
     ] as const;
 

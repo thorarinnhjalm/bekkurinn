@@ -3,7 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Users, Calendar, Megaphone, Menu, Camera } from 'lucide-react';
+import { Home, Users, Calendar, Megaphone, Menu, Camera, Car } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -42,6 +42,12 @@ const navItems = [
         href: '/announcements',
         icon: Megaphone,
         labelKey: 'class.announcements',
+    },
+    {
+        key: 'skutl',
+        href: '/pickup-offers',
+        icon: Car,
+        labelKey: 'class.skutl', // Will fallback to key
     },
 ] as const;
 
@@ -100,7 +106,7 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
                                     isActive ? 'font-semibold' : ''
                                 )}
                             >
-                                {translations[item.key as keyof typeof translations]}
+                                {translations[item.key as keyof typeof translations] || (item.key === 'skutl' ? 'Skutl' : item.key)}
                             </span>
 
                             {/* Active indicator */}

@@ -32,6 +32,8 @@ import type {
     User,
     CreateUserInput,
     School,
+    PickupOffer,
+    CreatePickupOfferInput,
 } from '@/types';
 
 /**
@@ -82,6 +84,50 @@ export async function searchUsersByEmail(email: string): Promise<User[]> {
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ ...doc.data(), uid: doc.id } as User));
 }
+
+/**
+ * Add a student to user's starred students list
+ */
+export async function addStarredStudent(uid: string, studentId: string): Promise<void> {
+    try {
+        const user = await getUser(uid);
+        const starredStudents = user?.starredStudents || [];
+
+        // Only add if not already starred
+        if (!starredStudents.includes(studentId)) {
+            starredStudents.push(studentId);
+            await updateDoc(doc(db, 'users', uid), { starredStudents });
+        }
+    } catch (error) {
+        logger.error('Failed to add starred student', error);
+        throw new Error('Gat ekki viðbætt við uppáhald');
+    }
+}
+
+/**
+ * Remove a student from user's starred students list
+ */
+export async function removeStarredStudent(uid: string, studentId: string): Promise<void> {
+    try {
+        const user = await getUser(uid);
+        const starredStudents = user?.starredStudents || [];
+
+        const filtered = starredStudents.filter(id => id !== studentId);
+        await updateDoc(doc(db, 'users', uid), { starredStudents: filtered });
+    } catch (error) {
+        logger.error('Failed to remove starred student', error);
+        throw new Error('Gat ekki fjarlægt úr uppáhaldi');
+    }
+}
+
+/**
+ * Get user's starred students
+ */
+export async function getStarredStudents(uid: string): Promise<string[]> {
+    const user = await getUser(uid);
+    return user?.starredStudents || [];
+}
+
 
 // ========================================
 // SCHOOLS
@@ -440,4 +486,197 @@ export async function getSchoolMemberEmails(schoolId: string): Promise<string[]>
     }
 
     return Array.from(new Set(allEmails));
+}
+
+// ========================================
+// PICKUP OFFERS
+// ========================================
+
+/**
+ * Create a new pickup offer
+ */
+export async function createPickupOffer(data: CreatePickupOfferInput): Promise<string> {
+    try {
+        const docRef = await addDoc(collection(db, 'pickupOffers'), {
+            ...data,
+            acceptances: [],
+            createdAt: serverTimestamp(),
+        });
+        return docRef.id;
+    } catch (error) {
+        logger.error('Failed to create pickup offer', error);
+        throw new Error('Gat ekki búið til skutltilboð');
+    }
+}
+
+/**
+ * Get a single pickup offer by ID
+ */
+export async function getPickupOffer(offerId: string): Promise<PickupOffer | null> {
+    try {
+        const docSnap = await getDoc(doc(db, 'pickupOffers', offerId));
+        if (!docSnap.exists()) return null;
+        return { ...docSnap.data(), id: docSnap.id } as PickupOffer;
+    } catch (error) {
+        logger.error('Failed to get pickup offer', error);
+        return null;
+    }
+}
+
+/**
+ * Get all active pickup offers for a class
+ */
+export async function getPickupOffersByClass(classId: string): Promise<PickupOffer[]> {
+    const q = query(
+        collection(db, 'pickupOffers'),
+        where('classId', '==', classId),
+        where('isActive', '==', true),
+        orderBy('createdAt', 'desc'),
+        limit(50)
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as PickupOffer));
+}
+
+/**
+ * Get pickup offers sent to a specific parent
+ */
+export async function getPickupOffersForParent(parentId: string, classId: string): Promise<PickupOffer[]> {
+    const q = query(
+        collection(db, 'pickupOffers'),
+        where('classId', '==', classId),
+        where('sentToParents', 'array-contains', parentId),
+        where('isActive', '==', true),
+        orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as PickupOffer));
+}
+
+/**
+ * Get pickup offers created by a specific parent
+ */
+export async function getPickupOffersByParent(parentId: string, classId: string): Promise<PickupOffer[]> {
+    const q = query(
+        collection(db, 'pickupOffers'),
+        where('classId', '==', classId),
+        where('offeredBy', '==', parentId),
+        orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as PickupOffer));
+}
+
+/**
+ * Accept a pickup offer
+ */
+export async function acceptPickupOffer(
+    offerId: string,
+    parentId: string,
+    parentName: string,
+    studentId: string,
+    studentName: string
+): Promise<void> {
+    try {
+        const offer = await getPickupOffer(offerId);
+        if (!offer) throw new Error('Offer not found');
+
+        // Check if this parent/student already accepted
+        const alreadyAccepted = offer.acceptances.some(
+            a => a.parentId === parentId && a.studentId === studentId
+        );
+        if (alreadyAccepted) {
+            throw new Error('You have already accepted this offer');
+        }
+
+        // Check if slots are available
+        if (offer.acceptances.length >= offer.availableSlots) {
+            throw new Error('No slots available');
+        }
+
+        const newAcceptance = {
+            parentId,
+            parentName,
+            studentId,
+            studentName,
+            timestamp: Timestamp.now(),
+        };
+
+        const updatedAcceptances = [...offer.acceptances, newAcceptance];
+
+        await updateDoc(doc(db, 'pickupOffers', offerId), {
+            acceptances: updatedAcceptances,
+        });
+    } catch (error) {
+        logger.error('Failed to accept pickup offer', error);
+        throw error;
+    }
+}
+
+/**
+ * Cancel/close a pickup offer (by creator)
+ */
+export async function cancelPickupOffer(offerId: string): Promise<void> {
+    try {
+        await updateDoc(doc(db, 'pickupOffers', offerId), {
+            isActive: false,
+        });
+    } catch (error) {
+        logger.error('Failed to cancel pickup offer', error);
+        throw new Error('Gat ekki hætt við tilboð');
+    }
+}
+
+/**
+ * Get parent UIDs of starred students' parents
+ * Used to send pickup offers to starred friends only
+ */
+export async function getStarredFriendsParents(userId: string, classId: string): Promise<string[]> {
+    try {
+        // 1. Get user's starred students
+        const user = await getUser(userId);
+        const starredStudentIds = user?.starredStudents || [];
+
+        if (starredStudentIds.length === 0) return [];
+
+        // 2. Get parent links for those students in this class
+        const parentLinksQuery = query(
+            collection(db, 'parentLinks'),
+            where('studentId', 'in', starredStudentIds),
+            where('classId', '==', classId),
+            where('status', '==', 'approved')
+        );
+        const parentLinksSnap = await getDocs(parentLinksQuery);
+
+        // 3. Extract parent UIDs, excluding the current user
+        const parentIds = parentLinksSnap.docs
+            .map(doc => doc.data().userId as string)
+            .filter(uid => uid !== userId);
+
+        // 4. Deduplicate
+        return [...new Set(parentIds)];
+    } catch (error) {
+        logger.error('Failed to get starred friends parents', error);
+        return [];
+    }
+}
+
+/**
+ * Get all parent UIDs in a class
+ * Used when sending pickup offer to everyone
+ */
+export async function getAllClassParents(classId: string): Promise<string[]> {
+    try {
+        const q = query(
+            collection(db, 'parentLinks'),
+            where('classId', '==', classId),
+            where('status', '==', 'approved')
+        );
+        const snapshot = await getDocs(q);
+        const parentIds = snapshot.docs.map(doc => doc.data().userId as string);
+        return [...new Set(parentIds)]; // Deduplicate
+    } catch (error) {
+        logger.error('Failed to get all class parents', error);
+        return [];
+    }
 }
