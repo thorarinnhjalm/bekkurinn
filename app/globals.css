@@ -75,15 +75,15 @@
   --black: #000000;
 }
 
+/* @theme directive is not standard CSS - these variables are defined in :root instead */
+/*
 @theme {
   --font-inter: "Inter", sans-serif;
 
-  /* Tailwind-compatible color mappings */
   --color-trust-navy: var(--trust-navy);
   --color-trust-navy-light: var(--trust-navy-light);
   --color-trust-navy-dark: var(--trust-navy-dark);
 
-  /* Legacy support - CRITICAL fyrir backward compatibility */
   --color-nordic-blue: var(--trust-navy);
   --color-nordic-blue-light: var(--trust-navy-light);
   --color-nordic-blue-dark: var(--trust-navy-dark);
@@ -93,6 +93,7 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
 }
+*/
 
 /* --- Global Reset & Base --- */
 body {

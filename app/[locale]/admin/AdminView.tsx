@@ -228,7 +228,7 @@ export default function AdminView() {
                 <DashboardTab
                     stats={stats}
                     pendingCount={pendingLinks.length}
-                    onNavigate={setActiveTab}
+                    onNavigate={(tab) => setActiveTab(tab as 'dashboard' | 'users' | 'approvals' | 'schools' | 'classes')}
                 />
             )}
 
