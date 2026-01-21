@@ -202,7 +202,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     Foreldrið sem skráði barnið þarf að samþykkja beiðnina áður en þú færð aðgang.
                 </p>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full">
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 w-full">
                     <p className="text-sm text-gray-500 mb-4">
                         Þú færð aðgang um leið og beiðnin er samþykkt.
                     </p>
@@ -239,7 +239,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     Til að sjá viðburði, afmæli og tilkynningar þarftu að skrá barnið þitt.
                 </p>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 w-full max-w-md">
+                <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 w-full max-w-md">
                     <Link
                         href={`/${locale}/onboarding?step=join${classData?.joinCode ? `&code=${classData.joinCode}` : ''}`} // Re-route to join/create student flow
                         className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold hover:bg-blue-700 transition-all flex justify-center items-center gap-2 shadow-lg shadow-blue-600/20"
@@ -268,11 +268,11 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                 <div className="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
                     <div className="space-y-4 max-w-2xl relative z-10">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/50 backdrop-blur border border-white/30 text-xs font-bold text-nordic-blue uppercase tracking-wide">
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-50 border border-blue-100 text-xs font-semibold text-nordic-blue uppercase tracking-wide">
                             👋 Velkomin aftur
                         </div>
-                        <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-gray-900 leading-tight">
-                            Góðan daginn, <span className="text-transparent bg-clip-text bg-gradient-to-r from-nordic-blue to-purple-600">{firstName.split(' ')[0]}</span>.
+                        <h1 className="text-4xl md:text-6xl font-black tracking-tight text-gray-900 leading-tight">
+                            Góðan daginn, <span className="text-nordic-blue">{firstName.split(' ')[0]}</span>.
                         </h1>
                         <p className="text-lg md:text-xl text-gray-600 font-medium max-w-lg leading-relaxed">
                             Þú ert að skoða <span className="font-bold text-gray-900">{displayClassName}</span>. Hér er yfirlit yfir allt sem er framundan í bekknum.
@@ -283,12 +283,12 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     {userClasses && userClasses.length > 1 && (
                         <div className="relative z-10">
                             <div className="relative inline-block group">
-                                <button className="flex items-center gap-3 bg-white/80 backdrop-blur shadow-lg border border-white/50 px-6 py-3 rounded-2xl hover:scale-105 transition-all duration-300">
+                                <button className="flex items-center gap-3 bg-white shadow-sm border border-gray-200 px-6 py-3 rounded-lg hover:shadow-md hover:border-gray-300 transition-all">
                                     <span className="font-bold text-gray-800 text-lg">{getSimpleClassName(activeClass)}</span>
                                     <ChevronDown size={20} className="text-gray-400" />
                                 </button>
 
-                                <div className="absolute right-0 mt-3 w-72 bg-white/90 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/50 p-2 hidden group-hover:block animate-in fade-in zoom-in-95 duration-200">
+                                <div className="absolute right-0 mt-3 w-72 bg-white rounded-lg shadow-lg border border-gray-200 p-2 hidden group-hover:block">
                                     {userClasses.map((c) => (
                                         <button
                                             key={c.id}
@@ -357,14 +357,14 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         </p>
 
                                         <div className="flex items-center gap-3 pt-2">
-                                            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-blue-700 font-bold text-xs ring-2 ring-white">
+                                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-semibold text-xs">
                                                 {(latestAnnouncement.author || 'S')[0]}
                                             </div>
                                             <span className="text-sm font-semibold text-gray-700">{latestAnnouncement.author || 'Stjórn'}</span>
                                         </div>
                                     </div>
 
-                                    <div className="hidden sm:flex h-12 w-12 rounded-2xl bg-blue-50 items-center justify-center text-nordic-blue group-hover:scale-110 group-hover:rotate-3 transition-all duration-500 shadow-sm">
+                                    <div className="hidden sm:flex h-12 w-12 rounded-lg bg-blue-50 items-center justify-center text-nordic-blue shadow-sm">
                                         <Megaphone size={24} />
                                     </div>
                                 </div>
@@ -394,7 +394,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         style={{ animationDelay: `${index * 100}ms` }}
                                     >
                                         <div className="flex justify-between items-start">
-                                            <div className={`w-14 h-14 rounded-2xl flex flex-col items-center justify-center shadow-lg transform group-hover:-translate-y-1 transition-transform duration-300 ${isSchoolEvent ? 'bg-gradient-to-br from-amber-100 to-amber-200 text-amber-800' : 'bg-gradient-to-br from-blue-100 to-blue-200 text-blue-800'}`}>
+                                            <div className={`w-14 h-14 rounded-lg flex flex-col items-center justify-center shadow-sm transition-transform duration-200 group-hover:-translate-y-1 ${isSchoolEvent ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
                                                 <span className="text-[10px] font-black uppercase tracking-wider opacity-70">
                                                     {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }).slice(0, 3) : ''}
                                                 </span>
@@ -444,7 +444,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 <div className="lg:col-span-4 space-y-8">
 
                     {/* Birthdays Card */}
-                    <div className="glass-card p-6 bg-gradient-to-b from-white to-white/60">
+                    <div className="professional-card p-6 bg-white">
                         <div className="flex items-center gap-2 mb-6">
                             <div className="w-8 h-8 rounded-lg bg-pink-100 text-pink-600 flex items-center justify-center">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8" /><path d="M4 16s.5-1 2-1 2.5 1.7 3.5 2.5 3.5-2.5 2-2.5 2 1 4 1" /><path d="M2 21h20" /><path d="M7 8v2" /><path d="M12 8v2" /><path d="M17 8v2" /><path d="M7 4h.01" /><path d="M12 4h.01" /><path d="M17 4h.01" /></svg>
@@ -456,7 +456,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             {upcomingBirthdays.length > 0 ? (
                                 upcomingBirthdays.map((student) => (
                                     <div key={student.id} className="flex items-center gap-4 group">
-                                        <div className="w-12 h-12 rounded-2xl bg-gray-50 flex items-center justify-center text-xl shadow-sm border border-gray-100 group-hover:scale-110 transition-transform">
+                                        <div className="w-12 h-12 rounded-lg bg-gray-50 flex items-center justify-center text-xl shadow-sm border border-gray-100">
                                             🎂
                                         </div>
                                         <div>
@@ -477,13 +477,13 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     <div className="glass-card p-6 space-y-6">
                         <h3 className="font-bold text-gray-900 border-b border-gray-100 pb-4">Yfirlit bekkjar</h3>
 
-                        <div className="p-4 rounded-2xl bg-blue-50/50 border border-blue-100 text-center group hover:bg-blue-50 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/directory`)}>
-                            <div className="text-2xl font-black text-nordic-blue mb-1 group-hover:scale-110 transition-transform">{studentsData?.length || 0}</div>
+                        <div className="p-4 rounded-lg bg-blue-50 border border-blue-100 text-center hover:bg-blue-100 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/directory`)}>
+                            <div className="text-2xl font-black text-nordic-blue mb-1">{studentsData?.length || 0}</div>
                             <div className="text-xs font-bold text-blue-600/70 uppercase tracking-wide">Nemendur</div>
                         </div>
                         {/* Placeholder for future stat or remove grid-cols-2 if only one item */}
-                        <div className="p-4 rounded-2xl bg-purple-50/50 border border-purple-100 text-center group hover:bg-purple-50 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/patrol`)}>
-                            <div className="text-2xl font-black text-purple-600 mb-1 group-hover:scale-110 transition-transform">
+                        <div className="p-4 rounded-lg bg-purple-50 border border-purple-100 text-center hover:bg-purple-100 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/patrol`)}>
+                            <div className="text-2xl font-black text-purple-600 mb-1">
                                 📅
                             </div>
                             <div className="text-xs font-bold text-purple-600/70 uppercase tracking-wide">Dagatal</div>
@@ -491,13 +491,9 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </div>
 
                     {/* INVITE CARD */}
-                    <div className="p-6 bg-gradient-to-br from-nordic-blue to-blue-700 text-white rounded-[24px] shadow-xl shadow-blue-900/20 relative overflow-hidden group">
-                        {/* Decorative Circles */}
-                        <div className="absolute top-0 right-0 -mr-8 -mt-8 w-32 h-32 bg-white/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700" />
-                        <div className="absolute bottom-0 left-0 -ml-4 -mb-4 w-24 h-24 bg-blue-400/20 rounded-full blur-xl" />
-
+                    <div className="p-6 bg-nordic-blue text-white rounded-lg shadow-lg relative overflow-hidden">
                         <div className="relative z-10 space-y-4">
-                            <div className="w-12 h-12 bg-white/20 backdrop-blur-md rounded-2xl flex items-center justify-center mb-2">
+                            <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-2">
                                 <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
@@ -509,9 +505,9 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
                             <button
                                 onClick={handleCopyJoinLink}
-                                className={`w-full py-3 px-4 rounded-xl flex items-center justify-center gap-2 font-bold transition-all duration-300 shadow-lg ${copied
+                                className={`w-full py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-bold transition-all duration-300 shadow-md ${copied
                                     ? 'bg-green-500 text-white'
-                                    : 'bg-white text-nordic-blue hover:bg-blue-50 active:scale-95'
+                                    : 'bg-white text-nordic-blue hover:bg-gray-50 active:scale-95'
                                     }`}
                             >
                                 {copied ? (

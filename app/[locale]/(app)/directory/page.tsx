@@ -242,7 +242,7 @@ export default function DirectoryPage() {
 
             {/* Floating Search Bar */}
             <div className="sticky top-4 z-20">
-                <div className="relative group max-w-2xl mx-auto shadow-2xl shadow-blue-900/5 rounded-2xl">
+                <div className="relative group max-w-2xl mx-auto shadow-md rounded-lg">
                     <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
                         <Search className="h-5 w-5 text-gray-400 group-focus-within:text-nordic-blue transition-colors" />
                     </div>
@@ -251,7 +251,7 @@ export default function DirectoryPage() {
                         placeholder="Leita að nemanda..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 rounded-2xl border-none outline-none ring-1 ring-black/5 bg-white/90 backdrop-blur-xl focus:ring-2 focus:ring-nordic-blue/50 focus:bg-white transition-all text-lg placeholder:text-gray-400"
+                        className="w-full pl-12 pr-6 py-4 rounded-lg border outline-none border-gray-200 bg-white focus:border-nordic-blue focus:ring-1 focus:ring-nordic-blue/20 transition-all text-lg placeholder:text-gray-400"
                     />
                 </div>
             </div>
@@ -291,9 +291,9 @@ export default function DirectoryPage() {
                             >
                                 <div className="flex items-center gap-5">
                                     {/* Avatar */}
-                                    <div className="relative w-20 h-20 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-sm transition-transform duration-500 group-hover:scale-105 bg-gradient-to-br from-blue-100 to-indigo-50 text-blue-600">
+                                    <div className="relative w-20 h-20 rounded-lg flex items-center justify-center text-2xl font-semibold shadow-sm transition-transform duration-300 group-hover:scale-105 bg-blue-50 text-blue-700">
                                         {canViewPhotos && student.photoUrl ? (
-                                            <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover rounded-2xl" />
+                                            <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover rounded-lg" />
                                         ) : (
                                             <span>{student.name[0]}</span>
                                         )}

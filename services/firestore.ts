@@ -680,3 +680,23 @@ export async function getAllClassParents(classId: string): Promise<string[]> {
         return [];
     }
 }
+
+// ========================================
+// CLASS MIGRATION
+// ========================================
+
+/**
+ * Migrate a standalone class to a school
+ * Updates the class's schoolId field
+ */
+export async function migrateClassToSchool(classId: string, schoolId: string): Promise<void> {
+    try {
+        await updateDoc(doc(db, 'classes', classId), {
+            schoolId: schoolId
+        });
+        logger.info(`Migrated class ${classId} to school ${schoolId}`);
+    } catch (error) {
+        logger.error('Failed to migrate class to school', error);
+        throw new Error('Gat ekki flutt bekk í skóla');
+    }
+}

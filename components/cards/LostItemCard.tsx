@@ -39,9 +39,9 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
 
     return (
         <div className={`
-            relative overflow-hidden group transition-all duration-300
-            bg-white border rounded-2xl
-            ${item.isClaimed ? 'opacity-60 grayscale' : 'hover:shadow-lg hover:-translate-y-1'}
+            relative overflow-hidden transition-all duration-200
+            bg-white border rounded-lg shadow-sm
+            ${item.isClaimed ? 'opacity-60 grayscale' : 'hover:shadow-md hover:border-gray-300'}
             ${isLost ? 'border-red-100' : 'border-blue-100'}
         `}>
             {/* Image (if exists) */}
@@ -77,8 +77,8 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                 {/* Header Badge */}
                 <div className="flex items-center justify-between">
                     <span className={`
-                        text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded
-                        ${isLost ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}
+                        text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md
+                        ${isLost ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-blue-50 text-blue-700 border border-blue-100'}
                     `}>
                         {isLost ? 'Týnt (Óskast)' : 'Fundið (Óskilamunir)'}
                     </span>
@@ -111,16 +111,16 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                     <div className="flex gap-2 pt-2">
                         <button
                             onClick={handleClaim}
-                            className="flex-1 py-1.5 bg-green-50 text-green-700 text-xs font-bold rounded-lg hover:bg-green-100 transition-colors flex items-center justify-center gap-1"
+                            className="flex-1 py-2 bg-green-50 text-green-700 text-xs font-semibold rounded-md hover:bg-green-100 transition-colors flex items-center justify-center gap-1.5 border border-green-100"
                         >
-                            <CheckCircle size={12} />
+                            <CheckCircle size={14} />
                             {isLost ? 'Málið leyst' : 'Ég á þetta!'}
                         </button>
                         <button
                             onClick={handleDelete}
-                            className="w-8 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                            className="w-9 flex items-center justify-center bg-gray-50 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors border border-gray-200"
                         >
-                            <Trash2 size={12} />
+                            <Trash2 size={14} />
                         </button>
                     </div>
                 )}

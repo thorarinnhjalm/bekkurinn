@@ -26,10 +26,10 @@ export default function HomePage() {
                     <div className="flex justify-between items-center h-20">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-900/10">
+                            <div className="w-10 h-10 bg-trust-navy rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
                                 B
                             </div>
-                            <span className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 tracking-tight">
+                            <span className="text-2xl font-bold text-gray-900 tracking-tight">
                                 Bekkurinn
                             </span>
                         </div>
@@ -60,7 +60,7 @@ export default function HomePage() {
                             {user ? (
                                 <Link
                                     href={`/${locale}/dashboard`}
-                                    className="bg-[#4A7C9E] text-white px-6 py-2.5 rounded-full font-medium hover:bg-[#2E5A75] transition-all transform hover:scale-105 shadow-md hover:shadow-lg"
+                                    className="bg-trust-navy text-white px-6 py-2.5 rounded-lg font-medium hover:bg-trust-navy-light transition-all shadow-sm hover:shadow-md"
                                 >
                                     Mælaborð
                                 </Link>
@@ -110,10 +110,10 @@ export default function HomePage() {
                         </div>
 
 
-                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-in fade-in slide-in-from-bottom-7 duration-700 delay-300">
+                        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link
                                 href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                                className="w-full sm:w-auto px-10 py-4 bg-[#4A7C9E] text-white rounded-xl font-bold text-lg hover:bg-[#2E5A75] transition-all transform hover:-translate-y-0.5 shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto px-10 py-4 bg-trust-navy text-white rounded-lg font-semibold text-lg hover:bg-trust-navy-light transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                             >
                                 {t('hero.cta_primary')} <ArrowRight size={20} />
                             </Link>
@@ -232,7 +232,7 @@ export default function HomePage() {
                         <div className="flex flex-col items-center gap-4">
                             <Link
                                 href={`/${locale}/onboarding`}
-                                className="px-10 py-5 bg-[#4A7C9E] text-white rounded-xl font-bold text-lg hover:bg-[#2E5A75] transition-all transform hover:scale-105 shadow-2xl"
+                                className="px-10 py-5 bg-trust-navy text-white rounded-lg font-semibold text-lg hover:bg-trust-navy-light transition-all shadow-lg hover:shadow-xl"
                             >
                                 {t('cta_final.button')}
                             </Link>
@@ -252,7 +252,7 @@ export default function HomePage() {
                     </div>
                 </footer>
             </main>
-        </div>
+        </div >
     );
 }
 
@@ -268,8 +268,8 @@ function NavLink({ href, children }: { href: string; children: React.ReactNode }
 
 function FeatureCard({ icon, title, desc, color }: any) {
     return (
-        <div className="p-8 rounded-2xl bg-white border border-gray-100 hover:border-blue-200 hover:shadow-2xl hover:shadow-blue-900/10 transition-all duration-300 group cursor-default text-center flex flex-col items-center">
-            <div className={`w-14 h-14 ${color} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
+        <div className="p-8 rounded-lg bg-white border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-200 text-center flex flex-col items-center">
+            <div className={`w-14 h-14 ${color} rounded-lg flex items-center justify-center mb-6`}>
                 {icon}
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3 leading-tight">{title}</h3>
@@ -280,8 +280,8 @@ function FeatureCard({ icon, title, desc, color }: any) {
 
 function StepCard({ number, title, desc }: any) {
     return (
-        <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-xl flex flex-col items-center">
-            <div className="w-12 h-12 bg-white border-2 border-blue-600 text-blue-600 rounded-full flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
+        <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-lg flex flex-col items-center">
+            <div className="w-12 h-12 bg-white border-2 border-trust-navy text-trust-navy rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
                 {number}
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{title}</h3>
@@ -292,9 +292,9 @@ function StepCard({ number, title, desc }: any) {
 
 function FaqItem({ q, a }: any) {
     return (
-        <div className="bg-gray-50 rounded-xl p-6 hover:bg-white hover:shadow-md transition-all border border-transparent hover:border-gray-100 flex flex-col items-center text-center">
+        <div className="bg-gray-50 rounded-lg p-6 hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-gray-200 flex flex-col items-center text-center">
             <h3 className="font-bold text-gray-900 mb-2 flex flex-col items-center gap-2">
-                <span className="text-blue-600 text-lg bg-blue-100 w-8 h-8 rounded-full flex items-center justify-center">?</span>
+                <span className="text-trust-navy text-lg bg-blue-50 w-8 h-8 rounded-lg flex items-center justify-center border border-blue-100">?</span>
                 <span>{q}</span>
             </h3>
             <p className="text-gray-600 leading-relaxed text-sm max-w-2xl">{a}</p>

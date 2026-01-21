@@ -67,10 +67,8 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
 
     return (
         <nav
-            className="fixed bottom-0 left-0 right-0 z-50 border-t md:hidden"
+            className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 md:hidden"
             style={{
-                backgroundColor: 'var(--white)',
-                borderColor: 'var(--border-light)',
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
         >
@@ -87,23 +85,21 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
                             href={fullPath}
                             className={cn(
                                 'flex flex-col items-center justify-center gap-1',
-                                'tap-target rounded-lg transition-all duration-200',
-                                'px-4 py-2 min-w-[64px]',
-                                isActive ? 'scale-105' : 'opacity-60 hover:opacity-100'
+                                'rounded-lg transition-colors duration-200',
+                                'px-3 py-2 min-w-[64px]',
+                                isActive
+                                    ? 'text-trust-navy'
+                                    : 'text-gray-500'
                             )}
-                            style={{
-                                color: isActive ? 'var(--nordic-blue)' : 'var(--text-secondary)',
-                            }}
                         >
                             <Icon
-                                size={24}
+                                size={22}
                                 strokeWidth={isActive ? 2.5 : 2}
-                                className="transition-transform"
                             />
                             <span
                                 className={cn(
-                                    'text-xs font-medium transition-all',
-                                    isActive ? 'font-semibold' : ''
+                                    'text-xs transition-all',
+                                    isActive ? 'font-semibold' : 'font-medium'
                                 )}
                             >
                                 {translations[item.key as keyof typeof translations] || (item.key === 'skutl' ? 'Skutl' : item.key)}
@@ -111,10 +107,7 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
 
                             {/* Active indicator */}
                             {isActive && (
-                                <div
-                                    className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-8 rounded-t-full"
-                                    style={{ backgroundColor: 'var(--nordic-blue)' }}
-                                />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-12 bg-trust-navy rounded-t-sm" />
                             )}
                         </Link>
                     );

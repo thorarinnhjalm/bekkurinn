@@ -15,7 +15,7 @@ export default function WhyUsPage() {
             <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
                     <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl text-nordic-blue hover:opacity-80 transition-opacity">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center text-white">B</div>
+                        <div className="w-8 h-8 rounded-lg bg-trust-navy flex items-center justify-center text-white shadow-sm">B</div>
                         <span>Bekkurinn</span>
                     </Link>
                     <Link href={`/${locale}/login`} className="px-5 py-2 bg-nordic-blue text-white rounded-full font-medium hover:bg-nordic-blue-dark transition-colors text-sm">

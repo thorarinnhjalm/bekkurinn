@@ -105,8 +105,7 @@ export default function AnnouncementsPage() {
     });
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500 pb-20 relative">
-            <div className="fixed top-40 left-10 w-64 h-64 bg-amber-100 rounded-full blur-3xl opacity-20 -z-10 pointer-events-none" />
+        <div className="space-y-8 pb-20">
 
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -124,9 +123,9 @@ export default function AnnouncementsPage() {
                 {(isAdmin || isSchoolAdmin) && (
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                        className="trust-button flex items-center gap-2"
                     >
-                        <Plus size={20} />
+                        <Plus size={18} />
                         Ný tilkynning
                     </button>
                 )}
@@ -134,7 +133,7 @@ export default function AnnouncementsPage() {
 
             {/* Global Translation Notice (if not Icelandic) */}
             {locale !== 'is' && (
-                <div className="max-w-4xl mx-auto p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex items-start gap-3">
+                <div className="max-w-4xl mx-auto p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
                     <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
                     <p className="text-xs text-blue-700 leading-relaxed italic">
                         <strong>Translation Notice:</strong> Messages are automatically translated into your language. Original text is preserved for accuracy.
@@ -143,9 +142,9 @@ export default function AnnouncementsPage() {
             )}
 
             {/* Announcements Feed */}
-            <div className="space-y-8 max-w-4xl mx-auto pt-6">
+            <div className="space-y-6 max-w-4xl mx-auto pt-6">
                 {sortedAnnouncements.length === 0 && (
-                    <div className="text-center py-20 bg-white/50 rounded-3xl border border-dashed border-gray-200">
+                    <div className="text-center py-20 bg-white rounded-lg border-2 border-dashed border-gray-300">
                         <p className="text-gray-400 font-medium">Engar tilkynningar ennþá</p>
                     </div>
                 )}
@@ -153,8 +152,7 @@ export default function AnnouncementsPage() {
                 {sortedAnnouncements.map((announcement, index) => (
                     <div
                         key={announcement.id}
-                        className={`glass-card relative overflow-hidden transition-all duration-300 ${announcement.pinned ? 'bg-gradient-to-br from-white to-amber-50/30 border-amber-100' : 'bg-white/80'}`}
-                        style={{ animationDelay: `${index * 100}ms` }}
+                        className={`trust-card relative overflow-hidden ${announcement.pinned ? 'bg-amber-50/30 border-amber-200' : ''}`}
                     >
                         {/* Tags / Badges */}
                         <div className="absolute top-0 right-0 p-4 flex gap-2">
@@ -173,7 +171,7 @@ export default function AnnouncementsPage() {
                         <div className="p-8">
                             <div className="flex items-center gap-4 mb-6">
                                 {/* Author Avatar */}
-                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg shadow-sm ${announcement.pinned ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
+                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg shadow-sm ${announcement.pinned ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
                                     {(announcement.author || 'S')[0]}
                                 </div>
                                 <div className="flex-1">
@@ -291,11 +289,11 @@ export default function AnnouncementsPage() {
             {/* Create Modal */}
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300 relative overflow-hidden">
+                    <div className="bg-white rounded-lg p-8 max-w-lg w-full space-y-6 shadow-lg relative overflow-hidden">
                         <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-nordic-blue to-purple-600 left-0" />
 
                         <div className="text-center">
-                            <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
+                            <div className="w-14 h-14 bg-indigo-50 rounded-lg flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
                                 <MessageSquare size={28} />
                             </div>
                             <h2 className="text-3xl font-black text-gray-900 tracking-tight">Ný tilkynning</h2>
@@ -459,7 +457,7 @@ export default function AnnouncementsPage() {
                 <div className="fixed inset-0 bg-red-900/80 backdrop-blur-xl flex items-center justify-center p-4 z-[60] animate-in fade-in duration-300">
                     <div className="bg-white rounded-[2rem] p-10 max-w-md w-full space-y-8 shadow-2xl relative overflow-hidden border-4 border-red-500">
                         <div className="text-center space-y-4">
-                            <div className="w-20 h-20 bg-red-100 rounded-3xl flex items-center justify-center mx-auto text-red-600 animate-pulse">
+                            <div className="w-20 h-20 bg-red-100 rounded-lg flex items-center justify-center mx-auto text-red-600">
                                 <Megaphone size={40} />
                             </div>
                             <h2 className="text-3xl font-black text-gray-900 tracking-tight italic uppercase">VARÚÐ!</h2>
@@ -477,7 +475,7 @@ export default function AnnouncementsPage() {
                                 value={nuclearKeyword}
                                 onChange={e => setNuclearKeyword(e.target.value)}
                                 placeholder="SENDA"
-                                className="w-full text-center px-6 py-4 rounded-2xl bg-gray-50 border-4 border-gray-100 focus:border-red-500 focus:bg-white transition-all outline-none font-black text-2xl tracking-[0.3em] uppercase placeholder:opacity-20 translate-z-0"
+                                className="w-full text-center px-6 py-4 rounded-lg bg-gray-50 border-2 border-gray-200 focus:border-red-500 focus:bg-white transition-all outline-none font-bold text-2xl tracking-[0.3em] uppercase placeholder:opacity-20"
                                 autoFocus
                             />
                         </div>
@@ -520,7 +518,7 @@ export default function AnnouncementsPage() {
                                     setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class'); setIsCritical(false);
                                 }}
                                 disabled={nuclearKeyword.toUpperCase() !== 'SENDA'}
-                                className="w-full py-5 rounded-2xl font-black text-white bg-red-600 shadow-[0_10px_30px_rgba(220,38,38,0.4)] hover:bg-red-700 active:scale-95 transition-all disabled:opacity-30 disabled:grayscale disabled:pointer-events-none text-xl"
+                                className="w-full py-5 rounded-lg font-bold text-white bg-red-600 shadow-md hover:bg-red-700 hover:shadow-lg active:scale-98 transition-all disabled:opacity-30 disabled:cursor-not-allowed text-xl"
                             >
                                 SENDA NÚNA
                             </button>
@@ -529,7 +527,7 @@ export default function AnnouncementsPage() {
                                     setShowNuclearConfirm(false);
                                     setNuclearKeyword('');
                                 }}
-                                className="w-full py-4 rounded-2xl font-bold text-gray-400 hover:text-gray-600 transition-colors"
+                                className="w-full py-4 rounded-lg font-semibold text-gray-500 hover:text-gray-700 transition-colors"
                             >
                                 Hætta við
                             </button>

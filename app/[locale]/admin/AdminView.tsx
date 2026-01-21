@@ -6,10 +6,14 @@ import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X, Calendar, Trash2, Megaphone } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
-import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask } from '@/services/firestore';
+import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask, migrateClassToSchool } from '@/services/firestore';
+import { getAllUsers, searchUsers, getUserClasses, getAllPendingParentLinks, getSystemStats, type SystemStats, deleteSchool } from '@/services/admin';
 import { useSchoolTasks } from '@/hooks/useFirestore';
-import type { School, User, Task } from '@/types';
+import type { School, User, Task, ParentLink } from '@/types';
 import { Timestamp } from 'firebase/firestore';
+import DashboardTab from './components/DashboardTab';
+import UsersTab from './components/UsersTab';
+import ApprovalsTab from './components/ApprovalsTab';
 
 const SUPER_ADMINS = [
     'thorarinnhjalmarsson@gmail.com'
@@ -36,13 +40,23 @@ export default function AdminView() {
 
     // UI State
     const [isFetching, setIsFetching] = useState(true);
-    const [activeTab, setActiveTab] = useState<'classes' | 'schools'>('schools');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'schools' | 'classes' | 'approvals'>('dashboard');
     const [expandedSchools, setExpandedSchools] = useState<string[]>([]);
 
     // Create School State
     const [newSchoolId, setNewSchoolId] = useState('');
     const [newSchoolName, setNewSchoolName] = useState('');
     const [isCreatingSchool, setIsCreatingSchool] = useState(false);
+
+    // User Management State
+    const [users, setUsers] = useState<User[]>([]);
+    const [userSearch, setUserSearch] = useState('');
+
+    // Dashboard State
+    const [stats, setStats] = useState<SystemStats | null>(null);
+
+    // Approvals State
+    const [pendingLinks, setPendingLinks] = useState<ParentLink[]>([]);
 
     useEffect(() => {
         if (!loading && user) {
@@ -66,6 +80,17 @@ export default function AdminView() {
 
             if (isSuperAdmin) {
                 setSchools(allSchools);
+
+                // Fetch additional admin data
+                const [usersData, statsData, pendingLinksData] = await Promise.all([
+                    getAllUsers(100),
+                    getSystemStats(),
+                    getAllPendingParentLinks()
+                ]);
+
+                setUsers(usersData);
+                setStats(statsData);
+                setPendingLinks(pendingLinksData);
             } else {
                 // Filter schools where user is admin
                 const mySchools = allSchools.filter(s => s.admins.includes(user?.uid || ''));
@@ -156,23 +181,69 @@ export default function AdminView() {
                 </div>
             </header>
 
+
             {/* Navigation Tabs */}
-            <div className="flex justify-center">
-                <div className="inline-flex bg-gray-100 p-1 rounded-2xl">
+            <div className="flex justify-center overflow-x-auto pb-2">
+                <div className="inline-flex bg-gray-100 p-1 rounded-2xl gap-1">
+                    <button
+                        onClick={() => setActiveTab('dashboard')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'dashboard' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                    >
+                        📊 Dashboard
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('users')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'users' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                    >
+                        👥 Notendur
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('approvals')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap relative ${activeTab === 'approvals' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                    >
+                        ✅ Samþykktir
+                        {pendingLinks.length > 0 && (
+                            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                                {pendingLinks.length}
+                            </span>
+                        )}
+                    </button>
                     <button
                         onClick={() => setActiveTab('schools')}
-                        className={`px-8 py-3 rounded-xl font-bold transition-all ${activeTab === 'schools' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'schools' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
                     >
-                        Skólar (Foreldrafélög)
+                        🏫 Skólar
                     </button>
                     <button
                         onClick={() => setActiveTab('classes')}
-                        className={`px-8 py-3 rounded-xl font-bold transition-all ${activeTab === 'classes' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'classes' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
                     >
-                        Bekkir
+                        📚 Bekkir
                     </button>
                 </div>
             </div>
+
+            {/* CONTENT: DASHBOARD */}
+            {activeTab === 'dashboard' && (
+                <DashboardTab
+                    stats={stats}
+                    pendingCount={pendingLinks.length}
+                    onNavigate={setActiveTab}
+                />
+            )}
+
+            {/* CONTENT: USERS */}
+            {activeTab === 'users' && (
+                <UsersTab initialUsers={users} />
+            )}
+
+            {/* CONTENT: APPROVALS */}
+            {activeTab === 'approvals' && (
+                <ApprovalsTab
+                    initialPendingLinks={pendingLinks}
+                    onRefresh={fetchData}
+                />
+            )}
 
             {/* CONTENT: SCHOOLS */}
             {activeTab === 'schools' && (
@@ -287,6 +358,22 @@ export default function AdminView() {
                                                             <Copy size={16} />
                                                         </button>
                                                     </div>
+                                                    <button
+                                                        onClick={async () => {
+                                                            if (!confirm(`Ertu viss um að þú viljir eyða bekk "${cls.name}"?\n\n⚠️ VIÐVÖRUN: Þetta er ÓAFTURKRÆFT!`)) return;
+                                                            try {
+                                                                const { deleteClass } = await import('@/services/admin');
+                                                                await deleteClass(cls.id);
+                                                                fetchData();
+                                                            } catch (error) {
+                                                                alert('Villa við að eyða bekk');
+                                                            }
+                                                        }}
+                                                        className="bg-red-600 text-white px-3 py-2 rounded-lg font-bold hover:bg-red-700 transition-all inline-flex items-center gap-2"
+                                                    >
+                                                        <Trash2 size={14} />
+                                                        Eyða
+                                                    </button>
                                                 </div>
                                             </div>
                                         ))}
@@ -371,7 +458,7 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
         <div className="glass-card p-0 overflow-hidden group hover:border-blue-200 transition-all">
             <div className="p-8 pb-4">
                 <div className="flex justify-between items-start mb-4">
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-1">
                         <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-blue-700 shadow-inner">
                             <GraduationCap size={32} />
                         </div>
@@ -380,6 +467,21 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                             <code className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md">{school.id}</code>
                         </div>
                     </div>
+                    <button
+                        onClick={async () => {
+                            if (!confirm(`Ertu viss um að þú viljir eyða skóla "${school.name}"?\n\n⚠️ VIÐVÖRUN: Þetta er ÓAFTURKRÆFT!`)) return;
+                            try {
+                                await deleteSchool(school.id);
+                                refreshData();
+                            } catch (error) {
+                                alert('Villa við að eyða skóla');
+                            }
+                        }}
+                        className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition-all flex items-center gap-2"
+                    >
+                        <Trash2 size={16} />
+                        Eyða skóla
+                    </button>
                 </div>
             </div>
 
