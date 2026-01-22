@@ -231,7 +231,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         return (
             <div className="min-h-screen p-4 pb-24 pt-24 max-w-5xl mx-auto flex flex-col items-center justify-center space-y-6 text-center animate-in fade-in duration-500">
                 <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-2">
-                    <UserPlus className="text-nordic-blue" size={40} />
+                    <UserPlus className="text-blue-900" size={40} />
                 </div>
 
                 <h1 className="text-3xl font-bold text-gray-900">Velkomin í {displayClassName}</h1>
@@ -272,7 +272,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             👋 Velkomin aftur
                         </div>
                         <h1 className="text-4xl md:text-6xl font-black tracking-tight text-gray-900 leading-tight">
-                            Góðan daginn, <span className="text-nordic-blue">{firstName.split(' ')[0]}</span>.
+                            Góðan daginn, <span className="text-blue-900">{firstName.split(' ')[0]}</span>.
                         </h1>
                         <p className="text-lg md:text-xl text-gray-600 font-medium max-w-lg leading-relaxed">
                             Þú ert að skoða <span className="font-bold text-gray-900">{displayClassName}</span>. Hér er yfirlit yfir allt sem er framundan í bekknum.
@@ -325,7 +325,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         <section className="space-y-4">
                             <div className="flex items-center justify-between px-2">
                                 <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Nýjasta tilkynningin</h2>
-                                <Link href={`/${locale}/announcements`} className="text-sm font-bold text-gray-400 hover:text-nordic-blue transition-colors">
+                                <Link href={`/${locale}/announcements`} className="text-sm font-bold text-gray-400 hover:text-blue-900 transition-colors">
                                     Sjá allar
                                 </Link>
                             </div>
@@ -348,7 +348,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                             </span>
                                         </div>
 
-                                        <h3 className="text-2xl font-bold text-gray-900 leading-snug group-hover:text-nordic-blue transition-colors">
+                                        <h3 className="text-2xl font-bold text-gray-900 leading-snug group-hover:text-blue-900 transition-colors">
                                             {latestAnnouncement.title}
                                         </h3>
 
@@ -364,7 +364,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         </div>
                                     </div>
 
-                                    <div className="hidden sm:flex h-12 w-12 rounded-lg bg-blue-50 items-center justify-center text-nordic-blue shadow-sm">
+                                    <div className="hidden sm:flex h-12 w-12 rounded-lg bg-blue-50 items-center justify-center text-blue-900 shadow-sm">
                                         <Megaphone size={24} />
                                     </div>
                                 </div>
@@ -378,7 +378,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             <h2 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
                                 Framundan <span className="text-gray-300 font-light text-lg">|</span> <span className="text-lg font-medium text-gray-500">Næstu dagar</span>
                             </h2>
-                            <Link href={`/${locale}/tasks`} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-nordic-blue hover:shadow-md transition-all">
+                            <Link href={`/${locale}/tasks`} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-blue-900 hover:shadow-md transition-all">
                                 <ChevronRight size={20} />
                             </Link>
                         </div>
@@ -408,7 +408,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                                     <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-1">Skráning</span>
                                                     <div className="flex items-center gap-1">
                                                         <div className="h-1.5 w-16 bg-gray-200 rounded-full overflow-hidden">
-                                                            <div className="h-full bg-nordic-blue rounded-full" style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }} />
+                                                            <div className="h-full bg-blue-900 rounded-full" style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -416,7 +416,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         </div>
 
                                         <div>
-                                            <h4 className="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-nordic-blue transition-colors">
+                                            <h4 className="font-bold text-lg text-gray-900 line-clamp-1 group-hover:text-blue-900 transition-colors">
                                                 {task.title}
                                             </h4>
                                             <p className="text-sm text-gray-500 font-medium">
@@ -478,7 +478,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         <h3 className="font-bold text-gray-900 border-b border-gray-100 pb-4">Yfirlit bekkjar</h3>
 
                         <div className="p-4 rounded-lg bg-blue-50 border border-blue-100 text-center hover:bg-blue-100 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/directory`)}>
-                            <div className="text-2xl font-black text-nordic-blue mb-1">{studentsData?.length || 0}</div>
+                            <div className="text-2xl font-black text-blue-900 mb-1">{studentsData?.length || 0}</div>
                             <div className="text-xs font-bold text-blue-600/70 uppercase tracking-wide">Nemendur</div>
                         </div>
                         {/* Placeholder for future stat or remove grid-cols-2 if only one item */}
