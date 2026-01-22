@@ -26,7 +26,7 @@ export default function HomePage() {
                     <div className="flex justify-between items-center h-20">
                         {/* Logo */}
                         <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                            <div className="w-10 h-10 bg-trust-navy rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
+                            <div className="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
                                 B
                             </div>
                             <span className="text-2xl font-bold text-gray-900 tracking-tight">
@@ -63,7 +63,7 @@ export default function HomePage() {
                             {user ? (
                                 <Link
                                     href={`/${locale}/dashboard`}
-                                    className="bg-trust-navy text-white px-6 py-2.5 rounded-lg font-medium hover:bg-trust-navy-light transition-all shadow-sm hover:shadow-md"
+                                    className="bg-blue-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-800 transition-all shadow-sm hover:shadow-md"
                                 >
                                     Mælaborð
                                 </Link>
@@ -116,7 +116,7 @@ export default function HomePage() {
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link
                                 href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                                className="w-full sm:w-auto px-10 py-4 bg-trust-navy text-white rounded-lg font-semibold text-lg hover:bg-trust-navy-light transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
+                                className="w-full sm:w-auto px-10 py-4 bg-blue-900 text-white rounded-lg font-semibold text-lg hover:bg-blue-800 transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2"
                             >
                                 {t('hero.cta_primary')} <ArrowRight size={20} />
                             </Link>
@@ -235,7 +235,7 @@ export default function HomePage() {
                         <div className="flex flex-col items-center gap-4">
                             <Link
                                 href={`/${locale}/onboarding`}
-                                className="px-10 py-5 bg-trust-navy text-white rounded-lg font-semibold text-lg hover:bg-trust-navy-light transition-all shadow-lg hover:shadow-xl"
+                                className="px-10 py-5 bg-blue-900 text-white rounded-lg font-semibold text-lg hover:bg-blue-800 transition-all shadow-lg hover:shadow-xl"
                             >
                                 {t('cta_final.button')}
                             </Link>
@@ -284,7 +284,7 @@ function FeatureCard({ icon, title, desc, color }: any) {
 function StepCard({ number, title, desc }: any) {
     return (
         <div className="text-center relative z-10 bg-gray-50 md:bg-transparent p-4 md:p-0 rounded-lg flex flex-col items-center">
-            <div className="w-12 h-12 bg-white border-2 border-trust-navy text-trust-navy rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
+            <div className="w-12 h-12 bg-white border-2 border-blue-900 text-blue-900 rounded-lg flex items-center justify-center font-bold text-xl mx-auto mb-6 shadow-sm">
                 {number}
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3 text-center">{title}</h3>
@@ -297,7 +297,7 @@ function FaqItem({ q, a }: any) {
     return (
         <div className="bg-gray-50 rounded-lg p-6 hover:bg-white hover:shadow-sm transition-all border border-transparent hover:border-gray-200 flex flex-col items-center text-center">
             <h3 className="font-bold text-gray-900 mb-2 flex flex-col items-center gap-2">
-                <span className="text-trust-navy text-lg bg-blue-50 w-8 h-8 rounded-lg flex items-center justify-center border border-blue-100">?</span>
+                <span className="text-blue-900 text-lg bg-blue-50 w-8 h-8 rounded-lg flex items-center justify-center border border-blue-100">?</span>
                 <span>{q}</span>
             </h3>
             <p className="text-gray-600 leading-relaxed text-sm max-w-2xl">{a}</p>

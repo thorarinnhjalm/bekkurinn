@@ -108,7 +108,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             {/* Logo Area */}
             <div className="p-6 border-b border-gray-100">
                 <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 rounded-lg bg-trust-navy flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                             <circle cx="16" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
@@ -145,7 +145,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             className={cn(
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActive
-                                    ? 'text-trust-navy font-semibold bg-gray-50 border-l-2 border-trust-navy'
+                                    ? 'text-blue-900 font-semibold bg-gray-50 border-l-2 border-blue-900'
                                     : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
                             )}
                         >

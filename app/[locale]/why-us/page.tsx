@@ -14,11 +14,11 @@ export default function WhyUsPage() {
             {/* Header */}
             <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full top-0 z-50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-                    <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl text-nordic-blue hover:opacity-80 transition-opacity">
-                        <div className="w-8 h-8 rounded-lg bg-trust-navy flex items-center justify-center text-white shadow-sm">B</div>
+                    <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl text-blue-900 hover:opacity-80 transition-opacity">
+                        <div className="w-8 h-8 rounded-lg bg-blue-900 flex items-center justify-center text-white shadow-sm">B</div>
                         <span>Bekkurinn</span>
                     </Link>
-                    <Link href={`/${locale}/login`} className="px-5 py-2 bg-nordic-blue text-white rounded-full font-medium hover:bg-nordic-blue-dark transition-colors text-sm">
+                    <Link href={`/${locale}/login`} className="px-5 py-2 bg-blue-900 text-white rounded-full font-medium hover:bg-blue-800 transition-colors text-sm">
                         Skrá sig inn
                     </Link>
                 </div>
@@ -41,7 +41,7 @@ export default function WhyUsPage() {
                         <div className="grid grid-cols-12 border-b border-gray-200 bg-gray-50/50">
                             <div className="col-span-4 p-6 font-semibold text-gray-900">Eiginleiki</div>
                             <div className="col-span-4 p-6 font-semibold text-gray-500 text-center border-l border-gray-200">Samfélagsmiðlar</div>
-                            <div className="col-span-4 p-6 font-bold text-nordic-blue text-center border-l border-gray-200 bg-blue-50/30">Bekkurinn</div>
+                            <div className="col-span-4 p-6 font-bold text-blue-900 text-center border-l border-gray-200 bg-blue-50/30">Bekkurinn</div>
                         </div>
 
                         {/* Row 1: Privacy */}
@@ -55,7 +55,7 @@ export default function WhyUsPage() {
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-gray-100 bg-blue-50/10 dark-blue-text font-medium">
                                 <div className="flex flex-col items-center gap-2">
-                                    <Shield size={20} className="text-nordic-blue" />
+                                    <Shield size={20} className="text-blue-900" />
                                     <span>Lokað kerfi. Engin sala gagna.</span>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@ export default function WhyUsPage() {
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-gray-100 bg-blue-50/10 dark-blue-text font-medium">
                                 <div className="flex flex-col items-center gap-2">
-                                    <Search size={20} className="text-nordic-blue" />
+                                    <Search size={20} className="text-blue-900" />
                                     <span>Allt flokkað: Skráin, Viðburðir, Verkefni.</span>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@ export default function WhyUsPage() {
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-gray-100 bg-blue-50/10 dark-blue-text font-medium">
                                 <div className="flex flex-col items-center gap-2">
-                                    <Calendar size={20} className="text-nordic-blue" />
+                                    <Calendar size={20} className="text-blue-900" />
                                     <span>Sérsniðið skráningarkerfi.</span>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@ export default function WhyUsPage() {
 
                     <div className="grid md:grid-cols-3 gap-8">
                         <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow">
-                            <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-nordic-blue mb-4">
+                            <div className="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-900 mb-4">
                                 <Globe size={24} />
                             </div>
                             <h3 className="font-bold text-gray-900 mb-2">Fjölmenning</h3>

@@ -92,7 +92,7 @@ export function TopHeader({ className }: { className?: string }) {
                                 onClick={() => setShowNotifications(!showNotifications)}
                                 className="relative tap-target p-2 rounded-lg"
                                 style={{
-                                    backgroundColor: showNotifications ? 'var(--nordic-blue-light)' : 'var(--stone)',
+                                    backgroundColor: showNotifications ? 'var(--nordic-blue-light)' : 'var(--gray-100)',
                                     color: showNotifications ? 'white' : 'inherit'
                                 }}
                             >
@@ -172,7 +172,7 @@ export function TopHeader({ className }: { className?: string }) {
                                     onClick={() => setShowSettingsMenu(!showSettingsMenu)}
                                     className="tap-target p-1 rounded-lg"
                                     style={{
-                                        backgroundColor: 'var(--stone)',
+                                        backgroundColor: 'var(--gray-100)',
                                     }}
                                 >
                                     {user.photoURL ? (
@@ -274,7 +274,7 @@ export function TopHeader({ className }: { className?: string }) {
                                 <button
                                     className="tap-target p-2 rounded-lg"
                                     style={{
-                                        backgroundColor: 'var(--stone)',
+                                        backgroundColor: 'var(--gray-100)',
                                     }}
                                 >
                                     <Settings size={20} style={{ color: 'var(--text-primary)' }} />
