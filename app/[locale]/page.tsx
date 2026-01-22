@@ -41,6 +41,9 @@ export default function HomePage() {
                             </Link>
                             <NavLink href="#features">{t('nav.features')}</NavLink>
                             <NavLink href="#how-it-works">{t('nav.how_it_works')}</NavLink>
+                            <Link href={`/${locale}/handbok`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                                Handbók
+                            </Link>
                             <NavLink href="#faq">{t('nav.faq')}</NavLink>
 
                             {/* Language Switcher */}
