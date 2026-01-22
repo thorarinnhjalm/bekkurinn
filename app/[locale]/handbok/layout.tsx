@@ -4,14 +4,16 @@ import { TopHeader } from '@/components/navigation/TopHeader';
 import { useAuth } from '@/components/providers/AuthProvider';
 import Link from 'next/link';
 
+import { useParams } from 'next/navigation';
+
 export default function HandbookLayout({
     children,
-    params
 }: {
     children: React.ReactNode;
-    params: { locale: string };
 }) {
     const { user } = useAuth();
+    const params = useParams();
+    const locale = params.locale as string;
 
     return (
         <div className="min-h-screen flex flex-col bg-stone-50">
