@@ -266,6 +266,10 @@ export default function LoginPage() {
 
                 <p className="text-xs text-center text-gray-400">
                     Með því að skrá þig inn samþykkir þú{' '}
+                    <a href={`/${locale}/terms`} className="underline hover:text-gray-600">
+                        notkunarskilmála
+                    </a>{' '}
+                    og{' '}
                     <a href={`/${locale}/privacy`} className="underline hover:text-gray-600">
                         persónuverndarstefnu
                     </a>{' '}
@@ -327,8 +331,17 @@ export default function LoginPage() {
                 <TestimonialsCarousel maxCount={5} />
 
                 {/* Footer */}
-                <div className="text-center text-sm text-gray-400">
+                <div className="text-center text-sm text-gray-400 space-y-2">
                     <p>Fyrir foreldra í grunnskólum á Íslandi</p>
+                    <div className="flex items-center justify-center gap-4">
+                        <a href={`/${locale}/how-it-works`} className="hover:text-gray-600 transition-colors">
+                            Hvernig virkar þetta?
+                        </a>
+                        <span>•</span>
+                        <a href={`/${locale}/contact`} className="hover:text-gray-600 transition-colors">
+                            Hafðu samband
+                        </a>
+                    </div>
                 </div>
             </div>
 

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ArrowLeft, Send, Mail, MessageSquare, HelpCircle, Bug, Lightbulb } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { createContactMessage } from '@/services/firestore';
 
 type ContactReason = 'question' | 'bug' | 'feature' | 'other';
 
@@ -34,16 +35,23 @@ export default function ContactPage() {
             return;
         }
 
+        // Basic email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            setError('Vinsamlegast sláðu inn gilt netfang.');
+            return;
+        }
+
         setIsSubmitting(true);
         setError(null);
 
         try {
-            // Create a mailto link as a fallback (no backend email service configured)
-            const subject = encodeURIComponent(`[Bekkurinn - ${reasonOptions.find(r => r.value === reason)?.label}] Skilaboð frá ${name}`);
-            const body = encodeURIComponent(`Nafn: ${name}\nNetfang: ${email}\nÁstæða: ${reasonOptions.find(r => r.value === reason)?.label}\n\nSkilaboð:\n${message}`);
-
-            // For now, open mailto link
-            window.location.href = `mailto:thorarinnhjalmarsson@gmail.com?subject=${subject}&body=${body}`;
+            await createContactMessage({
+                name: name.trim(),
+                email: email.trim().toLowerCase(),
+                reason,
+                message: message.trim(),
+            });
 
             setIsSubmitted(true);
         } catch (err) {

@@ -287,16 +287,16 @@ service cloud.firestore {
     // ========================================
     // NOTIFICATIONS
     // ========================================
-    
+
     match /notifications/{notificationId} {
       // Users can only read their own notifications
       allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
-      
+
       // Users can update (mark as read) their own notifications
-      allow update: if isAuthenticated() && 
+      allow update: if isAuthenticated() &&
                        resource.data.userId == request.auth.uid &&
                        request.resource.data.userId == request.auth.uid; // Cannot change owner
-      
+
       // Notification creation rules:
       // 1. Users can create notifications for themselves
       // 2. Super admins can create for anyone
@@ -307,9 +307,49 @@ service cloud.firestore {
         // Super admin can create for anyone
         isSuperAdmin()
       );
-      
+
       // Users can delete their notifications
       allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================
+    // TESTIMONIALS
+    // ========================================
+
+    match /testimonials/{testimonialId} {
+      // Read permissions:
+      // 1. Anyone can read approved testimonials (for public display)
+      // 2. Users can read their own testimonials
+      // 3. Super admins can read all
+      allow read: if resource.data.status == 'approved' ||
+                     (isAuthenticated() && resource.data.userId == request.auth.uid) ||
+                     isSuperAdmin();
+
+      // Create: Authenticated users can create testimonials for themselves
+      allow create: if isAuthenticated() &&
+                       request.resource.data.userId == request.auth.uid &&
+                       request.resource.data.status == 'pending'; // Must start as pending
+
+      // Update: Only super admins can update (approve/reject)
+      allow update: if isSuperAdmin();
+
+      // Delete: Super admins or the creator (if still pending)
+      allow delete: if isSuperAdmin() ||
+                       (isAuthenticated() &&
+                        resource.data.userId == request.auth.uid &&
+                        resource.data.status == 'pending');
+    }
+
+    // ========================================
+    // CONTACT MESSAGES
+    // ========================================
+
+    match /contactMessages/{messageId} {
+      // Anyone can create a contact message (even unauthenticated for flexibility)
+      allow create: if true;
+
+      // Only super admins can read and manage messages
+      allow read, update, delete: if isSuperAdmin();
     }
   }
 }

@@ -794,3 +794,34 @@ export async function hasUserSubmittedTestimonial(userId: string): Promise<boole
         return false;
     }
 }
+
+// ========================================
+// CONTACT MESSAGES
+// ========================================
+
+export interface ContactMessage {
+    id: string;
+    name: string;
+    email: string;
+    reason: 'question' | 'bug' | 'feature' | 'other';
+    message: string;
+    createdAt: Timestamp;
+    read: boolean;
+}
+
+export type CreateContactMessageInput = Omit<ContactMessage, 'id' | 'createdAt' | 'read'>;
+
+export async function createContactMessage(data: CreateContactMessageInput): Promise<string> {
+    try {
+        const docRef = await addDoc(collection(db, 'contactMessages'), {
+            ...data,
+            read: false,
+            createdAt: serverTimestamp(),
+        });
+        logger.info(`Created contact message ${docRef.id}`);
+        return docRef.id;
+    } catch (error) {
+        logger.error('Failed to create contact message', error);
+        throw new Error('Gat ekki sent skilaboð');
+    }
+}

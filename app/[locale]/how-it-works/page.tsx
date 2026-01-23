@@ -1,5 +1,16 @@
 import { ArrowLeft, UserPlus, Key, Users, Bell, Calendar, MapPin, Gift, BookOpen, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Hvernig virkar Bekkurinn? | Bekkurinn',
+    description: 'Lærðu hvernig Bekkurinn hjálpar foreldrum að halda utan um bekkjarsamfélagið. Einfalt í notkun - engar Excel-skrár, engir Facebook-hópar.',
+    openGraph: {
+        title: 'Hvernig virkar Bekkurinn?',
+        description: 'Einfalt kerfi fyrir foreldra til að halda utan um bekkjarsamfélagið.',
+        type: 'website',
+    },
+};
 
 interface PageProps {
     params: Promise<{ locale: string }>;
