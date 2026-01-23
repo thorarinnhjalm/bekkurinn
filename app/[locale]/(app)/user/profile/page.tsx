@@ -14,12 +14,12 @@ import { Timestamp } from 'firebase/firestore';
 import { ImageUploader } from '@/components/upload/ImageUploader';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
-const DIETARY_OPTIONS: { value: string; label: string }[] = [
-    { value: 'peanut', label: 'Jarðhnetur' },
-    { value: 'gluten', label: 'Glúten' },
-    { value: 'dairy', label: 'Mjólk / Laktósa' },
-    { value: 'vegan', label: 'Vegan' },
-    { value: 'pork', label: 'Svínakjöt' },
+const DIETARY_OPTIONS: { value: string; label: string; emoji: string }[] = [
+    { value: 'peanut', label: 'Jarðhnetur', emoji: '🥜' },
+    { value: 'gluten', label: 'Glúten', emoji: '🌾' },
+    { value: 'dairy', label: 'Mjólk / Laktósa', emoji: '🥛' },
+    { value: 'vegan', label: 'Vegan', emoji: '🌱' },
+    { value: 'pork', label: 'Svínakjöt', emoji: '🐷' },
 ];
 
 const ICELANDIC_MONTHS = [
@@ -35,9 +35,8 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
     }, [onClose]);
 
     return (
-        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${
-            type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-        }`}>
+        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+            }`}>
             {type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span className="font-medium">{message}</span>
         </div>
@@ -427,6 +426,7 @@ export default function UserProfilePage() {
                                 <StudentCard
                                     key={student.id}
                                     student={student}
+                                    inviteLink={`${typeof window !== 'undefined' ? window.location.origin : ''}/${locale}/onboarding?join=${student.id}&classId=${classId}&inviterId=${user?.uid || ''}`}
                                     isExpanded={expandedChild === student.id}
                                     onToggleExpand={() => setExpandedChild(expandedChild === student.id ? null : student.id)}
                                     onSavePhoto={(url) => handleSaveStudentPhoto(student.id, url)}
@@ -461,6 +461,7 @@ export default function UserProfilePage() {
 
 function StudentCard({
     student,
+    inviteLink,
     isExpanded,
     onToggleExpand,
     onSavePhoto,
@@ -471,6 +472,7 @@ function StudentCard({
     onCopyInvite
 }: {
     student: any;
+    inviteLink: string;
     isExpanded: boolean;
     onToggleExpand: () => void;
     onSavePhoto: (url: string) => void;
@@ -652,11 +654,10 @@ function StudentCard({
                                 <button
                                     key={option.value}
                                     onClick={() => onSaveGender(option.value)}
-                                    className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${
-                                        student.gender === option.value
-                                            ? 'bg-[#1E3A5F] text-white shadow-md'
-                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                    }`}
+                                    className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium transition-all ${student.gender === option.value
+                                        ? 'bg-[#1E3A5F] text-white shadow-md'
+                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                        }`}
                                 >
                                     {option.label}
                                 </button>
@@ -677,11 +678,10 @@ function StudentCard({
                                     <button
                                         key={option.value}
                                         onClick={() => toggleDietaryNeed(option.value)}
-                                        className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${
-                                            isSelected
-                                                ? 'bg-red-100 text-red-700 ring-2 ring-red-200'
-                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                                        }`}
+                                        className={`px-3 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5 ${isSelected
+                                            ? 'bg-red-100 text-red-700 ring-2 ring-red-200'
+                                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                            }`}
                                     >
                                         <span>{option.emoji}</span>
                                         {option.label}
@@ -711,26 +711,25 @@ function StudentCard({
 
                     {/* Invite Partner */}
                     <div className="pt-2">
-                        <button
-                            onClick={handleCopyInvite}
-                            className={`w-full py-3 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${
-                                copiedInvite
+                        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 block">
+                            Bjóða maka / hinu foreldrinu
+                        </label>
+                        <div className="flex gap-2">
+                            <input
+                                readOnly
+                                value={inviteLink}
+                                className="flex-1 px-3 py-2 border border-gray-200 rounded-lg bg-gray-50 text-gray-500 text-sm focus:outline-none"
+                            />
+                            <button
+                                onClick={handleCopyInvite}
+                                className={`px-4 rounded-xl font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
                                     ? 'bg-green-100 text-green-700'
                                     : 'bg-blue-50 text-blue-700 hover:bg-blue-100'
-                            }`}
-                        >
-                            {copiedInvite ? (
-                                <>
-                                    <CheckCircle2 size={18} />
-                                    Hlekkur afritaður!
-                                </>
-                            ) : (
-                                <>
-                                    <Copy size={18} />
-                                    Bjóða maka / hinu foreldrinu
-                                </>
-                            )}
-                        </button>
+                                    }`}
+                            >
+                                {copiedInvite ? <CheckCircle2 size={18} /> : <Copy size={18} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}

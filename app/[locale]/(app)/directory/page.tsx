@@ -86,19 +86,22 @@ export default function DirectoryPage() {
             if (!studentsData || studentsData.length === 0) return;
 
             try {
-                const studentIds = studentsData.map(s => s.id);
-
-                // Fetch all parent links for these students
+                // Fetch all parent links for the class (much more efficient and avoids 'in' query limits)
+                // We utilize the fact that parentLinks also store the classId
                 const parentLinksQuery = query(
                     collection(db, 'parentLinks'),
-                    where('studentId', 'in', studentIds),
+                    where('classId', '==', classId),
                     where('status', '==', 'approved')
                 );
                 const parentLinksSnap = await getDocs(parentLinksQuery);
                 const parentLinks = parentLinksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
+                // Filter out links for students not in our list (just in case)
+                const studentIdSet = new Set(studentsData.map(s => s.id));
+                const textLinks = parentLinks.filter((pl: any) => studentIdSet.has(pl.studentId));
+
                 // Get unique user IDs
-                const userIds = [...new Set(parentLinks.map((pl: any) => pl.userId))];
+                const userIds = [...new Set(textLinks.map((pl: any) => pl.userId))];
 
                 if (userIds.length === 0) {
                     setParentsMap(new Map());
