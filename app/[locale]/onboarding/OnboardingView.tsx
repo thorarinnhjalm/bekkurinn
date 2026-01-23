@@ -13,6 +13,44 @@ import { OnboardingSchema, validateInput } from '@/lib/validation';
 // Define the steps explicitly
 type OnboardingStep = 'language' | 'select' | 'create' | 'join';
 
+/**
+ * Progress Indicator Component
+ * Shows user's progress through onboarding flow
+ */
+function ProgressIndicator({ currentStep, totalSteps, labels }: {
+    currentStep: number;
+    totalSteps: number;
+    labels?: string[];
+}) {
+    return (
+        <div className="w-full max-w-md mx-auto mb-8">
+            {/* Progress bar */}
+            <div className="flex items-center gap-2 mb-2">
+                {Array.from({ length: totalSteps }, (_, i) => (
+                    <div key={i} className="flex-1 flex items-center">
+                        <div
+                            className={`h-2 flex-1 rounded-full transition-all duration-300 ${
+                                i < currentStep
+                                    ? 'bg-blue-600'
+                                    : i === currentStep
+                                        ? 'bg-blue-400'
+                                        : 'bg-gray-200'
+                            }`}
+                        />
+                    </div>
+                ))}
+            </div>
+            {/* Step label */}
+            <div className="flex justify-between text-xs text-gray-500">
+                <span>Skref {currentStep + 1} af {totalSteps}</span>
+                {labels && labels[currentStep] && (
+                    <span className="text-gray-700 font-medium">{labels[currentStep]}</span>
+                )}
+            </div>
+        </div>
+    );
+}
+
 // Temporary local implementations until moved to services
 // (Keep existing logic, just cleaner)
 async function createClassLocal(data: any, userId: string) {
@@ -550,6 +588,13 @@ export default function OnboardingView() {
     if (step === 'select') {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8">
+                <div className="w-full max-w-md">
+                    <ProgressIndicator
+                        currentStep={0}
+                        totalSteps={2}
+                        labels={['Velja aðferð', 'Ljúka skráningu']}
+                    />
+                </div>
                 <div className="text-center space-y-2">
                     <button
                         onClick={() => setStep('language')}
@@ -645,6 +690,11 @@ export default function OnboardingView() {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
                 <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
+                    <ProgressIndicator
+                        currentStep={1}
+                        totalSteps={2}
+                        labels={['Velja aðferð', 'Stofna bekk']}
+                    />
                     <header>
                         <button onClick={() => setStep('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
                             ← Til baka
@@ -752,7 +802,12 @@ export default function OnboardingView() {
     if (step === 'join') {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
-                <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6">
+                <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6 relative">
+                    <ProgressIndicator
+                        currentStep={1}
+                        totalSteps={2}
+                        labels={['Velja aðferð', 'Ganga í bekk']}
+                    />
                     <button onClick={() => {
                         if (isCreatingStudent) {
                             setIsCreatingStudent(false);

@@ -3,7 +3,8 @@
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { LogIn, Users, Shield } from 'lucide-react';
+import { LogIn, Users, Shield, Check, X } from 'lucide-react';
+import { ExitIntentPopup } from '@/components/ExitIntentPopup';
 
 /**
  * Login Page - Bekkurinn
@@ -270,11 +271,70 @@ export default function LoginPage() {
                     okkar
                 </p>
 
+                {/* Why not Facebook? Comparison Section */}
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
+                    <h3 className="text-lg font-bold text-center text-gray-900">
+                        Af hverju ekki Facebook?
+                    </h3>
+                    <div className="grid grid-cols-2 gap-4 text-sm">
+                        <div className="space-y-3">
+                            <div className="font-semibold text-gray-400 text-center pb-2 border-b border-gray-100">
+                                Facebook hópar
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <span>Upplýsingar týnast í straumi</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <span>Erfitt að finna símanúmer</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <span>Engin afmælisáminnning</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-500">
+                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <span>Auglýsingar og truflun</span>
+                            </div>
+                        </div>
+                        <div className="space-y-3">
+                            <div className="font-semibold text-blue-600 text-center pb-2 border-b border-blue-100">
+                                Bekkurinn
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <span>Allt skipulagt á einum stað</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <span>Bekkjarlisti með símum</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <span>Sjálfvirk afmælisáminnning</span>
+                            </div>
+                            <div className="flex items-center gap-2 text-gray-700">
+                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <span>Engar auglýsingar, aldrei</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 {/* Footer */}
                 <div className="text-center text-sm text-gray-400">
                     <p>Fyrir foreldra í grunnskólum á Íslandi</p>
                 </div>
             </div>
+
+            {/* Exit Intent Popup */}
+            <ExitIntentPopup
+                onSignUp={() => {
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                    handleSignIn();
+                }}
+            />
         </div>
     );
 }

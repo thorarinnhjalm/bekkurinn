@@ -10,9 +10,6 @@ const inter = Inter({
   display: "swap",
 });
 
-// Plausible Analytics - privacy-focused, GDPR compliant
-const PLAUSIBLE_DOMAIN = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || 'bekkurinn.is';
-
 export const metadata: Metadata = {
   metadataBase: new URL('https://bekkurinn.vercel.app'),
   title: {
@@ -61,12 +58,23 @@ export default function RootLayout({
       <head>
         {/* Plausible Analytics - privacy-focused, no cookies, GDPR compliant */}
         {process.env.NODE_ENV === 'production' && (
-          <Script
-            defer
-            data-domain={PLAUSIBLE_DOMAIN}
-            src="https://plausible.io/js/script.js"
-            strategy="afterInteractive"
-          />
+          <>
+            <Script
+              async
+              src="https://plausible.io/js/pa-Z7q7W2PyTFMrROBjkzzxp.js"
+              strategy="afterInteractive"
+            />
+            <Script
+              id="plausible-init"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+                  plausible.init()
+                `
+              }}
+            />
+          </>
         )}
       </head>
       <body>
