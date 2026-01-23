@@ -5,7 +5,8 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useParams } from 'next/navigation';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
-import { Loader2, Save, User, UserPlus, Check } from 'lucide-react';
+import { Loader2, Save, User, UserPlus, Check, Calendar } from 'lucide-react';
+import { Timestamp } from 'firebase/firestore';
 import { ImageUploader } from '@/components/upload/ImageUploader';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
@@ -156,6 +157,21 @@ export default function UserProfilePage() {
         }
     };
 
+    const handleSaveStudentBirthDate = async (studentId: string, dateString: string) => {
+        if (!dateString) return;
+        setIsSaving(true);
+        try {
+            const birthDate = Timestamp.fromDate(new Date(dateString));
+            await updateDoc(doc(db, 'students', studentId), { birthDate });
+            setStudents(prev => prev.map(s => s.id === studentId ? { ...s, birthDate } : s));
+        } catch (e) {
+            console.error(e);
+            alert('Villa við vistun á afmælisdegi');
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
     const handleCopyInviteLink = (studentId: string) => {
         const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}&inviterId=${user?.uid}`;
         navigator.clipboard.writeText(inviteLink).then(() => {
@@ -297,6 +313,7 @@ export default function UserProfilePage() {
                             onSaveName={(name) => handleSaveStudentName(student.id, name)}
                             onSaveDietaryNeeds={(needs) => handleSaveStudentDietaryNeeds(student.id, needs)}
                             onSaveGender={(gender) => handleSaveStudentGender(student.id, gender)}
+                            onSaveBirthDate={(date) => handleSaveStudentBirthDate(student.id, date)}
                             onCopyInvite={() => handleCopyInviteLink(student.id)}
                             userId={user?.uid || ''}
                         />
@@ -331,18 +348,40 @@ export default function UserProfilePage() {
     );
 }
 
-function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onSaveGender, onCopyInvite, userId }: {
+function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onSaveGender, onSaveBirthDate, onCopyInvite, userId }: {
     student: any,
     onSave: (url: string) => void,
     onSaveName: (name: string) => void,
     onSaveDietaryNeeds: (needs: string[]) => void,
     onSaveGender: (gender: string) => void,
+    onSaveBirthDate: (date: string) => void,
     onCopyInvite: () => void,
     userId: string
 }) {
     const [photoUrl, setPhotoUrl] = useState(student.photoUrl || '');
     const [isEditingName, setIsEditingName] = useState(false);
     const [editedName, setEditedName] = useState(student.name);
+    const [isEditingBirthDate, setIsEditingBirthDate] = useState(false);
+
+    // Format birthDate for the date input (YYYY-MM-DD)
+    const formatDateForInput = (timestamp: any) => {
+        if (!timestamp?.toDate) return '';
+        const date = timestamp.toDate();
+        return date.toISOString().split('T')[0];
+    };
+
+    const [editedBirthDate, setEditedBirthDate] = useState(formatDateForInput(student.birthDate));
+
+    // Format birthDate for display
+    const formatBirthDateDisplay = (timestamp: any) => {
+        if (!timestamp?.toDate) return 'Ekki skráður';
+        const date = timestamp.toDate();
+        return new Intl.DateTimeFormat('is-IS', {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric'
+        }).format(date);
+    };
 
     // Dietary Needs State
     const [dietaryNeeds, setDietaryNeeds] = useState<string[]>(student.dietaryNeeds || []);
@@ -412,6 +451,59 @@ function StudentCard({ student, onSave, onSaveName, onSaveDietaryNeeds, onSaveGe
                         )}
                         <p className="text-sm text-gray-500">Nemandi</p>
                     </div>
+                </div>
+
+                {/* BIRTHDATE */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
+                        <Calendar size={16} className="text-nordic-blue" />
+                        Afmælisdagur
+                    </label>
+                    {isEditingBirthDate ? (
+                        <div className="flex gap-2 items-center">
+                            <input
+                                type="date"
+                                value={editedBirthDate}
+                                onChange={(e) => setEditedBirthDate(e.target.value)}
+                                className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-nordic-blue outline-none"
+                                autoFocus
+                            />
+                            <button
+                                onClick={() => {
+                                    onSaveBirthDate(editedBirthDate);
+                                    setIsEditingBirthDate(false);
+                                }}
+                                className="text-[#4A7C9E] hover:text-[#2E5A75] text-sm font-medium"
+                            >
+                                ✓ Vista
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setEditedBirthDate(formatDateForInput(student.birthDate));
+                                    setIsEditingBirthDate(false);
+                                }}
+                                className="text-gray-500 hover:text-gray-700 text-sm"
+                            >
+                                ✗
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex items-center gap-2">
+                            <span className="text-gray-700">
+                                🎂 {formatBirthDateDisplay(student.birthDate)}
+                            </span>
+                            <button
+                                onClick={() => setIsEditingBirthDate(true)}
+                                className="text-gray-400 hover:text-nordic-blue text-sm"
+                                title="Breyta afmælisdegi"
+                            >
+                                ✎
+                            </button>
+                        </div>
+                    )}
+                    <p className="text-xs text-gray-400 mt-1">
+                        Afmælisdagur birtist í bekkjarlistanum og áminningar eru sendar.
+                    </p>
                 </div>
 
                 {/* GENDER SELECTOR */}
