@@ -2,6 +2,7 @@
 
 import { Users, SchoolIcon, GraduationCap, Shield } from 'lucide-react';
 import type { SystemStats } from '@/services/admin';
+import AnalyticsWidget from './AnalyticsWidget';
 
 interface DashboardTabProps {
     stats: SystemStats | null;
@@ -91,13 +92,8 @@ export default function DashboardTab({ stats, pendingCount, onNavigate }: Dashbo
                 </div>
             </div>
 
-            {/* Recent Activity Placeholder */}
-            <div className="professional-card p-6">
-                <h3 className="font-bold text-xl text-gray-900 mb-4">Nýleg virkni</h3>
-                <div className="text-center py-8 text-gray-500">
-                    <p>Activity tracking kemur í næstu útgáfu</p>
-                </div>
-            </div>
+            {/* Website Analytics */}
+            <AnalyticsWidget />
         </div>
     );
 }
