@@ -1,8 +1,8 @@
 import { Newspaper, BookOpen, Users, Milestone, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function HandbookIndex({ params }: { params: { locale: string } }) {
-    const locale = params.locale;
+export default async function HandbookIndex({ params }: { params: Promise<{ locale: string }> }) {
+    const { locale } = await params;
 
     return (
         <div className="max-w-4xl mx-auto py-12 px-4 sm:px-6">

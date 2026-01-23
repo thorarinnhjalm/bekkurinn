@@ -95,6 +95,11 @@ export default function AdminView() {
                 // Filter schools where user is admin
                 const mySchools = allSchools.filter(s => s.admins.includes(user?.uid || ''));
                 setSchools(mySchools);
+
+                // Ensure we don't leave stale super admin data if we switch accounts (edge case)
+                setUsers([]);
+                setStats(null);
+                setPendingLinks([]);
             }
 
         } catch (error) {

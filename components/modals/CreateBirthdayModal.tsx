@@ -94,7 +94,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
 
             await createTaskMutation.mutateAsync({
                 classId,
-                schoolId: schoolId || undefined,
+                ...(schoolId ? { schoolId } : {}),
                 scope: 'class',
                 type: 'birthday',
                 title: `Afmæli: ${title}`,
