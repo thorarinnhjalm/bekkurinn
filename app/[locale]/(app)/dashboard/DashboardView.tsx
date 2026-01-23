@@ -13,6 +13,37 @@ import WelcomeWizard from '@/components/dashboard/WelcomeWizard';
 import PendingApprovals from '@/components/dashboard/PendingApprovals';
 import type { Task, Announcement, Student } from '@/types';
 
+// Icelandic month names (fallback for when browser doesn't support is-IS locale)
+const ICELANDIC_MONTHS = [
+    'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
+    'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
+];
+const ICELANDIC_MONTHS_SHORT = [
+    'jan', 'feb', 'mar', 'apr', 'maí', 'jún',
+    'júl', 'ágú', 'sep', 'okt', 'nóv', 'des'
+];
+const ICELANDIC_WEEKDAYS = [
+    'sunnudagur', 'mánudagur', 'þriðjudagur', 'miðvikudagur',
+    'fimmtudagur', 'föstudagur', 'laugardagur'
+];
+
+// Helper to format date in Icelandic
+const formatDateIcelandic = (date: Date, options: { day?: boolean; month?: 'long' | 'short'; weekday?: boolean }) => {
+    const parts: string[] = [];
+    if (options.weekday) {
+        parts.push(ICELANDIC_WEEKDAYS[date.getDay()]);
+    }
+    if (options.day) {
+        parts.push(`${date.getDate()}.`);
+    }
+    if (options.month === 'long') {
+        parts.push(ICELANDIC_MONTHS[date.getMonth()]);
+    } else if (options.month === 'short') {
+        parts.push(ICELANDIC_MONTHS_SHORT[date.getMonth()]);
+    }
+    return parts.join(' ');
+};
+
 interface DashboardViewProps {
     translations: {
         greeting: string;
@@ -112,16 +143,12 @@ export default function DashboardView({ translations }: DashboardViewProps) {
         return isNaN(d.getTime()) ? null : d;
     };
 
-    // Format helpers
+    // Format helpers - using manual Icelandic names for reliability
     const formatDate = (timestamp: any) => {
         const date = toJsDate(timestamp);
         if (!date) return '';
 
-        const formatted = new Intl.DateTimeFormat('is-IS', {
-            weekday: 'long',
-            day: 'numeric',
-            month: 'long'
-        }).format(date);
+        const formatted = formatDateIcelandic(date, { weekday: true, day: true, month: 'long' });
         return formatted.charAt(0).toUpperCase() + formatted.slice(1);
     };
 
@@ -378,7 +405,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             <h2 className="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
                                 Framundan <span className="text-gray-300 font-light text-lg">|</span> <span className="text-lg font-medium text-gray-500">Næstu dagar</span>
                             </h2>
-                            <Link href={`/${locale}/tasks`} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-blue-900 hover:shadow-md transition-all">
+                            <Link href={`/${locale}/calendar`} className="w-10 h-10 rounded-full bg-white border border-gray-100 flex items-center justify-center text-gray-400 hover:text-blue-900 hover:shadow-md transition-all">
                                 <ChevronRight size={20} />
                             </Link>
                         </div>
@@ -396,7 +423,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         <div className="flex justify-between items-start">
                                             <div className={`w-14 h-14 rounded-lg flex flex-col items-center justify-center shadow-sm transition-transform duration-200 group-hover:-translate-y-1 ${isSchoolEvent ? 'bg-amber-100 text-amber-800' : 'bg-blue-100 text-blue-800'}`}>
                                                 <span className="text-[10px] font-black uppercase tracking-wider opacity-70">
-                                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }).slice(0, 3) : ''}
+                                                    {dateObj ? ICELANDIC_MONTHS_SHORT[dateObj.getMonth()] : ''}
                                                 </span>
                                                 <span className="text-xl font-black leading-none">
                                                     {dateObj ? dateObj.getDate() : ''}
@@ -462,7 +489,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                         <div>
                                             <p className="font-bold text-gray-900">{student.name.split(' ')[0]}</p>
                                             <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
-                                                {student.nextBirthday.toLocaleDateString('is-IS', { day: 'numeric', month: 'long' })}
+                                                {formatDateIcelandic(student.nextBirthday, { day: true, month: 'long' })}
                                             </p>
                                         </div>
                                     </div>
@@ -491,14 +518,14 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </div>
 
                     {/* INVITE CARD */}
-                    <div className="p-6 bg-[#1E3A5F] text-white rounded-lg shadow-lg relative overflow-hidden">
+                    <div className="p-6 bg-[#1E3A5F] rounded-lg shadow-lg relative overflow-hidden">
                         <div className="relative z-10 space-y-4">
                             <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-2">
-                                <UserPlus size={24} className="text-white" />
+                                <UserPlus size={24} className="text-[#FFFFFF]" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Stækka hópinn?</h3>
-                                <p className="text-blue-100 text-sm font-medium mt-1 leading-relaxed">
+                                <h3 className="text-xl font-bold text-[#FFFFFF] tracking-tight">Stækka hópinn?</h3>
+                                <p className="text-[#93C5FD] text-sm font-medium mt-1 leading-relaxed">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
                             </div>
@@ -506,8 +533,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             <button
                                 onClick={handleCopyJoinLink}
                                 className={`w-full py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-bold transition-all duration-300 shadow-md ${copied
-                                    ? 'bg-green-500 text-white'
-                                    : 'bg-white text-[#1E3A5F] hover:bg-gray-50 active:scale-95'
+                                    ? 'bg-[#22C55E] text-[#FFFFFF]'
+                                    : 'bg-[#FFFFFF] text-[#1E3A5F] hover:bg-gray-50 active:scale-95'
                                     }`}
                             >
                                 {copied ? (
