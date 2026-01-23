@@ -268,7 +268,7 @@ export default function DirectoryPage() {
             )}
 
             {/* Student Grid - Glass Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
                 {sortedStudents.map((student) => {
                     const isExpanded = expandedCards.has(student.id);
                     const isStarred = starredStudents.has(student.id);
