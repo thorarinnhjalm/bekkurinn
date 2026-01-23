@@ -21,6 +21,7 @@ interface DesktopSidebarProps {
         tasks: string;
         announcements: string;
         lost_found: string;
+        skutl: string;
     };
 }
 
@@ -93,7 +94,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             key: 'pickup-offers',
             href: '/pickup-offers',
             icon: Car,
-            label: 'Skutl', // TODO: Add to translations
+            label: translations.skutl,
         },
     ] as const;
 

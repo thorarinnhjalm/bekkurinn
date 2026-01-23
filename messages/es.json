@@ -29,10 +29,13 @@
         "join_class": "Unirse a clase"
     },
     "class": {
+        "home": "Inicio",
         "directory": "Directorio",
         "patrol": "Patrulla",
         "tasks": "Tareas",
         "announcements": "Anuncios",
+        "lost_found": "Perdido y encontrado",
+        "skutl": "Compartir coche",
         "my_children": "Mis hijos",
         "parents": "Padres",
         "students": "Estudiantes",

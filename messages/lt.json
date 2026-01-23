@@ -29,10 +29,13 @@
         "join_class": "Prisijungti prie klasės"
     },
     "class": {
+        "home": "Pagrindinis",
         "directory": "Katalogas",
         "patrol": "Patrulis",
         "tasks": "Užduotys",
         "announcements": "Skelbimai",
+        "lost_found": "Pamesta ir rasta",
+        "skutl": "Pavėžėjimas",
         "my_children": "Mano vaikai",
         "parents": "Tėvai",
         "students": "Mokiniai"

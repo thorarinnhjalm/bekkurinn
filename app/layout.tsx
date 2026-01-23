@@ -56,6 +56,36 @@ export default function RootLayout({
   return (
     <html className={inter.variable}>
       <head>
+        {/* JSON-LD Structured Data for SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "Bekkurinn",
+              "url": "https://bekkurinn.is",
+              "description": "Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi. Bekkjarlisti, afmælisáminningar, viðburðir og tilkynningar á einum stað.",
+              "applicationCategory": "EducationalApplication",
+              "operatingSystem": "Web",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "ISK"
+              },
+              "author": {
+                "@type": "Organization",
+                "name": "Bekkurinn",
+                "url": "https://bekkurinn.is"
+              },
+              "inLanguage": ["is", "en", "pl", "lt", "es"],
+              "audience": {
+                "@type": "EducationalAudience",
+                "educationalRole": "parent"
+              }
+            })
+          }}
+        />
         {/* Plausible Analytics - privacy-focused, no cookies, GDPR compliant */}
         {process.env.NODE_ENV === 'production' && (
           <>

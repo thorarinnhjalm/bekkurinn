@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "dotenv": "^17.2.3",
     "firebase": "^12.7.0",
+    "firebase-admin": "^13.6.0",
     "framer-motion": "^12.24.11",
     "lru-cache": "^11.2.4",
     "lucide-react": "^0.562.0",
