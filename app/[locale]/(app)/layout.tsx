@@ -2,6 +2,7 @@ import { DesktopSidebar } from '@/components/navigation/DesktopSidebar';
 import { BottomNav } from '@/components/navigation/BottomNav';
 import { TopHeader } from '@/components/navigation/TopHeader';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ClientTestimonialPrompt } from '@/components/ClientTestimonialPrompt';
 
 /**
  * App Layout - Wrapper for authenticated app sections
@@ -66,6 +67,9 @@ export default async function AppLayout({
 
             {/* Bottom Navigation */}
             <BottomNav locale={locale} translations={messages.class} />
+
+            {/* Testimonial Collection Prompt */}
+            <ClientTestimonialPrompt />
         </div>
     );
 }

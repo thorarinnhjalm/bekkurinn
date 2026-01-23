@@ -247,3 +247,25 @@ export interface Notification {
     createdAt: Timestamp;
 }
 
+// ========================================
+// TESTIMONIALS
+// ========================================
+
+export type TestimonialStatus = 'pending' | 'approved' | 'rejected';
+
+export interface Testimonial {
+    id: string;
+    userId: string;
+    userName: string;
+    userRole: string; // "Bekkjarfulltrúi", "Foreldri", etc.
+    schoolName?: string;
+    text: string;
+    rating: number; // 1-5 stars
+    status: TestimonialStatus;
+    createdAt: Timestamp;
+    approvedAt?: Timestamp;
+    approvedBy?: string;
+}
+
+export type CreateTestimonialInput = Omit<Testimonial, 'id' | 'createdAt' | 'approvedAt' | 'approvedBy' | 'status'>;
+

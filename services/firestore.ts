@@ -34,6 +34,8 @@ import type {
     School,
     PickupOffer,
     CreatePickupOfferInput,
+    Testimonial,
+    CreateTestimonialInput,
 } from '@/types';
 
 /**
@@ -698,5 +700,97 @@ export async function migrateClassToSchool(classId: string, schoolId: string): P
     } catch (error) {
         logger.error('Failed to migrate class to school', error);
         throw new Error('Gat ekki flutt bekk í skóla');
+    }
+}
+
+// ========================================
+// TESTIMONIALS
+// ========================================
+
+export async function createTestimonial(data: CreateTestimonialInput): Promise<string> {
+    try {
+        const docRef = await addDoc(collection(db, 'testimonials'), {
+            ...data,
+            status: 'pending',
+            createdAt: serverTimestamp(),
+        });
+        logger.info(`Created testimonial ${docRef.id}`);
+        return docRef.id;
+    } catch (error) {
+        logger.error('Failed to create testimonial', error);
+        throw new Error('Gat ekki vistað umsögn');
+    }
+}
+
+export async function getApprovedTestimonials(maxCount: number = 10): Promise<Testimonial[]> {
+    try {
+        const q = query(
+            collection(db, 'testimonials'),
+            where('status', '==', 'approved'),
+            orderBy('createdAt', 'desc'),
+            limit(maxCount)
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
+    } catch (error) {
+        logger.error('Failed to fetch approved testimonials', error);
+        return [];
+    }
+}
+
+export async function getAllTestimonials(): Promise<Testimonial[]> {
+    try {
+        const q = query(
+            collection(db, 'testimonials'),
+            orderBy('createdAt', 'desc')
+        );
+        const snapshot = await getDocs(q);
+        return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Testimonial));
+    } catch (error) {
+        logger.error('Failed to fetch all testimonials', error);
+        return [];
+    }
+}
+
+export async function updateTestimonialStatus(
+    testimonialId: string,
+    status: 'approved' | 'rejected',
+    approvedBy: string
+): Promise<void> {
+    try {
+        await updateDoc(doc(db, 'testimonials', testimonialId), {
+            status,
+            approvedAt: serverTimestamp(),
+            approvedBy,
+        });
+        logger.info(`Updated testimonial ${testimonialId} status to ${status}`);
+    } catch (error) {
+        logger.error('Failed to update testimonial status', error);
+        throw new Error('Gat ekki uppfært umsögn');
+    }
+}
+
+export async function deleteTestimonial(testimonialId: string): Promise<void> {
+    try {
+        await deleteDoc(doc(db, 'testimonials', testimonialId));
+        logger.info(`Deleted testimonial ${testimonialId}`);
+    } catch (error) {
+        logger.error('Failed to delete testimonial', error);
+        throw new Error('Gat ekki eytt umsögn');
+    }
+}
+
+export async function hasUserSubmittedTestimonial(userId: string): Promise<boolean> {
+    try {
+        const q = query(
+            collection(db, 'testimonials'),
+            where('userId', '==', userId),
+            limit(1)
+        );
+        const snapshot = await getDocs(q);
+        return !snapshot.empty;
+    } catch (error) {
+        logger.error('Failed to check user testimonial', error);
+        return false;
     }
 }

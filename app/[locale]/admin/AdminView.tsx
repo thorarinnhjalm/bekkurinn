@@ -14,6 +14,7 @@ import { Timestamp } from 'firebase/firestore';
 import DashboardTab from './components/DashboardTab';
 import UsersTab from './components/UsersTab';
 import ApprovalsTab from './components/ApprovalsTab';
+import TestimonialsTab from './components/TestimonialsTab';
 
 const SUPER_ADMINS = [
     'thorarinnhjalmarsson@gmail.com'
@@ -40,7 +41,7 @@ export default function AdminView() {
 
     // UI State
     const [isFetching, setIsFetching] = useState(true);
-    const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'schools' | 'classes' | 'approvals'>('dashboard');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'users' | 'schools' | 'classes' | 'approvals' | 'testimonials'>('dashboard');
     const [expandedSchools, setExpandedSchools] = useState<string[]>([]);
 
     // Create School State
@@ -225,6 +226,12 @@ export default function AdminView() {
                     >
                         📚 Bekkir
                     </button>
+                    <button
+                        onClick={() => setActiveTab('testimonials')}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'testimonials' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                    >
+                        ⭐ Umsagnir
+                    </button>
                 </div>
             </div>
 
@@ -388,6 +395,11 @@ export default function AdminView() {
                         );
                     })}
                 </div>
+            )}
+
+            {/* CONTENT: TESTIMONIALS */}
+            {activeTab === 'testimonials' && (
+                <TestimonialsTab />
             )}
         </div>
     );

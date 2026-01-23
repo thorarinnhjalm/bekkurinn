@@ -5,6 +5,7 @@ import { useRouter, useParams, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { LogIn, Users, Shield, Check, X } from 'lucide-react';
 import { ExitIntentPopup } from '@/components/ExitIntentPopup';
+import { TestimonialsCarousel } from '@/components/TestimonialsCarousel';
 
 /**
  * Login Page - Bekkurinn
@@ -321,6 +322,9 @@ export default function LoginPage() {
                         </div>
                     </div>
                 </div>
+
+                {/* Testimonials Carousel */}
+                <TestimonialsCarousel maxCount={5} />
 
                 {/* Footer */}
                 <div className="text-center text-sm text-gray-400">
