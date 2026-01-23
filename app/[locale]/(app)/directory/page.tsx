@@ -178,14 +178,15 @@ export default function DirectoryPage() {
         setExpandedCards(newExpanded);
     };
 
+    const ICELANDIC_MONTHS = [
+        'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
+        'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
+    ];
+
     const formatBirthDate = (timestamp: any) => {
         if (!timestamp?.toDate) return '';
         const date = timestamp.toDate();
-        return new Intl.DateTimeFormat('is-IS', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-        }).format(date);
+        return `${date.getDate()}. ${ICELANDIC_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
     };
 
     // Loading state
