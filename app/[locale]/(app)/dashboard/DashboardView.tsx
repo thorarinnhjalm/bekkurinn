@@ -491,7 +491,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </div>
 
                     {/* INVITE CARD */}
-                    <div className="p-6 bg-nordic-blue text-white rounded-lg shadow-lg relative overflow-hidden">
+                    <div className="p-6 bg-[#1E3A5F] text-white rounded-lg shadow-lg relative overflow-hidden">
                         <div className="relative z-10 space-y-4">
                             <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-2">
                                 <UserPlus size={24} className="text-white" />
@@ -507,7 +507,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 onClick={handleCopyJoinLink}
                                 className={`w-full py-3 px-4 rounded-lg flex items-center justify-center gap-2 font-bold transition-all duration-300 shadow-md ${copied
                                     ? 'bg-green-500 text-white'
-                                    : 'bg-white text-nordic-blue hover:bg-gray-50 active:scale-95'
+                                    : 'bg-white text-[#1E3A5F] hover:bg-gray-50 active:scale-95'
                                     }`}
                             >
                                 {copied ? (
