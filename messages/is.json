@@ -129,6 +129,47 @@
     "no_birthdays": "Engin afmæli á næstunni",
     "quick_actions": "Flýtileiðir"
   },
+  "privacy_page": {
+    "title": "Persónuverndarstefna",
+    "last_updated": "Síðast uppfært: Janúar 2026",
+    "section1_title": "1. Hvaða gögn söfnum við?",
+    "section1_intro": "Bekkurinn safnar eftirfarandi upplýsingum til að veita þjónustuna:",
+    "section1_items": [
+      "Nafn og netfang (frá Google innskráningu eða nýskráningu)",
+      "Símanúmer (valkvætt, stýrt af notanda)",
+      "Upplýsingar um börn (nafn, fæðingardagur, fæðuofnæmi)",
+      "Bekkjaraðild og hlutverk"
+    ],
+    "section2_title": "2. Hvernig notum við gögnin?",
+    "section2_intro": "Gögnin eru eingöngu notuð til að:",
+    "section2_items": [
+      "Sýna tengiliðaupplýsingar öðrum foreldrum í sama bekk",
+      "Halda utan um afmæli og viðburði bekkjarins",
+      "Auðvelda samskipti milli foreldra",
+      "Halda utan um rölt og sjálfboðaliðaverkefni"
+    ],
+    "section3_title": "3. Hvernig verndum við gögnin?",
+    "section3_intro": "Öll gögn eru geymd á öruggum Firebase netþjónum með:",
+    "section3_items": [
+      "Dulkóðuðum tengingum (HTTPS)",
+      "Aðgangsreglum sem tryggja að aðeins meðlimir bekkjar sjái gögn",
+      "Engum gögnum deilt með þriðja aðila"
+    ],
+    "section4_title": "4. Þín réttindi",
+    "section4_intro": "Þú hefur rétt til að:",
+    "section4_items": [
+      "Fá aðgang að öllum gögnum sem við geymum um þig",
+      "Leiðrétta rangar upplýsingar",
+      "Eyða aðgangi þínum og tengdum gögnum",
+      "Stjórna sýnileika símanúmers (kveikt/slökkt)"
+    ],
+    "section5_title": "5. Hafa samband",
+    "section5_text": "Ef þú hefur spurningar um persónuvernd, hafðu samband við okkur á",
+    "notice_title": "Athugið:",
+    "notice_text": "Bekkurinn er hannað með persónuvernd í fyrirrúmi. Við söfnum aldrei meira en nauðsynlegt er og seljum aldrei gögn til þriðja aðila.",
+    "back": "Til baka",
+    "copyright": "© 2026 Bekkurinn. Öll réttindi áskilin."
+  },
   "landing": {
     "nav": {
       "why_us": "Samanburður",

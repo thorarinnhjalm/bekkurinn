@@ -114,6 +114,47 @@
         "kid": "kid",
         "kids": "kids"
     },
+    "privacy_page": {
+        "title": "Privacy Policy",
+        "last_updated": "Last updated: January 2026",
+        "section1_title": "1. What data do we collect?",
+        "section1_intro": "Bekkurinn collects the following information to provide our service:",
+        "section1_items": [
+            "Name and email (from Google sign-in or registration)",
+            "Phone number (optional, controlled by user)",
+            "Information about children (name, birthday, dietary needs)",
+            "Class membership and role"
+        ],
+        "section2_title": "2. How do we use the data?",
+        "section2_intro": "The data is only used to:",
+        "section2_items": [
+            "Display contact information to other parents in the same class",
+            "Keep track of birthdays and class events",
+            "Facilitate communication between parents",
+            "Manage patrol and volunteer tasks"
+        ],
+        "section3_title": "3. How do we protect the data?",
+        "section3_intro": "All data is stored on secure Firebase servers with:",
+        "section3_items": [
+            "Encrypted connections (HTTPS)",
+            "Access rules ensuring only class members see data",
+            "No data shared with third parties"
+        ],
+        "section4_title": "4. Your rights",
+        "section4_intro": "You have the right to:",
+        "section4_items": [
+            "Access all data we store about you",
+            "Correct incorrect information",
+            "Delete your account and associated data",
+            "Control phone number visibility (on/off)"
+        ],
+        "section5_title": "5. Contact",
+        "section5_text": "If you have questions about privacy, contact us at",
+        "notice_title": "Note:",
+        "notice_text": "Bekkurinn is designed with privacy first. We never collect more than necessary and never sell data to third parties.",
+        "back": "Back",
+        "copyright": "© 2026 Bekkurinn. All rights reserved."
+    },
     "landing": {
         "nav": {
             "why_us": "Comparison",

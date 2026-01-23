@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
@@ -8,6 +9,9 @@ const inter = Inter({
   subsets: ["latin"],
   display: "swap",
 });
+
+// Plausible Analytics - privacy-focused, GDPR compliant
+const PLAUSIBLE_DOMAIN = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN || 'bekkurinn.is';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://bekkurinn.vercel.app'),
@@ -54,6 +58,17 @@ export default function RootLayout({
 }) {
   return (
     <html className={inter.variable}>
+      <head>
+        {/* Plausible Analytics - privacy-focused, no cookies, GDPR compliant */}
+        {process.env.NODE_ENV === 'production' && (
+          <Script
+            defer
+            data-domain={PLAUSIBLE_DOMAIN}
+            src="https://plausible.io/js/script.js"
+            strategy="afterInteractive"
+          />
+        )}
+      </head>
       <body>
         <QueryProvider>
           {children}

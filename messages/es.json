@@ -70,5 +70,46 @@
         "pending_approvals": "Aprobaciones pendientes",
         "approve": "Aprobar",
         "reject": "Rechazar"
+    },
+    "privacy_page": {
+        "title": "Política de privacidad",
+        "last_updated": "Última actualización: Enero 2026",
+        "section1_title": "1. ¿Qué datos recopilamos?",
+        "section1_intro": "Bekkurinn recopila la siguiente información para proporcionar el servicio:",
+        "section1_items": [
+            "Nombre y correo electrónico (del inicio de sesión de Google o registro)",
+            "Número de teléfono (opcional, controlado por el usuario)",
+            "Información sobre los niños (nombre, fecha de nacimiento, necesidades dietéticas)",
+            "Membresía de clase y rol"
+        ],
+        "section2_title": "2. ¿Cómo usamos los datos?",
+        "section2_intro": "Los datos se utilizan únicamente para:",
+        "section2_items": [
+            "Mostrar información de contacto a otros padres de la misma clase",
+            "Hacer seguimiento de cumpleaños y eventos de clase",
+            "Facilitar la comunicación entre padres",
+            "Gestionar patrullas y tareas de voluntariado"
+        ],
+        "section3_title": "3. ¿Cómo protegemos los datos?",
+        "section3_intro": "Todos los datos se almacenan en servidores seguros de Firebase con:",
+        "section3_items": [
+            "Conexiones cifradas (HTTPS)",
+            "Reglas de acceso que aseguran que solo los miembros de la clase vean los datos",
+            "Sin compartir datos con terceros"
+        ],
+        "section4_title": "4. Tus derechos",
+        "section4_intro": "Tienes derecho a:",
+        "section4_items": [
+            "Acceder a todos los datos que almacenamos sobre ti",
+            "Corregir información incorrecta",
+            "Eliminar tu cuenta y datos asociados",
+            "Controlar la visibilidad del número de teléfono (activar/desactivar)"
+        ],
+        "section5_title": "5. Contacto",
+        "section5_text": "Si tienes preguntas sobre privacidad, contáctanos en",
+        "notice_title": "Nota:",
+        "notice_text": "Bekkurinn está diseñado con la privacidad como prioridad. Nunca recopilamos más de lo necesario y nunca vendemos datos a terceros.",
+        "back": "Volver",
+        "copyright": "© 2026 Bekkurinn. Todos los derechos reservados."
     }
 }

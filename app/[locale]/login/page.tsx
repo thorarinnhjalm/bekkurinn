@@ -130,7 +130,10 @@ export default function LoginPage() {
                             Bekkurinn
                         </h1>
                         <p className="text-lg mt-2 text-gray-600">
-                            Sameiginleg skrá bekkjarins
+                            Hættu að leita í Excel-skrám og Facebook-hópum
+                        </p>
+                        <p className="text-sm mt-2 text-gray-500">
+                            Bekkjarlisti • Afmæli • Óskilamunir • Viðburðir — allt á einum stað
                         </p>
                     </div>
                 </div>
@@ -260,8 +263,11 @@ export default function LoginPage() {
                 )}
 
                 <p className="text-xs text-center text-gray-400">
-                    Með því að skrá þig inn samþykkir þú að fara með allar<br />
-                    upplýsingar með fullum trúnaði
+                    Með því að skrá þig inn samþykkir þú{' '}
+                    <a href={`/${locale}/privacy`} className="underline hover:text-gray-600">
+                        persónuverndarstefnu
+                    </a>{' '}
+                    okkar
                 </p>
 
                 {/* Footer */}

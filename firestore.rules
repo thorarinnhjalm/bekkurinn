@@ -172,8 +172,26 @@ service cloud.firestore {
       ) && request.resource.data.createdBy == request.auth.uid;
       
       // Update:
-      // Class/School members can update (claim slots) - complicated logic, simplified to:
-      allow update: if isAuthenticated();
+      // Class/School members can update (claim/unclaim slots)
+      // Rules:
+      // 1. Must be authenticated
+      // 2. Must be class member (for class scope) OR authenticated (for school scope)
+      // 3. Admins can update any field
+      // 4. Regular members can only modify volunteers array (claim/unclaim)
+      allow update: if isAuthenticated() && (
+        // Admins can update anything
+        (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
+        (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId)) ||
+        // Class members can only update volunteers-related fields
+        (resource.data.scope == 'class' && isClassMember(resource.data.classId) &&
+          // Only allow changes to slotsFilled and volunteers
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['slotsFilled', 'volunteers'])
+        ) ||
+        // School scope - any auth user can claim slots
+        (resource.data.scope == 'school' &&
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['slotsFilled', 'volunteers'])
+        )
+      );
       
       // Delete: Only admins
       allow delete: if (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
@@ -279,9 +297,16 @@ service cloud.firestore {
                        resource.data.userId == request.auth.uid &&
                        request.resource.data.userId == request.auth.uid; // Cannot change owner
       
-      // System/Admin creation (for now, allow auth users to create for themselves or others if logic permits, 
-      // but ideally this is Cloud Functions. For testing, we allow creation.)
-      allow create: if isAuthenticated();
+      // Notification creation rules:
+      // 1. Users can create notifications for themselves
+      // 2. Super admins can create for anyone
+      // Note: Ideally this would be Cloud Functions, but for MVP we allow controlled client creation
+      allow create: if isAuthenticated() && (
+        // Create for yourself
+        request.resource.data.userId == request.auth.uid ||
+        // Super admin can create for anyone
+        isSuperAdmin()
+      );
       
       // Users can delete their notifications
       allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;

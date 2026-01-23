@@ -69,6 +69,47 @@
         "approve": "Patvirtinti",
         "reject": "Atmesti"
     },
+    "privacy_page": {
+        "title": "Privatumo politika",
+        "last_updated": "Paskutinį kartą atnaujinta: 2026 m. sausis",
+        "section1_title": "1. Kokius duomenis renkame?",
+        "section1_intro": "Bekkurinn renka šią informaciją paslaugai teikti:",
+        "section1_items": [
+            "Vardą ir el. paštą (iš Google prisijungimo arba registracijos)",
+            "Telefono numerį (neprivaloma, kontroliuoja vartotojas)",
+            "Informaciją apie vaikus (vardas, gimtadienis, mitybos poreikiai)",
+            "Narystę klasėje ir vaidmenį"
+        ],
+        "section2_title": "2. Kaip naudojame duomenis?",
+        "section2_intro": "Duomenys naudojami tik:",
+        "section2_items": [
+            "Rodyti kontaktinę informaciją kitiems tos pačios klasės tėvams",
+            "Sekti gimtadienius ir klasės renginius",
+            "Palengvinti bendravimą tarp tėvų",
+            "Valdyti patruliavimą ir savanorystės užduotis"
+        ],
+        "section3_title": "3. Kaip saugome duomenis?",
+        "section3_intro": "Visi duomenys saugomi saugiuose Firebase serveriuose su:",
+        "section3_items": [
+            "Šifruotais ryšiais (HTTPS)",
+            "Prieigos taisyklėmis, užtikrinančiomis, kad tik klasės nariai mato duomenis",
+            "Jokių duomenų nesidalinama su trečiosiomis šalimis"
+        ],
+        "section4_title": "4. Jūsų teisės",
+        "section4_intro": "Turite teisę:",
+        "section4_items": [
+            "Susipažinti su visais duomenimis, kuriuos saugome apie jus",
+            "Ištaisyti neteisingą informaciją",
+            "Ištrinti paskyrą ir susijusius duomenis",
+            "Valdyti telefono numerio matomumą (įjungti/išjungti)"
+        ],
+        "section5_title": "5. Kontaktai",
+        "section5_text": "Jei turite klausimų apie privatumą, susisiekite su mumis el. paštu",
+        "notice_title": "Pastaba:",
+        "notice_text": "Bekkurinn sukurtas su privatumu pirmenybe. Mes niekada nerenkame daugiau nei būtina ir niekada neparduodame duomenų trečiosioms šalims.",
+        "back": "Atgal",
+        "copyright": "© 2026 Bekkurinn. Visos teisės saugomos."
+    },
     "landing": {
         "nav": {
             "features": "Funkcijos",
