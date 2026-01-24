@@ -29,17 +29,17 @@
     "join_class": "Dołącz do klasy"
   },
   "class": {
-    "directory": "Tengiliðir",
-    "patrol": "Röltið",
-    "tasks": "Dagatal",
-    "announcements": "Auglýsingar",
-    "skutl": "Skutl",
-    "my_children": "Börnin mín",
-    "parents": "Foreldrar",
-    "students": "Nemendur",
-    "home": "Home",
-    "lost_found": "Lost & Found",
-    "settings": "Stillingar"
+    "directory": "Katalog",
+    "patrol": "Patrol",
+    "tasks": "Zadania",
+    "announcements": "Ogłoszenia",
+    "skutl": "Podwóz",
+    "my_children": "Moje dzieci",
+    "parents": "Rodzice",
+    "students": "Uczniowie",
+    "home": "Strona główna",
+    "lost_found": "Zgubione i znalezione",
+    "settings": "Ustawienia"
   },
   "patrol": {
     "title": "Patrol Osiedlowy",
