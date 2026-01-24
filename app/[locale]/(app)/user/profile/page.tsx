@@ -172,10 +172,10 @@ export default function UserProfilePage() {
                 isPhoneVisible: userIsPhoneVisible,
                 address: userAddress
             }, { merge: true });
-            showToast('Vistað', 'success');
+            showToast('Saved', 'success');
         } catch (e) {
             console.error(e);
-            showToast('Villa við vistun', 'error');
+            showToast('Error saving', 'error');
         }
     };
 
@@ -183,10 +183,10 @@ export default function UserProfilePage() {
         try {
             await updateDoc(doc(db, 'students', studentId), { photoUrl: url });
             setStudents(prev => prev.map(s => s.id === studentId ? { ...s, photoUrl: url } : s));
-            showToast('Mynd uppfærð', 'success');
+            showToast('Photo updated', 'success');
         } catch (e) {
             console.error(e);
-            showToast('Villa við vistun', 'error');
+            showToast('Error saving', 'error');
         }
     };
 
@@ -195,10 +195,10 @@ export default function UserProfilePage() {
         try {
             await updateDoc(doc(db, 'students', studentId), { name: newName });
             setStudents(prev => prev.map(s => s.id === studentId ? { ...s, name: newName } : s));
-            showToast('Nafn uppfært', 'success');
+            showToast('Name updated', 'success');
         } catch (e) {
             console.error(e);
-            showToast('Villa við vistun', 'error');
+            showToast('Error saving', 'error');
         }
     };
 
@@ -228,26 +228,26 @@ export default function UserProfilePage() {
             const birthDate = Timestamp.fromDate(new Date(dateString));
             await updateDoc(doc(db, 'students', studentId), { birthDate });
             setStudents(prev => prev.map(s => s.id === studentId ? { ...s, birthDate } : s));
-            showToast('Afmælisdagur vistaður', 'success');
+            showToast('Birthday saved', 'success');
         } catch (e) {
             console.error(e);
-            showToast('Villa við vistun', 'error');
+            showToast('Error saving', 'error');
         }
     };
 
     const handleCopyInviteLink = (studentId: string) => {
         const inviteLink = `${window.location.origin}/${locale}/onboarding?join=${studentId}&classId=${classId}&inviterId=${user?.uid}`;
         navigator.clipboard.writeText(inviteLink).then(() => {
-            showToast('Hlekkur afritaður', 'success');
+            showToast('Link copied', 'success');
         }).catch(() => {
-            showToast('Villa við að afrita', 'error');
+            showToast('Error copying', 'error');
         });
     };
 
     if (!user) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
-                <p className="text-gray-500">Vinsamlegast skráðu þig inn.</p>
+                <p className="text-gray-500">Please sign in.</p>
             </div>
         );
     }
@@ -257,7 +257,7 @@ export default function UserProfilePage() {
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
                     <Loader2 size={40} className="animate-spin text-[#1E3A5F]" />
-                    <p className="text-gray-500">Hleður gögnum...</p>
+                    <p className="text-gray-500">Loading data...</p>
                 </div>
             </div>
         );

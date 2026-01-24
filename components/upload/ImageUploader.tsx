@@ -19,7 +19,7 @@ export function ImageUploader({
     onUploadComplete,
     storagePath,
     maxSizeMB = 5,
-    label = 'Mynd'
+    label = 'Photo'
 }: ImageUploaderProps) {
     const [isUploading, setIsUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState(0);
@@ -38,12 +38,12 @@ export function ImageUploader({
 
         // Validation
         if (!file.type.startsWith('image/')) {
-            setError('Vinsamlegast veldu mynd (JPG, PNG)');
+            setError('Please select an image (JPG, PNG)');
             return;
         }
 
         if (file.size > maxSizeMB * 1024 * 1024) {
-            setError(`Mynd of stór. Hámark er ${maxSizeMB}MB`);
+            setError(`Image too large. Maximum is ${maxSizeMB}MB`);
             return;
         }
 
@@ -94,7 +94,7 @@ export function ImageUploader({
                 },
                 (error) => {
                     console.error('Upload error:', error);
-                    setError('Villa kom upp við upphleðslu');
+                    setError('Upload error occurred');
                     setIsUploading(false);
                 },
                 async () => {
@@ -106,7 +106,7 @@ export function ImageUploader({
             );
         } catch (error) {
             console.error('Upload error:', error);
-            setError('Villa kom upp');
+            setError('An error occurred');
             setIsUploading(false);
         }
     };
@@ -145,7 +145,7 @@ export function ImageUploader({
                             <button
                                 onClick={handleRemove}
                                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
-                                title="Fjarlægja mynd"
+                                title="Remove photo"
                             >
                                 <X size={16} />
                             </button>
@@ -166,7 +166,7 @@ export function ImageUploader({
                     >
                         <Upload size={24} className="text-gray-400 mb-1" />
                         <span className="text-xs text-gray-500 text-center px-2">
-                            Smella til að velja
+                            Click to select
                         </span>
                     </div>
                 )}
@@ -190,13 +190,13 @@ export function ImageUploader({
             {!isUploading && previewUrl && currentImageUrl === previewUrl && (
                 <div className="flex items-center gap-1 text-sm text-green-600">
                     <Check size={16} />
-                    <span>Mynd vistuð</span>
+                    <span>Photo saved</span>
                 </div>
             )}
 
             {/* Help Text */}
             <p className="text-xs text-gray-500">
-                JPG eða PNG, hámark {maxSizeMB}MB
+                JPG or PNG, maximum {maxSizeMB}MB
             </p>
         </div>
     );
