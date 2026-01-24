@@ -9,6 +9,7 @@ import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check, Globe } from '
 import { collection, addDoc, serverTimestamp, Timestamp, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { OnboardingSchema, validateInput } from '@/lib/validation';
+import { useTranslations } from 'next-intl';
 
 // Define the steps explicitly
 type OnboardingStep = 'language' | 'select' | 'create' | 'join';
@@ -29,13 +30,12 @@ function ProgressIndicator({ currentStep, totalSteps, labels }: {
                 {Array.from({ length: totalSteps }, (_, i) => (
                     <div key={i} className="flex-1 flex items-center">
                         <div
-                            className={`h-2 flex-1 rounded-full transition-all duration-300 ${
-                                i < currentStep
-                                    ? 'bg-blue-600'
-                                    : i === currentStep
-                                        ? 'bg-blue-400'
-                                        : 'bg-gray-200'
-                            }`}
+                            className={`h-2 flex-1 rounded-full transition-all duration-300 ${i < currentStep
+                                ? 'bg-blue-600'
+                                : i === currentStep
+                                    ? 'bg-blue-400'
+                                    : 'bg-gray-200'
+                                }`}
                         />
                     </div>
                 ))}
@@ -129,6 +129,7 @@ export default function OnboardingView() {
     const searchParams = useSearchParams();
     const { createNotification } = useNotifications();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('onboarding');
 
     // Check query param 'step' to see if language is already selected
     const paramStep = searchParams.get('step') as OnboardingStep;
@@ -546,8 +547,8 @@ export default function OnboardingView() {
                     <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
                         <Globe className="text-white" size={32} />
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900">Veldu tungumál</h1>
-                    <p className="text-gray-500 text-lg">Select your language / Wybierz język</p>
+                    <h1 className="text-3xl font-bold text-gray-900">{t('language_select_title')}</h1>
+                    <p className="text-gray-500 text-lg">{t('language_select_subtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
@@ -600,10 +601,10 @@ export default function OnboardingView() {
                         onClick={() => setStep('language')}
                         className="text-sm text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1 mx-auto"
                     >
-                        <Globe size={14} /> Breyta tungumáli / Change language
+                        <Globe size={14} /> {t('change_language')}
                     </button>
-                    <h1 className="text-3xl font-bold text-nordic-blue-dark">Velkomin í Bekkinn!</h1>
-                    <p className="text-text-secondary">Hvernig viltu byrja?</p>
+                    <h1 className="text-3xl font-bold text-nordic-blue-dark">{t('welcome_main_title')}</h1>
+                    <p className="text-text-secondary">{t('welcome_select_method')}</p>
                 </div>
 
                 <div className="grid gap-4 w-full max-w-md">
@@ -615,8 +616,8 @@ export default function OnboardingView() {
                             <Users className="text-nordic-blue" size={24} />
                         </div>
                         <div>
-                            <h3 className="font-bold text-lg">Ganga í bekk</h3>
-                            <p className="text-sm text-text-secondary">Ég er með boðskóða frá fulltrúa</p>
+                            <h3 className="font-bold text-lg">{t('join_class')}</h3>
+                            <p className="text-sm text-text-secondary">{t('join_class_desc')}</p>
                         </div>
                         <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-nordic-blue" />
                     </button>
@@ -629,8 +630,8 @@ export default function OnboardingView() {
                             <Plus className="text-amber-600" size={24} />
                         </div>
                         <div>
-                            <h3 className="font-bold text-lg">Stofna nýjan bekk</h3>
-                            <p className="text-sm text-text-secondary">Ég er bekkjarfulltrúi</p>
+                            <h3 className="font-bold text-lg">{t('create_class')}</h3>
+                            <p className="text-sm text-text-secondary">{t('create_class_role_desc')}</p>
                         </div>
                         <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-amber-600" />
                     </button>
@@ -650,12 +651,12 @@ export default function OnboardingView() {
                             <Check size={40} />
                         </div>
 
-                        <h2 className="text-2xl font-bold text-gray-900">Bekkur stofnaður!</h2>
-                        <p className="text-gray-600">Til hamingju. Hér eru kóðarnir til að deila:</p>
+                        <h2 className="text-2xl font-bold text-gray-900">{t('success_title')}</h2>
+                        <p className="text-gray-600">{t('success_desc')}</p>
 
                         <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 space-y-4 text-left">
                             <div>
-                                <p className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-1">Fyrir foreldra (Almennur aðgangur)</p>
+                                <p className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-1">{t('code_parents_label')}</p>
                                 <div className="text-3xl font-mono font-bold text-blue-800 bg-white p-3 rounded-lg border border-blue-200 text-center tracking-widest select-all">
                                     {createdClassInfo.joinCode}
                                 </div>
@@ -664,11 +665,11 @@ export default function OnboardingView() {
                             <hr className="border-blue-200" />
 
                             <div>
-                                <p className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-1">Fyrir Foreldraráð (Stjórnendur)</p>
+                                <p className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-1">{t('code_admin_label')}</p>
                                 <div className="text-xl font-mono font-bold text-purple-800 bg-purple-50 p-3 rounded-lg border border-purple-200 text-center tracking-widest select-all break-all">
                                     {createdClassInfo.parentTeamCode}
                                 </div>
-                                <p className="text-xs text-purple-700 mt-2">Dulin aðgangsheimild. Veitir stjórnendurréttindi. Deildu varlega.</p>
+                                <p className="text-xs text-purple-700 mt-2">{t('code_admin_warning')}</p>
                             </div>
                         </div>
 
@@ -680,7 +681,7 @@ export default function OnboardingView() {
                             }}
                             className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg"
                         >
-                            Áfram á stjórnborð
+                            {t('continue_dashboard')}
                         </button>
                     </div>
                 </div>
@@ -699,13 +700,13 @@ export default function OnboardingView() {
                         <button onClick={() => setStep('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
                             ← Til baka
                         </button>
-                        <h1 className="text-2xl font-bold text-nordic-blue-dark">Stofna nýjan bekk</h1>
-                        <p className="text-text-secondary">Fylltu út grunnupplýsingar</p>
+                        <h1 className="text-2xl font-bold text-nordic-blue-dark">{t('create_class_title')}</h1>
+                        <p className="text-text-secondary">{t('create_class_subtitle')}</p>
                     </header>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Skóli (í Kópavogi)</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('school_label')}</label>
                             <select
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
@@ -765,12 +766,12 @@ export default function OnboardingView() {
 
                         {formData.isSplit && (
                             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nafn deildar/bekkjar</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('section_label')}</label>
                                 <input
                                     type="text"
                                     value={formData.section}
                                     onChange={(e) => setFormData({ ...formData, section: e.target.value })}
-                                    placeholder="t.d. A, B, Hlíð, Melar..."
+                                    placeholder={t.raw('split_grade_desc').split(' ')[0]} // Using part of example or just generic placeholder? Let's use generic from t if possible, or keep simple
                                     className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
                                     autoFocus
                                 />
@@ -790,7 +791,8 @@ export default function OnboardingView() {
                             className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all transform active:scale-95 shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2"
                         >
                             {loading && <Loader2 className="animate-spin" />}
-                            <span>Stofna Bekk</span>
+                            {loading && <Loader2 className="animate-spin" />}
+                            <span>{t('create_btn')}</span>
                         </button>
                     </div>
                 </div>
