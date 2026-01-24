@@ -86,17 +86,28 @@ service cloud.firestore {
     // STUDENTS
     // ========================================
     
+    // Helper to check if user is a parent of a specific student
+    function isParentOfStudentById(studentId, classId) {
+      let myLinkId = request.auth.uid + '_' + classId;
+      return exists(/databases/$(database)/documents/parentLinks/$(myLinkId)) &&
+             get(/databases/$(database)/documents/parentLinks/$(myLinkId)).data.studentId == studentId &&
+             get(/databases/$(database)/documents/parentLinks/$(myLinkId)).data.status == 'approved';
+    }
+
     match /students/{studentId} {
       // Class members can read students in their class
       // ONBOARDING: Allow auth users to read (to select child)
       allow read: if isAuthenticated();
-      
+
       // Parents can create student entries (pending admin approval via parentLinks)
       allow create: if isAuthenticated();
-      
-      // Only admins can update student details
-      allow update: if isClassAdmin(resource.data.classId);
-      
+
+      // Parents can update their own children, admins can update any student
+      allow update: if isAuthenticated() && (
+        isClassAdmin(resource.data.classId) ||
+        isParentOfStudentById(studentId, resource.data.classId)
+      );
+
       // Only admins can delete students
       allow delete: if isClassAdmin(resource.data.classId);
     }

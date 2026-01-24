@@ -136,7 +136,7 @@ export default function DirectoryPage() {
             }
         }
         fetchParents();
-    }, [studentsData]);
+    }, [studentsData, classId]);
 
     // Format helpers and event handlers...
     const toggleStar = async (studentId: string) => {
