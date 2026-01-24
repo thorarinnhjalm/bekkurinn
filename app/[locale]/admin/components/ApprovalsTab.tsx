@@ -21,7 +21,7 @@ export default function ApprovalsTab({ initialPendingLinks, onRefresh }: Approva
             setPendingLinks(prev => prev.filter(l => l.id !== link.id));
             onRefresh();
         } catch (error) {
-            alert('Villa við að samþykkja');
+            alert('Error approving');
         } finally {
             setProcessingIds(prev => prev.filter(id => id !== link.id));
         }
@@ -36,7 +36,7 @@ export default function ApprovalsTab({ initialPendingLinks, onRefresh }: Approva
             setPendingLinks(prev => prev.filter(l => l.id !== link.id));
             onRefresh();
         } catch (error) {
-            alert('Villa við að hafna');
+            alert('Error rejecting');
         } finally {
             setProcessingIds(prev => prev.filter(id => id !== link.id));
         }
@@ -67,7 +67,7 @@ export default function ApprovalsTab({ initialPendingLinks, onRefresh }: Approva
                 ) : (
                     <div className="text-center py-12">
                         <div className="text-6xl mb-4">🎉</div>
-                        <p className="text-xl font-bold text-gray-900">Engar beiðnir bíða samþykktar!</p>
+                        <p className="text-xl font-bold text-gray-900">No pending approvals!</p>
                         <p className="text-gray-600 mt-2">Allar beiðnir hafa verið afgreiddar.</p>
                     </div>
                 )}
@@ -100,10 +100,10 @@ function PendingApprovalRow({
         <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-nordic-blue transition-colors">
             <div className="flex-1">
                 <div className="font-bold text-gray-900">
-                    {userInfo?.displayName || 'Hleður...'}
+                    {userInfo?.displayName || 'Loading...'}
                 </div>
                 <div className="text-sm text-gray-600 mt-1">
-                    {userInfo?.email} • {classInfo?.name || 'Hleður bekk...'}
+                    {userInfo?.email} • {classInfo?.name || 'Loading class...'}
                 </div>
                 <div className="text-xs text-gray-500 mt-1">
                     Beiðni send: {link.createdAt?.toDate?.().toLocaleDateString('is-IS')}

@@ -70,7 +70,7 @@ export default function PendingApprovals({ classId, myStudentId, isAdmin }: Pend
             setRequests(prev => prev.filter(r => r.id !== linkId));
         } catch (error) {
             console.error("Error approving:", error);
-            alert("Villa við að samþykkja beiðni.");
+            alert("Error approving request.");
         } finally {
             setProcessingId(null);
         }
@@ -84,7 +84,7 @@ export default function PendingApprovals({ classId, myStudentId, isAdmin }: Pend
             setRequests(prev => prev.filter(r => r.id !== linkId));
         } catch (error) {
             console.error("Error denying:", error);
-            alert("Villa við að hafna beiðni.");
+            alert("Error rejecting request.");
         } finally {
             setProcessingId(null);
         }

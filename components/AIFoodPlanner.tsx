@@ -63,10 +63,10 @@ export function AIFoodPlanner({
                     setError('Gat ekki lesið svar frá gervigreind (JSON error)');
                 }
             } else {
-                setError(data.error || 'Villa kom upp');
+                setError(data.error || 'Error occurred');
             }
         } catch (err) {
-            setError('Villa kom upp við að tengjast þjónustunni');
+            setError('Error connecting to service');
         } finally {
             setLoading(false);
         }

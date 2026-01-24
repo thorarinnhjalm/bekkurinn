@@ -118,7 +118,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
             setDescription('');
         } catch (e) {
             console.error(e);
-            alert("Villa kom upp við að stofna viðburð.");
+            alert("Error creating event.");
         }
     };
 
@@ -317,7 +317,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                         <button
                             onClick={() => {
                                 if (title && date && location) setStep(2);
-                                else alert('Vinsamlegast fylltu út alla reiti');
+                                else alert('Please fill in all fields');
                             }}
                             className="flex-1 bg-gray-900 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg shadow-gray-200"
                         >

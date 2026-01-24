@@ -46,7 +46,7 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
             onClose();
         } catch (error) {
             console.error('Save error:', error);
-            alert('Villa kom upp');
+            alert('Error occurred');
         } finally {
             setIsSaving(false);
         }

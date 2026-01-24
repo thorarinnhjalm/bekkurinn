@@ -18,7 +18,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [text, setText] = useState('');
-    const [role, setRole] = useState('Foreldri');
+    const [role, setRole] = useState('Parent');
     const [schoolName, setSchoolName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,7 +63,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
 
     const handleSubmit = async () => {
         if (!user || rating === 0 || text.trim().length < 10) {
-            setError('Vinsamlegast gefðu stjörnur og skrifaðu að minnsta kosti 10 stafi.');
+            setError('Please give stars and write at least 10 characters.');
             return;
         }
 
@@ -73,7 +73,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
         try {
             await createTestimonial({
                 userId: user.uid,
-                userName: user.displayName || 'Nafnlaust',
+                userName: user.displayName || 'Anonymous',
                 userRole: role,
                 schoolName: schoolName || undefined,
                 text: text.trim(),
@@ -81,7 +81,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
             });
             setIsSubmitted(true);
         } catch (err) {
-            setError('Villa kom upp. Reyndu aftur.');
+            setError('Error occurred. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
@@ -151,11 +151,10 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                                 >
                                     <Star
                                         size={32}
-                                        className={`transition-colors ${
-                                            star <= (hoverRating || rating)
+                                        className={`transition-colors ${star <= (hoverRating || rating)
                                                 ? 'fill-yellow-400 text-yellow-400'
                                                 : 'text-gray-300'
-                                        }`}
+                                            }`}
                                     />
                                 </button>
                             ))}
@@ -175,16 +174,15 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
 
                         {/* Role Selection */}
                         <div className="flex gap-2">
-                            {['Foreldri', 'Bekkjarfulltrúi', 'Kennari'].map((r) => (
+                            {['Parent', 'Class Rep', 'Teacher'].map((r) => (
                                 <button
                                     key={r}
                                     type="button"
                                     onClick={() => setRole(r)}
-                                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
-                                        role === r
+                                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${role === r
                                             ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
                                             : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
-                                    }`}
+                                        }`}
                                 >
                                     {r}
                                 </button>

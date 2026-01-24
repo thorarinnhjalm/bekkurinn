@@ -42,7 +42,7 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
             await deleteUser(user.uid);
             setUsers(prev => prev.filter(u => u.uid !== user.uid));
         } catch (error) {
-            alert('Villa við að eyða notanda');
+            alert('Error deleting user');
         }
     };
 
@@ -76,7 +76,7 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                     <table className="w-full">
                         <thead>
                             <tr className="border-b-2 border-gray-200">
-                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Nafn</th>
+                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Name</th>
                                 <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Netfang</th>
                                 <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Sími</th>
                                 <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Stofnað</th>

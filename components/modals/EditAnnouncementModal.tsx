@@ -32,7 +32,7 @@ export function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }:
             onClose();
         } catch (error) {
             console.error('Save error:', error);
-            alert('Villa kom upp');
+            alert('Error occurred');
         } finally {
             setIsSaving(false);
         }
