@@ -127,41 +127,42 @@ export default function PrivacyPage() {
                         <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
                             {t('section5_title')}
                         </h2>
-                        {t('section5_text')}{' '}
-                        <a href="mailto:privacy@bekkurinn.is" className="text-blue-600 hover:underline">
-                            privacy@bekkurinn.is
-                        </a>
-                    </p>
-
-                    {/* Section 6: Cookies */}
-                    <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
-                        {t('section6_title')}
-                    </h2>
-                    <p className="text-gray-600 mb-4">
-                        {t('section6_text')}
-                    </p>
-
-                    {/* Section 7: Data Retention */}
-                    <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
-                        {t('section7_title')}
-                    </h2>
-                    <p className="text-gray-600 mb-4">
-                        {t('section7_text')}
-                    </p>
-
-                    {/* Notice */}
-                    <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                        <p className="text-sm text-blue-800">
-                            <strong>{t('notice_title')}</strong> {t('notice_text')}
+                        <p className="text-gray-600 mb-4">
+                            {t('section5_text')}{' '}
+                            <a href="mailto:privacy@bekkurinn.is" className="text-blue-600 hover:underline">
+                                privacy@bekkurinn.is
+                            </a>
                         </p>
+
+                        {/* Section 6: Cookies */}
+                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                            {t('section6_title')}
+                        </h2>
+                        <p className="text-gray-600 mb-4">
+                            {t('section6_text')}
+                        </p>
+
+                        {/* Section 7: Data Retention */}
+                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                            {t('section7_title')}
+                        </h2>
+                        <p className="text-gray-600 mb-4">
+                            {t('section7_text')}
+                        </p>
+
+                        {/* Notice */}
+                        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
+                            <p className="text-sm text-blue-800">
+                                <strong>{t('notice_title')}</strong> {t('notice_text')}
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <p className="text-center text-gray-400 text-sm mt-8">
-                {t('copyright')}
-            </p>
-        </div>
+                <p className="text-center text-gray-400 text-sm mt-8">
+                    {t('copyright')}
+                </p>
+            </div>
         </div >
     );
 }
