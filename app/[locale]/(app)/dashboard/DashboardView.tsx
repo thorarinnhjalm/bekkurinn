@@ -521,11 +521,11 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     <div className="p-6 bg-[#1E3A5F] rounded-lg shadow-lg relative overflow-hidden">
                         <div className="relative z-10 space-y-4">
                             <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center mb-2">
-                                <UserPlus size={24} className="text-[#FFFFFF]" />
+                                <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-[#FFFFFF] tracking-tight">Stækka hópinn?</h3>
-                                <p className="text-[#93C5FD] text-sm font-medium mt-1 leading-relaxed">
+                                <h3 className="text-xl font-bold text-white tracking-tight">Stækka hópinn?</h3>
+                                <p className="text-blue-100 text-sm font-medium mt-1 leading-relaxed">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
                             </div>
