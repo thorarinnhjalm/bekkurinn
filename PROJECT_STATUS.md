@@ -121,7 +121,10 @@
 - [x] **User Search**: Instant email search to assigning School Admins.
 - [x] **Access Control**: Restricted to Super Admins (hardcoded list).
 
-### 13. **Localization Fixes** ✅
+### 13. **Full Internationalization (i18n)** ✅
+- [x] **8 Supported Languages**: Icelandic, English, Polish, Spanish, Lithuanian, Tagalog, Ukrainian, Vietnamese.
+- [x] **Language Switcher**: Integrated into Sidebar/Mobile menu.
+- [x] **Complete Coverage**: All pages (Settings, Directory, Calendar, Announcements, Lost & Found, Carpool) fully translated.
 - [x] **Default Locale**: Disabled `localeDetection` to force `/is` as default.
 - [x] **Middleware**: Optimized matcher configuration.
 
@@ -150,10 +153,14 @@ bekkurinn/
 │   └── icons/
 │       └── DietaryIcons.tsx          # Dietary restriction icons
 ├── messages/
-│   ├── is.json                       # Icelandic translations
-│   ├── en.json                       # English (base)
+│   ├── is.json                       # Icelandic (default)
+│   ├── en.json                       # English
 │   ├── pl.json                       # Polish
-│   └── es.json                       # Spanish
+│   ├── es.json                       # Spanish
+│   ├── lt.json                       # Lithuanian
+│   ├── tl.json                       # Tagalog
+│   ├── uk.json                       # Ukrainian
+│   └── vi.json                       # Vietnamese
 ├── public/
 │   └── logo.png                      # Custom Bekkurinn logo
 └── types/
