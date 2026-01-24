@@ -525,5 +525,43 @@
       "privacy": "Persónuverndarstefna",
       "copyright": "© 2026 Bekkurinn. Allur réttur áskilinn."
     }
+  },
+  "user": {
+    "title": "Minn aðgangur",
+    "subtitle": "Stillingar fyrir þig og börnin þín",
+    "phone_label": "Símanúmer",
+    "phone_placeholder": "Símanúmer",
+    "show_in_list": "Birta í bekkjarlista",
+    "address_label": "Heimilisfang",
+    "address_placeholder": "Heimilisfang",
+    "upload_photo": "Prófílmynd",
+    "my_children": "Börnin mín",
+    "add_child": "Bæta við barni",
+    "no_children": "Engin börn tengd við aðganginn þinn",
+    "please_login": "Vinsamlegast skráðu þig inn.",
+    "loading_data": "Hleður gögnum...",
+    "save_success": "Vistað",
+    "save_error": "Villa við vistun",
+    "photo_updated": "Mynd uppfærð",
+    "name_updated": "Nafn uppfært",
+    "birthday_saved": "Afmælisdagur vistaður",
+    "link_copied": "Hlekkur afritaður",
+    "error_copying": "Villa við að afrita",
+    "child_card": {
+      "name_label": "Nafn",
+      "birthday_label": "Afmælisdagur",
+      "gender_label": "Kyn",
+      "boy": "Strákur",
+      "girl": "Stelpa",
+      "other": "Annað",
+      "dietary_label": "Ofnæmi og mataræði",
+      "photo_label": "Mynd",
+      "other_parents_label": "Önnur foreldri / forráðamenn",
+      "connected": "Tengdur",
+      "invite_parent": "Bjóða foreldri / forráðamann",
+      "copy_invite_link": "Afrita boðshlekk",
+      "copied": "Afritað!",
+      "max_parents_help": "Hægt er að tengja allt að 4 foreldra/forráðamenn við hvert barn"
+    }
   }
 }
