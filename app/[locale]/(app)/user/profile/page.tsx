@@ -16,22 +16,10 @@ import { locales } from '@/i18n-config';
 import Link from 'next/link';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
-const DIETARY_OPTIONS = [
-    { value: 'dairy', label: 'Mjólk / Laktósi' },
-    { value: 'gluten', label: 'Glúten' },
-    { value: 'egg', label: 'Egg' },
-    { value: 'peanut', label: 'Jarðhnetur' },
-    { value: 'treenuts', label: 'Hnetur' },
-    { value: 'fish', label: 'Fiskur' },
-    { value: 'shellfish', label: 'Skelfiski' },
-    { value: 'soy', label: 'Soja' },
-    { value: 'vegan', label: 'Vegan' },
-    { value: 'pork', label: 'Svínakjöt' },
-];
-
-const ICELANDIC_MONTHS = [
-    'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
-    'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
+// Use keys only, translation happens in render
+const DIETARY_KEYS = [
+    'dairy', 'gluten', 'egg', 'peanut', 'treenuts',
+    'fish', 'shellfish', 'soy', 'vegan', 'pork'
 ];
 
 // Toast notification component
@@ -423,6 +411,7 @@ export default function UserProfilePage() {
                                 onCopyInvite={() => handleCopyInviteLink(student.id)}
                                 t={t}
                                 tDietary={tDietary}
+                                locale={locale}
                             />
                         ))}
                     </div>
@@ -458,7 +447,8 @@ function StudentCard({
     onSaveBirthDate,
     onCopyInvite,
     t,
-    tDietary
+    tDietary,
+    locale
 }: {
     student: any;
     otherParents: any[];
@@ -472,6 +462,7 @@ function StudentCard({
     onCopyInvite: () => void;
     t: any;
     tDietary: any;
+    locale: string;
 }) {
     const [editedName, setEditedName] = useState(student.name);
     const [dietaryNeeds, setDietaryNeeds] = useState<string[]>(student.dietaryNeeds || []);
@@ -485,10 +476,15 @@ function StudentCard({
 
     const [editedBirthDate, setEditedBirthDate] = useState(formatDateForInput(student.birthDate));
 
+    // Use Intl.DateTimeFormat for localized date display
     const formatBirthDateDisplay = (timestamp: any) => {
         if (!timestamp?.toDate) return null;
         const date = timestamp.toDate();
-        return `${date.getDate()}. ${ICELANDIC_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+        try {
+            return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+        } catch (e) {
+            return date.toLocaleDateString();
+        }
     };
 
     const toggleDietaryNeed = (value: string) => {
@@ -601,19 +597,18 @@ function StudentCard({
                     <div>
                         <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.dietary_label')}</label>
                         <div className="flex flex-wrap gap-2">
-                            {DIETARY_OPTIONS.map((option) => {
-                                const isSelected = dietaryNeeds.includes(option.value);
+                            {DIETARY_KEYS.map((key) => {
+                                const isSelected = dietaryNeeds.includes(key);
                                 return (
                                     <button
-                                        key={option.value}
-                                        onClick={() => toggleDietaryNeed(option.value)}
+                                        key={key}
+                                        onClick={() => toggleDietaryNeed(key)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${isSelected
                                             ? 'bg-red-50 text-red-700 border border-red-200'
                                             : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
                                             }`}
                                     >
-                                        {/* Use tDietary to translate option labels */}
-                                        {tDietary(option.value)}
+                                        {tDietary(key)}
                                         {isSelected && <Check size={14} />}
                                     </button>
                                 );
@@ -668,8 +663,8 @@ function StudentCard({
                             <button
                                 onClick={handleCopyInvite}
                                 className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
-                                        ? 'bg-green-50 text-green-700 border border-green-200'
-                                        : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                    ? 'bg-green-50 text-green-700 border border-green-200'
+                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
                                     }`}
                             >
                                 {copiedInvite ? (
