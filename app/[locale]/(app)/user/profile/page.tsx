@@ -64,6 +64,7 @@ export default function UserProfilePage() {
     const [loadingLinks, setLoadingLinks] = useState(true);
     const [classId, setClassId] = useState<string>('');
     const [expandedChild, setExpandedChild] = useState<string | null>(null);
+    const [otherParents, setOtherParents] = useState<Map<string, any[]>>(new Map());
 
     const showToast = (message: string, type: 'success' | 'error') => {
         setToast({ message, type });
@@ -94,6 +95,42 @@ export default function UserProfilePage() {
         }
         fetchData();
     }, [user]);
+
+    // Fetch other parents for each student
+    useEffect(() => {
+        async function fetchOtherParents() {
+            if (!user || students.length === 0) return;
+
+            const parentsMap = new Map<string, any[]>();
+
+            for (const student of students) {
+                // Get all parent links for this student
+                const linksQuery = query(
+                    collection(db, 'parentLinks'),
+                    where('studentId', '==', student.id),
+                    where('status', '==', 'approved')
+                );
+                const linksSnap = await getDocs(linksQuery);
+                const otherUserIds = linksSnap.docs
+                    .map(d => d.data().userId)
+                    .filter(uid => uid !== user.uid);
+
+                if (otherUserIds.length > 0) {
+                    // Fetch user data for other parents
+                    const usersQuery = query(
+                        collection(db, 'users'),
+                        where('__name__', 'in', otherUserIds)
+                    );
+                    const usersSnap = await getDocs(usersQuery);
+                    const parents = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                    parentsMap.set(student.id, parents);
+                }
+            }
+
+            setOtherParents(parentsMap);
+        }
+        fetchOtherParents();
+    }, [user, students]);
 
     // Fetch User Profile Data
     useEffect(() => {
@@ -213,7 +250,7 @@ export default function UserProfilePage() {
     }
 
     return (
-        <div className="space-y-8 animate-in fade-in duration-500 pb-24 pt-6">
+        <div className="max-w-2xl mx-auto space-y-8 animate-in fade-in duration-500 pb-24 pt-6">
             {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
 
             {/* Header */}
@@ -325,6 +362,7 @@ export default function UserProfilePage() {
                             <StudentCard
                                 key={student.id}
                                 student={student}
+                                otherParents={otherParents.get(student.id) || []}
                                 isExpanded={expandedChild === student.id}
                                 onToggleExpand={() => setExpandedChild(expandedChild === student.id ? null : student.id)}
                                 onSavePhoto={(url) => handleSaveStudentPhoto(student.id, url)}
@@ -358,6 +396,7 @@ export default function UserProfilePage() {
 
 function StudentCard({
     student,
+    otherParents,
     isExpanded,
     onToggleExpand,
     onSavePhoto,
@@ -368,6 +407,7 @@ function StudentCard({
     onCopyInvite
 }: {
     student: any;
+    otherParents: any[];
     isExpanded: boolean;
     onToggleExpand: () => void;
     onSavePhoto: (url: string) => void;
@@ -428,12 +468,20 @@ function StudentCard({
                 </div>
                 <div className="flex-1 min-w-0">
                     <h3 className="text-lg font-bold text-gray-900 truncate">{student.name}</h3>
-                    {birthDateDisplay && (
-                        <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-0.5">
-                            <Calendar size={14} />
-                            {birthDateDisplay}
-                        </p>
-                    )}
+                    <div className="flex items-center gap-3 mt-0.5">
+                        {birthDateDisplay && (
+                            <span className="text-sm text-gray-500 flex items-center gap-1">
+                                <Calendar size={14} />
+                                {birthDateDisplay}
+                            </span>
+                        )}
+                        {otherParents.length > 0 && (
+                            <span className="text-sm text-green-600 flex items-center gap-1">
+                                <User size={14} />
+                                {otherParents[0].displayName?.split(' ')[0] || 'Maki'}
+                            </span>
+                        )}
+                    </div>
                 </div>
                 <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
                     <ChevronDown size={18} className="text-gray-500" />
@@ -529,32 +577,64 @@ function StudentCard({
                         />
                     </div>
 
-                    {/* Invite Partner */}
-                    <div className="pt-2 border-t border-gray-200">
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-                            Bjóða maka / hinu foreldrinu
-                        </label>
-                        <button
-                            onClick={handleCopyInvite}
-                            className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-                                copiedInvite
-                                    ? 'bg-green-50 text-green-700 border border-green-200'
-                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
-                            }`}
-                        >
-                            {copiedInvite ? (
-                                <>
-                                    <CheckCircle2 size={18} />
-                                    Afritað!
-                                </>
-                            ) : (
-                                <>
-                                    <Copy size={18} />
-                                    Afrita boðshlekk
-                                </>
-                            )}
-                        </button>
-                    </div>
+                    {/* Other Parents */}
+                    {otherParents.length > 0 && (
+                        <div className="pt-2 border-t border-gray-200">
+                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
+                                Önnur foreldri / forráðamenn
+                            </label>
+                            <div className="space-y-2">
+                                {otherParents.map((parent) => (
+                                    <div key={parent.id} className="flex items-center gap-3 p-3 bg-green-50 border border-green-100 rounded-lg">
+                                        <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                            {parent.photoURL ? (
+                                                <img src={parent.photoURL} alt={parent.displayName || ''} className="w-full h-full object-cover" />
+                                            ) : (
+                                                <User size={18} className="text-green-600" />
+                                            )}
+                                        </div>
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-medium text-gray-900 truncate">{parent.displayName || 'Foreldri'}</p>
+                                            <p className="text-xs text-green-600">Tengdur</p>
+                                        </div>
+                                        <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Invite - always visible (up to 4 parents allowed) */}
+                    {otherParents.length < 3 && (
+                        <div className={otherParents.length === 0 ? 'pt-2 border-t border-gray-200' : 'pt-3'}>
+                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
+                                Bjóða foreldri / forráðamann
+                            </label>
+                            <button
+                                onClick={handleCopyInvite}
+                                className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
+                                    copiedInvite
+                                        ? 'bg-green-50 text-green-700 border border-green-200'
+                                        : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                }`}
+                            >
+                                {copiedInvite ? (
+                                    <>
+                                        <CheckCircle2 size={18} />
+                                        Afritað!
+                                    </>
+                                ) : (
+                                    <>
+                                        <Copy size={18} />
+                                        Afrita boðshlekk
+                                    </>
+                                )}
+                            </button>
+                            <p className="text-xs text-gray-400 mt-2 text-center">
+                                Hægt er að tengja allt að 4 foreldra/forráðamenn við hvert barn
+                            </p>
+                        </div>
+                    )}
                 </div>
             )}
         </div>
