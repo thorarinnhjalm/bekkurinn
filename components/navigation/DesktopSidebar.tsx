@@ -22,6 +22,8 @@ interface DesktopSidebarProps {
         announcements: string;
         lost_found: string;
         skutl: string;
+        settings?: string;
+        logout?: string;
     };
 }
 
@@ -188,21 +190,39 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-2 gap-2 mb-3">
                         <Link
                             href={`/${locale}/settings`}
                             className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-gray-100 text-xs font-medium text-gray-700 transition-colors"
                         >
                             <Settings size={14} />
-                            Stillingar
+                            {translations.settings || 'Stillingar'}
                         </Link>
                         <button
                             onClick={() => signOut()}
                             className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-red-50 text-xs font-medium text-red-600 transition-colors"
                         >
                             <LogOut size={14} />
-                            Útskrá
+                            {translations.logout || 'Útskrá'}
                         </button>
+                    </div>
+
+                    {/* Language Switcher */}
+                    <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200">
+                        {['is', 'en', 'pl', 'lt'].map((lang) => (
+                            <Link
+                                key={lang}
+                                href={`/${lang}${pathname.replace(/^\/[a-z]{2}/, '')}`}
+                                className={cn(
+                                    "text-[10px] uppercase font-bold px-2 py-1 rounded transition-colors",
+                                    locale === lang
+                                        ? "bg-blue-100 text-blue-800"
+                                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+                                )}
+                            >
+                                {lang}
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -11,7 +11,7 @@ import { SCHOOLS } from '@/constants/schools';
 import { collection, query, where, getDocs, deleteDoc, addDoc, Timestamp, getFirestore, orderBy, doc, updateDoc, arrayUnion, arrayRemove, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config'; // Ensure db is exported from lib/firebase or services
 import { HelpBox } from '@/components/ui/HelpBox';
-
+import { useTranslations } from 'next-intl';
 
 // Calendar Parsing Logic
 function parseICS(icsContent: string) {
@@ -61,6 +61,8 @@ function parseDate(dateStr: string): Date {
 
 export default function SettingsView() {
     const { user, loading: authLoading } = useAuth();
+    const t = useTranslations('settings');
+    const tCommon = useTranslations('common');
 
     // Dynamic Class Fetching
     const [classId, setClassId] = useState<string | null>(null);
@@ -153,7 +155,7 @@ export default function SettingsView() {
                             const data = userDoc.data();
                             return {
                                 uid,
-                                email: data.email || 'Ekkert netfang',
+                                email: data.email || 'Ekkert netfang', // Could translate 'No email' but minor
                                 displayName: data.displayName || data.email || 'Notandi'
                             };
                         }
@@ -205,10 +207,11 @@ export default function SettingsView() {
                 schoolId: formData.schoolId || null
             });
             await refetch();
-            alert('Stillingar vistaðar!');
+
+            alert(t('saved_success'));
         } catch (error) {
             console.error(error);
-            alert('Villa við vistun');
+            alert(t('error_saving'));
         } finally {
             setIsSaving(false);
         }
@@ -217,7 +220,7 @@ export default function SettingsView() {
     const handlePromoteClass = async () => {
         if (!classId) return;
         const nextGrade = Number(formData.grade) + 1;
-        if (confirm(`Ertu viss um að þú viljir hækka bekkinn upp í ${nextGrade}. bekk?\n\nÞetta uppfærir nafnið á bekknum fyrir alla.`)) {
+        if (confirm(t('promote_confirm_title', { grade: nextGrade }) + '\n\n' + t('promote_confirm_desc'))) {
             setIsSaving(true);
             try {
                 const displayName = formData.schoolName
@@ -229,10 +232,10 @@ export default function SettingsView() {
                     name: displayName
                 });
                 await refetch();
-                alert(`Til hamingju! Bekkurinn er núna í ${nextGrade}. bekk.`);
+                alert(t('promote_success', { grade: nextGrade }));
             } catch (error) {
                 console.error(error);
-                alert('Villa kom upp');
+                alert(tCommon('error'));
             } finally {
                 setIsSaving(false);
             }
@@ -249,12 +252,12 @@ export default function SettingsView() {
             const res = await fetch(`/api/proxy-calendar?url=${encodeURIComponent(formData.calendarUrl)}`);
             if (!res.ok) {
                 const data = await res.json().catch(() => ({}));
-                throw new Error(data.error || 'Gat ekki sótt dagatal');
+                throw new Error(data.error || 'Gat ekki sótt dagatal'); // Backend error message might be hardcoded, let's leave it for now or rely on generic
             }
             const icsText = await res.text();
 
             // 2. Parse ICS
-            setSyncStatus('Les gögn...');
+            setSyncStatus(t('reading_data'));
             const events = parseICS(icsText);
 
             // 3. Filter relevant events
@@ -264,14 +267,14 @@ export default function SettingsView() {
             );
 
             // 4. Delete old school events
-            setSyncStatus('Hreinsa gamalt...');
+            setSyncStatus(t('cleaning_old'));
             const q = query(collection(db, 'tasks'), where('classId', '==', classId), where('type', '==', 'school_event'));
             const querySnapshot = await getDocs(q);
             const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
             await Promise.all(deletePromises);
 
             // 5. Add new events
-            setSyncStatus(`Bæti við ${relevantEvents.length} viðburðum...`);
+            setSyncStatus(t('adding_events'));
             const addPromises = relevantEvents.map((event: any) => {
                 const date = parseDate(event.dtstart);
                 // Skip past (optional)
@@ -294,7 +297,7 @@ export default function SettingsView() {
             });
             await Promise.all(addPromises);
 
-            setSyncStatus('Lokið!');
+            setSyncStatus(t('sync_done'));
             setTimeout(() => setSyncStatus(null), 3000);
 
         } catch (error) {
@@ -344,7 +347,7 @@ export default function SettingsView() {
 
             await refetch();
             setNewAdminEmail('');
-            alert('Stjórnendaréttindi veitt!');
+            alert('Stjórnendaréttindi veitt!'); // Keep hardcoded or add key 'admin_added'
         } catch (error) {
             console.error('Error adding admin:', error);
             alert('Villa kom upp við að bæta við stjórnanda.');
@@ -374,7 +377,7 @@ export default function SettingsView() {
             alert('Réttindi afturkölluð.');
         } catch (error) {
             console.error('Error removing admin:', error);
-            alert('Villa kom upp.');
+            alert(tCommon('error'));
         }
     };
 
@@ -392,8 +395,8 @@ export default function SettingsView() {
         <div className="max-w-2xl mx-auto p-4 space-y-8 pb-24 pt-8">
             <header className="border-b border-gray-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">Stillingar Bekkjarins</h1>
-                    <p className="text-gray-500">Breyttu upplýsingum um skóla og árgang</p>
+                    <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
+                    <p className="text-gray-500">{t('subtitle')}</p>
                 </div>
                 <button
                     onClick={handleSave}
@@ -401,18 +404,18 @@ export default function SettingsView() {
                     className="hidden sm:flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 shadow-sm border-none"
                 >
                     {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
-                    Vista
+                    {t('save_btn')}
                 </button>
             </header>
 
             {/* Help Box */}
             <HelpBox
-                title="Vissir þú að...?"
+                title={t('help_title')}
                 variant="tip"
                 tips={[
-                    "Þú getur bætt við fleiri stjórnendum sem geta breytt stillingum og búið til viðburði.",
-                    "Skóladagatalið sækir sjálfkrafa frídaga og viðburði úr dagskrá skólans.",
-                    "Boðskóðinn má deila með öllum foreldrum í bekknum til að bjóða þeim í kerfið."
+                    t('help_tip_1'),
+                    t('help_tip_2'),
+                    t('help_tip_3')
                 ]}
             />
 
@@ -422,17 +425,17 @@ export default function SettingsView() {
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center gap-2">
                         <Users className="text-[#4A7C9E]" size={24} />
-                        Boðskóðar fyrir foreldra
+                        {t('invite_section_title')}
                     </h2>
                     <p className="text-sm text-gray-500">
-                        Deildu þessum kóðum eða tenglum með foreldrum í bekknum.
+                        {t('invite_section_desc')}
                     </p>
                 </div>
 
                 {/* Standard Join Code */}
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
                     <label className="block text-sm font-semibold text-blue-900 uppercase tracking-wider mb-2">
-                        Almennur Aðgangskóði
+                        {t('general_code_label')}
                     </label>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                         <div className="bg-white px-4 py-3 rounded-lg border border-blue-200 flex-1 min-w-0">
@@ -449,27 +452,27 @@ export default function SettingsView() {
                                 onClick={() => {
                                     const url = `${window.location.origin}/${locale}/onboarding?step=join&code=${formData.joinCode}`;
                                     navigator.clipboard.writeText(url);
-                                    alert('Tengill afritaður! \n\n' + url);
+                                    alert(t('link_copied') + '\n\n' + url);
                                 }}
                                 className="flex-1 sm:flex-none px-4 py-2 bg-[#4A7C9E] text-white rounded-lg hover:bg-[#2E5A75] transition-colors text-sm font-medium"
-                                title="Afrita tengil"
+                                title={t('copy_link')}
                             >
-                                📋 Afrita tengil
+                                📋 {t('copy_link')}
                             </button>
                             <button
                                 onClick={() => {
                                     navigator.clipboard.writeText(formData.joinCode);
-                                    alert('Kóði afritaður!');
+                                    alert(t('code_copied'));
                                 }}
                                 className="px-4 py-2 bg-white text-[#4A7C9E] border border-[#B3CDE0] rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
-                                title="Afrita kóða"
+                                title={t('copy_code')}
                             >
-                                Afrita kóða
+                                {t('copy_code')}
                             </button>
                         </div>
                     </div>
                     <p className="text-xs text-blue-700 mt-2">
-                        ℹ️ Foreldrar nota þennan kóða til að tengja sig við barn sitt í bekknum.
+                        ℹ️ {t('parent_info')}
                     </p>
                 </div>
 
@@ -477,7 +480,7 @@ export default function SettingsView() {
                 {formData.parentTeamCode && (
                     <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
                         <label className="block text-sm font-semibold text-purple-900 uppercase tracking-wider mb-2">
-                            Foreldraráð (Stjórnendakóði)
+                            {t('admin_code_label')}
                         </label>
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
                             <div className="bg-white px-4 py-3 rounded-lg border border-purple-200 flex-1 min-w-0 overflow-hidden">
@@ -493,25 +496,25 @@ export default function SettingsView() {
                                     onClick={() => {
                                         const url = `${window.location.origin}/${locale}/onboarding?step=join&code=${formData.parentTeamCode}`;
                                         navigator.clipboard.writeText(url);
-                                        alert('Stjórnendatengill afritaður! \n\n' + url);
+                                        alert(t('link_copied') + '\n\n' + url);
                                     }}
                                     className="flex-1 sm:flex-none px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
                                 >
-                                    📋 Afrita tengil
+                                    📋 {t('copy_link')}
                                 </button>
                                 <button
                                     onClick={() => {
                                         navigator.clipboard.writeText(formData.parentTeamCode);
-                                        alert('Kóði afritaður!');
+                                        alert(t('code_copied'));
                                     }}
                                     className="px-4 py-2 bg-white text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors text-sm font-medium"
                                 >
-                                    Afrita kóða
+                                    {t('copy_code')}
                                 </button>
                             </div>
                         </div>
                         <p className="text-xs text-purple-700 mt-2">
-                            ⚠️ Dulin aðgangsheimild. Veitir stjórnendaréttindi. Deildu aðeins með foreldraráði.
+                            ⚠️ {t('admin_warning')}
                         </p>
                     </div>
                 )}
@@ -524,14 +527,14 @@ export default function SettingsView() {
                         <Shield className="text-nordic-blue" size={24} />
                     </div>
                     <div>
-                        <h2 className="text-xl font-semibold">Stjórnendur bekkjarins</h2>
-                        <p className="text-sm text-gray-500">Aðeins stjórnendur geta breytt stillingum og búið til viðburði</p>
+                        <h2 className="text-xl font-semibold">{t('admins_section_title')}</h2>
+                        <p className="text-sm text-gray-500">{t('admins_section_desc')}</p>
                     </div>
                 </div>
 
                 {/* Current Admins List */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Núverandi stjórnendur ({adminUsers.length})</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('current_admins')} ({adminUsers.length})</label>
                     <div className="border border-gray-200 rounded-lg divide-y divide-gray-100">
                         {adminUsers.map((admin) => (
                             <div key={admin.uid} className="p-3 flex items-center justify-between hover:bg-gray-50">
@@ -548,13 +551,13 @@ export default function SettingsView() {
                                     <button
                                         onClick={() => handleRemoveAdmin(admin.uid)}
                                         className="text-red-600 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
-                                        title="Fjarlægja stjórnanda"
+                                        title={t('remove_admin')}
                                     >
                                         <X size={18} />
                                     </button>
                                 )}
                                 {adminUsers.length === 1 && (
-                                    <span className="text-xs text-gray-400 italic">Einasti stjórnandi</span>
+                                    <span className="text-xs text-gray-400 italic">{t('only_admin_msg')}</span>
                                 )}
                             </div>
                         ))}
@@ -563,13 +566,13 @@ export default function SettingsView() {
 
                 {/* Add New Admin */}
                 <div className="pt-4 border-t border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Bæta við stjórnanda</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('add_admin_title')}</label>
                     <div className="flex gap-2">
                         <input
                             type="email"
                             value={newAdminEmail}
                             onChange={(e) => setNewAdminEmail(e.target.value)}
-                            placeholder="netfang@example.com"
+                            placeholder={t('add_admin_placeholder')}
                             className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') handleAddAdmin();
@@ -581,13 +584,14 @@ export default function SettingsView() {
                             className="flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isAddingAdmin ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
-                            Bæta við
+                            {t('add_btn')}
                         </button>
                     </div>
                     <p className="text-xs text-gray-500 mt-2">
-                        ⚠️ Notandinn þarf að hafa skráð sig inn í kerfið áður en þú getur bætt honum við sem stjórnanda.
+                        ⚠️ {t('add_admin_warning')}
                     </p>
                 </div>
+
             </section>
 
             {/* General Settings */}
@@ -596,24 +600,24 @@ export default function SettingsView() {
                     <div className="p-2 bg-blue-50 rounded-lg">
                         <School className="text-nordic-blue" size={24} />
                     </div>
-                    <h2 className="text-xl font-semibold">Grunnupplýsingar</h2>
+                    <h2 className="text-xl font-semibold">{t('general_settings_title')}</h2>
                 </div>
 
                 <div className="grid gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Skóli</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('school_label')}</label>
                         <select
                             value={formData.schoolName}
                             onChange={handleSchoolChange}
                             className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none bg-white text-gray-900"
                         >
-                            <option value="">Veldu skóla...</option>
+                            <option value="">{t('select_school')}</option>
                             {SCHOOLS.map(school => (
                                 <option key={school.name} value={school.name}>
                                     {school.name}
                                 </option>
                             ))}
-                            <option value="Annað">Annað (Skrifa nafn)</option>
+                            <option value="Annað">{t('other_school')}</option>
                         </select>
                         {/* Fallback input if 'Annað' or unknown */}
                         {!SCHOOLS.find(s => s.name === formData.schoolName) && formData.schoolName && (
@@ -622,7 +626,7 @@ export default function SettingsView() {
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
                                 className="w-full mt-2 p-2 border border-gray-300 rounded-md"
-                                placeholder="Sláðu inn nafn skóla"
+                                placeholder={t('enter_school_name')}
                             />
                         )}
                     </div>
@@ -633,9 +637,9 @@ export default function SettingsView() {
                             <div className="flex items-center gap-3">
                                 <Calendar className="text-nordic-blue" />
                                 <div>
-                                    <p className="font-medium text-nordic-blue-dark">Skóladagatal fundið</p>
+                                    <p className="font-medium text-nordic-blue-dark">{t('calendar_found')}</p>
                                     <p className="text-xs text-nordic-blue">
-                                        Nær sjálfkrafa í starfsdaga og frí.
+                                        {t('calendar_sync_desc')}
                                     </p>
                                 </div>
                             </div>
@@ -645,14 +649,14 @@ export default function SettingsView() {
                                 className="flex items-center gap-2 bg-white text-nordic-blue border border-blue-200 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors"
                             >
                                 {isSyncing ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}
-                                {syncStatus || 'Uppfæra dagatal'}
+                                {syncStatus || t('update_calendar')}
                             </button>
                         </div>
                     )}
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Bekkur / Árgangur</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('grade_label')}</label>
                             <input
                                 type="number"
                                 value={formData.grade}
@@ -663,22 +667,22 @@ export default function SettingsView() {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Deild (Valfrjálst)</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('section_label')}</label>
                             <input
                                 type="text"
                                 value={formData.section}
                                 onChange={(e) => setFormData({ ...formData, section: e.target.value })}
                                 className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
-                                placeholder="t.d. Hlíð"
+                                placeholder={t('section_placeholder')}
                             />
                         </div>
                     </div>
 
                     <div className="pt-2 text-sm text-gray-500 bg-gray-50 p-3 rounded">
-                        <strong>Forskoðun á nafni:</strong><br />
+                        <strong>{t('preview_name')}</strong><br />
                         {formData.schoolName && formData.grade
                             ? `${formData.grade}. Bekkur ${formData.section || ''} - ${formData.schoolName}`
-                            : formData.name || '(Vantar upplýsingar)'}
+                            : formData.name || t('missing_info')}
                     </div>
                 </div>
 
@@ -689,7 +693,7 @@ export default function SettingsView() {
                         className="flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 border-none"
                     >
                         {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
-                        Vista Breytingar
+                        {t('save_changes')}
                     </button>
                 </div>
             </section>
@@ -703,12 +707,11 @@ export default function SettingsView() {
                         <div className="p-2 bg-amber-100 rounded-lg">
                             <GraduationCap className="text-amber-600" size={24} />
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-900">Nýtt Skólaár (Í ágúst)</h2>
+                        <h2 className="text-xl font-semibold text-gray-900">{t('new_school_year_title')}</h2>
                     </div>
 
                     <p className="text-gray-600 mb-6">
-                        Þegar skólinn byrjar aftur í ágúst er sniðugt að hækka bekkinn upp um árgang hér.
-                        Nafn bekkjarins uppfærist og nýtt tímabil hefst.
+                        {t('new_school_year_desc')}
                     </p>
 
                     <div className="flex items-center justify-between bg-amber-50 p-4 rounded-lg border border-amber-100">
@@ -724,7 +727,7 @@ export default function SettingsView() {
                             className="flex items-center gap-2 bg-white border-2 border-amber-400 text-amber-700 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors font-semibold shadow-sm"
                         >
                             <GraduationCap size={20} />
-                            Byrja nýtt skólaár
+                            {t('start_new_year')}
                         </button>
                     </div>
                 </div>
