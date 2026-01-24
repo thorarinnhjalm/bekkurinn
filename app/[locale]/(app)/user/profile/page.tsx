@@ -6,11 +6,13 @@ import { useParams } from 'next/navigation';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
-    Loader2, User, UserPlus, Check, Calendar, Phone, MapPin,
+    Loader2, User, UserPlus, Check, Calendar, Phone, MapPin, Globe,
     ChevronDown, Heart, Copy, CheckCircle2, AlertCircle
 } from 'lucide-react';
 import { Timestamp } from 'firebase/firestore';
 import { ImageUploader } from '@/components/upload/ImageUploader';
+import { locales } from '@/i18n-config';
+import Link from 'next/link';
 import { AddressAutocomplete } from '@/components/ui/AddressAutocomplete';
 
 const DIETARY_OPTIONS = [
@@ -39,9 +41,8 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
     }, [onClose]);
 
     return (
-        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${
-            type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
-        }`}>
+        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+            }`}>
             {type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span className="font-medium">{message}</span>
         </div>
@@ -361,6 +362,30 @@ export default function UserProfilePage() {
                             label="Prófílmynd"
                         />
                     </div>
+
+                    {/* Language Switcher */}
+                    <div className="flex items-start gap-4 pt-2">
+                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
+                            <Globe size={18} className="text-gray-500" />
+                        </div>
+                        <div className="flex-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">Tungumál / Language</label>
+                            <div className="flex flex-wrap gap-2">
+                                {locales.map((l) => (
+                                    <Link
+                                        key={l}
+                                        href={`/${l}${window.location.pathname.replace(/^\/[a-z]{2}/, '')}${window.location.search}`}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border ${locale === l
+                                            ? 'bg-[#1E3A5F] text-white border-[#1E3A5F]'
+                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                                            }`}
+                                    >
+                                        {l.toUpperCase()}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -551,11 +576,10 @@ function StudentCard({
                                 <button
                                     key={option.value}
                                     onClick={() => onSaveGender(option.value)}
-                                    className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${
-                                        student.gender === option.value
-                                            ? 'bg-[#1E3A5F] text-white shadow-sm'
-                                            : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
-                                    }`}
+                                    className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${student.gender === option.value
+                                        ? 'bg-[#1E3A5F] text-white shadow-sm'
+                                        : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+                                        }`}
                                 >
                                     {option.label}
                                 </button>
@@ -573,11 +597,10 @@ function StudentCard({
                                     <button
                                         key={option.value}
                                         onClick={() => toggleDietaryNeed(option.value)}
-                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${
-                                            isSelected
-                                                ? 'bg-red-50 text-red-700 border border-red-200'
-                                                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
-                                        }`}
+                                        className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${isSelected
+                                            ? 'bg-red-50 text-red-700 border border-red-200'
+                                            : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+                                            }`}
                                     >
                                         {option.label}
                                         {isSelected && <Check size={14} />}
@@ -633,11 +656,10 @@ function StudentCard({
                             </label>
                             <button
                                 onClick={handleCopyInvite}
-                                className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${
-                                    copiedInvite
-                                        ? 'bg-green-50 text-green-700 border border-green-200'
-                                        : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
-                                }`}
+                                className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
+                                    ? 'bg-green-50 text-green-700 border border-green-200'
+                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                    }`}
                             >
                                 {copiedInvite ? (
                                     <>

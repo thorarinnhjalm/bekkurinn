@@ -208,23 +208,6 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                         </button>
                     </div>
 
-                    {/* Language Switcher */}
-                    <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200">
-                        {locales.map((lang) => (
-                            <Link
-                                key={lang}
-                                href={`/${lang}${pathname.replace(/^\/[a-z]{2}/, '')}`}
-                                className={cn(
-                                    "text-[10px] uppercase font-bold px-2 py-1 rounded transition-colors",
-                                    locale === lang
-                                        ? "bg-blue-100 text-blue-800"
-                                        : "text-gray-400 hover:text-gray-600 hover:bg-gray-100"
-                                )}
-                            >
-                                {lang}
-                            </Link>
-                        ))}
-                    </div>
                 </div>
             </div>
         </aside>
