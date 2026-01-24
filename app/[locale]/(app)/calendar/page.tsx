@@ -25,7 +25,7 @@ export default function TasksPage() {
     const t = useTranslations('calendar');
 
     // 1. Get User's Classes
-    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '', user?.email);
     const activeClassId = userClasses?.[0]?.id || '';
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';

@@ -22,7 +22,7 @@ export default function PatrolPage() {
     const locale = (params.locale as string) || 'is';
     const t = useTranslations('patrol');
 
-    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '', user?.email);
     const activeClassId = userClasses?.[0]?.id || '';
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';

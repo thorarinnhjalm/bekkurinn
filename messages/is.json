@@ -428,7 +428,11 @@
       "Eyða aðgangi þínum og tengdum gögnum",
       "Stjórna sýnileika símanúmers (kveikt/slökkt)"
     ],
-    "section5_title": "5. Hafa samband",
+    "section6_title": "5. Vefkökur (Cookies)",
+    "section6_text": "Við notum eingöngu nauðsynlegar kökur til að halda þér innskráðum. Við notum ekki rakningarkökur frá þriðja aðila.",
+    "section7_title": "6. Varðveisla gagna",
+    "section7_text": "Við geymum gögnin þín aðeins á meðan þau þarf til að veita þjónustuna. Ef þú yfirgefur bekk eða eyðir aðgangi þínum, er persónuupplýsingum þínum eytt varanlega.",
+    "section5_title": "7. Hafa samband",
     "section5_text": "Ef þú hefur spurningar um persónuvernd, hafðu samband við okkur á",
     "notice_title": "Athugið:",
     "notice_text": "Bekkurinn er hannað með persónuvernd í fyrirrúmi. Við söfnum aldrei meira en nauðsynlegt er og seljum aldrei gögn til þriðja aðila.",

@@ -50,9 +50,9 @@ import { db } from '@/lib/firebase/config';
 // USER / CONTEXT HOOKS
 // ========================================
 
-export function useUserClasses(userId: string | undefined) {
+export function useUserClasses(userId: string | undefined, userEmail?: string | null) {
     return useQuery({
-        queryKey: ['userClasses', userId],
+        queryKey: ['userClasses', userId, userEmail],
         queryFn: async () => {
             if (!userId) return [];
 
@@ -99,7 +99,14 @@ export function useUserClasses(userId: string | undefined) {
                 }));
             }
 
-            const result = Array.from(classesMap.values());
+            let result = Array.from(classesMap.values());
+
+            // SUPER ADMIN CHECK
+            const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',') || [];
+            if (userEmail && adminEmails.map(e => e.trim()).includes(userEmail)) {
+                result = result.map(c => ({ ...c, role: 'admin' }));
+            }
+
             return result;
         },
         enabled: !!userId,
@@ -108,9 +115,9 @@ export function useUserClasses(userId: string | undefined) {
     });
 }
 
-export function useUserClass(userId: string | undefined) {
+export function useUserClass(userId: string | undefined, userEmail?: string | null) {
     // Legacy support: return the first class from the list
-    const { data } = useUserClasses(userId);
+    const { data } = useUserClasses(userId, userEmail);
     return {
         data: data && data.length > 0 ? data[0] : null,
         isLoading: !data, // Approximated

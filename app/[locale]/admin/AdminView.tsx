@@ -16,9 +16,7 @@ import UsersTab from './components/UsersTab';
 import ApprovalsTab from './components/ApprovalsTab';
 import TestimonialsTab from './components/TestimonialsTab';
 
-const SUPER_ADMINS = [
-    'thorarinnhjalmarsson@gmail.com'
-];
+
 
 interface ClassData {
     id: string;
@@ -77,7 +75,8 @@ export default function AdminView() {
             // Fetch Schools
             const allSchools = await getAllSchools();
 
-            const isSuperAdmin = user && SUPER_ADMINS.includes(user.email || '');
+            const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
+            const isSuperAdmin = user && adminEmails.includes(user.email || '');
 
             if (isSuperAdmin) {
                 setSchools(allSchools);
@@ -139,7 +138,10 @@ export default function AdminView() {
 
     if (loading || isFetching) return <div className="flex justify-center pt-20"><Loader2 className="animate-spin text-nordic-blue" /></div>;
 
-    const isSuperAdmin = user && SUPER_ADMINS.includes(user.email || '');
+    const isSuperAdmin = user && (
+        process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()).includes(user.email || '')
+        // Fallback for development if env is missing? No, secure by default.
+    );
 
     // Access Check (After Fetching)
     if (!isFetching && !loading) {

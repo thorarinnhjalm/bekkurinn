@@ -63,7 +63,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     const locale = params.locale || 'is';
 
     // 1. Find all user classes
-    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid);
+    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid, user?.email);
     const [selectedClassId, setSelectedClassId] = useState<string | null>(null);
 
     // Default to first class if not selected

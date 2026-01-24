@@ -413,7 +413,11 @@
             "Delete your account and associated data",
             "Control phone number visibility (on/off)"
         ],
-        "section5_title": "5. Contact",
+        "section6_title": "5. Cookies",
+        "section6_text": "We only use essential functional cookies to keep you logged in. We do not use third-party tracking cookies or advertising pixels.",
+        "section7_title": "6. Data Retention",
+        "section7_text": "We retain your data only for as long as needed to provide the service to your class. If you leave a class or delete your account, your personal data is permanently removed.",
+        "section5_title": "7. Contact",
         "section5_text": "If you have questions about privacy, contact us at",
         "notice_title": "Note:",
         "notice_text": "Bekkurinn is designed with privacy first. We never collect more than necessary and never sell data to third parties.",

@@ -1,0 +1,127 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - navigation [ref=e3]:
+      - generic [ref=e6] [cursor=pointer]:
+        - generic [ref=e7]: B
+        - generic [ref=e8]: Bekkurinn
+    - main [ref=e9]:
+      - generic [ref=e14]:
+        - generic [ref=e16]: Finally, a proper system for class reps
+        - heading "Everything your class needs. In one place." [level=1] [ref=e20]:
+          - text: Everything your class needs.
+          - generic [ref=e21]: In one place.
+        - paragraph [ref=e23]: Forget endless Facebook threads and lost emails. Bekkurinn manages patrol, events, and contacts simply and securely.
+        - generic [ref=e24]:
+          - link "Create Class (Free)" [ref=e25]:
+            - /url: /en/onboarding
+            - text: Create Class (Free)
+            - img [ref=e26]
+          - link "How does it work?" [ref=e28]:
+            - /url: "#features"
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - heading "Tools that simplify life" [level=2] [ref=e32]
+          - paragraph [ref=e33]: Designed for simplicity, security, and convenience.
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - img [ref=e37]
+            - heading "School Calendar in your pocket" [level=3] [ref=e39]
+            - paragraph [ref=e40]: School days, holidays, and events sync automatically. You never have to chase the calendar again.
+          - generic [ref=e41]:
+            - img [ref=e43]
+            - heading "Legal Communication" [level=3] [ref=e45]
+            - paragraph [ref=e46]: Facebook groups are not GDPR compliant. Here, your school communication is safe, legal, and private.
+          - generic [ref=e47]:
+            - img [ref=e49]
+            - heading "Patrol made fair and easy" [level=3] [ref=e54]
+            - paragraph [ref=e55]: A fair system for distributing shifts. The system reminds people – no chasing required.
+          - generic [ref=e56]:
+            - img [ref=e58]
+            - heading "Don't let Zuckerberg own your data" [level=3] [ref=e61]
+            - paragraph [ref=e62]: Facebook and WhatsApp mine your data. Bekkurinn is 100% GDPR compliant and Icelandic. Your data belongs to you.
+          - generic [ref=e63]:
+            - img [ref=e65]
+            - heading "Allergies & Special Needs" [level=3] [ref=e68]
+            - paragraph [ref=e69]: Keep everyone informed for birthdays and parties. No stress, just safety.
+          - generic [ref=e70]:
+            - img [ref=e72]
+            - heading "Less administration time" [level=3] [ref=e74]
+            - paragraph [ref=e75]: You volunteered to help, not for a full-time job. We give you your time back.
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - heading "Three simple steps" [level=2] [ref=e79]
+          - paragraph [ref=e80]: Takes less than 2 minutes to start
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: "1"
+            - heading "Create your class" [level=3] [ref=e84]
+            - paragraph [ref=e85]: Register school and class. Get a join code instantly to share on WhatsApp.
+          - generic [ref=e86]:
+            - generic [ref=e87]: "2"
+            - heading "Invite parents" [level=3] [ref=e88]
+            - paragraph [ref=e89]: Parents click the link and are in. Takes 30 seconds, no complexity.
+          - generic [ref=e90]:
+            - generic [ref=e91]: "3"
+            - heading "All set" [level=3] [ref=e92]
+            - paragraph [ref=e93]: Calendar, patrol, and contacts are organized. The system handles the rest.
+        - generic [ref=e94]:
+          - link "Try for free – no commitment" [ref=e95]:
+            - /url: /en/onboarding
+          - paragraph [ref=e96]: No credit card required · Ready in 2 minutes
+      - generic [ref=e98]:
+        - heading "Frequently Asked Questions" [level=2] [ref=e99]
+        - generic [ref=e100]:
+          - generic [ref=e101]:
+            - heading "? Is it really free?" [level=3] [ref=e102]:
+              - generic [ref=e103]: "?"
+              - generic [ref=e104]: Is it really free?
+            - paragraph [ref=e105]: Yes, completely free. No hidden costs, no commitment. We believe all children deserve organized school activities.
+          - generic [ref=e106]:
+            - heading "? How secure is it?" [level=3] [ref=e107]:
+              - generic [ref=e108]: "?"
+              - generic [ref=e109]: How secure is it?
+            - paragraph [ref=e110]: Data security is a priority. We use bank-grade encryption (256-bit). All data is GDPR compliant and stored securely. Only class members see the info.
+          - generic [ref=e111]:
+            - heading "? I'm not tech-savvy. Can I use this?" [level=3] [ref=e112]:
+              - generic [ref=e113]: "?"
+              - generic [ref=e114]: I'm not tech-savvy. Can I use this?
+            - paragraph [ref=e115]: Absolutely. It's designed to be as simple as possible. If you can use Facebook or Email, you can use Bekkurinn.
+          - generic [ref=e116]:
+            - heading "? Do I need an app?" [level=3] [ref=e117]:
+              - generic [ref=e118]: "?"
+              - generic [ref=e119]: Do I need an app?
+            - paragraph [ref=e120]: No, Bekkurinn works in your browser on phone and computer. No download needed.
+          - generic [ref=e121]:
+            - heading "? I have children in different classes?" [level=3] [ref=e122]:
+              - generic [ref=e123]: "?"
+              - generic [ref=e124]: I have children in different classes?
+            - paragraph [ref=e125]: No problem! You can be in multiple classes with one account and switch between them easily.
+      - generic [ref=e129]:
+        - heading "Take control today" [level=2] [ref=e130]
+        - paragraph [ref=e131]: Join forward-thinking parents and simplify life for the whole class.
+        - generic [ref=e132]:
+          - link "Create Class (Free)" [ref=e133]:
+            - /url: /en/onboarding
+          - paragraph [ref=e134]: No commitment · Ready in 2 minutes · Secure
+      - generic [ref=e136]:
+        - generic [ref=e137]:
+          - generic [ref=e138]: B
+          - generic [ref=e139]: Bekkurinn
+        - paragraph [ref=e140]: © 2026 Bekkurinn. All rights reserved. Made in Iceland 🇮🇸
+  - generic [ref=e141]:
+    - img [ref=e143]
+    - button "Open Tanstack query devtools" [ref=e211] [cursor=pointer]:
+      - img [ref=e212]
+  - generic [ref=e280]:
+    - img [ref=e282]
+    - button "Open Tanstack query devtools" [ref=e350] [cursor=pointer]:
+      - img [ref=e351]
+  - button "Open Next.js Dev Tools" [ref=e424] [cursor=pointer]:
+    - img [ref=e425]
+  - alert [ref=e430]
+  - iframe [ref=e431]:
+    
+```

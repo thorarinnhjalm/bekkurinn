@@ -17,7 +17,7 @@ export default function LostFoundPage() {
     const t = useTranslations('lost_found');
 
     // Get Context (Class/School)
-    const { data: userClasses } = useUserClasses(user?.uid || '');
+    const { data: userClasses } = useUserClasses(user?.uid || '', user?.email);
     const activeClassId = userClasses?.[0]?.id || '';
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const { data: school } = useSchool(activeClass?.schoolId);
