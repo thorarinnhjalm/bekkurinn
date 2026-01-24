@@ -20,7 +20,7 @@ export const OnboardingSchema = z.object({
         .min(1, 'Grade must be between 1-10')
         .max(10, 'Grade must be between 1-10'),
     section: z.string()
-        .max(50, 'Deild of löng')
+        .max(50, 'Section name too long')
         .optional(),
     isSplit: z.boolean(),
 });
