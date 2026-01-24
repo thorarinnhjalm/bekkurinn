@@ -96,41 +96,62 @@ export default function UserProfilePage() {
         fetchData();
     }, [user]);
 
-    // Fetch other parents for each student
+    // Fetch other parents for each student (using classId like directory page does)
     useEffect(() => {
         async function fetchOtherParents() {
-            if (!user || students.length === 0) return;
+            if (!user || students.length === 0 || !classId) return;
 
             const parentsMap = new Map<string, any[]>();
 
-            for (const student of students) {
-                // Get all parent links for this student
-                const linksQuery = query(
-                    collection(db, 'parentLinks'),
-                    where('studentId', '==', student.id),
-                    where('status', '==', 'approved')
-                );
-                const linksSnap = await getDocs(linksQuery);
-                const otherUserIds = linksSnap.docs
-                    .map(d => d.data().userId)
-                    .filter(uid => uid !== user.uid);
+            // Fetch ALL parent links for the class (same approach as directory page)
+            const linksQuery = query(
+                collection(db, 'parentLinks'),
+                where('classId', '==', classId)
+            );
+            const linksSnap = await getDocs(linksQuery);
+            const allClassLinks = linksSnap.docs.map(d => ({ id: d.id, ...d.data() } as any));
 
-                if (otherUserIds.length > 0) {
-                    // Fetch user data for other parents
-                    const usersQuery = query(
-                        collection(db, 'users'),
-                        where('__name__', 'in', otherUserIds)
-                    );
-                    const usersSnap = await getDocs(usersQuery);
-                    const parents = usersSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-                    parentsMap.set(student.id, parents);
-                }
+            // Get student IDs we care about
+            const myStudentIds = new Set(students.map(s => s.id));
+
+            // Filter links: for our students, not current user, not rejected
+            const relevantLinks = allClassLinks.filter((link: any) => {
+                if (link.userId === user.uid) return false;
+                if (!myStudentIds.has(link.studentId)) return false;
+                const status = (link.status || '').toLowerCase();
+                return status !== 'rejected' && status !== 'denied';
+            });
+
+            // Get unique user IDs
+            const otherUserIds = [...new Set(relevantLinks.map((link: any) => link.userId))];
+
+            if (otherUserIds.length > 0) {
+                // Fetch user data for other parents
+                const usersQuery = query(
+                    collection(db, 'users'),
+                    where('__name__', 'in', otherUserIds)
+                );
+                const usersSnap = await getDocs(usersQuery);
+                const usersData = new Map<string, any>();
+                usersSnap.docs.forEach(d => {
+                    usersData.set(d.id, { id: d.id, ...d.data() });
+                });
+
+                // Build map: studentId -> array of parent user objects
+                relevantLinks.forEach((link: any) => {
+                    const parentUser = usersData.get(link.userId);
+                    if (parentUser) {
+                        const existing = parentsMap.get(link.studentId) || [];
+                        existing.push(parentUser);
+                        parentsMap.set(link.studentId, existing);
+                    }
+                });
             }
 
             setOtherParents(parentsMap);
         }
         fetchOtherParents();
-    }, [user, students]);
+    }, [user, students, classId]);
 
     // Fetch User Profile Data
     useEffect(() => {
