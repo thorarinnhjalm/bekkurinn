@@ -10,6 +10,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { useClass } from '@/hooks/useFirestore';
+import { locales } from '@/i18n-config';
 
 interface DesktopSidebarProps {
     className?: string;
@@ -209,7 +210,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
 
                     {/* Language Switcher */}
                     <div className="flex items-center justify-center gap-2 pt-2 border-t border-gray-200">
-                        {['is', 'en', 'pl', 'lt'].map((lang) => (
+                        {locales.map((lang) => (
                             <Link
                                 key={lang}
                                 href={`/${lang}${pathname.replace(/^\/[a-z]{2}/, '')}`}

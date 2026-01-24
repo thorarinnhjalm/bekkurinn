@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Timestamp } from 'firebase/firestore';
+import { locales } from '@/i18n-config';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -207,7 +208,7 @@ export function TopHeader({ className }: { className?: string }) {
                                         <div className="px-4 py-2 border-b" style={{ borderColor: 'var(--border-light)' }}>
                                             <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>Tungumál / Language</p>
                                             <div className="flex items-center gap-2">
-                                                {['is', 'en', 'pl'].map((l) => (
+                                                {locales.map((l) => (
                                                     <Link
                                                         key={l}
                                                         href={`/${l}${pathname ? pathname.replace(/^\/[a-z]{2}/, '') : ''}`}
@@ -258,7 +259,7 @@ export function TopHeader({ className }: { className?: string }) {
                             <div className="flex items-center gap-2">
                                 {/* Language Switcher for non-logged in users */}
                                 <div className="flex items-center gap-1 bg-stone-100 rounded-lg p-1">
-                                    {['is', 'en'].map((l) => (
+                                    {locales.map((l) => (
                                         <Link
                                             key={l}
                                             href={`/${l}${pathname ? pathname.replace(/^\/[a-z]{2}/, '') : ''}`}
