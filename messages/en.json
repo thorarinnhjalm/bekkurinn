@@ -379,6 +379,15 @@
         "kid": "kid",
         "kids": "kids"
     },
+    "dashboard": {
+        "greeting": "Good morning, {name}",
+        "whats_next": "What's Next?",
+        "latest_announcement": "Latest Announcement",
+        "upcoming_birthdays": "Upcoming Birthdays",
+        "no_events": "No upcoming events",
+        "no_birthdays": "No upcoming birthdays",
+        "quick_actions": "Quick Actions"
+    },
     "privacy_page": {
         "title": "Privacy Policy",
         "last_updated": "Last updated: January 2026",

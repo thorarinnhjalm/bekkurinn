@@ -50,6 +50,15 @@
         "progress_goal": "Meta de la clase: {filled}/{total}",
         "your_shifts": "Tus turnos"
     },
+    "dashboard": {
+        "greeting": "Buenos días, {name}",
+        "whats_next": "¿Qué sigue?",
+        "latest_announcement": "Último anuncio",
+        "upcoming_birthdays": "Próximos cumpleaños",
+        "no_events": "No hay eventos próximos",
+        "no_birthdays": "No hay cumpleaños próximos",
+        "quick_actions": "Acciones rápidas"
+    },
     "privacy": {
         "phone_visible": "Teléfono visible para todos",
         "phone_hidden": "Teléfono visible solo para administradores",

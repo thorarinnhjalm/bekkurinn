@@ -46,6 +46,15 @@
         "progress_goal": "Cel klasy: {filled}/{total}",
         "your_shifts": "Twoje zmiany"
     },
+    "dashboard": {
+        "greeting": "Dzień dobry, {name}",
+        "whats_next": "Co dalej?",
+        "latest_announcement": "Ostatnie ogłoszenie",
+        "upcoming_birthdays": "Nadchodzące urodziny",
+        "no_events": "Brak nadchodzących wydarzeń",
+        "no_birthdays": "Brak nadchodzących urodzin",
+        "quick_actions": "Szybkie akcje"
+    },
     "privacy": {
         "phone_visible": "Telefon widoczny dla wszystkich",
         "phone_hidden": "Telefon widoczny tylko dla administratorów",

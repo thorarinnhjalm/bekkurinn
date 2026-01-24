@@ -48,6 +48,15 @@
         "progress_goal": "Klasės tikslas: {filled}/{total}",
         "your_shifts": "Jūsų pamainos"
     },
+    "dashboard": {
+        "greeting": "Labas rytas, {name}",
+        "whats_next": "Kas toliau?",
+        "latest_announcement": "Naujausias skelbimas",
+        "upcoming_birthdays": "Artimiausi gimtadieniai",
+        "no_events": "Nėra artėjančių renginių",
+        "no_birthdays": "Nėra artėjančių gimtadienių",
+        "quick_actions": "Greitieji veiksmai"
+    },
     "privacy": {
         "phone_visible": "Telefonas matomas visiems",
         "phone_hidden": "Telefonas matomas tik administratoriams",
