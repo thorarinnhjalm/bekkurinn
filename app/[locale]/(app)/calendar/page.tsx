@@ -9,6 +9,7 @@ import type { Task } from '@/types';
 import { Babelfish } from '@/components/Babelfish';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
 import { CreateBirthdayModal } from '@/components/modals/CreateBirthdayModal';
+import { useTranslations } from 'next-intl';
 
 /**
  * Tasks Page - Skipulag V2
@@ -21,6 +22,7 @@ export default function TasksPage() {
     const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('calendar');
 
     // 1. Get User's Classes
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
@@ -79,17 +81,17 @@ export default function TasksPage() {
             });
         } catch (err) {
             console.error("Failed to volunteer:", err);
-            alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+            alert(t('error_signup'));
         }
     };
 
     const handleDelete = async (taskId: string) => {
-        if (!window.confirm('Ertu viss um að þú viljir eyða þessu verkefni?')) return;
+        if (!window.confirm(t('confirm_delete'))) return;
         try {
             await deleteTaskMutation.mutateAsync(taskId);
         } catch (err) {
             console.error("Failed to delete task:", err);
-            alert("Gat ekki eytt verkefni.");
+            alert(t('error_delete'));
         }
     };
 
@@ -142,9 +144,9 @@ export default function TasksPage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Dagatal</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
-                        Yfirlit yfir allt sem er framundan hjá bekknum.
+                        {t('subtitle')}
                     </p>
                 </div>
                 <div className="flex gap-2">
@@ -154,7 +156,7 @@ export default function TasksPage() {
                             className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
                         >
                             <Plus size={20} />
-                            Nýr viðburður
+                            {t('new_event')}
                         </button>
                     )}
                     {/* Birthday Button - Visible to everyone */}
@@ -163,7 +165,7 @@ export default function TasksPage() {
                         className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-pink-50 text-pink-600 font-bold hover:bg-pink-100 transition-all border border-pink-100"
                     >
                         <span className="text-xl">🎂</span>
-                        Skrá afmæli
+                        {t('register_birthday')}
                     </button>
                 </div>
             </header>
@@ -174,25 +176,25 @@ export default function TasksPage() {
                     onClick={() => setFilter('all')}
                     className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'all' ? 'bg-gray-900 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
                 >
-                    Allt
+                    {t('filter_all')}
                 </button>
                 <button
                     onClick={() => setFilter('event')}
                     className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'event' ? 'bg-nordic-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
                 >
-                    Viðburðir
+                    {t('filter_events')}
                 </button>
                 <button
                     onClick={() => setFilter('rolt')}
                     className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'rolt' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
                 >
-                    Rölt
+                    {t('filter_patrol')}
                 </button>
                 <button
                     onClick={() => setFilter('birthday')}
                     className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'birthday' ? 'bg-pink-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
                 >
-                    Afmæli
+                    {t('filter_birthday')}
                 </button>
             </div>
 
@@ -227,20 +229,20 @@ export default function TasksPage() {
 
                     if (isSchool) {
                         borderClass = "border-l-4 border-purple-500";
-                        badgeLabel = "Skóla viðburður";
+                        badgeLabel = t('type_school');
                         badgeColor = "bg-purple-100 text-purple-700";
                     } else if (isBirthday) {
                         borderClass = "border-l-4 border-pink-400";
-                        badgeLabel = "Afmæli";
+                        badgeLabel = t('type_birthday');
                         badgeColor = "bg-pink-100 text-pink-700";
                     } else if (isRolt) {
                         borderClass = "border-l-4 border-indigo-500";
-                        badgeLabel = "Rölt";
+                        badgeLabel = t('type_patrol');
                         badgeColor = "bg-indigo-100 text-indigo-700";
                     } else {
                         // Class Event
                         borderClass = "border-l-4 border-nordic-blue";
-                        badgeLabel = "Bekkjarviðburður";
+                        badgeLabel = t('type_class');
                         badgeColor = "bg-blue-100 text-blue-700";
                     }
 
@@ -253,23 +255,23 @@ export default function TasksPage() {
                             {/* Date Column */}
                             <div className="md:w-48 bg-gray-50/50 md:border-r border-gray-100 p-6 flex flex-col justify-center items-center text-center group-hover:bg-blue-50/30 transition-colors">
                                 <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">
-                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { weekday: 'short' }) : '---'}
+                                    {dateObj ? new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(dateObj) : '---'}
                                 </span>
                                 <span className="text-4xl font-black text-gray-900 leading-none mb-1">
                                     {dateObj ? dateObj.getDate() : '--'}
                                 </span>
                                 <span className="text-lg font-medium text-nordic-blue">
-                                    {dateObj ? dateObj.toLocaleDateString('is-IS', { month: 'short' }) : '---'}
+                                    {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
                                 </span>
                                 {dateObj && !isAllDay && (
                                     <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
                                         <Clock size={12} />
-                                        {dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}
+                                        {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(dateObj)}
                                     </div>
                                 )}
                                 {isAllDay && (
                                     <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
-                                        Allan daginn
+                                        {t('label_allday')}
                                     </div>
                                 )}
                             </div>
@@ -284,7 +286,7 @@ export default function TasksPage() {
                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${badgeColor}`}>
                                                 {badgeLabel}
                                             </span>
-                                            {task.scope === 'school' && !isSchool && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase tracking-wider">Allur Skólinn</span>}
+                                            {task.scope === 'school' && !isSchool && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase tracking-wider">{t('scope_school')}</span>}
                                         </div>
 
                                         <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-nordic-blue transition-colors">
@@ -319,7 +321,7 @@ export default function TasksPage() {
                                 </div>
 
                                 <p className="text-gray-600 leading-relaxed mb-4 max-w-2xl">
-                                    {task.description || "Engin lýsing."}
+                                    {task.description || t('desc_empty')}
                                 </p>
 
                                 {task.description && (
@@ -338,7 +340,7 @@ export default function TasksPage() {
                                         <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
                                             <div className="flex-1">
                                                 <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
-                                                    <span>Sjálfboðaliðar</span>
+                                                    <span>{t('volunteers')}</span>
                                                     <span>{task.slotsFilled} / {task.slotsTotal}</span>
                                                 </div>
                                                 <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
@@ -357,13 +359,13 @@ export default function TasksPage() {
                                                     : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
                                                     }`}
                                             >
-                                                {isFull ? 'Fullmannað' : 'Skrá mig'}
+                                                {isFull ? t('full') : t('sign_up')}
                                             </button>
                                         </div>
                                     ) : (
                                         <div className="py-2 text-sm text-gray-400 font-medium italic flex items-center gap-2">
                                             <Info size={14} />
-                                            Engin skráning nauðsynleg.
+                                            {t('no_signup_needed')}
                                         </div>
                                     )}
                                 </div>
@@ -377,14 +379,14 @@ export default function TasksPage() {
                         <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
                             <Calendar className="text-gray-300" size={40} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900">Ekkert fannst</h3>
-                        <p className="text-gray-500">Engir viðburðir fundust með þessum leitarskilyrðum.</p>
+                        <h3 className="text-2xl font-bold text-gray-900">{t('empty_title')}</h3>
+                        <p className="text-gray-500">{t('empty_desc')}</p>
                         {filter !== 'all' && (
                             <button
                                 onClick={() => setFilter('all')}
                                 className="mt-4 text-nordic-blue font-bold hover:underline"
                             >
-                                Sýna allt
+                                {t('show_all')}
                             </button>
                         )}
                     </div>
@@ -401,7 +403,7 @@ export default function TasksPage() {
                             <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-nordic-blue shadow-sm">
                                 <Edit2 size={28} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Nýtt verkefni</h2>
+                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('modal_title')}</h2>
                         </div>
 
                         <div className="space-y-4">
@@ -412,19 +414,19 @@ export default function TasksPage() {
                                         onClick={() => setScope('class')}
                                         className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                                     >
-                                        Bekkur
+                                        {t('scope_class')}
                                     </button>
                                     <button
                                         onClick={() => setScope('school')}
                                         className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                                     >
-                                        Allur Skólinn
+                                        {t('scope_school')}
                                     </button>
                                 </div>
                             )}
 
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Heiti</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_title')}</label>
                                 <input
                                     type="text"
                                     value={createTitle}
@@ -435,7 +437,7 @@ export default function TasksPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Dagsetning</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_date')}</label>
                                     <input
                                         type="date"
                                         value={createDate}
@@ -444,7 +446,7 @@ export default function TasksPage() {
                                     />
                                 </div>
                                 <div className={createIsAllDay ? 'opacity-30 pointer-events-none' : ''}>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Klukkan</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_time')}</label>
                                     <input
                                         type="time"
                                         value={createTime}
@@ -461,10 +463,10 @@ export default function TasksPage() {
                                     onChange={(e) => setCreateIsAllDay(e.target.checked)}
                                     className="w-5 h-5 rounded border-gray-300 text-nordic-blue focus:ring-nordic-blue"
                                 />
-                                <label htmlFor="isAllDay" className="text-sm font-bold text-gray-700 cursor-pointer">Allan daginn</label>
+                                <label htmlFor="isAllDay" className="text-sm font-bold text-gray-700 cursor-pointer">{t('label_allday')}</label>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Lýsing</label>
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_desc')}</label>
                                 <textarea
                                     value={createDesc}
                                     onChange={e => setCreateDesc(e.target.value)}
@@ -474,7 +476,7 @@ export default function TasksPage() {
                             </div>
                             <div className="flex items-center justify-between gap-4">
                                 <div className="flex-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">Fjöldi sjálfboðaliða</label>
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_slots')}</label>
                                     <input
                                         type="number"
                                         value={createSlots}
@@ -485,7 +487,7 @@ export default function TasksPage() {
                                 </div>
                                 <div className="pt-5">
                                     <span className="text-xs text-gray-400 font-medium leading-tight inline-block max-w-[140px]">
-                                        Settu 0 ef þetta er aðeins upplýsinga-viðburður.
+                                        {t('slots_help')}
                                     </span>
                                 </div>
                             </div>
@@ -496,7 +498,7 @@ export default function TasksPage() {
                                 onClick={() => setIsCreating(false)}
                                 className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
                             >
-                                Hætta við
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={async () => {
@@ -523,7 +525,7 @@ export default function TasksPage() {
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >
-                                Birta verkefni
+                                {t('publish')}
                             </button>
                         </div>
                     </div>

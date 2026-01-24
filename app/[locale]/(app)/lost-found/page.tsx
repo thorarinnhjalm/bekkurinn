@@ -6,9 +6,15 @@ import { useUserClasses, useSchool, useLostItems, useCreateLostItem } from '@/ho
 import { LostItemCard } from '@/components/cards/LostItemCard';
 import { ImageUploader } from '@/components/upload/ImageUploader';
 import { Loader2, Plus, Search, Filter, Camera } from 'lucide-react';
+import { useRouter, useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 export default function LostFoundPage() {
     const { user, loading: authLoading } = useAuth();
+    const router = useRouter(); // Added missing router import if not present, checking imports... it was present.
+    const params = useParams();
+    const locale = (params.locale as string) || 'is';
+    const t = useTranslations('lost_found');
 
     // Get Context (Class/School)
     const { data: userClasses } = useUserClasses(user?.uid || '');
@@ -36,6 +42,12 @@ export default function LostFoundPage() {
     // Admins can post "Found" items (School scope). Parents usually post "Lost" items (Class scope).
     // Actually, let's allow anyone to post anything, but default logic suggests admins handle "Found" pile.
 
+    // Redirect
+    if (!authLoading && !user) {
+        router.push(`/${locale}/login`);
+        return null;
+    }
+
     if (authLoading || isLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center text-nordic-blue">
@@ -50,7 +62,7 @@ export default function LostFoundPage() {
     });
 
     const handleCreate = async () => {
-        if (!newItemTitle) return alert("Vantar titil!");
+        if (!newItemTitle) return alert(t('missing_title'));
 
         await createMutation.mutateAsync({
             title: newItemTitle,
@@ -81,11 +93,11 @@ export default function LostFoundPage() {
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-blue-700 uppercase tracking-wide mb-3">
                         <Camera size={12} />
-                        Óskilamunir & Tapað/Fundið
+                        {t('badge')}
                     </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Týnt & Fundið</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
-                        Hér getur þú leitað að týndum munum eða skráð hluti sem þú hefur fundið.
+                        {t('subtitle')}
                     </p>
                 </div>
 
@@ -94,7 +106,7 @@ export default function LostFoundPage() {
                     className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
                 >
                     <Plus size={20} />
-                    Skrá hlut
+                    {t('register_item')}
                 </button>
             </header>
 
@@ -106,7 +118,7 @@ export default function LostFoundPage() {
                         ${filter === 'all' ? 'bg-gray-900 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50'}
                     `}
                 >
-                    Allt
+                    {t('filter_all')}
                 </button>
                 <button
                     onClick={() => setFilter('found')}
@@ -114,7 +126,7 @@ export default function LostFoundPage() {
                         ${filter === 'found' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-blue-50'}
                     `}
                 >
-                    🎒 Óskilamunir (Fundið)
+                    {t('filter_found')}
                 </button>
                 <button
                     onClick={() => setFilter('lost')}
@@ -122,7 +134,7 @@ export default function LostFoundPage() {
                         ${filter === 'lost' ? 'bg-red-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-red-50'}
                     `}
                 >
-                    ❓ Tapað (Óskast)
+                    {t('filter_lost')}
                 </button>
             </div>
 
@@ -142,8 +154,8 @@ export default function LostFoundPage() {
                     <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-gray-300">
                         <Search size={32} />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">Ekkert hér!</h3>
-                    <p className="text-gray-500">Engir munir skráðir í augnablikinu.</p>
+                    <h3 className="text-lg font-bold text-gray-900">{t('empty_title')}</h3>
+                    <p className="text-gray-500">{t('empty_desc')}</p>
                 </div>
             )}
 
@@ -152,8 +164,8 @@ export default function LostFoundPage() {
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
                     <div className="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300 overflow-y-auto max-h-[90vh]">
                         <div className="text-center">
-                            <h2 className="text-2xl font-black text-gray-900">Skrá nýjan hlut</h2>
-                            <p className="text-gray-500 text-sm">Hvort er hluturinn týndur eða fundinn?</p>
+                            <h2 className="text-2xl font-black text-gray-900">{t('modal_title')}</h2>
+                            <p className="text-gray-500 text-sm">{t('modal_subtitle')}</p>
                         </div>
 
                         {/* Type Toggle */}
@@ -164,7 +176,7 @@ export default function LostFoundPage() {
                                     ${newItemType === 'lost' ? 'bg-white text-red-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}
                                 `}
                             >
-                                ❓ Ég týndi...
+                                {t('type_lost')}
                             </button>
                             <button
                                 onClick={() => setNewItemType('found')}
@@ -172,13 +184,13 @@ export default function LostFoundPage() {
                                     ${newItemType === 'found' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}
                                 `}
                             >
-                                🎒 Ég fann...
+                                {t('type_found')}
                             </button>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Mynd af hlut (Valfrjálst)</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_image')}</label>
                                 <div className="h-40 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 overflow-hidden relative group">
                                     <ImageUploader
                                         onUploadComplete={(url) => setNewItemImage(url)}
@@ -190,34 +202,34 @@ export default function LostFoundPage() {
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Hvað er þetta?</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_title')}</label>
                                 <input
                                     type="text"
                                     value={newItemTitle}
                                     onChange={e => setNewItemTitle(e.target.value)}
-                                    placeholder={newItemType === 'lost' ? "Dæmi: Rauður Nike skór" : "Dæmi: Blá úlpa (66°N)"}
+                                    placeholder={newItemType === 'lost' ? t('placeholder_title_lost') : t('placeholder_title_found')}
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-bold"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nánari lýsing</label>
+                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_desc')}</label>
                                 <textarea
                                     value={newItemDesc}
                                     onChange={e => setNewItemDesc(e.target.value)}
-                                    placeholder="Stærð, merkingar, sérkenni..."
+                                    placeholder={t('placeholder_desc')}
                                     className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none h-24 resize-none"
                                 />
                             </div>
 
                             {newItemType === 'found' && (
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Hvar fannst hann?</label>
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_location')}</label>
                                     <input
                                         type="text"
                                         value={newItemLocation}
                                         onChange={e => setNewItemLocation(e.target.value)}
-                                        placeholder="Dæmi: Íþróttahúsi, ganginum, klefa..."
+                                        placeholder={t('placeholder_location')}
                                         className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none"
                                     />
                                 </div>
@@ -229,13 +241,13 @@ export default function LostFoundPage() {
                                 onClick={() => setIsCreating(false)}
                                 className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
                             >
-                                Hætta við
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={handleCreate}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gray-900 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >
-                                Skrá hlut
+                                {t('submit')}
                             </button>
                         </div>
                     </div>

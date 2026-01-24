@@ -4,6 +4,7 @@ import { Car, Clock, Users, Check, X } from 'lucide-react';
 import { acceptPickupOffer, cancelPickupOffer } from '@/services/firestore';
 import type { PickupOffer } from '@/types';
 import { useState } from 'react';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface PickupOfferCardProps {
     offer: PickupOffer;
@@ -24,6 +25,8 @@ export function PickupOfferCard({
 }: PickupOfferCardProps) {
     const [isProcessing, setIsProcessing] = useState(false);
     const [error, setError] = useState('');
+    const t = useTranslations('pickup_offers.card');
+    const locale = useLocale();
 
     const isMyOffer = offer.offeredBy === currentUserId;
     const slotsRemaining = offer.availableSlots - offer.acceptances.length;
@@ -37,7 +40,7 @@ export function PickupOfferCard({
 
     const handleAccept = async () => {
         if (!currentUserStudentId || !currentUserStudentName) {
-            setError('Engin nemandi tengdur');
+            setError(t('no_student'));
             return;
         }
 
@@ -54,21 +57,21 @@ export function PickupOfferCard({
             );
             onUpdate(); // Refresh the list
         } catch (err: any) {
-            setError(err.message || 'Villa kom upp');
+            setError(err.message || t('error_generic'));
         } finally {
             setIsProcessing(false);
         }
     };
 
     const handleCancel = async () => {
-        if (!confirm('Ertu viss um að þú viljir hætta við þetta tilboð?')) return;
+        if (!confirm(t('confirm_cancel'))) return;
 
         setIsProcessing(true);
         try {
             await cancelPickupOffer(offer.id);
             onUpdate();
         } catch (err: any) {
-            setError(err.message || 'Villa kom upp');
+            setError(err.message || t('error_generic'));
         } finally {
             setIsProcessing(false);
         }
@@ -84,9 +87,9 @@ export function PickupOfferCard({
         offerDate.setHours(0, 0, 0, 0);
 
         if (offerDate.getTime() === today.getTime()) {
-            return 'Í dag';
+            return t('today');
         }
-        return new Intl.DateTimeFormat('is-IS', {
+        return new Intl.DateTimeFormat(locale, {
             day: 'numeric',
             month: 'long'
         }).format(date);
@@ -103,7 +106,7 @@ export function PickupOfferCard({
                     <div>
                         <h3 className="font-bold text-gray-900 text-lg">{offer.title}</h3>
                         <p className="text-sm text-gray-600">
-                            {isMyOffer ? 'Þitt tilboð' : `${offer.offeredByName}`}
+                            {isMyOffer ? t('your_offer') : `${offer.offeredByName}`}
                         </p>
                     </div>
                 </div>
@@ -112,12 +115,12 @@ export function PickupOfferCard({
                 {hasAccepted && (
                     <span className="flex items-center gap-1 px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-bold">
                         <Check size={14} />
-                        Samþykkt
+                        {t('accepted')}
                     </span>
                 )}
                 {isFull && !hasAccepted && (
                     <span className="px-3 py-1 bg-gray-200 text-gray-600 rounded-full text-sm font-bold">
-                        Fullt
+                        {t('full')}
                     </span>
                 )}
             </div>
@@ -131,7 +134,7 @@ export function PickupOfferCard({
                 <div className="flex items-center gap-1.5">
                     <Users size={16} />
                     <span className={slotsRemaining === 0 ? 'text-gray-400' : 'text-green-600 font-bold'}>
-                        {slotsRemaining} {slotsRemaining === 1 ? 'pláss' : 'pláss'} laus
+                        {slotsRemaining} {slotsRemaining === 1 ? t('spots_left') : t('spots_left')}
                     </span>
                 </div>
             </div>
@@ -154,7 +157,7 @@ export function PickupOfferCard({
             {isMyOffer && offer.acceptances.length > 0 && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm font-bold text-gray-700 mb-2">
-                        {offer.acceptances.length} {offer.acceptances.length === 1 ? 'barn' : 'börn'} samþykkt:
+                        {offer.acceptances.length} {offer.acceptances.length === 1 ? t('child') : t('children')} {t('children_accepted')}:
                     </p>
                     <ul className="space-y-1">
                         {offer.acceptances.map((acceptance, idx) => (
@@ -180,7 +183,7 @@ export function PickupOfferCard({
                         ) : (
                             <>
                                 <Check size={16} />
-                                Samþykkja fyrir {currentUserStudentName || 'barn'}
+                                {t('accept_for')} {currentUserStudentName || t('child')}
                             </>
                         )}
                     </button>
@@ -197,7 +200,7 @@ export function PickupOfferCard({
                         ) : (
                             <>
                                 <X size={16} />
-                                Hætta við tilboð
+                                {t('cancel_offer')}
                             </>
                         )}
                     </button>

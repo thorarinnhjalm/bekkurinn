@@ -10,6 +10,7 @@ import { getPickupOffersForParent, getPickupOffersByParent } from '@/services/fi
 import { CreatePickupOfferModal } from '@/components/modals/CreatePickupOfferModal';
 import { PickupOfferCard } from '@/components/cards/PickupOfferCard';
 import type { PickupOffer } from '@/types';
+import { useTranslations } from 'next-intl';
 
 /**
  * Pickup Offers Page
@@ -21,6 +22,7 @@ export default function PickupOffersPage() {
     const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('pickup_offers');
 
     const [classId, setClassId] = useState<string | null>(null);
     const [studentId, setStudentId] = useState<string | null>(null);
@@ -143,7 +145,7 @@ export default function PickupOffersPage() {
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
                     <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
-                    <p style={{ color: 'var(--text-secondary)' }}>Hleður skutltilboðum...</p>
+                    <p style={{ color: 'var(--text-secondary)' }}>{t('loading')}</p>
                 </div>
             </div>
         );
@@ -156,9 +158,9 @@ export default function PickupOffersPage() {
                 <div className="absolute -top-10 -left-10 w-64 h-64 bg-green-100 rounded-full blur-3xl opacity-30 -z-10" />
 
                 <div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Skutl</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
                     <p className="text-lg text-gray-500 max-w-lg">
-                        Hjálpist að við að sækja börnin
+                        {t('subtitle')}
                     </p>
                 </div>
 
@@ -167,7 +169,7 @@ export default function PickupOffersPage() {
                     className="px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 font-bold transition shadow-lg hover:shadow-xl flex items-center gap-2 justify-center"
                 >
                     <Plus size={20} />
-                    Býð hjálp
+                    {t('offer_help')}
                 </button>
             </header>
 
@@ -175,7 +177,7 @@ export default function PickupOffersPage() {
             <section className="space-y-4">
                 <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
                     <Car size={24} className="text-green-600" />
-                    Tilboð send til mín
+                    {t('received_offers')}
                 </h2>
 
                 {receivedOffers.length > 0 ? (
@@ -197,9 +199,9 @@ export default function PickupOffersPage() {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Inbox className="text-gray-300" size={32} />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Engin tilboð</h3>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{t('empty_received_title')}</h3>
                         <p className="text-gray-500">
-                            Þegar foreldrar bjóða þér skutl munu tilboð birtast hér.
+                            {t('empty_received_desc')}
                         </p>
                     </div>
                 )}
@@ -207,7 +209,7 @@ export default function PickupOffersPage() {
 
             {/* My Offers Section */}
             <section className="space-y-4">
-                <h2 className="text-2xl font-bold text-gray-900">Mín tilboð</h2>
+                <h2 className="text-2xl font-bold text-gray-900">{t('my_offers')}</h2>
 
                 {myOffers.length > 0 ? (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -228,15 +230,15 @@ export default function PickupOffersPage() {
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Car className="text-gray-300" size={32} />
                         </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-2">Engin tilboð send</h3>
+                        <h3 className="text-xl font-bold text-gray-900 mb-2">{t('empty_created_title')}</h3>
                         <p className="text-gray-500 mb-4">
-                            Þú hefur ekki sent nein skutltilboð ennþá.
+                            {t('empty_created_desc')}
                         </p>
                         <button
                             onClick={() => setShowCreateModal(true)}
                             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-bold transition"
                         >
-                            Búa til tilboð
+                            {t('create_offer')}
                         </button>
                     </div>
                 )}

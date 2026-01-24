@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { X, Car, Clock, Users, Info } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import { Timestamp } from 'firebase/firestore';
 import { createPickupOffer, getStarredFriendsParents, getAllClassParents } from '@/services/firestore';
 import type { CreatePickupOfferInput } from '@/types';
@@ -30,6 +31,7 @@ export function CreatePickupOfferModal({
     const [targetParentCount, setTargetParentCount] = useState(0);
     const [isSaving, setIsSaving] = useState(false);
     const [error, setError] = useState('');
+    const t = useTranslations('pickup_offers.modal');
 
     // Calculate target parent count whenever onlyStarredFriends changes
     useEffect(() => {
@@ -64,7 +66,7 @@ export function CreatePickupOfferModal({
             if (onlyStarredFriends) {
                 sentToParents = await getStarredFriendsParents(userId, classId);
                 if (sentToParents.length === 0) {
-                    setError('Þú hefur ekki stjörnumerkt neina vini. Vinsamlegast veldu "Senda á allan bekkinn" eða stjörnuhertu vini fyrst.');
+                    setError(t('no_starred'));
                     setIsSaving(false);
                     return;
                 }
@@ -83,7 +85,7 @@ export function CreatePickupOfferModal({
                 offeredBy: userId,
                 offeredByName: userName,
                 offeredByStudentId: studentId,
-                title: `Skutl heim kl ${time}`,
+                title: `${t('title_default')} ${time}`,
                 description: description.trim() || undefined,
                 date: Timestamp.fromDate(today),
                 time,
@@ -105,10 +107,10 @@ export function CreatePickupOfferModal({
             setOnlyStarredFriends(true);
 
             // Show success message (could use a toast notification system)
-            alert(`Tilboð sent til ${sentToParents.length} foreldra!`);
+            alert(t('send_success', { count: sentToParents.length }));
         } catch (error: any) {
             console.error('Error creating pickup offer:', error);
-            setError(error.message || 'Villa kom upp við að búa til tilboð');
+            setError(error.message || t('create_error'));
         } finally {
             setIsSaving(false);
         }
@@ -125,7 +127,7 @@ export function CreatePickupOfferModal({
                         <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
                             <Car className="text-green-600" size={20} />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900">Býð hjálp með skutl</h2>
+                        <h2 className="text-2xl font-bold text-gray-900">{t('modal_title')}</h2>
                     </div>
                     <button
                         onClick={onClose}
@@ -149,7 +151,7 @@ export function CreatePickupOfferModal({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                             <Clock size={16} />
-                            Hvenær ertu að sækja?
+                            {t('label_time')}
                         </label>
                         <input
                             type="time"
@@ -164,7 +166,7 @@ export function CreatePickupOfferModal({
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
                             <Users size={16} />
-                            Hversu mörg börn get ég tekið með?
+                            {t('label_slots')}
                         </label>
                         <select
                             value={slots}
@@ -180,12 +182,12 @@ export function CreatePickupOfferModal({
                     {/* Description */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                            Lýsing (valfrjálst)
+                            {t('label_desc')}
                         </label>
                         <textarea
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
-                            placeholder="T.d. &quot;Mannekla í dag, get hjálpað&quot;"
+                            placeholder={t('placeholder_desc')}
                             rows={3}
                             className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 outline-none resize-none"
                         />
@@ -201,11 +203,11 @@ export function CreatePickupOfferModal({
                                 className="w-5 h-5 text-green-600 rounded border-gray-300 focus:ring-green-500 mt-0.5"
                             />
                             <div className="flex-1">
-                                <p className="font-medium text-gray-900">Senda bara á vini barnsins</p>
+                                <p className="font-medium text-gray-900">{t('label_target')}</p>
                                 <p className="text-sm text-gray-600 mt-1">
                                     {onlyStarredFriends
-                                        ? `Verður sent til ${targetParentCount} ${targetParentCount === 1 ? 'foreldris' : 'foreldra'} (stjörnumerktu vinirnir)`
-                                        : `Verður sent til allra í bekknum (${targetParentCount} ${targetParentCount === 1 ? 'foreldri' : 'foreldrar'})`
+                                        ? t('target_friends', { count: targetParentCount })
+                                        : t('target_all', { count: targetParentCount })
                                     }
                                 </p>
                             </div>
@@ -219,7 +221,7 @@ export function CreatePickupOfferModal({
                             onClick={onClose}
                             className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition"
                         >
-                            Hætta við
+                            {t('cancel')}
                         </button>
                         <button
                             type="submit"
@@ -229,12 +231,12 @@ export function CreatePickupOfferModal({
                             {isSaving ? (
                                 <>
                                     <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                                    Sendir...
+                                    {t('sending')}
                                 </>
                             ) : (
                                 <>
                                     <Car size={18} />
-                                    Senda tilboð
+                                    {t('submit')}
                                 </>
                             )}
                         </button>

@@ -5,6 +5,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useDeleteLostItem, useUpdateLostItem } from '@/hooks/useFirestore';
 import { Trash2, CheckCircle, MapPin, Calendar, User } from 'lucide-react';
 import Image from 'next/image';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface LostItemCardProps {
     item: LostItem;
@@ -15,19 +16,21 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
     const { user } = useAuth();
     const deleteMutation = useDeleteLostItem();
     const updateMutation = useUpdateLostItem();
+    const t = useTranslations('lost_found.card');
+    const locale = useLocale();
 
     // Check if current user is the author
     const isAuthor = user?.uid === item.createdBy;
     const canManage = isAdmin || isAuthor;
 
     const handleDelete = async () => {
-        if (confirm('Ertu viss um að þú viljir eyða þessu?')) {
+        if (confirm(t('confirm_delete'))) {
             await deleteMutation.mutateAsync(item.id);
         }
     };
 
     const handleClaim = async () => {
-        if (confirm('Er þetta fundið/komið í leitirnar?')) {
+        if (confirm(t('confirm_claim'))) {
             await updateMutation.mutateAsync({
                 id: item.id,
                 data: { isClaimed: true, claimedBy: user?.uid }
@@ -56,7 +59,7 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                     {item.isClaimed && (
                         <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
                             <span className="px-3 py-1 bg-green-500 text-white font-bold rounded-full text-sm shadow-sm">
-                                FUNDIÐ!
+                                {t('found_badge')}
                             </span>
                         </div>
                     )}
@@ -67,7 +70,7 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                 `}>
                     <span className="text-4xl mb-2">{isLost ? '❓' : '🎒'}</span>
                     <span className="text-xs font-bold uppercase tracking-wide opacity-70">
-                        {isLost ? 'Týnt' : 'Fundið'}
+                        {isLost ? t('lost') : t('found')}
                     </span>
                 </div>
             )}
@@ -80,10 +83,10 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                         text-[10px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-md
                         ${isLost ? 'bg-red-50 text-red-700 border border-red-100' : 'bg-blue-50 text-blue-700 border border-blue-100'}
                     `}>
-                        {isLost ? 'Týnt (Óskast)' : 'Fundið (Óskilamunir)'}
+                        {isLost ? t('lost_label') : t('found_label')}
                     </span>
                     <span className="text-[10px] text-gray-400 font-medium">
-                        {new Date(item.createdAt?.seconds * 1000).toLocaleDateString('is-IS')}
+                        {new Date(item.createdAt?.seconds * 1000).toLocaleDateString(locale)}
                     </span>
                 </div>
 
@@ -114,7 +117,7 @@ export function LostItemCard({ item, isAdmin }: LostItemCardProps) {
                             className="flex-1 py-2 bg-green-50 text-green-700 text-xs font-semibold rounded-md hover:bg-green-100 transition-colors flex items-center justify-center gap-1.5 border border-green-100"
                         >
                             <CheckCircle size={14} />
-                            {isLost ? 'Málið leyst' : 'Ég á þetta!'}
+                            {isLost ? t('solved') : t('claim_mine')}
                         </button>
                         <button
                             onClick={handleDelete}

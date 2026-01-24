@@ -7,6 +7,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
 import { Babelfish } from '@/components/Babelfish';
 import { PollOption } from '@/types';
+import { useTranslations } from 'next-intl';
 
 /**
  * Announcements Page - Auglýsingataflan V2
@@ -19,6 +20,7 @@ export default function AnnouncementsPage() {
     const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('announcements');
 
     // Dynamic Class ID
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
@@ -77,12 +79,12 @@ export default function AnnouncementsPage() {
         const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
         const diffDays = Math.floor(diffHours / 24);
 
-        if (diffHours < 1) return 'Rétt í þessu';
-        if (diffHours < 24) return `${diffHours} klst. síðan`;
-        if (diffDays === 1) return 'Í gær';
-        if (diffDays < 7) return `${diffDays} dögum síðan`;
+        if (diffHours < 1) return t('time_just_now');
+        if (diffHours < 24) return t('time_hours_ago', { hours: diffHours });
+        if (diffDays === 1) return t('time_yesterday');
+        if (diffDays < 7) return t('time_days_ago', { days: diffDays });
 
-        return new Intl.DateTimeFormat('is-IS', { day: 'numeric', month: 'long' }).format(date);
+        return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long' }).format(date);
     };
 
     if (authLoading || announcementsLoading) {
@@ -104,6 +106,12 @@ export default function AnnouncementsPage() {
         return bTime - aTime;
     });
 
+    // Translation for Scope/Author
+    const getAuthorLabel = (announcement: any) => {
+        if (announcement.scope === 'school') return t('author_pta');
+        return announcement.author || t('author_board');
+    }
+
     return (
         <div className="space-y-8 pb-20">
 
@@ -112,11 +120,11 @@ export default function AnnouncementsPage() {
                 <div>
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-xs font-bold text-amber-700 uppercase tracking-wide mb-3 animate-in fade-in slide-in-from-left-2">
                         <Megaphone size={12} />
-                        Fréttir úr skólanum
+                        {t('badge')}
                     </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Auglýsingataflan</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
                     <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
-                        Hér finnur þú allar mikilvægar tilkynningar frá bekkjarfulltrúum og foreldrafélagi.
+                        {t('subtitle')}
                     </p>
                 </div>
 
@@ -126,7 +134,7 @@ export default function AnnouncementsPage() {
                         className="trust-button flex items-center gap-2"
                     >
                         <Plus size={18} />
-                        Ný tilkynning
+                        {t('new_announcement')}
                     </button>
                 )}
             </header>
@@ -145,7 +153,7 @@ export default function AnnouncementsPage() {
             <div className="space-y-6 max-w-4xl mx-auto pt-6">
                 {sortedAnnouncements.length === 0 && (
                     <div className="text-center py-20 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                        <p className="text-gray-400 font-medium">Engar tilkynningar ennþá</p>
+                        <p className="text-gray-400 font-medium">{t('empty')}</p>
                     </div>
                 )}
 
@@ -158,12 +166,12 @@ export default function AnnouncementsPage() {
                         <div className="absolute top-0 right-0 p-4 flex gap-2">
                             {announcement.scope === 'school' && (
                                 <span className="flex items-center gap-1.5 px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full uppercase tracking-wide shadow-sm">
-                                    <Megaphone size={12} fill="currentColor" /> Skólatilkynning
+                                    <Megaphone size={12} fill="currentColor" /> {t('tag_school')}
                                 </span>
                             )}
                             {announcement.pinned && (
                                 <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wide shadow-sm">
-                                    <Pin size={12} fill="currentColor" /> Mikilvægt
+                                    <Pin size={12} fill="currentColor" /> {t('tag_important')}
                                 </span>
                             )}
                         </div>
@@ -177,7 +185,7 @@ export default function AnnouncementsPage() {
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
                                         <p className="font-bold text-gray-900 leading-tight">
-                                            {announcement.author || (announcement.scope === 'school' ? 'Foreldrafélag' : 'Stjórn')}
+                                            {getAuthorLabel(announcement)}
                                         </p>
                                         {announcement.originalLanguage && announcement.originalLanguage !== 'is' && (
                                             <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
@@ -211,7 +219,7 @@ export default function AnnouncementsPage() {
                                 <div className="mt-6 bg-gray-50 rounded-xl p-6 space-y-4 border border-gray-100">
                                     <div className="flex items-center gap-2 text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
                                         <BarChart2 size={16} />
-                                        <span>Könnun</span>
+                                        <span>{t('poll')}</span>
                                     </div>
 
                                     {announcement.pollOptions.map(option => {
@@ -262,7 +270,7 @@ export default function AnnouncementsPage() {
                                         );
                                     })}
                                     <p className="text-center text-xs text-gray-400 font-medium pt-2">
-                                        {announcement.pollOptions?.reduce((acc, curr) => acc + (curr.votes?.length || 0), 0)} atkvæði samtals
+                                        {announcement.pollOptions?.reduce((acc, curr) => acc + (curr.votes?.length || 0), 0)} {t('votes_total')}
                                     </p>
                                 </div>
                             )}
@@ -271,13 +279,13 @@ export default function AnnouncementsPage() {
                                 <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
                                     <button
                                         onClick={() => {
-                                            if (confirm('Ertu viss um að þú viljir eyða þessu?')) {
+                                            if (confirm(t('delete_confirm'))) {
                                                 deleteAnnouncementMutation.mutate(announcement.id);
                                             }
                                         }}
                                         className="text-xs font-bold text-red-500 hover:text-red-700 px-3 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
                                     >
-                                        Eyða tilkynningu
+                                        {t('delete_btn')}
                                     </button>
                                 </div>
                             )}
@@ -296,8 +304,8 @@ export default function AnnouncementsPage() {
                             <div className="w-14 h-14 bg-indigo-50 rounded-lg flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
                                 <MessageSquare size={28} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Ný tilkynning</h2>
-                            <p className="text-gray-500 font-medium mt-1">Sendu mikilvæg skilaboð</p>
+                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('modal_title')}</h2>
+                            <p className="text-gray-500 font-medium mt-1">{t('modal_subtitle')}</p>
                         </div>
 
                         <div className="space-y-4">
@@ -323,7 +331,7 @@ export default function AnnouncementsPage() {
                                 type="text"
                                 value={newTitle}
                                 onChange={e => setNewTitle(e.target.value)}
-                                placeholder="Fyrirsögn"
+                                placeholder={t('placeholder_title')}
                                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-bold text-lg"
                                 autoFocus
                             />
@@ -331,7 +339,7 @@ export default function AnnouncementsPage() {
                             <textarea
                                 value={newContent}
                                 onChange={e => setNewContent(e.target.value)}
-                                placeholder="Hvað er í fréttum?"
+                                placeholder={t('placeholder_content')}
                                 className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none h-40 resize-none font-medium text-gray-600"
                             />
 
@@ -340,7 +348,7 @@ export default function AnnouncementsPage() {
                                     <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${newPinned ? 'bg-amber-500 border-amber-500 text-white' : 'border-amber-300 bg-white'}`}>
                                         {newPinned && <Pin size={14} />}
                                     </div>
-                                    <span className="font-bold text-amber-900 text-sm">Festa efst sem mikilvægt</span>
+                                    <span className="font-bold text-amber-900 text-sm">{t('pin_action')}</span>
                                 </div>
 
                                 {/* Kjarnorku sending - DISABLED FOR NOW */}
@@ -366,12 +374,12 @@ export default function AnnouncementsPage() {
                                     <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${isPoll ? 'border-nordic-blue bg-nordic-blue text-white' : 'border-gray-300'}`}>
                                         {isPoll && <CheckCircle size={14} />}
                                     </div>
-                                    Búa til könnun
+                                    {t('create_poll')}
                                 </button>
 
                                 {isPoll && (
                                     <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100 animate-in slide-in-from-top-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">Svarmöguleikar</label>
+                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('poll_options')}</label>
 
                                         {pollOptions.map((opt) => (
                                             <div key={opt.id} className="flex gap-2 animate-in fade-in">
@@ -391,7 +399,7 @@ export default function AnnouncementsPage() {
                                                 onKeyDown={(e) => {
                                                     if (e.key === 'Enter') addPollOption();
                                                 }}
-                                                placeholder="Bæta við valmöguleika..."
+                                                placeholder={t('add_option')}
                                                 className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-nordic-blue"
                                             />
                                             <button onClick={addPollOption} className="text-nordic-blue hover:text-blue-700">
@@ -412,7 +420,7 @@ export default function AnnouncementsPage() {
                             </button>
                             <button
                                 onClick={async () => {
-                                    if (!newTitle || !newContent) return alert("Vinsamlegast fylltu út reitina");
+                                    if (!newTitle || !newContent) return alert(t('fill_required'));
 
                                     if (isCritical) {
                                         setShowNuclearConfirm(true);
@@ -446,7 +454,7 @@ export default function AnnouncementsPage() {
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
                             >
-                                Birta
+                                {t('publish')}
                             </button>
                         </div>
                     </div>

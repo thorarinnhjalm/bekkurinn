@@ -7,6 +7,7 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
 import type { Task } from '@/types';
+import { useTranslations } from 'next-intl';
 
 /**
  * PatrolPage - V2
@@ -19,6 +20,7 @@ export default function PatrolPage() {
     const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('patrol');
 
     const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '');
     const activeClassId = userClasses?.[0]?.id || '';
@@ -38,7 +40,7 @@ export default function PatrolPage() {
     // State
     const [isCreating, setIsCreating] = useState(false);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
-    const [newTitle, setNewTitle] = useState('Foreldrarölt');
+    const [newTitle, setNewTitle] = useState(t('default_title'));
     const [newDate, setNewDate] = useState('');
     const [newTime, setNewTime] = useState('20:00');
     const [newSlots, setNewSlots] = useState(2);
@@ -58,17 +60,17 @@ export default function PatrolPage() {
             });
         } catch (err) {
             console.error("Failed to volunteer:", err);
-            alert("Gat ekki skráð þig. Vinsamlegast reyndu aftur.");
+            alert(t('error_volunteering'));
         }
     };
 
     const handleDelete = async (taskId: string) => {
-        if (!window.confirm('Ertu viss um að þú viljir eyða þessu rölti?')) return;
+        if (!window.confirm(t('confirm_delete'))) return;
         try {
             await deleteTaskMutation.mutateAsync(taskId);
         } catch (err) {
             console.error("Failed to delete patrol:", err);
-            alert("Gat ekki eytt rölti.");
+            alert(t('error_deleting'));
         }
     };
 
@@ -95,9 +97,9 @@ export default function PatrolPage() {
         <div className="space-y-8 animate-in fade-in duration-500 pb-20">
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Foreldrarölt</h1>
+                    <h1 className="text-3xl font-bold text-gray-900 tracking-tight">{t('title')}</h1>
                     <p className="text-gray-500 mt-1">
-                        Skráðu þig á röltið og taktu þátt í samfélaginu
+                        {t('subtitle')}
                     </p>
                 </div>
                 {isAdmin && (
@@ -106,7 +108,7 @@ export default function PatrolPage() {
                         className="btn-premium flex items-center gap-2"
                     >
                         <Plus size={18} />
-                        Nýtt rölt
+                        {t('new_patrol')}
                     </button>
                 )}
             </header>
@@ -128,7 +130,7 @@ export default function PatrolPage() {
                                         <div>
                                             <h3 className="font-bold text-gray-900 leading-tight">{patrol.title}</h3>
                                             <p className="text-sm font-medium text-gray-500 uppercase tracking-wide">
-                                                {dateObj ? `${dateObj.toLocaleDateString('is-IS', { month: 'short', day: 'numeric' })} kl. ${dateObj.toLocaleTimeString('is-IS', { hour: '2-digit', minute: '2-digit' })}` : ''}
+                                                {dateObj ? `${new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' }).format(dateObj)} kl. ${new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(dateObj)}` : ''}
                                             </p>
                                         </div>
                                     </div>
@@ -157,7 +159,7 @@ export default function PatrolPage() {
 
                             <div className="mt-auto">
                                 <div className="flex items-center justify-between text-sm font-bold text-gray-500 mb-2">
-                                    <span>Mættir</span>
+                                    <span>{t('attended')}</span>
                                     <span>{patrol.slotsFilled} / {patrol.slotsTotal}</span>
                                 </div>
                                 <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden mb-4">
@@ -180,12 +182,12 @@ export default function PatrolPage() {
                                     {isJoined ? (
                                         <>
                                             <Check size={18} />
-                                            <span>Mæti!</span>
+                                            <span>{t('attend')}</span>
                                         </>
                                     ) : isFull ? (
-                                        'Fullmannað'
+                                        t('full')
                                     ) : (
-                                        'Skrá mig á rölt'
+                                        t('sign_up')
                                     )}
                                 </button>
                             </div>
@@ -195,7 +197,7 @@ export default function PatrolPage() {
 
                 {patrols.length === 0 && (
                     <div className="col-span-full py-12 text-center border-2 border-dashed border-gray-200 rounded-3xl">
-                        <p className="text-gray-400 font-bold">Engin rölt skráð á næstunni</p>
+                        <p className="text-gray-400 font-bold">{t('no_patrols')}</p>
                     </div>
                 )}
             </div>
@@ -208,12 +210,12 @@ export default function PatrolPage() {
                             <div className="w-14 h-14 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
                                 <Footprints size={28} />
                             </div>
-                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">Nýtt rölt</h2>
+                            <h2 className="text-2xl font-black text-gray-900 tracking-tight">{t('modal_title')}</h2>
                         </div>
 
                         <div className="space-y-4">
                             <div>
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Heiti</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t('label_title')}</label>
                                 <input
                                     type="text"
                                     value={newTitle}
@@ -225,7 +227,7 @@ export default function PatrolPage() {
 
                             <div className="grid grid-cols-2 gap-3">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Dagsetning</label>
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t('label_date')}</label>
                                     <input
                                         type="date"
                                         value={newDate}
@@ -234,7 +236,7 @@ export default function PatrolPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Klukkan</label>
+                                    <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t('label_time')}</label>
                                     <input
                                         type="time"
                                         value={newTime}
@@ -245,7 +247,7 @@ export default function PatrolPage() {
                             </div>
 
                             <div>
-                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">Fjöldi foreldra</label>
+                                <label className="text-xs font-bold text-gray-400 uppercase tracking-wider ml-1">{t('label_slots')}</label>
                                 <input
                                     type="number"
                                     value={newSlots}
@@ -261,7 +263,7 @@ export default function PatrolPage() {
                                 onClick={() => setIsCreating(false)}
                                 className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
                             >
-                                Hætta við
+                                {t('cancel')}
                             </button>
                             <button
                                 onClick={async () => {
@@ -281,7 +283,7 @@ export default function PatrolPage() {
                                 }}
                                 className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg hover:bg-indigo-700 active:scale-95 transition-all"
                             >
-                                Stofna
+                                {t('create')}
                             </button>
                         </div>
                     </div>

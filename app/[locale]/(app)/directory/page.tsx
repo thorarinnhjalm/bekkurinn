@@ -10,6 +10,7 @@ import { useRouter, useParams } from 'next/navigation';
 import type { Student, DietaryNeed } from '@/types';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { useTranslations } from 'next-intl';
 
 /**
  * Directory Page - Sameiginleg skrá bekkjarins
@@ -22,6 +23,7 @@ export default function DirectoryPage() {
     const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('directory');
     const [classId, setClassId] = useState<string | null>(null);
 
     // 1. Fetch User Class (Newest)
@@ -212,15 +214,10 @@ export default function DirectoryPage() {
         setExpandedCards(newExpanded);
     };
 
-    const ICELANDIC_MONTHS = [
-        'janúar', 'febrúar', 'mars', 'apríl', 'maí', 'júní',
-        'júlí', 'ágúst', 'september', 'október', 'nóvember', 'desember'
-    ];
-
     const formatBirthDate = (timestamp: any) => {
         if (!timestamp?.toDate) return '';
         const date = timestamp.toDate();
-        return `${date.getDate()}. ${ICELANDIC_MONTHS[date.getMonth()]} ${date.getFullYear()}`;
+        return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
     };
 
     // Loading state
@@ -245,7 +242,7 @@ export default function DirectoryPage() {
             const bStarred = starredStudents.has(b.id);
             if (aStarred && !bStarred) return -1;
             if (!aStarred && bStarred) return 1;
-            return a.name.localeCompare(b.name, 'is');
+            return a.name.localeCompare(b.name, locale);
         });
 
     const starredCount = starredStudents.size;
@@ -265,15 +262,15 @@ export default function DirectoryPage() {
                 <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
 
                 <div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Skráin</h1>
+                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
                     <p className="text-lg text-gray-500 max-w-lg">
-                        Allir vinirnir í <span className="font-semibold text-nordic-blue">{displayName}</span> á einum stað.
+                        {t('subtitle_prefix')} <span className="font-semibold text-nordic-blue">{displayName}</span> {t('subtitle_suffix')}
                     </p>
                 </div>
                 {starredCount > 0 && (
                     <div className="glass-card px-5 py-2 flex items-center gap-2 text-amber-600 font-bold animate-in zoom-in bg-amber-50/50 border-amber-100">
                         <Star size={18} fill="currentColor" />
-                        <span>{starredCount} vinir í uppáhaldi</span>
+                        <span>{starredCount} {t('starred_friends')}</span>
                     </div>
                 )}
             </header>
@@ -286,7 +283,7 @@ export default function DirectoryPage() {
                     </div>
                     <input
                         type="search"
-                        placeholder="Leita að nemanda..."
+                        placeholder={t('search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-12 pr-6 py-4 rounded-lg border outline-none border-gray-200 bg-white focus:border-nordic-blue focus:ring-1 focus:ring-nordic-blue/20 transition-all text-lg placeholder:text-gray-400"
@@ -298,7 +295,7 @@ export default function DirectoryPage() {
             {students.length > 0 && (
                 <div className="flex items-center justify-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
                     <Users size={14} />
-                    <span>{sortedStudents.length} af {students.length} nemendum</span>
+                    <span>{t('student_count', { current: sortedStudents.length, total: students.length })}</span>
                 </div>
             )}
 
@@ -351,7 +348,7 @@ export default function DirectoryPage() {
                                         </h3>
                                         <p className="text-sm font-medium text-gray-500 mt-1 flex items-center gap-1.5">
                                             <span>🎂</span>
-                                            {student.birthDate ? formatBirthDate(student.birthDate) : 'Vantar afmælisdag'}
+                                            {student.birthDate ? formatBirthDate(student.birthDate) : t('missing_birthday')}
                                         </p>
                                     </div>
                                 </div>
@@ -361,7 +358,7 @@ export default function DirectoryPage() {
                             {isExpanded && (
                                 <div className="bg-gray-50/50 border-t border-gray-100 p-6 animate-in slide-in-from-top-2">
                                     <div className="space-y-4">
-                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">Foreldrar & Aðstandendur</h4>
+                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t('parents_title')}</h4>
                                         {parents.length > 0 ? (
                                             parents.map((parent) => (
                                                 <div key={parent.id} className="flex items-start gap-4 p-3 rounded-xl bg-white border border-gray-100 shadow-sm">
@@ -370,16 +367,16 @@ export default function DirectoryPage() {
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <p className="font-bold text-gray-900 text-sm">{parent.displayName}</p>
-                                                        <p className="text-xs text-gray-500 mb-2">{parent.role === 'admin' ? 'Kennari / Stjórnandi' : 'Foreldri'}</p>
+                                                        <p className="text-xs text-gray-500 mb-2">{parent.role === 'admin' ? t('teacher_role') : t('parent_role')}</p>
 
                                                         <div className="flex flex-wrap gap-2">
                                                             {parent.phone && parent.isPhoneVisible && (
                                                                 <a href={`tel:${parent.phone}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-bold hover:bg-green-100 transition-colors">
-                                                                    <Phone size={12} /> Hringja
+                                                                    <Phone size={12} /> {t('call')}
                                                                 </a>
                                                             )}
                                                             <a href={`mailto:${parent.email}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold hover:bg-blue-100 transition-colors">
-                                                                <Mail size={12} /> Senda póst
+                                                                <Mail size={12} /> {t('email')}
                                                             </a>
                                                         </div>
 
@@ -403,7 +400,7 @@ export default function DirectoryPage() {
                                             ))
                                         ) : (
                                             <div className="text-center py-4 bg-white/50 rounded-xl border border-dashed border-gray-200">
-                                                <p className="text-sm text-gray-400">Engir foreldrar skráðir ennþá</p>
+                                                <p className="text-sm text-gray-400">{t('no_parents')}</p>
                                             </div>
                                         )}
                                     </div>
@@ -414,7 +411,7 @@ export default function DirectoryPage() {
                                         className="w-full mt-4 flex items-center justify-center gap-2 text-gray-400 hover:text-gray-600 py-2 transition-colors"
                                     >
                                         <ChevronUp size={16} />
-                                        <span className="text-xs font-bold uppercase">Loka</span>
+                                        <span className="text-xs font-bold uppercase">{t('close')}</span>
                                     </button>
                                 </div>
                             )}
@@ -429,8 +426,8 @@ export default function DirectoryPage() {
                     <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <Users className="text-gray-300" size={40} />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">Engir nemendur fundust</h3>
-                    <p className="text-gray-500 mt-2">Prófaðu að breyta leitarskilyrðum eða hafðu samband við stjórnanda.</p>
+                    <h3 className="text-xl font-bold text-gray-900">{t('no_results_title')}</h3>
+                    <p className="text-gray-500 mt-2">{t('no_results_desc')}</p>
                 </div>
             )}
         </div>
