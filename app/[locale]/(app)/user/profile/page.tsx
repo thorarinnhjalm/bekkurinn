@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useParams } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import {
@@ -53,6 +54,9 @@ export default function UserProfilePage() {
     const { user } = useAuth();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
+    const t = useTranslations('user');
+    const tCommon = useTranslations('common');
+    const tDietary = useTranslations('dietary');
     const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
     // State for user profile details
@@ -278,9 +282,9 @@ export default function UserProfilePage() {
             {/* Header */}
             <header className="relative">
                 <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
-                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Minn aðgangur</h1>
+                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
                 <p className="text-lg text-gray-500">
-                    Stillingar fyrir þig og börnin þín
+                    {t('subtitle')}
                 </p>
             </header>
 
@@ -313,14 +317,14 @@ export default function UserProfilePage() {
                             value={userPhone}
                             onChange={(e) => setUserPhone(e.target.value)}
                             onBlur={handleSaveUser}
-                            placeholder="Símanúmer"
+                            placeholder={t('phone_placeholder')}
                             className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all"
                         />
                     </div>
 
                     {/* Phone Visibility */}
                     <div className="flex items-center justify-between pl-14">
-                        <span className="text-sm text-gray-600">Birta í bekkjarlista</span>
+                        <span className="text-sm text-gray-600">{t('show_in_list')}</span>
                         <button
                             onClick={() => {
                                 setUserIsPhoneVisible(!userIsPhoneVisible);
@@ -344,7 +348,7 @@ export default function UserProfilePage() {
                                     setUserAddress(addr.fullAddress);
                                     setTimeout(handleSaveUser, 100);
                                 }}
-                                placeholder="Heimilisfang"
+                                placeholder={t('address_placeholder')}
                                 className="w-full"
                             />
                         </div>
@@ -359,7 +363,7 @@ export default function UserProfilePage() {
                                 setTimeout(handleSaveUser, 100);
                             }}
                             storagePath={`users/${user?.uid}/profile`}
-                            label="Prófílmynd"
+                            label={t('upload_photo')}
                         />
                     </div>
 
@@ -392,13 +396,13 @@ export default function UserProfilePage() {
             {/* Children Section */}
             <section className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900">Börnin mín</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">{t('my_children')}</h2>
                     <a
                         href={`/${locale}/onboarding?step=join`}
                         className="text-sm font-semibold text-[#1E3A5F] hover:underline flex items-center gap-1"
                     >
                         <UserPlus size={16} />
-                        Bæta við
+                        {t('add_child')}
                     </a>
                 </div>
 
@@ -417,6 +421,8 @@ export default function UserProfilePage() {
                                 onSaveGender={(gender) => handleSaveStudentGender(student.id, gender)}
                                 onSaveBirthDate={(date) => handleSaveStudentBirthDate(student.id, date)}
                                 onCopyInvite={() => handleCopyInviteLink(student.id)}
+                                t={t}
+                                tDietary={tDietary}
                             />
                         ))}
                     </div>
@@ -425,13 +431,13 @@ export default function UserProfilePage() {
                         <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
                             <Heart size={28} className="text-gray-400" />
                         </div>
-                        <p className="text-gray-500 mb-4">Engin börn tengd við aðganginn þinn</p>
+                        <p className="text-gray-500 mb-4">{t('no_children')}</p>
                         <a
                             href={`/${locale}/onboarding?step=join`}
                             className="inline-flex items-center gap-2 bg-[#1E3A5F] text-white px-5 py-2.5 rounded-lg font-medium hover:bg-[#2E4A6F] transition"
                         >
                             <UserPlus size={18} />
-                            Bæta við barni
+                            {t('add_child')}
                         </a>
                     </div>
                 )}
@@ -450,7 +456,9 @@ function StudentCard({
     onSaveDietaryNeeds,
     onSaveGender,
     onSaveBirthDate,
-    onCopyInvite
+    onCopyInvite,
+    t,
+    tDietary
 }: {
     student: any;
     otherParents: any[];
@@ -462,6 +470,8 @@ function StudentCard({
     onSaveGender: (gender: string) => void;
     onSaveBirthDate: (date: string) => void;
     onCopyInvite: () => void;
+    t: any;
+    tDietary: any;
 }) {
     const [editedName, setEditedName] = useState(student.name);
     const [dietaryNeeds, setDietaryNeeds] = useState<string[]>(student.dietaryNeeds || []);
@@ -540,7 +550,7 @@ function StudentCard({
 
                     {/* Name */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Nafn</label>
+                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.name_label')}</label>
                         <input
                             type="text"
                             value={editedName}
@@ -552,7 +562,7 @@ function StudentCard({
 
                     {/* Birthday */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Afmælisdagur</label>
+                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.birthday_label')}</label>
                         <input
                             type="date"
                             value={editedBirthDate}
@@ -566,12 +576,12 @@ function StudentCard({
 
                     {/* Gender */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Kyn</label>
+                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.gender_label')}</label>
                         <div className="flex gap-2">
                             {[
-                                { value: 'boy', label: 'Strákur' },
-                                { value: 'girl', label: 'Stelpa' },
-                                { value: 'other', label: 'Annað' }
+                                { value: 'boy', label: t('child_card.boy') },
+                                { value: 'girl', label: t('child_card.girl') },
+                                { value: 'other', label: t('child_card.other') }
                             ].map((option) => (
                                 <button
                                     key={option.value}
@@ -589,7 +599,7 @@ function StudentCard({
 
                     {/* Dietary Needs */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Ofnæmi og mataræði</label>
+                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.dietary_label')}</label>
                         <div className="flex flex-wrap gap-2">
                             {DIETARY_OPTIONS.map((option) => {
                                 const isSelected = dietaryNeeds.includes(option.value);
@@ -602,7 +612,8 @@ function StudentCard({
                                             : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
                                             }`}
                                     >
-                                        {option.label}
+                                        {/* Use tDietary to translate option labels */}
+                                        {tDietary(option.value)}
                                         {isSelected && <Check size={14} />}
                                     </button>
                                 );
@@ -612,7 +623,7 @@ function StudentCard({
 
                     {/* Photo Upload */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">Mynd</label>
+                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.photo_label')}</label>
                         <ImageUploader
                             currentImageUrl={student.photoUrl || ''}
                             onUploadComplete={(url) => onSavePhoto(url)}
@@ -625,7 +636,7 @@ function StudentCard({
                     {otherParents.length > 0 && (
                         <div className="pt-2 border-t border-gray-200">
                             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-                                Önnur foreldri / forráðamenn
+                                {t('child_card.other_parents_label')}
                             </label>
                             <div className="space-y-2">
                                 {otherParents.map((parent) => (
@@ -638,8 +649,8 @@ function StudentCard({
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-gray-900 truncate">{parent.displayName || 'Foreldri'}</p>
-                                            <p className="text-xs text-green-600">Tengdur</p>
+                                            <p className="font-medium text-gray-900 truncate">{parent.displayName || t('child_card.parent')}</p>
+                                            <p className="text-xs text-green-600">{t('child_card.connected')}</p>
                                         </div>
                                         <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
                                     </div>
@@ -652,29 +663,29 @@ function StudentCard({
                     {otherParents.length < 3 && (
                         <div className={otherParents.length === 0 ? 'pt-2 border-t border-gray-200' : 'pt-3'}>
                             <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
-                                Bjóða foreldri / forráðamann
+                                {t('child_card.invite_parent')}
                             </label>
                             <button
                                 onClick={handleCopyInvite}
                                 className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
-                                    ? 'bg-green-50 text-green-700 border border-green-200'
-                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                        ? 'bg-green-50 text-green-700 border border-green-200'
+                                        : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
                                     }`}
                             >
                                 {copiedInvite ? (
                                     <>
                                         <CheckCircle2 size={18} />
-                                        Afritað!
+                                        {t('child_card.copied')}
                                     </>
                                 ) : (
                                     <>
                                         <Copy size={18} />
-                                        Afrita boðshlekk
+                                        {t('child_card.copy_invite_link')}
                                     </>
                                 )}
                             </button>
                             <p className="text-xs text-gray-400 mt-2 text-center">
-                                Hægt er að tengja allt að 4 foreldra/forráðamenn við hvert barn
+                                {t('child_card.max_parents_help')}
                             </p>
                         </div>
                     )}
