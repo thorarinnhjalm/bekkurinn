@@ -86,7 +86,7 @@ export default function DirectoryPage() {
             if (!studentsData || studentsData.length === 0) return;
 
             try {
-                // Fetch all parent links for the class (much more efficient and avoids 'in' query limits)
+                // Fetch all parent links for the class (efficient)
                 // We utilize the fact that parentLinks also store the classId
                 const parentLinksQuery = query(
                     collection(db, 'parentLinks'),
@@ -94,7 +94,41 @@ export default function DirectoryPage() {
                     where('status', '==', 'approved')
                 );
                 const parentLinksSnap = await getDocs(parentLinksQuery);
-                const parentLinks = parentLinksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+                let parentLinks = parentLinksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                // ---------------------------------------------------------
+                // Fallback Strategy for Legacy Data (missing classId)
+                // ---------------------------------------------------------
+
+                // 1. Identify which students have NO parents found yet
+                const studentsWithParents = new Set(parentLinks.map((pl: any) => pl.studentId));
+                const studentsWithoutParents = studentsData.filter(s => !studentsWithParents.has(s.id));
+
+                if (studentsWithoutParents.length > 0) {
+                    console.log(`Checking fallback for ${studentsWithoutParents.length} students...`);
+
+                    // Batch request for remaining students (max 10 per batch for 'in' query)
+                    const studentIds = studentsWithoutParents.map(s => s.id);
+                    const BATCH_SIZE = 10;
+
+                    for (let i = 0; i < studentIds.length; i += BATCH_SIZE) {
+                        const batch = studentIds.slice(i, i + BATCH_SIZE);
+                        try {
+                            const fallbackQuery = query(
+                                collection(db, 'parentLinks'),
+                                where('studentId', 'in', batch),
+                                where('status', '==', 'approved')
+                            );
+                            const fallbackSnap = await getDocs(fallbackQuery);
+                            const fallbackLinks = fallbackSnap.docs.map(d => ({ id: d.id, ...d.data() }));
+
+                            // Add to our main list
+                            parentLinks = [...parentLinks, ...fallbackLinks];
+                        } catch (err) {
+                            console.error('Fallback query failed', err);
+                        }
+                    }
+                }
 
                 // Filter out links for students not in our list (just in case)
                 const studentIdSet = new Set(studentsData.map(s => s.id));
