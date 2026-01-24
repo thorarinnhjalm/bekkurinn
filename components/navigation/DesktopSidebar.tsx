@@ -197,14 +197,14 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-gray-100 text-xs font-medium text-gray-700 transition-colors"
                         >
                             <Settings size={14} />
-                            {translations.settings || 'Stillingar'}
+                            {translations.settings || 'Settings'}
                         </Link>
                         <button
                             onClick={() => signOut()}
                             className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-red-50 text-xs font-medium text-red-600 transition-colors"
                         >
                             <LogOut size={14} />
-                            {translations.logout || 'Útskrá'}
+                            {translations.logout || 'Sign Out'}
                         </button>
                     </div>
 
