@@ -51,6 +51,15 @@
     "code_admin_warning": "Hidden access permission. Grants admin rights. Share carefully.",
     "continue_dashboard": "Continue to Dashboard"
   },
+  "navigation": {
+    "notifications": "Notifications",
+    "mark_all_read": "Mark all read",
+    "no_notifications": "No new notifications",
+    "my_account": "My Account",
+    "class_settings": "Class Settings",
+    "sign_out": "Sign Out",
+    "settings": "Settings"
+  },
   "class": {
     "home": "Home",
     "directory": "Directory",

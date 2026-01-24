@@ -467,5 +467,14 @@
       "max_parents_help": "Up to 4 parents/guardians can be linked to each child",
       "parent": "Parent"
     }
+  },
+  "navigation": {
+    "notifications": "Notifications",
+    "mark_all_read": "Mark all read",
+    "no_notifications": "No new notifications",
+    "my_account": "My Account",
+    "class_settings": "Class Settings",
+    "sign_out": "Sign Out",
+    "settings": "Settings"
   }
 }

@@ -10,6 +10,7 @@ import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useNotifications } from '@/hooks/useNotifications';
 import { Timestamp } from 'firebase/firestore';
 import { locales } from '@/i18n-config';
+import { useTranslations } from 'next-intl';
 
 /**
  * Top Header - Logo, Notifications, Settings
@@ -20,6 +21,7 @@ import { locales } from '@/i18n-config';
 export function TopHeader({ className }: { className?: string }) {
     const { user, signOut } = useAuth();
     const router = useRouter();
+    const t = useTranslations('navigation');
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showAbout, setShowAbout] = useState(false);
@@ -46,8 +48,8 @@ export function TopHeader({ className }: { className?: string }) {
         if (!user) return;
         await createNotification(
             user.uid,
-            'Velkomin(n) í Bekkinn!',
-            'Þetta er prufu-tilkynning. Kerfið virkar!',
+            'Welcome to Bekkurinn!',
+            'This is a test notification. The system works!',
             'system'
         );
     };
@@ -116,13 +118,13 @@ export function TopHeader({ className }: { className?: string }) {
                                     className="absolute right-0 mt-2 w-80 nordic-card shadow-lg z-50 overflow-hidden max-h-[80vh] flex flex-col bg-white"
                                 >
                                     <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-white sticky top-0 z-10">
-                                        <h3 className="font-semibold text-sm">Tilkynningar</h3>
+                                        <h3 className="font-semibold text-sm">{t('notifications')}</h3>
                                         {unreadCount > 0 && (
                                             <button
                                                 onClick={() => markAllAsRead()}
                                                 className="text-[11px] font-bold text-nordic-blue hover:text-nordic-blue-dark transition-colors uppercase tracking-wider"
                                             >
-                                                Lesa allt
+                                                {t('mark_all_read')}
                                             </button>
                                         )}
                                     </div>
@@ -158,7 +160,7 @@ export function TopHeader({ className }: { className?: string }) {
                                         ) : (
                                             <div className="p-8 flex flex-col items-center justify-center text-center text-gray-500">
                                                 <Bell size={32} className="mb-2 opacity-20" />
-                                                <p className="text-sm">Engar nýjar tilkynningar</p>
+                                                <p className="text-sm">{t('no_notifications')}</p>
                                             </div>
                                         )}
                                     </div>
@@ -205,52 +207,33 @@ export function TopHeader({ className }: { className?: string }) {
                                             <p className="text-xs truncate" style={{ color: 'var(--text-tertiary)' }}>{user.email}</p>
                                         </div>
 
-                                        <div className="px-4 py-2 border-b" style={{ borderColor: 'var(--border-light)' }}>
-                                            <p className="text-xs font-semibold mb-2" style={{ color: 'var(--text-tertiary)' }}>Tungumál / Language</p>
-                                            <div className="flex items-center gap-2">
-                                                {locales.map((l) => (
-                                                    <Link
-                                                        key={l}
-                                                        href={`/${l}${pathname ? pathname.replace(/^\/[a-z]{2}/, '') : ''}`}
-                                                        className={`px-2 py-1 text-xs rounded border ${locale === l
-                                                            ? 'bg-nordic-blue text-white border-nordic-blue'
-                                                            : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'
-                                                            }`}
-                                                        onClick={() => setShowSettingsMenu(false)}
-                                                    >
-                                                        {l.toUpperCase()}
-                                                    </Link>
-                                                ))}
-                                            </div>
-                                        </div>
-
                                         <Link
                                             href={`/${locale}/user/profile`}
-                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
+                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                                             style={{ color: 'var(--text-primary)' }}
                                             onClick={() => setShowSettingsMenu(false)}
                                         >
                                             <UserIcon size={16} />
-                                            <span>Minn Aðgangur</span>
+                                            <span>{t('my_account')}</span>
                                         </Link>
 
                                         <Link
                                             href={`/${locale}/settings`}
-                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors"
+                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-gray-50 transition-colors"
                                             style={{ color: 'var(--text-primary)' }}
                                             onClick={() => setShowSettingsMenu(false)}
                                         >
                                             <Settings size={16} />
-                                            <span>Stillingar Bekkjar</span>
+                                            <span>{t('class_settings')}</span>
                                         </Link>
 
                                         <button
                                             onClick={handleSignOut}
-                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-opacity-50 transition-colors border-t"
+                                            className="w-full flex items-center gap-2 px-4 py-2 text-sm hover:bg-red-50 transition-colors border-t"
                                             style={{ color: 'var(--red)', borderColor: 'var(--border-light)' }}
                                         >
                                             <LogOut size={16} />
-                                            <span>Útskráning</span>
+                                            <span>{t('sign_out')}</span>
                                         </button>
                                     </div>
                                 )}

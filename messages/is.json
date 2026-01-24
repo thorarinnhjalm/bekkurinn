@@ -51,6 +51,15 @@
     "code_admin_warning": "Dulin aðgangsheimild. Veitir stjórnendurréttindi. Deildu varlega.",
     "continue_dashboard": "Áfram á stjórnborð"
   },
+  "navigation": {
+    "notifications": "Tilkynningar",
+    "mark_all_read": "Lesa allt",
+    "no_notifications": "Engar nýjar tilkynningar",
+    "my_account": "Minn Aðgangur",
+    "class_settings": "Stillingar Bekkjar",
+    "sign_out": "Útskráning",
+    "settings": "Stillingar"
+  },
   "class": {
     "home": "Heim",
     "directory": "Tengiliðir",
