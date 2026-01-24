@@ -13,12 +13,12 @@ import { z } from 'zod';
 
 export const OnboardingSchema = z.object({
     schoolName: z.string()
-        .min(3, 'Skólanafn verður að vera a.m.k. 3 stafir')
-        .max(100, 'Skólanafn of langt'),
+        .min(3, 'School name must be at least 3 characters')
+        .max(100, 'School name too long'),
     grade: z.number()
-        .int('Bekkur verður að vera heiltala')
-        .min(1, 'Bekkur verður að vera á bilinu 1-10')
-        .max(10, 'Bekkur verður að vera á bilinu 1-10'),
+        .int('Grade must be a whole number')
+        .min(1, 'Grade must be between 1-10')
+        .max(10, 'Grade must be between 1-10'),
     section: z.string()
         .max(50, 'Deild of löng')
         .optional(),
@@ -32,9 +32,9 @@ export type OnboardingInput = z.infer<typeof OnboardingSchema>;
 // ========================================
 
 export const JoinCodeSchema = z.string()
-    .min(4, 'Boðskóði of stuttur')
-    .max(30, 'Boðskóði of langur')
-    .regex(/^[A-Z0-9-]+$/, 'Boðskóði má bara innihalda stóra stafi, tölur og bandstrik')
+    .min(4, 'Join code too short')
+    .max(30, 'Join code too long')
+    .regex(/^[A-Z0-9-]+$/, 'Join code can only contain uppercase letters, numbers and hyphens')
     .transform(val => val.toUpperCase().trim());
 
 // ========================================
@@ -43,12 +43,12 @@ export const JoinCodeSchema = z.string()
 
 export const StudentSchema = z.object({
     name: z.string()
-        .min(2, 'Nafn of stutt')
-        .max(100, 'Nafn of langt'),
+        .min(2, 'Name too short')
+        .max(100, 'Name too long'),
     birthDate: z.coerce.date(),
     dietaryNeeds: z.array(z.string()).optional(),
-    allergies: z.string().max(500, 'Of langur texti').optional(),
-    classId: z.string().min(1, 'Bekkur vantar'),
+    allergies: z.string().max(500, 'Text too long').optional(),
+    classId: z.string().min(1, 'Class required'),
 });
 
 export type StudentInput = z.infer<typeof StudentSchema>;
@@ -59,12 +59,12 @@ export type StudentInput = z.infer<typeof StudentSchema>;
 
 export const AnnouncementSchema = z.object({
     title: z.string()
-        .min(3, 'Titill of stuttur')
-        .max(200, 'Titill of langur'),
+        .min(3, 'Title too short')
+        .max(200, 'Title too long'),
     body: z.string()
-        .min(10, 'Texti of stuttur')
-        .max(5000, 'Texti of langur'),
-    classId: z.string().min(1, 'Bekkur vantar'),
+        .min(10, 'Text too short')
+        .max(5000, 'Text too long'),
+    classId: z.string().min(1, 'Class required'),
     pinned: z.boolean().optional(),
 });
 
@@ -76,17 +76,17 @@ export type AnnouncementInput = z.infer<typeof AnnouncementSchema>;
 
 export const TaskSchema = z.object({
     title: z.string()
-        .min(3, 'Titill of stuttur')
-        .max(200, 'Titill of langur'),
+        .min(3, 'Title too short')
+        .max(200, 'Title too long'),
     description: z.string()
-        .max(2000, 'Lýsing of löng')
+        .max(2000, 'Description too long')
         .optional(),
     date: z.coerce.date(),
     slotsTotal: z.number()
-        .int('Fjöldi verður að vera heiltala')
-        .min(0, 'Fjöldi getur ekki verið neikvæður')
-        .max(50, 'Fjöldi of hár'),
-    classId: z.string().min(1, 'Bekkur vantar'),
+        .int('Count must be a whole number')
+        .min(0, 'Count cannot be negative')
+        .max(50, 'Count too high'),
+    classId: z.string().min(1, 'Class required'),
     type: z.enum(['task', 'school_event']).optional(),
 });
 
@@ -98,23 +98,23 @@ export type TaskInput = z.infer<typeof TaskSchema>;
 
 export const SettingsSchema = z.object({
     schoolName: z.string()
-        .min(3, 'Skólanafn of stutt')
-        .max(100, 'Skólanafn of langt'),
+        .min(3, 'School name too short')
+        .max(100, 'School name too long'),
     grade: z.number()
-        .int('Bekkur verður að vera heiltala')
-        .min(1, 'Bekkur verður að vera á bilinu 1-10')
-        .max(10, 'Bekkur verður að vera á bilinu 1-10'),
+        .int('Grade must be a whole number')
+        .min(1, 'Grade must be between 1-10')
+        .max(10, 'Grade must be between 1-10'),
     section: z.string()
-        .max(50, 'Deild of löng')
+        .max(50, 'Section name too long')
         .optional(),
     calendarUrl: z.string()
-        .url('Ógild vefslóð')
+        .url('Invalid URL')
         .optional()
         .or(z.literal('')), // Allow empty string
     joinCode: z.string()
-        .min(4, 'Boðskóði of stuttur')
-        .max(30, 'Boðskóði of langur')
-        .regex(/^[A-Z0-9-]+$/, 'Boðskóði má bara innihalda stóra stafi, tölur og bandstrik')
+        .min(4, 'Join code too short')
+        .max(30, 'Join code too long')
+        .regex(/^[A-Z0-9-]+$/, 'Join code can only contain uppercase letters, numbers and hyphens')
         .optional(),
 });
 
@@ -126,11 +126,11 @@ export type SettingsInput = z.infer<typeof SettingsSchema>;
 
 export const UserUpdateSchema = z.object({
     displayName: z.string()
-        .min(2, 'Nafn of stutt')
-        .max(100, 'Nafn of langt')
+        .min(2, 'Name too short')
+        .max(100, 'Name too long')
         .optional(),
     phone: z.string()
-        .regex(/^[0-9\s\-\+\(\)]+$/, 'Ógilt símanúmer')
+        .regex(/^[0-9\s\-\+\(\)]+$/, 'Invalid phone number')
         .optional()
         .or(z.literal('')),
     isPhoneVisible: z.boolean().optional(),

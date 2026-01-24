@@ -125,7 +125,7 @@ export function InlineErrorBoundary({ children, fallback }: Props) {
                 fallback || (
                     <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                         <p className="text-red-800 text-sm">
-                            Villa kom upp við að hlaða þessum hluta.
+                            An error occurred loading this section.
                         </p>
                     </div>
                 )

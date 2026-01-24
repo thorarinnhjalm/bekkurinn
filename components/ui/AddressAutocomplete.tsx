@@ -19,7 +19,7 @@ interface AddressAutocompleteProps {
     className?: string;
 }
 
-export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder = 'Sláðu inn heimilisfang...', className = '' }: AddressAutocompleteProps) {
+export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder = 'Enter address...', className = '' }: AddressAutocompleteProps) {
     const [searchTerm, setSearchTerm] = useState(defaultValue);
     const [suggestions, setSuggestions] = useState<Address[]>([]);
     const [loading, setLoading] = useState(false);
