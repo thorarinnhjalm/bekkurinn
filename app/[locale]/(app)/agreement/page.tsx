@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement } from '@/hooks/useFirestore';
+import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement } from '@/hooks/useFirestore';
 import { Loader2, Lock, Vote, CheckCircle2 } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
@@ -23,6 +23,7 @@ export default function AgreementPage() {
     const castVoteMutation = useCastVote();
     const createAgreementMutation = useCreateAgreement();
     const updateAgreementMutation = useUpdateAgreement();
+    const deleteAgreementMutation = useDeleteAgreement();
 
     if (isLoading || userClassLoading) {
         return (
@@ -247,9 +248,23 @@ export default function AgreementPage() {
                     <p className="text-yellow-700 text-sm mb-4">Sáttmálinn er í vinnslu. Þú getur breytt spurningum eða byrjað kosningu.</p>
 
                     {isAdmin && (
-                        <button onClick={handleStartVoting} className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-xl transition-colors">
-                            Byrja kosningu (Virkjar fyrir alla)
-                        </button>
+                        <div className="space-y-4">
+                            <button onClick={handleStartVoting} className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-xl transition-colors">
+                                Byrja kosningu (Virkjar fyrir alla)
+                            </button>
+
+                            <button
+                                onClick={async () => {
+                                    if (confirm('Ertu viss um að þú viljir eyða sáttmálanum? Þetta er óafturkræft.')) {
+                                        await deleteAgreementMutation.mutateAsync(agreement.id);
+                                        window.location.reload();
+                                    }
+                                }}
+                                className="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium rounded-xl transition-colors"
+                            >
+                                Eyða sáttmála (Byrja upp á nýtt)
+                            </button>
+                        </div>
                     )}
                 </div>
 
