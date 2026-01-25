@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement } from '@/hooks/useFirestore';
+import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement, useAgreementSignatures, useSignAgreement } from '@/hooks/useFirestore';
 import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
