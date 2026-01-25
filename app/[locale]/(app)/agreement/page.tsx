@@ -13,7 +13,7 @@ import { Timestamp } from 'firebase/firestore';
 export default function AgreementPage() {
     const t = useTranslations('agreement');
     const { user } = useAuth();
-    const { data: activeClass } = useUserClass(user?.uid);
+    const { data: activeClass, isLoading: userClassLoading } = useUserClass(user?.uid);
     const isAdmin = activeClass?.role === 'admin';
 
     const { data: agreement, isLoading } = useAgreement(activeClass?.id || null);
@@ -24,7 +24,7 @@ export default function AgreementPage() {
     const createAgreementMutation = useCreateAgreement();
     const updateAgreementMutation = useUpdateAgreement();
 
-    if (isLoading) {
+    if (isLoading || userClassLoading) {
         return (
             <div className="min-h-[60vh] flex items-center justify-center">
                 <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />

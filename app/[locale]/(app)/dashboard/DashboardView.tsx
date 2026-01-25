@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams, useParams } from 'next/navigation';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink } from '@/hooks/useFirestore';
-import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus, Users, CheckSquare, Settings, Copy, Check } from 'lucide-react';
+import { useAnnouncements, useTasks, useStudents, useClass, useUserClasses, useUserParentLink, useAgreement } from '@/hooks/useFirestore';
+import { Loader2, Calendar, Star, Megaphone, ChevronRight, ChevronDown, UserPlus, Users, CheckSquare, Settings, Copy, Check, ShieldCheck } from 'lucide-react';
 // import { db } from '@/lib/firebase/config'; // No longer needed directly
 import { collection, query, where, getDocs, orderBy } from 'firebase/firestore'; // Removed manual queries
 
@@ -86,6 +86,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
     const { data: announcementsData, isLoading: announcementsLoading } = useAnnouncements(classId, activeClass?.schoolId);
     const { data: tasksData, isLoading: tasksLoading } = useTasks(classId, activeClass?.schoolId);
     const { data: studentsData, isLoading: studentsLoading } = useStudents(classId);
+    const { data: agreementData } = useAgreement(classId);
 
     // Auth redirection
     useEffect(() => {
@@ -508,12 +509,30 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                             <div className="text-2xl font-black text-blue-900 mb-1">{studentsData?.length || 0}</div>
                             <div className="text-xs font-bold text-blue-600/70 uppercase tracking-wide">Nemendur</div>
                         </div>
-                        {/* Placeholder for future stat or remove grid-cols-2 if only one item */}
                         <div className="p-4 rounded-lg bg-purple-50 border border-purple-100 text-center hover:bg-purple-100 transition-colors cursor-pointer" onClick={() => router.push(`/${locale}/patrol`)}>
                             <div className="text-2xl font-black text-purple-600 mb-1">
                                 📅
                             </div>
                             <div className="text-xs font-bold text-purple-600/70 uppercase tracking-wide">Dagatal</div>
+                        </div>
+
+                        {/* Agreement Card */}
+                        <div
+                            onClick={() => router.push(`/${locale}/agreement`)}
+                            className={`p-4 rounded-lg border text-center transition-colors cursor-pointer ${agreementData
+                                    ? 'bg-emerald-50 border-emerald-100 hover:bg-emerald-100'
+                                    : 'bg-gray-50 border-gray-100 hover:bg-gray-100'
+                                }`}
+                        >
+                            <div className="mb-2 flex justify-center">
+                                <ShieldCheck size={28} className={agreementData ? "text-emerald-600" : "text-gray-400"} />
+                            </div>
+                            <div className="text-sm font-bold text-gray-900 mb-0.5">
+                                Bekkjarsáttmáli
+                            </div>
+                            <div className={`text-[10px] font-bold uppercase tracking-wide ${agreementData ? "text-emerald-600/70" : "text-gray-400"}`}>
+                                {agreementData ? 'Skoða' : (isAdmin ? 'Stofna' : 'Vantar')}
+                            </div>
                         </div>
                     </div>
 
