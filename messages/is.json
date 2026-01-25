@@ -636,5 +636,60 @@
     "poster": {
       "verified_badge": "Samþykkt af bekknum"
     }
+  },
+  "handbook": {
+    "agreement": {
+      "badge": "Lýðræðisleg ákvarðanataka",
+      "title": "Bekkjarsáttmálinn",
+      "subtitle": "Lýðræðislegur vettvangur þar sem foreldrar taka saman ákvarðanir um sameiginlegar reglur bekkjarins.",
+      "what": {
+        "title": "Hvað er þetta?",
+        "p1": "Bekkjarsáttmálinn er lýðræðislegt verkfæri þar sem foreldrar bekkjarins greiða nafnlaust atkvæði um sameiginlegar reglur og viðmið. Þetta tryggir að allir fái að segja sína skoðun án þrýstings.",
+        "p2": "Þegar kosningu lýkur birtast niðurstöður sem sýna hvað meirihluti foreldra vill. Ein sterka hliðin er að atkvæðin eru nafnlaus - enginn sér hver greiddi hvert atkvæði, bara niðurstöðurnar."
+      },
+      "topics": {
+        "title": "Hvaða efni fjallum við um?",
+        "birthdays": {
+          "title": "Afmælisgjafir",
+          "desc": "Hámarksverð fyrir afmælisgjafir svo enginn finnist þurfa að eyða of miklu."
+        },
+        "invitations": {
+          "title": "Boðsreglur",
+          "desc": "Hvernig börnin bjóða í afmæli - allur bekkurinn, kynaskipt, eða minni hópar."
+        },
+        "social": {
+          "title": "Samfélagsmiðlar",
+          "desc": "Á hvaða aldri mega börnin fara að nota Instagram, TikTok og aðra samfélagsmiðla."
+        },
+        "gaming": {
+          "title": "Netleikir með spjalli",
+          "desc": "Afstaða til Roblox, Fortnite og annarra leikja þar sem börn geta spjallað við ókunnuga."
+        },
+        "screen": {
+          "title": "Skjátími",
+          "desc": "Viðmið um skjánotkun, t.d. Heilsuvera leiðbeiningar (engin tæki í herbergjum og við mat)."
+        }
+      },
+      "how": {
+        "title": "Hvernig virkar þetta?",
+        "step1": {
+          "title": "Bekkjarfulltrúi stofnar kosninguna",
+          "desc": "Stjórnandinn (yfirleitt bekkjarfulltrúi) setur upp sáttmálann og sendir tengil til allra foreldra."
+        },
+        "step2": {
+          "title": "Foreldrar greiða atkvæði",
+          "desc": "Hver foreldri fer inn og greiðir nafnlaust atkvæði um hvern lið. Þú sérð ekki atkvæði annarra fyrr en kosningu lýkur."
+        },
+        "step3": {
+          "title": "Niðurstöður birtast",
+          "desc": "Þegar fulltrúinn lokar kosningunni sjá allir hvað meirihlutinn valdi. Sáttmálinn er nú opinber viðmiðun fyrir bekkinn."
+        }
+      },
+      "privacy": {
+        "title": "Er þetta öruggt?",
+        "desc": "Já. Atkvæðin eru nafnlaus - enginn sér hver greiddi hvert atkvæði, bara niðurstöðurnar. Þetta gerir fólki auðveldara að segja sína raunverulegu skoðun án félagslegs þrýstings."
+      },
+      "cta": "Fara í Bekkjarsáttmála"
+    }
   }
 }
