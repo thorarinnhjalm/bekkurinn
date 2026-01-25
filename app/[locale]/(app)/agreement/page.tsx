@@ -161,7 +161,7 @@ export default function AgreementPage() {
     // 1. VOTING PHASE
     if (agreement.status === 'voting') {
         const cleanKey = (k: string) => k.replace(/^agreement\./, '');
-        const sections = agreement.sections.map((s: any) => ({
+        const sections: AgreementSection[] = agreement.sections.map((s: any) => ({
             ...s,
             titleKey: cleanKey(s.titleKey),
             descriptionKey: cleanKey(s.descriptionKey),
