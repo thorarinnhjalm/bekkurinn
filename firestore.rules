@@ -35,7 +35,8 @@ service cloud.firestore {
       return isAuthenticated() && (
              get(/databases/$(database)/documents/classes/$(classId)).data.admins.hasAny([request.auth.uid]) ||
              (exists(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)) && 
-              get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin')
+              get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin') ||
+             isSuperAdmin()
       );
     }
 
