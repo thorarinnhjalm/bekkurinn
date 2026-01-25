@@ -25,8 +25,16 @@ import {
     getTasksBySchool,
     getParentLinksByUser
 } from '@/services/firestore';
-import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput } from '@/types';
-import { Class, Student, Task, Announcement, ParentLink, LostItem } from '@/types';
+import {
+    getAgreementByClass,
+    createAgreement,
+    updateAgreement,
+    castVote,
+    getAgreementVotes,
+    getMyVote
+} from '@/services/agreementService';
+import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput, CreateAgreementInput, AgreementVote } from '@/types';
+import { Class, Student, Task, Announcement, ParentLink, LostItem, Agreement } from '@/types';
 import {
     collection,
     doc,
@@ -43,6 +51,71 @@ import {
     orderBy
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+
+// ... existing code ...
+
+// ==========================================
+// AGREEMENT HOOKS
+// ==========================================
+
+export function useAgreement(classId: string | null) {
+    return useQuery({
+        queryKey: ['agreement', classId],
+        queryFn: () => (classId ? getAgreementByClass(classId) : null),
+        enabled: !!classId,
+    });
+}
+
+export function useAgreementVotes(agreementId: string | undefined) {
+    return useQuery({
+        queryKey: ['agreementVotes', agreementId],
+        queryFn: () => (agreementId ? getAgreementVotes(agreementId) : []),
+        enabled: !!agreementId,
+    });
+}
+
+export function useMyVote(agreementId: string | undefined, userId: string | undefined) {
+    return useQuery({
+        queryKey: ['myVote', agreementId, userId],
+        queryFn: () => (agreementId && userId ? getMyVote(agreementId, userId) : null),
+        enabled: !!agreementId && !!userId,
+    });
+}
+
+export function useCreateAgreement() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (data: CreateAgreementInput) => createAgreement(data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['agreement', variables.classId] });
+        },
+    });
+}
+
+export function useUpdateAgreement() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ agreementId, data }: { agreementId: string; data: Partial<Agreement> }) =>
+            updateAgreement(agreementId, data),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['agreement'] });
+            // Also invalidate specific agreement cache if needed
+            queryClient.invalidateQueries({ queryKey: ['agreementVotes', variables.agreementId] });
+        },
+    });
+}
+
+export function useCastVote() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ agreementId, vote }: { agreementId: string; vote: Omit<AgreementVote, 'id' | 'timestamp'> }) =>
+            castVote(agreementId, vote),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['agreementVotes', variables.agreementId] });
+            queryClient.invalidateQueries({ queryKey: ['myVote', variables.agreementId] });
+        },
+    });
+}
 
 // ... other hooks ...
 

@@ -585,5 +585,54 @@
       "copied": "Copied!",
       "max_parents_help": "Up to 4 parents/guardians can be linked to each child"
     }
+  },
+  "agreement": {
+    "title": "Class Agreement",
+    "subtitle": "Democratic social contract for our class",
+    "status_draft": "Draft",
+    "status_voting": "Voting in Progress!",
+    "status_published": "Active Agreement",
+    "vote_now": "Vote Now",
+    "your_vote": "Your Vote",
+    "deadline": "Voting ends:",
+    "ratified_by": "Ratified by:",
+    "signed_count": "{count} parents have agreed",
+    "sign_btn": "Confirm & Agree",
+    "read_more": "Read more",
+    "sections": {
+      "birthdays": {
+        "title": "Birthdays & Parties",
+        "desc": "Guidelines for birthday gifts and invitations to ensure inclusion.",
+        "gift_amount_q": "What is the max limit for birthday gifts?",
+        "invitation_rule_q": "How should we handle invitations?"
+      },
+      "social": {
+        "title": "Communication & Social Media",
+        "desc": "Guidelines for social media usage and communication.",
+        "social_age_q": "At what age should kids use social media?",
+        "screen_time_q": "Screen time guidelines?"
+      }
+    },
+    "options": {
+      "0kr": "No gifts",
+      "1000kr": "Max 1.000 kr.",
+      "1500kr": "Max 1.500 kr.",
+      "2000kr": "Max 2.000 kr.",
+      "free": "Optional / No limit",
+      "all_class": "Invite whole class",
+      "gender_split": "Invite all boys or all girls",
+      "small_groups": "Small groups allowed (but don't leave 1-2 out)",
+      "no_social": "No social media (before 13)",
+      "monitored": "Under parent supervision",
+      "open": "Parents decide individually"
+    },
+    "voting_card": {
+      "title": "Your voice matters",
+      "desc": "Please help shape the rules. Your vote is anonymous in the final results.",
+      "submit": "Submit Vote"
+    },
+    "poster": {
+      "verified_badge": "Agreed by Class"
+    }
   }
 }

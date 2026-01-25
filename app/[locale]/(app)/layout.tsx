@@ -66,7 +66,13 @@ export default async function AppLayout({
             </div>
 
             {/* Bottom Navigation */}
-            <BottomNav locale={locale} translations={messages.class} />
+            <BottomNav
+                locale={locale}
+                translations={{
+                    ...messages.class,
+                    agreement: messages.agreement.title
+                }}
+            />
 
             {/* Testimonial Collection Prompt */}
             <ClientTestimonialPrompt />

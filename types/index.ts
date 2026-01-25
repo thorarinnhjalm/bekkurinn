@@ -269,3 +269,59 @@ export interface Testimonial {
 
 export type CreateTestimonialInput = Omit<Testimonial, 'id' | 'createdAt' | 'approvedAt' | 'approvedBy' | 'status'>;
 
+
+// ========================================
+// AGREEMENTS (Bekkjarsáttmáli)
+// ========================================
+
+export type AgreementStatus = 'draft' | 'voting' | 'published';
+
+export interface AgreementOption {
+    value: string | number;
+    labelKey: string; // Translation key
+}
+
+export interface AgreementItem {
+    id: string; // e.g., 'gift_amount'
+    type: 'select' | 'radio' | 'boolean';
+    questionKey: string;
+    options: AgreementOption[];
+    winningValue?: string | number; // Populated by admin or auto-calc
+}
+
+export interface AgreementSection {
+    id: string; // e.g., 'birthdays'
+    templateId: string;
+    titleKey: string;
+    descriptionKey: string;
+    items: AgreementItem[];
+}
+
+export interface Agreement {
+    id: string;
+    classId: string;
+    schoolId?: string;
+    status: AgreementStatus;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
+    votingDeadline?: Timestamp;
+    sections: AgreementSection[];
+
+    // Metadata
+    createdBy: string;
+    publishedAt?: Timestamp;
+    ratifiedBy?: string; // Admin UID
+}
+
+export interface AgreementVote {
+    id: string; // userId
+    userId: string;
+    userName: string;
+    studentId?: string; // Optional: Link to child
+    timestamp: Timestamp;
+    answers: {
+        [itemId: string]: string | number;
+    };
+}
+
+export type CreateAgreementInput = Omit<Agreement, 'id' | 'createdAt' | 'updatedAt'>;

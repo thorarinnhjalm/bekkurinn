@@ -3,7 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Users, Calendar, Megaphone, Menu, Camera, Car } from 'lucide-react';
+import { Home, Users, Calendar, Megaphone, Menu, Camera, Car, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -32,6 +32,12 @@ const navItems = [
         labelKey: 'class.directory',
     },
     {
+        key: 'agreement',
+        href: '/agreement',
+        icon: ShieldCheck,
+        labelKey: 'agreement.title',
+    },
+    {
         key: 'tasks',
         href: '/calendar',
         icon: Calendar, // Changed icon to Calendar
@@ -47,7 +53,7 @@ const navItems = [
         key: 'skutl',
         href: '/pickup-offers',
         icon: Car,
-        labelKey: 'class.skutl', // Will fallback to key
+        labelKey: 'class.skutl',
     },
 ] as const;
 
@@ -59,6 +65,7 @@ interface BottomNavProps {
         patrol: string;
         tasks: string;
         announcements: string;
+        agreement: string;
     };
 }
 

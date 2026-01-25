@@ -572,5 +572,54 @@
       "copied": "Afritað!",
       "max_parents_help": "Hægt er að tengja allt að 4 foreldra/forráðamenn við hvert barn"
     }
+  },
+  "agreement": {
+    "title": "Bekkjarsáttmáli",
+    "subtitle": "Lýðræðislegur sáttmáli fyrir bekkinn okkar",
+    "status_draft": "Í vinnslu (Drög)",
+    "status_voting": "Kosning stendur yfir!",
+    "status_published": "Gildandi sáttmáli",
+    "vote_now": "Kjósa núna",
+    "your_vote": "Þitt atkvæði",
+    "deadline": "Kosningu lýkur:",
+    "ratified_by": "Staðfest af:",
+    "signed_count": "{count} foreldrar hafa samþykkt",
+    "sign_btn": "Staðfesta og samþykkja",
+    "read_more": "Lesa nánar",
+    "sections": {
+      "birthdays": {
+        "title": "Afmæli & Veislur",
+        "desc": "Viðmið fyrir afmælisgjafir og boðskort til að tryggja að enginn sé útundan.",
+        "gift_amount_q": "Hvað má afmælisgjöf kosta (hámark)?",
+        "invitation_rule_q": "Hvernig bjóðum við í afmæli?"
+      },
+      "social": {
+        "title": "Samskipti & Netnotkun",
+        "desc": "Viðmið um samfélagsmiðla og samskipti barnanna.",
+        "social_age_q": "Hvenær mega börnin vera á samfélagsmiðlum?",
+        "screen_time_q": "Viðmið um skjátíma?"
+      }
+    },
+    "options": {
+      "0kr": "Engar gjafir",
+      "1000kr": "Hámark 1.000 kr.",
+      "1500kr": "Hámark 1.500 kr.",
+      "2000kr": "Hámark 2.000 kr.",
+      "free": "Valfrjálst / Ekkert hámark",
+      "all_class": "Bjóða öllum í bekknum",
+      "gender_split": "Bjóða öllum strákum eða öllum stelpum",
+      "small_groups": "Lektir afmælismunir (litlir hópar ok, en ekki skilja 1-2 eftir)",
+      "no_social": "Engir samfélagsmiðlar (fyrir 13 ára)",
+      "monitored": "Undir eftirliti foreldra",
+      "open": "Foreldrar ákveða alfarið"
+    },
+    "voting_card": {
+      "title": "Þín skoðun skiptir máli",
+      "desc": "Vinsamlegast taktu þátt í að móta reglurnar. Atkvæðið þitt er nafnlaust í niðurstöðum.",
+      "submit": "Senda atkvæði"
+    },
+    "poster": {
+      "verified_badge": "Samþykkt af bekknum"
+    }
   }
 }
