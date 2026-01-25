@@ -27,7 +27,10 @@ export default async function AppLayout({
             <DesktopSidebar
                 className="hidden md:flex"
                 locale={locale}
-                translations={messages.class}
+                translations={{
+                    ...messages.class,
+                    agreement: messages.agreement.title
+                }}
             />
 
             {/* Main Wrapper */}

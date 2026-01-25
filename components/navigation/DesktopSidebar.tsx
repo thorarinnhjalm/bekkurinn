@@ -23,6 +23,7 @@ interface DesktopSidebarProps {
         announcements: string;
         lost_found: string;
         skutl: string;
+        agreement: string;
         settings?: string;
         logout?: string;
     };
@@ -74,6 +75,12 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             href: '/directory',
             icon: Users,
             label: translations.directory,
+        },
+        {
+            key: 'agreement',
+            href: '/agreement',
+            icon: ShieldCheck,
+            label: translations.agreement,
         },
         {
             key: 'tasks',
