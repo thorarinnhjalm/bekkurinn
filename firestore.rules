@@ -30,13 +30,15 @@ service cloud.firestore {
     }
     
     function isClassAdmin(classId) {
+      // Check Super Admin FIRST to avoid potential get() errors on missing docs
+      if (isSuperAdmin()) return true;
+
       // Check if user is in the 'admins' array on the class document
       // OR if they have a parentLink with role 'admin' (e.g. Class Representative)
       return isAuthenticated() && (
              get(/databases/$(database)/documents/classes/$(classId)).data.admins.hasAny([request.auth.uid]) ||
              (exists(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)) && 
-              get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin') ||
-             isSuperAdmin()
+              get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin')
       );
     }
 
@@ -333,25 +335,26 @@ service cloud.firestore {
       allow read: if isAuthenticated();
 
       // Create: Class Admins only
-      allow create: if isClassAdmin(request.resource.data.classId) && 
+      allow create: if (isClassAdmin(request.resource.data.classId) || isSuperAdmin()) && 
                        request.resource.data.createdBy == request.auth.uid;
 
       // Update: Class Admins only (e.g., change status, publish)
-      allow update: if isClassAdmin(resource.data.classId);
+      allow update: if isClassAdmin(resource.data.classId) || isSuperAdmin();
 
       // VOTES Subcollection
       match /votes/{userId} {
         // Read: The voter themselves OR Class Admins
         allow read: if isAuthenticated() && (
           request.auth.uid == userId ||
-          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId)
+          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+          isSuperAdmin()
         );
 
         // Write: The voter themselves (if class member)
         // We check class membership of the PARENT agreement
         allow write: if isAuthenticated() && 
                         request.auth.uid == userId &&
-                        isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId);
+                        (isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) || isSuperAdmin());
       }
     }
 
