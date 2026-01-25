@@ -277,6 +277,109 @@ export default function AgreementPage() {
                             </button>
                         </div>
                     )}
+
+                    {isAdmin && (
+                        <div className="mt-8 pt-8 border-t border-yellow-100">
+                            <p className="text-xs text-yellow-600 mb-2 font-medium uppercase tracking-wide">Prufukeyrsla</p>
+                            <button
+                                onClick={async () => {
+                                    if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+
+                                    // Delete old if exists
+                                    if (agreement.id) {
+                                        await deleteAgreementMutation.mutateAsync(agreement.id);
+                                    }
+
+                                    // Create demo
+                                    const demoData: any = {
+                                        classId: activeClass.id,
+                                        status: 'published', // Published directly
+                                        createdBy: user.uid,
+                                        sections: [
+                                            {
+                                                id: 'birthdays',
+                                                templateId: 'v1',
+                                                titleKey: 'sections.birthdays.title',
+                                                descriptionKey: 'sections.birthdays.desc',
+                                                items: [
+                                                    {
+                                                        id: 'gift_amount',
+                                                        type: 'radio',
+                                                        questionKey: 'sections.birthdays.gift_amount_q',
+                                                        winningValue: 1500,
+                                                        options: [
+                                                            { value: 500, labelKey: 'options.500kr', voteCount: 2 },
+                                                            { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
+                                                            { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
+                                                            { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
+                                                            { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                        ]
+                                                    },
+                                                    {
+                                                        id: 'invites',
+                                                        type: 'radio',
+                                                        questionKey: 'sections.birthdays.invitation_rule_q',
+                                                        winningValue: 'all_class',
+                                                        options: [
+                                                            { value: 'all_class', labelKey: 'options.all_class', voteCount: 15 },
+                                                            { value: 'gender_split', labelKey: 'options.gender_split', voteCount: 6 },
+                                                            { value: 'small_groups', labelKey: 'options.small_groups', voteCount: 2 },
+                                                        ]
+                                                    }
+                                                ]
+                                            },
+                                            {
+                                                id: 'social',
+                                                templateId: 'v1',
+                                                titleKey: 'sections.social.title',
+                                                descriptionKey: 'sections.social.desc',
+                                                items: [
+                                                    {
+                                                        id: 'social_age',
+                                                        type: 'radio',
+                                                        questionKey: 'sections.social.social_age_q',
+                                                        winningValue: 'monitored',
+                                                        options: [
+                                                            { value: 'no_social', labelKey: 'options.no_social', voteCount: 4 },
+                                                            { value: 'monitored', labelKey: 'options.monitored', voteCount: 16 },
+                                                            { value: 'open', labelKey: 'options.open', voteCount: 3 },
+                                                        ]
+                                                    },
+                                                    {
+                                                        id: 'gaming_rules',
+                                                        type: 'radio',
+                                                        questionKey: 'sections.social.gaming_q',
+                                                        winningValue: 'flexible',
+                                                        options: [
+                                                            { value: 'pegi', labelKey: 'options.pegi', voteCount: 5 },
+                                                            { value: 'flexible', labelKey: 'options.flexible_gaming', voteCount: 14 },
+                                                            { value: 'open', labelKey: 'options.parents_decide', voteCount: 4 },
+                                                        ]
+                                                    },
+                                                    {
+                                                        id: 'screen_time',
+                                                        type: 'radio',
+                                                        questionKey: 'sections.social.screen_time_q',
+                                                        winningValue: 'heilsuvera',
+                                                        options: [
+                                                            { value: 'heilsuvera', labelKey: 'options.heilsuvera_guidelines', voteCount: 18 },
+                                                            { value: 'balanced', labelKey: 'options.screen_balanced', voteCount: 4 },
+                                                            { value: 'open', labelKey: 'options.parents_decide', voteCount: 1 },
+                                                        ]
+                                                    }
+                                                ]
+                                            }
+                                        ]
+                                    };
+
+                                    await createAgreementMutation.mutateAsync(demoData);
+                                    window.location.reload();
+                                }}
+                                className="w-full py-2 border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-medium transition-colors"
+                            >
+                                Sýna Demo (Fylla með gervigögnum)
+                            </button>
+                        </div>
                 </div>
 
                 {/* Preview of what voting looks like */}
