@@ -21,7 +21,8 @@ service cloud.firestore {
     function isSuperAdmin() {
       return isAuthenticated() && 
              (request.auth.token.email == 'thorarinnhjalmarsson@gmail.com' || 
-              request.auth.token.email == 'thorarinn@antigravity.is');
+              request.auth.token.email == 'thorarinn@antigravity.is' ||
+              request.auth.uid == 'yw1CYJlirIaFnkVxJkpAqauAzQ92');
     }
     
     function isClassMember(classId) {
