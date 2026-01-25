@@ -29,7 +29,9 @@ export default async function AppLayout({
                 locale={locale}
                 translations={{
                     ...messages.class,
-                    agreement: messages.agreement.title
+                    agreement: messages.agreement.title,
+                    logout: messages.admin.logout,
+                    settings: messages.admin.settings_link
                 }}
             />
 
