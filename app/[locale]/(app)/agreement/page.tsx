@@ -145,6 +145,16 @@ export default function AgreementPage() {
                 ) : (
                     <p className="text-sm text-gray-400">Bekkjarfulltrúi hefur ekki stofnað sáttmála ennþá.</p>
                 )}
+
+                <div className="mt-8 p-4 bg-gray-100 rounded text-xs font-mono text-left opacity-75">
+                    <p className="font-bold border-b border-gray-300 mb-2">Debug Info (Temporary)</p>
+                    <p>User ID: {user?.uid}</p>
+                    <p>Class ID: {activeClass?.id}</p>
+                    <p>Role: {activeClass?.role}</p>
+                    <p>Is Admin: {isAdmin ? 'YES' : 'NO'}</p>
+                    <p>Agrmt Loading: {isLoading ? 'Yes' : 'No'}</p>
+                    <p>Class Loading: {userClassLoading ? 'Yes' : 'No'}</p>
+                </div>
             </div>
         );
     }
