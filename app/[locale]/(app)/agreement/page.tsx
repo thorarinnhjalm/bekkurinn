@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement, useAgreementSignatures, useSignAgreement } from '@/hooks/useFirestore';
-import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool } from 'lucide-react';
+import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool, Settings, PartyPopper, Smartphone } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
 import { Agreement, AgreementItem, AgreementSection } from '@/types';
@@ -255,146 +255,175 @@ export default function AgreementPage() {
     // 2. DRAFT PHASE (Admin only really)
     if (agreement.status === 'draft') {
         return (
-            <div className="space-y-6">
-                <div className="bg-yellow-50 border-2 border-yellow-200 rounded-2xl p-6">
-                    <h2 className="font-bold text-yellow-800 text-lg mb-2">{t('status_draft')}</h2>
-                    <p className="text-yellow-700 text-sm mb-4">Sáttmálinn er í vinnslu. Þú getur breytt spurningum eða byrjað kosningu.</p>
+            <div className="space-y-12 animate-in fade-in duration-800 pb-20">
+                {/* Header Section */}
+                <header className="relative isolate overflow-hidden">
+                    <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl opacity-20" aria-hidden="true">
+                        <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-amber-100 to-orange-200"
+                            style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
+                        />
+                    </div>
 
-                    {isAdmin && (
-                        <div className="space-y-4">
-                            <button onClick={handleStartVoting} className="w-full py-3 bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold rounded-xl transition-colors">
-                                Byrja kosningu (Virkjar fyrir alla)
-                            </button>
-
-                            <button
-                                onClick={async () => {
-                                    if (confirm('Ertu viss um að þú viljir eyða sáttmálanum? Þetta er óafturkræft.')) {
-                                        await deleteAgreementMutation.mutateAsync(agreement.id);
-                                        window.location.reload();
-                                    }
-                                }}
-                                className="w-full py-2 bg-red-50 hover:bg-red-100 text-red-600 text-sm font-medium rounded-xl transition-colors"
-                            >
-                                Eyða sáttmála (Byrja upp á nýtt)
-                            </button>
+                    <div className="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                        <div className="space-y-4 max-w-2xl text-center md:text-left">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-amber-50 border border-amber-100 text-xs font-semibold text-amber-700 uppercase tracking-wide">
+                                <Lock size={14} />
+                                {t('status_draft')}
+                            </div>
+                            <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 leading-tight">
+                                Sáttmáli í vinnslu
+                            </h1>
+                            <p className="text-lg text-gray-600 font-medium max-w-lg leading-relaxed">
+                                Hér getur þú stillt spurningar og valmöguleika áður en kosning hefst.
+                            </p>
                         </div>
-                    )}
 
-                    {isAdmin && (
-                        <div className="mt-8 pt-8 border-t border-yellow-100">
-                            <p className="text-xs text-yellow-600 mb-2 font-medium uppercase tracking-wide">Prufukeyrsla</p>
-                            <button
-                                onClick={async () => {
-                                    if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+                        {isAdmin && (
+                            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+                                <button
+                                    onClick={handleStartVoting}
+                                    className="px-8 py-4 bg-amber-400 hover:bg-amber-500 text-amber-900 font-black rounded-xl transition-all shadow-lg shadow-amber-400/20 active:scale-95 flex items-center justify-center gap-2"
+                                >
+                                    <Vote size={20} />
+                                    Byrja kosningu
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        if (confirm('Ertu viss um að þú viljir eyða sáttmálanum? Þetta er óafturkræft.')) {
+                                            await deleteAgreementMutation.mutateAsync(agreement.id);
+                                            window.location.reload();
+                                        }
+                                    }}
+                                    className="px-6 py-4 bg-white border border-gray-200 text-red-600 font-bold rounded-xl hover:bg-red-50 hover:border-red-100 transition-all active:scale-95 text-sm"
+                                >
+                                    Eyða & Byrja aftur
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </header>
 
-                                    // Delete old if exists
-                                    if (agreement.id) {
-                                        await deleteAgreementMutation.mutateAsync(agreement.id);
-                                    }
+                {/* Main Content Area */}
+                <div className="grid lg:grid-cols-12 gap-8 items-start">
+                    {/* Left: Editor/Structure */}
+                    <div className="lg:col-span-12 space-y-10">
+                        <section className="space-y-6">
+                            <div className="flex items-center justify-between px-2">
+                                <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Reglur & Spurningar</h2>
+                                <span className="text-sm font-bold text-gray-400">Drög að uppsetningu</span>
+                            </div>
 
-                                    // Create demo
-                                    const demoData: any = {
-                                        classId: activeClass.id,
-                                        status: 'published', // Published directly
-                                        createdBy: user!.uid,
-                                        sections: [
-                                            {
-                                                id: 'birthdays',
-                                                templateId: 'v1',
-                                                titleKey: 'sections.birthdays.title',
-                                                descriptionKey: 'sections.birthdays.desc',
-                                                items: [
+                            <div className="space-y-8">
+                                {agreement.sections.map((section: any) => (
+                                    <div key={section.id} className="professional-card p-0 overflow-hidden bg-white">
+                                        <div className="p-6 md:p-8 bg-gray-50/50 border-b border-gray-100 flex items-center justify-between">
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-12 h-12 rounded-2xl bg-white shadow-sm border border-gray-100 flex items-center justify-center">
+                                                    {section.id === 'birthdays' ? <PartyPopper className="text-pink-500" /> : <Smartphone className="text-indigo-500" />}
+                                                </div>
+                                                <div>
+                                                    <h3 className="text-xl font-bold text-gray-900">{t(`sections.${section.id}.title` as any)}</h3>
+                                                    <p className="text-sm text-gray-500 font-medium">{t(`sections.${section.id}.desc` as any)}</p>
+                                                </div>
+                                            </div>
+                                            <button className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
+                                                Breyta texta
+                                            </button>
+                                        </div>
+
+                                        <div className="p-6 md:p-8 space-y-8">
+                                            {section.items.map((item: any) => (
+                                                <div key={item.id} className="space-y-4">
+                                                    <div className="flex items-start justify-between gap-4">
+                                                        <div className="flex-1">
+                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Spurning</div>
+                                                            <h4 className="font-bold text-lg text-gray-900">
+                                                                {t(`sections.${section.id}.${item.id}_q` as any)}
+                                                            </h4>
+                                                        </div>
+                                                        <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                                                            <Settings size={18} />
+                                                        </button>
+                                                    </div>
+
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {item.options.map((opt: any) => (
+                                                            <div key={opt.value} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
+                                                                {t(`options.${opt.labelKey.replace(/^options\./, '')}` as any)}
+                                                            </div>
+                                                        ))}
+                                                        <button className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all">
+                                                            + Bæta við
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Demo/Preview Area */}
+                        {isAdmin && (
+                            <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
+                                <div className="text-center max-w-md mx-auto space-y-4">
+                                    <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
+                                        <ShieldCheck size={32} />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
+                                    <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
+                                    <button
+                                        onClick={async () => {
+                                            if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+                                            if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
+
+                                            const demoData: any = {
+                                                classId: activeClass.id,
+                                                status: 'published',
+                                                createdBy: user!.uid,
+                                                sections: [
                                                     {
-                                                        id: 'gift_amount',
-                                                        type: 'radio',
-                                                        questionKey: 'sections.birthdays.gift_amount_q',
-                                                        winningValue: 1500,
-                                                        options: [
-                                                            { value: 500, labelKey: 'options.500kr', voteCount: 2 },
-                                                            { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
-                                                            { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
-                                                            { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
-                                                            { value: 'free', labelKey: 'options.free', voteCount: 1 },
-                                                        ]
-                                                    },
-                                                    {
-                                                        id: 'invites',
-                                                        type: 'radio',
-                                                        questionKey: 'sections.birthdays.invitation_rule_q',
-                                                        winningValue: 'all_class',
-                                                        options: [
-                                                            { value: 'all_class', labelKey: 'options.all_class', voteCount: 15 },
-                                                            { value: 'gender_split', labelKey: 'options.gender_split', voteCount: 6 },
-                                                            { value: 'small_groups', labelKey: 'options.small_groups', voteCount: 2 },
+                                                        id: 'birthdays',
+                                                        templateId: 'v1',
+                                                        titleKey: 'sections.birthdays.title',
+                                                        descriptionKey: 'sections.birthdays.desc',
+                                                        items: [
+                                                            {
+                                                                id: 'gift_amount',
+                                                                type: 'radio',
+                                                                questionKey: 'sections.birthdays.gift_amount_q',
+                                                                winningValue: 1500,
+                                                                options: [
+                                                                    { value: 500, labelKey: 'options.500kr', voteCount: 2 },
+                                                                    { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
+                                                                    { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
+                                                                    { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
+                                                                    { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                                ]
+                                                            }
                                                         ]
                                                     }
                                                 ]
-                                            },
-                                            {
-                                                id: 'social',
-                                                templateId: 'v1',
-                                                titleKey: 'sections.social.title',
-                                                descriptionKey: 'sections.social.desc',
-                                                items: [
-                                                    {
-                                                        id: 'social_age',
-                                                        type: 'radio',
-                                                        questionKey: 'sections.social.social_age_q',
-                                                        winningValue: 'monitored',
-                                                        options: [
-                                                            { value: 'no_social', labelKey: 'options.no_social', voteCount: 4 },
-                                                            { value: 'monitored', labelKey: 'options.monitored', voteCount: 16 },
-                                                            { value: 'open', labelKey: 'options.open', voteCount: 3 },
-                                                        ]
-                                                    },
-                                                    {
-                                                        id: 'gaming_rules',
-                                                        type: 'radio',
-                                                        questionKey: 'sections.social.gaming_q',
-                                                        winningValue: 'flexible',
-                                                        options: [
-                                                            { value: 'pegi', labelKey: 'options.pegi', voteCount: 5 },
-                                                            { value: 'flexible', labelKey: 'options.flexible_gaming', voteCount: 14 },
-                                                            { value: 'open', labelKey: 'options.parents_decide', voteCount: 4 },
-                                                        ]
-                                                    },
-                                                    {
-                                                        id: 'screen_time',
-                                                        type: 'radio',
-                                                        questionKey: 'sections.social.screen_time_q',
-                                                        winningValue: 'heilsuvera',
-                                                        options: [
-                                                            { value: 'heilsuvera', labelKey: 'options.heilsuvera_guidelines', voteCount: 18 },
-                                                            { value: 'balanced', labelKey: 'options.screen_balanced', voteCount: 4 },
-                                                            { value: 'open', labelKey: 'options.parents_decide', voteCount: 1 },
-                                                        ]
-                                                    }
-                                                ]
-                                            }
-                                        ]
-                                    };
-
-                                    await createAgreementMutation.mutateAsync(demoData);
-                                    window.location.reload();
-                                }}
-                                className="w-full py-2 border border-blue-200 text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-xl text-sm font-medium transition-colors"
-                            >
-                                Sýna Demo (Fylla með gervigögnum)
-                            </button>
-                        </div>
-                    )}
-                </div>
-
-                {/* Preview of what voting looks like */}
-                <div className="opacity-60 pointer-events-none grayscale">
-                    <h3 className="font-bold text-center mb-4">Forskoðun</h3>
-                    {/* Reuse logic or map lightly */}
+                                            };
+                                            await createAgreementMutation.mutateAsync(demoData);
+                                            window.location.reload();
+                                        }}
+                                        className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                                    >
+                                        Sýna Demo (Fylla með gervigögnum)
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );
     }
 
-    const hasSigned = signatures?.some(s => s.userId === user?.uid);
+    // 3. PUBLISHED PHASE
+    const hasSigned = signatures?.some((s: any) => s.userId === user?.uid);
 
     const handleSign = async () => {
         if (!agreement || !user) return;
@@ -407,16 +436,6 @@ export default function AgreementPage() {
         });
     };
 
-    if (isLoading || userClassLoading) {
-        return (
-            <div className="min-h-[60vh] flex items-center justify-center">
-                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
-            </div>
-        );
-    }
-    // ... rest of checking logic if needed (it stays but let's see)
-
-    // 3. PUBLISHED PHASE
     return (
         <div className="space-y-12 animate-in fade-in duration-800 pb-20">
             {/* Header Section */}
