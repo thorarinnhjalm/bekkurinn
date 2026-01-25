@@ -88,6 +88,16 @@ export default function AgreementPage() {
                                 { value: 'monitored', labelKey: 'options.monitored' },
                                 { value: 'open', labelKey: 'options.open' },
                             ]
+                        },
+                        {
+                            id: 'gaming_rules',
+                            type: 'radio',
+                            questionKey: 'sections.social.gaming_q',
+                            options: [
+                                { value: 'pegi', labelKey: 'options.pegi' },
+                                { value: 'flexible', labelKey: 'options.flexible_gaming' },
+                                { value: 'open', labelKey: 'options.parents_decide' },
+                            ]
                         }
                     ]
                 }

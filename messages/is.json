@@ -597,10 +597,12 @@
         "title": "Samskipti & Netnotkun",
         "desc": "Viðmið um samfélagsmiðla og samskipti barnanna.",
         "social_age_q": "Hvenær mega börnin vera á samfélagsmiðlum?",
+        "gaming_q": "Hvaða viðmið gilda um tölvuleiki (t.d. Fortnite, GTA)?",
         "screen_time_q": "Viðmið um skjátíma?"
       }
     },
     "options": {
+      "0kr": "Engar gjafir",
       "500kr": "Hámark 500 kr.",
       "1000kr": "Hámark 1.000 kr.",
       "1500kr": "Hámark 1.500 kr.",
@@ -611,7 +613,10 @@
       "small_groups": "Minni hópar (en skilja engan eftir útundan)",
       "no_social": "Engir samfélagsmiðlar (fyrir 13 ára)",
       "monitored": "Undir eftirliti foreldra",
-      "open": "Foreldrar ákveða alfarið"
+      "open": "Foreldrar ákveða alfarið",
+      "pegi": "Við virðum PEGI aldursmerkingar leikja",
+      "flexible_gaming": "Sveigjanlegt með vinsæla leiki (t.d. Fortnite) en 16+/18+ bannað",
+      "parents_decide": "Foreldrar ákveða fyrir sín börn"
     },
     "voting_card": {
       "title": "Þín skoðun skiptir máli",
