@@ -597,7 +597,7 @@
         "title": "Samskipti & Netnotkun",
         "desc": "Viðmið um samfélagsmiðla og samskipti barnanna.",
         "social_age_q": "Hvenær mega börnin vera á samfélagsmiðlum?",
-        "gaming_q": "Hvaða viðmið gilda um tölvuleiki (t.d. Fortnite, GTA)?",
+        "gaming_q": "Hver er afstaðan til Roblox og netleikja?",
         "screen_time_q": "Viðmið um skjátíma?"
       }
     },
@@ -614,8 +614,8 @@
       "no_social": "Engir samfélagsmiðlar (fyrir 13 ára)",
       "monitored": "Undir eftirliti foreldra",
       "open": "Foreldrar ákveða alfarið",
-      "pegi": "Við virðum PEGI aldursmerkingar leikja",
-      "flexible_gaming": "Sveigjanlegt með vinsæla leiki (t.d. Fortnite) en 16+/18+ bannað",
+      "pegi": "Bannað / Bíðum með Roblox (og opna netleiki)",
+      "flexible_gaming": "Leyft en með reglum (t.d. lokað á chat / vinir eingöngu)",
       "parents_decide": "Foreldrar ákveða fyrir sín börn"
     },
     "voting_card": {
