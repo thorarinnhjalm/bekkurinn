@@ -294,7 +294,7 @@ export default function AgreementPage() {
                                     const demoData: any = {
                                         classId: activeClass.id,
                                         status: 'published', // Published directly
-                                        createdBy: user.uid,
+                                        createdBy: user!.uid,
                                         sections: [
                                             {
                                                 id: 'birthdays',
@@ -380,6 +380,7 @@ export default function AgreementPage() {
                                 Sýna Demo (Fylla með gervigögnum)
                             </button>
                         </div>
+                    )}
                 </div>
 
                 {/* Preview of what voting looks like */}
