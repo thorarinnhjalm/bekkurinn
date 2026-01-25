@@ -46,29 +46,29 @@ export default function AgreementPage() {
                 {
                     id: 'birthdays',
                     templateId: 'v1',
-                    titleKey: 'agreement.sections.birthdays.title',
-                    descriptionKey: 'agreement.sections.birthdays.desc',
+                    titleKey: 'sections.birthdays.title',
+                    descriptionKey: 'sections.birthdays.desc',
                     items: [
                         {
                             id: 'gift_amount',
                             type: 'radio',
-                            questionKey: 'agreement.sections.birthdays.gift_amount_q',
+                            questionKey: 'sections.birthdays.gift_amount_q',
                             options: [
-                                { value: 0, labelKey: 'agreement.options.0kr' },
-                                { value: 1000, labelKey: 'agreement.options.1000kr' },
-                                { value: 1500, labelKey: 'agreement.options.1500kr' },
-                                { value: 2000, labelKey: 'agreement.options.2000kr' },
-                                { value: 'free', labelKey: 'agreement.options.free' },
+                                { value: 0, labelKey: 'options.0kr' },
+                                { value: 1000, labelKey: 'options.1000kr' },
+                                { value: 1500, labelKey: 'options.1500kr' },
+                                { value: 2000, labelKey: 'options.2000kr' },
+                                { value: 'free', labelKey: 'options.free' },
                             ]
                         },
                         {
                             id: 'invites',
                             type: 'radio',
-                            questionKey: 'agreement.sections.birthdays.invitation_rule_q',
+                            questionKey: 'sections.birthdays.invitation_rule_q',
                             options: [
-                                { value: 'all_class', labelKey: 'agreement.options.all_class' },
-                                { value: 'gender_split', labelKey: 'agreement.options.gender_split' },
-                                { value: 'small_groups', labelKey: 'agreement.options.small_groups' },
+                                { value: 'all_class', labelKey: 'options.all_class' },
+                                { value: 'gender_split', labelKey: 'options.gender_split' },
+                                { value: 'small_groups', labelKey: 'options.small_groups' },
                             ]
                         }
                     ]
@@ -76,17 +76,17 @@ export default function AgreementPage() {
                 {
                     id: 'social',
                     templateId: 'v1',
-                    titleKey: 'agreement.sections.social.title',
-                    descriptionKey: 'agreement.sections.social.desc',
+                    titleKey: 'sections.social.title',
+                    descriptionKey: 'sections.social.desc',
                     items: [
                         {
                             id: 'social_age',
                             type: 'radio',
-                            questionKey: 'agreement.sections.social.social_age_q',
+                            questionKey: 'sections.social.social_age_q',
                             options: [
-                                { value: 'no_social', labelKey: 'agreement.options.no_social' },
-                                { value: 'monitored', labelKey: 'agreement.options.monitored' },
-                                { value: 'open', labelKey: 'agreement.options.open' },
+                                { value: 'no_social', labelKey: 'options.no_social' },
+                                { value: 'monitored', labelKey: 'options.monitored' },
+                                { value: 'open', labelKey: 'options.open' },
                             ]
                         }
                     ]
