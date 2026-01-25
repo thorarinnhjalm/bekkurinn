@@ -191,9 +191,11 @@ export function useUserClasses(userId: string | undefined, userEmail?: string | 
 export function useUserClass(userId: string | undefined, userEmail?: string | null) {
     // Legacy support: return the first class from the list
     const { data } = useUserClasses(userId, userEmail);
+    // Priority: Admin class > First class found
+    const activeClass = data?.find((c: any) => c.role === 'admin') || data?.[0] || null;
     return {
-        data: data && data.length > 0 ? data[0] : null,
-        isLoading: !data, // Approximated
+        data: activeClass,
+        isLoading: !data,
     };
 }
 

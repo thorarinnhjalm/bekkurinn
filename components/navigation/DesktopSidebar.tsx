@@ -77,12 +77,6 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             label: translations.directory,
         },
         {
-            key: 'agreement',
-            href: '/agreement',
-            icon: ShieldCheck,
-            label: translations.agreement,
-        },
-        {
             key: 'tasks',
             href: '/calendar',
             icon: Calendar,
@@ -105,6 +99,12 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             href: '/pickup-offers',
             icon: Car,
             label: translations.skutl,
+        },
+        {
+            key: 'agreement',
+            href: '/agreement',
+            icon: ShieldCheck,
+            label: translations.agreement,
         },
     ] as const;
 

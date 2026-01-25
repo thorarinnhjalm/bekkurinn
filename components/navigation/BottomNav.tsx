@@ -32,12 +32,6 @@ const navItems = [
         labelKey: 'class.directory',
     },
     {
-        key: 'agreement',
-        href: '/agreement',
-        icon: ShieldCheck,
-        labelKey: 'agreement.title',
-    },
-    {
         key: 'tasks',
         href: '/calendar',
         icon: Calendar, // Changed icon to Calendar
@@ -54,6 +48,12 @@ const navItems = [
         href: '/pickup-offers',
         icon: Car,
         labelKey: 'class.skutl',
+    },
+    {
+        key: 'agreement',
+        href: '/agreement',
+        icon: ShieldCheck,
+        labelKey: 'agreement.title',
     },
 ] as const;
 
