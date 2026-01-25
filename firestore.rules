@@ -31,16 +31,11 @@ service cloud.firestore {
     }
     
     function isClassAdmin(classId) {
-      // Check Super Admin FIRST to avoid potential get() errors on missing docs
-      if (isSuperAdmin()) return true;
-
-      // Check if user is in the 'admins' array on the class document
-      // OR if they have a parentLink with role 'admin' (e.g. Class Representative)
-      return isAuthenticated() && (
+      return isSuperAdmin() || (isAuthenticated() && (
              get(/databases/$(database)/documents/classes/$(classId)).data.admins.hasAny([request.auth.uid]) ||
              (exists(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)) && 
               get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin')
-      );
+      ));
     }
 
     // New Helper for School Admins (Foreldrafélag)
