@@ -337,6 +337,9 @@ service cloud.firestore {
       // Update: Class Admins only (e.g., change status, publish)
       allow update: if isClassAdmin(resource.data.classId) || isSuperAdmin();
 
+      // Delete: Class Admins only (reset agreements)
+      allow delete: if isClassAdmin(resource.data.classId) || isSuperAdmin();
+
       // VOTES Subcollection
       match /votes/{userId} {
         // Read: The voter themselves OR Class Admins
