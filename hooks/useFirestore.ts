@@ -117,6 +117,16 @@ export function useCastVote() {
     });
 }
 
+export function useDeleteAgreement() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: (agreementId: string) => deleteAgreement(agreementId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['agreement'] });
+        },
+    });
+}
+
 // ... other hooks ...
 
 // ========================================
