@@ -202,6 +202,17 @@ export default function AgreementPage() {
                             <button onClick={handlePublish} className="text-xs font-bold bg-yellow-400 text-yellow-900 px-3 py-1.5 rounded-lg hover:bg-yellow-500">
                                 Loka kosningu & Birta
                             </button>
+                            <button
+                                onClick={async () => {
+                                    if (confirm('Ertu viss um að þú viljir eyða sáttmálanum? Þetta er óafturkræft.')) {
+                                        await deleteAgreementMutation.mutateAsync(agreement.id);
+                                        window.location.reload();
+                                    }
+                                }}
+                                className="text-xs font-bold bg-red-100 text-red-600 px-3 py-1.5 rounded-lg hover:bg-red-200 ml-2"
+                            >
+                                Eyða
+                            </button>
                         </div>
                     )}
                 </header>
