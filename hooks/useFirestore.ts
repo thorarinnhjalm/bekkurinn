@@ -31,7 +31,8 @@ import {
     updateAgreement,
     castVote,
     getAgreementVotes,
-    getMyVote
+    getMyVote,
+    deleteAgreement
 } from '@/services/agreementService';
 import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput, CreateAgreementInput, AgreementVote } from '@/types';
 import { Class, Student, Task, Announcement, ParentLink, LostItem, Agreement } from '@/types';

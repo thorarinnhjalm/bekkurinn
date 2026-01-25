@@ -86,3 +86,12 @@ export async function getMyVote(agreementId: string, userId: string): Promise<Ag
     if (!snapshot.exists()) return null;
     return { id: snapshot.id, ...snapshot.data() } as AgreementVote;
 }
+// Delete an agreement
+export async function deleteAgreement(agreementId: string): Promise<void> {
+    try {
+        await deleteDoc(doc(db, COLLECTION_NAME, agreementId));
+    } catch (error) {
+        console.error('Failed to delete agreement', error);
+        throw new Error('Gat ekki eytt sáttmála');
+    }
+}

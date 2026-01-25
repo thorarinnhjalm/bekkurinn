@@ -825,12 +825,4 @@ export async function createContactMessage(data: CreateContactMessageInput): Pro
         throw new Error('Gat ekki sent skilaboð');
     }
 }
-export async function deleteAgreement(agreementId: string): Promise<void> {
-    try {
-        await deleteDoc(doc(db, 'agreements', agreementId));
-        // Also delete subcollections if necessary, but for now main doc is enough
-    } catch (error) {
-        logger.error('Failed to delete agreement', error);
-        throw new Error('Gat ekki eytt sáttmála');
-    }
-}
+
