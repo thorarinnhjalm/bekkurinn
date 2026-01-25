@@ -55,6 +55,7 @@ export default function AgreementPage() {
                             questionKey: 'sections.birthdays.gift_amount_q',
                             options: [
                                 { value: 0, labelKey: 'options.0kr' },
+                                { value: 500, labelKey: 'options.500kr' },
                                 { value: 1000, labelKey: 'options.1000kr' },
                                 { value: 1500, labelKey: 'options.1500kr' },
                                 { value: 2000, labelKey: 'options.2000kr' },
