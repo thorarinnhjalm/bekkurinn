@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Calendar, Shield, Users, Lock, CheckCircle2, Coffee } from 'lucide-react';
+import { Calendar, Shield, Users, Lock, CheckCircle2, Coffee, Vote } from 'lucide-react';
 
 export function Features() {
     const t = useTranslations('landing');
@@ -50,6 +50,12 @@ export function Features() {
                         title={t('features.f6_title')}
                         desc={t('features.f6_desc')}
                         color="bg-indigo-50"
+                    />
+                    <FeatureCard
+                        icon={<Vote className="text-rose-600" size={28} />}
+                        title={t('features.f7_title')}
+                        desc={t('features.f7_desc')}
+                        color="bg-rose-50"
                     />
                 </div>
             </div>
