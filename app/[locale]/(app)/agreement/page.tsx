@@ -94,7 +94,14 @@ export default function AgreementPage() {
             ]
         };
 
-        await createAgreementMutation.mutateAsync(newAgreement);
+        try {
+            console.log('Starting creation with:', newAgreement);
+            await createAgreementMutation.mutateAsync(newAgreement);
+            alert('Agreement created! Page should refresh.');
+        } catch (e: any) {
+            console.error('Agreement creation failed:', e);
+            alert(`Error creating agreement: ${e.message}`);
+        }
     };
 
     const handleStartVoting = async () => {
