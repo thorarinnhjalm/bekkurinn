@@ -170,46 +170,66 @@ export default function AgreementPage() {
                     <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
                     <p className="text-gray-500">{t('voting_card.desc')}</p>
 
-                    {isAdmin && (
-                        <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center justify-between">
-                            <span className="text-sm font-medium text-yellow-800">Admin Stjórnborð</span>
-                            <button onClick={handlePublish} className="text-xs font-bold bg-yellow-400 text-yellow-900 px-3 py-1.5 rounded-lg hover:bg-yellow-500">
-                                Loka kosningu & Birta
-                            </button>
-                        </div>
-                    )}
-                </header>
+                    {/* Helper to strip double prefixes from old data */}
+                    {(() => {
+                        const cleanKey = (k: string) => k.replace(/^agreement\./, '');
+                        const sections = agreement.sections.map(s => ({
+                            ...s,
+                            titleKey: cleanKey(s.titleKey),
+                            descriptionKey: cleanKey(s.descriptionKey),
+                            items: s.items.map(i => ({
+                                ...i,
+                                questionKey: cleanKey(i.questionKey),
+                                options: i.options.map(o => ({ ...o, labelKey: cleanKey(o.labelKey) }))
+                            }))
+                        }));
 
-                <div className="space-y-8">
-                    {agreement.sections.map(section => (
-                        <div key={section.id}>
-                            <h2 className="text-xl font-bold text-gray-800 mb-4 px-1">{t(section.titleKey as any)}</h2>
-                            {section.items.map(item => (
-                                <VotingCard
-                                    key={item.id}
-                                    item={item}
-                                    isVotingOpen={true}
-                                    existingVote={myVote?.answers?.[item.id]}
-                                    onVote={async (val) => {
-                                        await castVoteMutation.mutateAsync({
-                                            agreementId: agreement.id,
-                                            vote: {
-                                                userId: user!.uid,
-                                                userName: user!.displayName || 'Foreldri',
-                                                studentId: undefined, // Could link to specific child if needed
-                                                answers: {
-                                                    ...(myVote?.answers || {}),
-                                                    [item.id]: val
-                                                }
-                                            }
-                                        });
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    ))}
-                </div>
+                        return (
+                            <>
+                                {isAdmin && (
+                                    <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg flex items-center justify-between">
+                                        <span className="text-sm font-medium text-yellow-800">Admin Stjórnborð</span>
+                                        <button onClick={handlePublish} className="text-xs font-bold bg-yellow-400 text-yellow-900 px-3 py-1.5 rounded-lg hover:bg-yellow-500">
+                                            Loka kosningu & Birta
+                                        </button>
+                                    </div>
+                                )}
+                            </header >
+
+                                <div className="space-y-8">
+                                    {sections.map(section => (
+                                        <div key={section.id}>
+                                            <h2 className="text-xl font-bold text-gray-800 mb-4 px-1">{t(section.titleKey as any)}</h2>
+                                            {section.items.map(item => (
+                                                <VotingCard
+                                                    key={item.id}
+                                                    item={item}
+                                                    isVotingOpen={true}
+                                                    existingVote={myVote?.answers?.[item.id]}
+                                                    onVote={async (val) => {
+                                                        await castVoteMutation.mutateAsync({
+                                                            agreementId: agreement.id,
+                                                            vote: {
+                                                                userId: user!.uid,
+                                                                userName: user!.displayName || 'Foreldri',
+                                                                studentId: undefined, // Could link to specific child if needed
+                                                                answers: {
+                                                                    ...(myVote?.answers || {}),
+                                                                    [item.id]: val
+                                                                }
+                                                            }
+                                                        });
+                                                    }}
+                                                />
+                                            ))}
+                                        </div>
+                                    ))}
+                                </div>
+                            </>
+                )
+                    })()}
             </div>
+            </div >
         );
     }
 
