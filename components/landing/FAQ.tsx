@@ -15,6 +15,9 @@ export function FAQ() {
                     <FaqItem q={t('faq.q3')} a={t('faq.a3')} />
                     <FaqItem q={t('faq.q4')} a={t('faq.a4')} />
                     <FaqItem q={t('faq.q5')} a={t('faq.a5')} />
+                    <FaqItem q={t('faq.q6')} a={t('faq.a6')} />
+                    <FaqItem q={t('faq.q7')} a={t('faq.a7')} />
+                    <FaqItem q={t('faq.q8')} a={t('faq.a8')} />
                 </div>
             </div>
         </section>

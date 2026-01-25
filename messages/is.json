@@ -517,7 +517,13 @@
       "q4": "Þarf ég app í símann?",
       "a4": "Nei, Bekkurinn virkar í vafra í símanum og tölvunni. Engin þörf á að sækja app. Þú getur vistað síðuna á heimaskjáinn hjá þér fyrir fljótlegan aðgang.",
       "q5": "Ég er með tvö börn í mismunandi bekkjum?",
-      "a5": "Ekkert mál! Þú getur verið meðskráð/ur í eins marga bekki og þarf með einum aðgangi. Þú skiptir á milli þeirra með einum smelli."
+      "a5": "Ekkert mál! Þú getur verið meðskráð/ur í eins marga bekki og þarf með einum aðgangi. Þú skiptir á milli þeirra með einum smelli.",
+      "q6": "Hvað er Bekkjarsáttmálinn?",
+      "a6": "Bekkjarsáttmálinn er lýðræðisleg atkvæðagreiðsla þar sem foreldrar bekkjarins greiða nafnlaust atkvæði um sameiginlegar reglur. Þið kjósið um afmælisgjafir, boðskipan, samfélagsmiðla, Roblox og skjátíma. Niðurstaðan sýnir hvað meirihlutinn vill.",
+      "q7": "Hvaða efni fjallar sáttmálinn um?",
+      "a7": "Sáttmálinn fjallar um algengustu umræðuefnin: Hámark gjafaverðs, boðsreglur, aldur fyrir samfélagsmiðla, netleiki með spjalli (Roblox/Fortnite), og skjátímaviðmið (t.d. Heilsuvera leiðbeiningar).",
+      "q8": "Er atkvæðagreiðslan nafnlaus?",
+      "a8": "Já, þegar kosningu lýkur sjá foreldrar bara niðurstöðurnar (hvað vann), ekki hver greiddi hvert atkvæði. Þetta gerir fólki auðveldara að segja sína skoðun án þrýstings."
     },
     "cta_final": {
       "title": "Taktu stjórnina í dag",
