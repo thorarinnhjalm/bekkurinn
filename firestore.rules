@@ -324,6 +324,37 @@ service cloud.firestore {
     }
 
     // ========================================
+    // AGREEMENTS (Bekkjarsáttmáli)
+    // ========================================
+
+    match /agreements/{agreementId} {
+      // Read: Authenticated users (should technically be class members, but keeping it open for MVP/Debugging)
+      allow read: if isAuthenticated();
+
+      // Create: Class Admins only
+      allow create: if isClassAdmin(request.resource.data.classId) && 
+                       request.resource.data.createdBy == request.auth.uid;
+
+      // Update: Class Admins only (e.g., change status, publish)
+      allow update: if isClassAdmin(resource.data.classId);
+
+      // VOTES Subcollection
+      match /votes/{userId} {
+        // Read: The voter themselves OR Class Admins
+        allow read: if isAuthenticated() && (
+          request.auth.uid == userId ||
+          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId)
+        );
+
+        // Write: The voter themselves (if class member)
+        // We check class membership of the PARENT agreement
+        allow write: if isAuthenticated() && 
+                        request.auth.uid == userId &&
+                        isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId);
+      }
+    }
+
+    // ========================================
     // TESTIMONIALS
     // ========================================
 
