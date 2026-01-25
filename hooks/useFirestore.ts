@@ -32,7 +32,9 @@ import {
     castVote,
     getAgreementVotes,
     getMyVote,
-    deleteAgreement
+    deleteAgreement,
+    signAgreement,
+    getAgreementSignatures
 } from '@/services/agreementService';
 import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput, CreateAgreementInput, AgreementVote } from '@/types';
 import { Class, Student, Task, Announcement, ParentLink, LostItem, Agreement } from '@/types';
@@ -124,6 +126,25 @@ export function useDeleteAgreement() {
         mutationFn: (agreementId: string) => deleteAgreement(agreementId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['agreement'] });
+        },
+    });
+}
+
+export function useAgreementSignatures(agreementId: string | undefined) {
+    return useQuery({
+        queryKey: ['agreementSignatures', agreementId],
+        queryFn: () => (agreementId ? getAgreementSignatures(agreementId) : []),
+        enabled: !!agreementId,
+    });
+}
+
+export function useSignAgreement() {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ agreementId, signature }: { agreementId: string; signature: { userId: string; userName: string } }) =>
+            signAgreement(agreementId, signature),
+        onSuccess: (_, variables) => {
+            queryClient.invalidateQueries({ queryKey: ['agreementSignatures', variables.agreementId] });
         },
     });
 }

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement } from '@/hooks/useFirestore';
-import { Loader2, Lock, Vote, CheckCircle2 } from 'lucide-react';
+import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
 import { Agreement, AgreementItem, AgreementSection } from '@/types';
@@ -18,12 +18,14 @@ export default function AgreementPage() {
 
     const { data: agreement, isLoading } = useAgreement(activeClass?.id || null);
     const { data: myVote } = useMyVote(agreement?.id, user?.uid);
+    const { data: signatures, isLoading: signaturesLoading } = useAgreementSignatures(agreement?.id);
 
     // Mutations
     const castVoteMutation = useCastVote();
     const createAgreementMutation = useCreateAgreement();
     const updateAgreementMutation = useUpdateAgreement();
     const deleteAgreementMutation = useDeleteAgreement();
+    const signMutation = useSignAgreement();
 
     if (isLoading || userClassLoading) {
         return (
@@ -392,19 +394,109 @@ export default function AgreementPage() {
         );
     }
 
+    const hasSigned = signatures?.some(s => s.userId === user?.uid);
+
+    const handleSign = async () => {
+        if (!agreement || !user) return;
+        await signMutation.mutateAsync({
+            agreementId: agreement.id,
+            signature: {
+                userId: user.uid,
+                userName: user.displayName || 'Foreldri'
+            }
+        });
+    };
+
+    if (isLoading || userClassLoading) {
+        return (
+            <div className="min-h-[60vh] flex items-center justify-center">
+                <Loader2 className="w-8 h-8 animate-spin text-indigo-600" />
+            </div>
+        );
+    }
+    // ... rest of checking logic if needed (it stays but let's see)
+
     // 3. PUBLISHED PHASE
     return (
-        <div className="pb-20">
-            <AgreementPoster agreement={agreement} />
+        <div className="space-y-12 animate-in fade-in duration-800 pb-20">
+            {/* Header Section */}
+            <header className="relative isolate overflow-hidden">
+                <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl opacity-20" aria-hidden="true">
+                    <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-emerald-100 to-indigo-200"
+                        style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
+                    />
+                </div>
 
-            {/* Admin control to re-open loop? */}
-            {isAdmin && (
-                <div className="mt-8 text-center">
-                    <button className="text-xs text-gray-400 hover:text-gray-600 underline">
-                        Breyta / Endurnýja sáttmála
-                    </button>
+                <div className="glass-card p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="space-y-4 max-w-2xl text-center md:text-left">
+                        <div className="flex flex-wrap justify-center md:justify-start gap-2">
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700 uppercase tracking-wide">
+                                <ShieldCheck size={14} />
+                                {t('poster.verified_badge')}
+                            </div>
+                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-blue-50 border border-blue-100 text-xs font-semibold text-blue-700 uppercase tracking-wide">
+                                <PenTool size={14} />
+                                {signatures?.length || 0} hafa skrifað undir
+                            </div>
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-black tracking-tight text-gray-900 leading-tight">
+                            {t('title')}
+                        </h1>
+                        <p className="text-lg text-gray-600 font-medium max-w-lg leading-relaxed">
+                            {t('subtitle')}
+                        </p>
+                    </div>
+
+                    {isAdmin && (
+                        <div className="flex flex-col gap-3">
+                            <button
+                                onClick={async () => {
+                                    if (confirm('Ertu viss um að þú viljir endurræsa sáttmálann? Öllum atkvæðum verður eytt.')) {
+                                        await deleteAgreementMutation.mutateAsync(agreement.id);
+                                        window.location.reload();
+                                    }
+                                }}
+                                className="px-6 py-3 bg-white border border-gray-200 rounded-xl text-sm font-bold text-gray-500 hover:text-red-600 hover:border-red-100 hover:bg-red-50 transition-all shadow-sm"
+                            >
+                                Breyta / Endurnýja
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </header>
+
+            {/* Signature CTA */}
+            {!hasSigned && !isAdmin && (
+                <div className="professional-card p-8 border-l-4 border-l-trust-navy bg-gradient-to-br from-white to-gray-50">
+                    <div className="flex flex-col md:flex-row items-center gap-8">
+                        <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-trust-navy shadow-sm">
+                            <PenTool size={32} />
+                        </div>
+                        <div className="flex-1 text-center md:text-left">
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">Skrifa undir sáttmálann</h3>
+                            <p className="text-gray-600 leading-relaxed font-medium">
+                                {t('poster.signature_desc')}
+                            </p>
+                        </div>
+                        <button
+                            onClick={handleSign}
+                            disabled={signMutation.isPending}
+                            className="bg-trust-navy text-white px-10 py-4 rounded-xl font-bold hover:bg-trust-navy-light transition-all shadow-lg hover:shadow-xl active:scale-95 disabled:opacity-50"
+                        >
+                            {signMutation.isPending ? 'Vistar...' : t('poster.sign_button')}
+                        </button>
+                    </div>
                 </div>
             )}
+
+            {hasSigned && (
+                <div className="flex items-center justify-center gap-3 py-4 px-6 rounded-2xl bg-emerald-50 text-emerald-700 border border-emerald-100 animate-in zoom-in duration-300">
+                    <CheckCircle2 size={24} />
+                    <span className="font-bold text-lg">{t('poster.signed_success')}</span>
+                </div>
+            )}
+
+            <AgreementPoster agreement={agreement} signaturesCount={signatures?.length || 0} />
         </div>
     );
 }

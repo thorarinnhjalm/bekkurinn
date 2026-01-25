@@ -1,12 +1,13 @@
 import { useTranslations } from 'next-intl';
-import { AgreementSection, Agreement } from '@/types';
-import { ShieldCheck, PartyPopper, MessageCircle } from 'lucide-react';
+import { Agreement } from '@/types';
+import { ShieldCheck, PartyPopper, MessageCircle, Info, Calendar, Smartphone, Gamepad2, Gift, Users, CheckCircle2 } from 'lucide-react';
 
 interface AgreementPosterProps {
     agreement: Agreement;
+    signaturesCount?: number;
 }
 
-export function AgreementPoster({ agreement }: AgreementPosterProps) {
+export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterProps) {
     const t = useTranslations('agreement');
 
     // Helper to find the label for a winning value
@@ -16,40 +17,61 @@ export function AgreementPoster({ agreement }: AgreementPosterProps) {
         return opt ? t(opt.labelKey as any) : item.winningValue;
     };
 
+    const getIcon = (sectionId: string) => {
+        switch (sectionId) {
+            case 'birthdays': return <PartyPopper className="text-pink-500" size={20} />;
+            case 'social': return <Smartphone className="text-indigo-500" size={20} />;
+            default: return <Info className="text-blue-500" size={20} />;
+        }
+    };
+
+    const getItemIcon = (itemId: string) => {
+        if (itemId.includes('gift')) return <Gift size={14} />;
+        if (itemId.includes('invit')) return <Users size={14} />;
+        if (itemId.includes('gaming')) return <Gamepad2 size={14} />;
+        if (itemId.includes('screen')) return <Smartphone size={14} />;
+        return <CheckCircle2 size={14} />;
+    };
+
     return (
-        <div className="space-y-6">
-            <div className="bg-gradient-to-br from-indigo-600 to-purple-700 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl -mr-16 -mt-16 pointer-events-none" />
-
-                <div className="relative z-10 text-center mb-8">
-                    <ShieldCheck className="w-16 h-16 mx-auto mb-4 text-white/90" />
-                    <h2 className="text-3xl font-black tracking-tight mb-2">
-                        {t('title')}
-                    </h2>
-                    <p className="text-indigo-100 font-medium text-lg">
-                        {t('subtitle')}
-                    </p>
+        <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            {/* Header Section */}
+            <div className="text-center space-y-4 max-w-2xl mx-auto mb-12">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-100 text-xs font-bold uppercase tracking-wider">
+                    <ShieldCheck size={14} />
+                    {t('poster.verified_badge')}
                 </div>
+                <h2 className="text-3xl md:text-4xl font-black text-gray-900 tracking-tight">
+                    {t('title')}
+                </h2>
+                <p className="text-gray-500 font-medium leading-relaxed">
+                    {t('subtitle')}
+                </p>
+            </div>
 
-                <div className="grid gap-4 md:grid-cols-2">
-                    {agreement.sections.map((section) => (
-                        <div key={section.id} className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20">
-                            <div className="flex items-center gap-3 mb-3">
-                                {section.id === 'birthdays' && <PartyPopper className="text-yellow-300 w-6 h-6" />}
-                                {section.id === 'social' && <MessageCircle className="text-blue-300 w-6 h-6" />}
-                                <h3 className="font-bold text-xl">{t(section.titleKey as any)}</h3>
+            {/* Poster Card */}
+            <div className="professional-card overflow-hidden bg-white border-none shadow-xl ring-1 ring-gray-200">
+                <div className="grid lg:grid-cols-2">
+                    {agreement.sections.map((section, sIdx) => (
+                        <div
+                            key={section.id}
+                            className={`p-8 ${sIdx === 0 && agreement.sections.length > 1 ? 'lg:border-r border-gray-100' : ''} ${sIdx > 0 ? 'border-t lg:border-t-0 border-gray-100' : ''}`}
+                        >
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm">
+                                    {getIcon(section.id)}
+                                </div>
+                                <h3 className="text-xl font-bold text-gray-900">{t(section.titleKey as any)}</h3>
                             </div>
-                            <p className="text-white/80 text-sm mb-4 leading-relaxed">
-                                {t(section.descriptionKey as any)}
-                            </p>
 
-                            <div className="space-y-3">
+                            <div className="space-y-4 text-left">
                                 {section.items.map((item) => (
-                                    <div key={item.id} className="bg-white/90 rounded-lg p-3 text-gray-900">
-                                        <div className="text-xs font-bold text-gray-500 uppercase mb-1">
+                                    <div key={item.id} className="group p-4 rounded-xl bg-gray-50/50 hover:bg-white hover:shadow-md transition-all duration-300 border border-transparent hover:border-gray-100">
+                                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
                                             {t(item.questionKey as any)}
                                         </div>
-                                        <div className="font-bold text-indigo-700 text-lg">
+                                        <div className="text-lg font-bold text-trust-navy flex items-center gap-2">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
                                             {getWinningLabel(item)}
                                         </div>
                                     </div>
@@ -59,14 +81,26 @@ export function AgreementPoster({ agreement }: AgreementPosterProps) {
                     ))}
                 </div>
 
-                <div className="mt-8 text-center pt-6 border-t border-white/20">
-                    <div className="inline-flex items-center gap-2 bg-green-500/20 px-4 py-2 rounded-full border border-green-400/30">
-                        <ShieldCheck className="w-4 h-4 text-green-300" />
-                        <span className="font-bold text-sm text-green-100">
-                            {t('poster.verified_badge')} • {new Date(agreement.updatedAt?.seconds * 1000).getFullYear()}
+                {/* Footer Info */}
+                <div className="bg-gray-50/80 p-6 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-white border border-gray-200 flex items-center justify-center">
+                            <Calendar size={14} className="text-gray-400" />
+                        </div>
+                        <span className="text-sm font-bold text-gray-500">
+                            Gildir fyrir skólaárið {new Date(agreement.updatedAt?.seconds * 1000 || Date.now()).getFullYear()}-{new Date(agreement.updatedAt?.seconds * 1000 || Date.now()).getFullYear() + 1}
                         </span>
                     </div>
+                    <div className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+                        Staðfest af foreldrum • {agreement.classId}
+                    </div>
                 </div>
+            </div>
+
+            {/* Action Tip */}
+            <div className="flex items-center justify-center gap-2 text-gray-400">
+                <Info size={14} />
+                <p className="text-xs font-medium">Þessi sáttmáli er bindandi samkomulag foreldrahópsins.</p>
             </div>
         </div>
     );

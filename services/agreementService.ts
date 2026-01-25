@@ -86,6 +86,24 @@ export async function getMyVote(agreementId: string, userId: string): Promise<Ag
     if (!snapshot.exists()) return null;
     return { id: snapshot.id, ...snapshot.data() } as AgreementVote;
 }
+const SIGNATURES_SUBCOLLECTION = 'signatures';
+
+// Sign an agreement
+export async function signAgreement(agreementId: string, signature: { userId: string; userName: string; timestamp?: any }): Promise<void> {
+    const sigRef = doc(db, COLLECTION_NAME, agreementId, SIGNATURES_SUBCOLLECTION, signature.userId);
+    await utilSetDoc(sigRef, {
+        ...signature,
+        timestamp: signature.timestamp || serverTimestamp()
+    });
+}
+
+// Get all signatures for an agreement
+export async function getAgreementSignatures(agreementId: string): Promise<any[]> {
+    const q = query(collection(db, COLLECTION_NAME, agreementId, SIGNATURES_SUBCOLLECTION));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+}
+
 // Delete an agreement
 export async function deleteAgreement(agreementId: string): Promise<void> {
     try {

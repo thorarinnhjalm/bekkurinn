@@ -634,7 +634,14 @@
       "submit": "Senda atkvæði"
     },
     "poster": {
-      "verified_badge": "Samþykkt af bekknum"
+      "verified_badge": "Samþykkt af bekknum",
+      "signature_title": "Undirritun foreldra",
+      "signature_desc": "Með því að skrifa undir samþykki ég að fylgja þessum viðmiðum í hvívetna.",
+      "signature_count": "{count} foreldrar hafa staðfest",
+      "sign_button": "Skrifa undir",
+      "signed_success": "Þú hefur skrifað undir. Takk fyrir!",
+      "validity": "Gildir fyrir skólaárið {start}-{end}",
+      "binding_note": "Þessi sáttmáli er bindandi samkomulag foreldrahópsins."
     }
   },
   "handbook": {
