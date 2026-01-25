@@ -97,6 +97,7 @@ export default function AgreementPage() {
                                 { value: 'pegi', labelKey: 'options.pegi' },
                                 { value: 'flexible', labelKey: 'options.flexible_gaming' },
                                 { value: 'open', labelKey: 'options.parents_decide' },
+                            ]
                         },
                         {
                             id: 'screen_time',
