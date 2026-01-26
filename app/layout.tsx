@@ -26,20 +26,11 @@ export const metadata: Metadata = {
     siteName: 'Bekkurinn',
     locale: 'is_IS',
     type: "website",
-    images: [
-      {
-        url: '/dashboard-mockup.png',
-        width: 1200,
-        height: 630,
-        alt: 'Bekkurinn mælaborð',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Bekkurinn',
     description: 'Bylting fyrir bekkjarfulltrúa á Íslandi.',
-    images: ['/dashboard-mockup.png'],
   },
   icons: {
     icon: '/icon.svg',
