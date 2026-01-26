@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import { Calendar, Loader2, Users, Plus, Footprints, Clock, Check, Edit2, Trash2 } from 'lucide-react';
-import { useTasks, useUserClasses, useCreateTask, useClaimTaskSlot, useUpdateTask, useDeleteTask, useSchool } from '@/hooks/useFirestore';
+import { useTasks, useUserClasses, useCreateTask, useClaimTaskSlot, useUpdateTask, useDeleteTask, useSchool, useUserStudentIds, useStudents } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
+import { SelectChildModal } from '@/components/modals/SelectChildModal';
 import type { Task } from '@/types';
 import { useTranslations } from 'next-intl';
 
@@ -28,6 +29,12 @@ export default function PatrolPage() {
     const isAdmin = activeClass?.role === 'admin';
 
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId);
+
+    // Student Logic for selector
+    const { data: myStudentIds } = useUserStudentIds(user?.uid, activeClassId);
+    const { data: allStudents } = useStudents(activeClassId);
+    const myStudents = allStudents?.filter(s => myStudentIds?.includes(s.id)) || [];
+
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
     const updateTaskMutation = useUpdateTask();
@@ -40,6 +47,7 @@ export default function PatrolPage() {
     // State
     const [isCreating, setIsCreating] = useState(false);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
+    const [taskToVolunteer, setTaskToVolunteer] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState(t('default_title'));
     const [newDate, setNewDate] = useState('');
     const [newTime, setNewTime] = useState('20:00');
@@ -50,14 +58,22 @@ export default function PatrolPage() {
         return null;
     }
 
-    const handleVolunteer = async (taskId: string) => {
+    const handleVolunteerClick = (taskId: string) => {
         if (!user) return;
+        setTaskToVolunteer(taskId);
+    };
+
+    const confirmVolunteer = async (studentId?: string, studentName?: string) => {
+        if (!user || !taskToVolunteer) return;
         try {
             await claimSlotMutation.mutateAsync({
-                taskId,
+                taskId: taskToVolunteer,
                 userId: user.uid,
                 userName: user.displayName || 'Foreldri',
+                studentId,
+                studentName
             });
+            setTaskToVolunteer(null);
         } catch (err) {
             console.error("Failed to volunteer:", err);
             alert(t('error_volunteering'));
@@ -170,7 +186,7 @@ export default function PatrolPage() {
                                 </div>
 
                                 <button
-                                    onClick={() => !isJoined && handleVolunteer(patrol.id)}
+                                    onClick={() => !isJoined && handleVolunteerClick(patrol.id)}
                                     disabled={isJoined || isFull}
                                     className={`w-full py-2.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all ${isJoined
                                         ? 'bg-green-50 text-green-600 border-2 border-green-100'
@@ -302,6 +318,14 @@ export default function PatrolPage() {
                     }}
                 />
             )}
+
+            {/* Child Selection Modal */}
+            <SelectChildModal
+                isOpen={!!taskToVolunteer}
+                onClose={() => setTaskToVolunteer(null)}
+                children={myStudents}
+                onSelect={(sid, sname) => confirmVolunteer(sid, sname)}
+            />
         </div>
     );
 }

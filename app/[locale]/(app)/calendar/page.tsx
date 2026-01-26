@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool, useUpdateTask, useDeleteTask, useUserStudentIds } from '@/hooks/useFirestore';
+import { useTasks, useClaimTaskSlot, useUserClasses, useCreateTask, useSchool, useUpdateTask, useDeleteTask, useUserStudentIds, useStudents } from '@/hooks/useFirestore';
 import { Edit2, Loader2, Calendar, Clock, MapPin, Plus, Info, Trash2 } from 'lucide-react'; // Users removed if unused
 import { useRouter, useParams } from 'next/navigation';
 import type { Task } from '@/types';
 import { Babelfish } from '@/components/Babelfish';
 import { EditTaskModal } from '@/components/modals/EditTaskModal';
 import { CreateBirthdayModal } from '@/components/modals/CreateBirthdayModal';
+import { SelectChildModal } from '@/components/modals/SelectChildModal';
 import { useTranslations } from 'next-intl';
 
 /**
@@ -36,6 +37,10 @@ export default function TasksPage() {
 
     // 2. Fetch Tasks (Class + School)
     const { data: myStudentIds } = useUserStudentIds(user?.uid, activeClassId);
+    // New: Fetch actual student objects for the user (to populate selector)
+    const { data: allStudents } = useStudents(activeClassId);
+    const myStudents = allStudents?.filter(s => myStudentIds?.includes(s.id)) || [];
+
     const { data: tasksData, isLoading: tasksLoading } = useTasks(activeClassId, activeClass?.schoolId, myStudentIds, user?.uid);
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
@@ -45,6 +50,7 @@ export default function TasksPage() {
     // State
     const [isCreating, setIsCreating] = useState(false);
     const [isBirthdayModalOpen, setIsBirthdayModalOpen] = useState(false);
+    const [taskToVolunteer, setTaskToVolunteer] = useState<string | null>(null);
     const [editingTask, setEditingTask] = useState<Task | null>(null);
     const [createTitle, setCreateTitle] = useState('');
     const [createDate, setCreateDate] = useState('');
@@ -71,14 +77,33 @@ export default function TasksPage() {
         return date >= now;
     };
 
-    const handleVolunteer = async (taskId: string) => {
+    const handleVolunteerClick = (taskId: string) => {
         if (!user) return;
+
+        // If user has multiple children in this class, show modal
+        // Note: useUserStudentIds returns IDs only. We need names.
+        // But we can check userClasses for the current user's children?
+        // Actually, let's use the `myStudentIds`. We need to fetch student details.
+        // For simplicity: If > 1 child ID, show modal.
+
+        // Better: Fetch student objects for current user in this class.
+        // We can use a hook or filter from a students list.
+        // FOR NOW: Let's assume we can pass the student IDs and fetch names or use a hook.
+
+        setTaskToVolunteer(taskId);
+    };
+
+    const confirmVolunteer = async (studentId?: string, studentName?: string) => {
+        if (!user || !taskToVolunteer) return;
         try {
             await claimSlotMutation.mutateAsync({
-                taskId,
+                taskId: taskToVolunteer,
                 userId: user.uid,
                 userName: user.displayName || 'Foreldri',
+                studentId,
+                studentName
             });
+            setTaskToVolunteer(null);
         } catch (err) {
             console.error("Failed to volunteer:", err);
             alert(t('error_signup'));
@@ -367,7 +392,7 @@ export default function TasksPage() {
                                             </div>
 
                                             <button
-                                                onClick={() => handleVolunteer(task.id)}
+                                                onClick={() => handleVolunteerClick(task.id)}
                                                 disabled={isFull || !isTaskUpcoming}
                                                 className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
                                                     ? 'bg-green-100 text-green-700 cursor-default'
@@ -566,6 +591,13 @@ export default function TasksPage() {
                 onClose={() => setIsBirthdayModalOpen(false)}
                 classId={activeClassId}
                 schoolId={activeClass?.schoolId}
+            />
+            {/* Child Selection Modal */}
+            <SelectChildModal
+                isOpen={!!taskToVolunteer}
+                onClose={() => setTaskToVolunteer(null)}
+                children={myStudents}
+                onSelect={(sid, sname) => confirmVolunteer(sid, sname)}
             />
         </div>
     );

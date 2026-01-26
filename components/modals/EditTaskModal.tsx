@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Loader2, Calendar } from 'lucide-react';
-import type { Task } from '@/types';
+import { X, Loader2, Calendar, Trash2 } from 'lucide-react';
+import type { Task, TaskVolunteer } from '@/types';
+import { useUnclaimTaskSlot } from '@/hooks/useFirestore';
 
 interface EditTaskModalProps {
     task: Task;
@@ -14,6 +15,7 @@ interface EditTaskModalProps {
 
 export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: EditTaskModalProps) {
     const [isSaving, setIsSaving] = useState(false);
+    const unclaimMutation = useUnclaimTaskSlot();
     const [formData, setFormData] = useState({
         title: task.title,
         description: task.description || '',
@@ -49,6 +51,16 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
             alert('Error occurred');
         } finally {
             setIsSaving(false);
+        }
+    };
+
+    const handleRemoveVolunteer = async (userId: string) => {
+        if (!confirm('Ertu viss um að þú viljir fjarlægja þennan sjálfboðaliða?')) return;
+        try {
+            await unclaimMutation.mutateAsync({ taskId: task.id, userId });
+        } catch (error) {
+            console.error(error);
+            alert('Gat ekki fjarlægt sjálfboðaliða');
         }
     };
 
@@ -151,6 +163,32 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
                                     Getur ekki verið minna en {task.slotsFilled} (núverandi skráningar)
                                 </p>
                             )}
+                        </div>
+                    )}
+
+                    {/* Volunteer List */}
+                    {task.volunteers && task.volunteers.length > 0 && (
+                        <div className="pt-4 border-t border-gray-100">
+                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1 mb-2 block">Skráðir sjálfboðaliðar</label>
+                            <div className="space-y-2 max-h-48 overflow-y-auto bg-gray-50 rounded-xl p-2">
+                                {task.volunteers.map((vol, idx) => (
+                                    <div key={idx} className="flex items-center justify-between bg-white p-3 rounded-lg border border-gray-100 shadow-sm">
+                                        <div>
+                                            <p className="font-bold text-sm text-gray-900">{vol.name}</p>
+                                            {vol.studentName && (
+                                                <p className="text-xs text-gray-400">Fyrir: {vol.studentName}</p>
+                                            )}
+                                        </div>
+                                        <button
+                                            onClick={() => handleRemoveVolunteer(vol.userId)}
+                                            className="text-gray-300 hover:text-red-500 transition-colors p-1"
+                                            title="Fjarlægja"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     )}
                 </div>

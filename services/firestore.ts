@@ -335,14 +335,20 @@ export async function getTasksByClass(classId: string): Promise<Task[]> {
 }
 
 
-export async function claimTaskSlot(taskId: string, userId: string, userName: string): Promise<void> {
+export async function claimTaskSlot(
+    taskId: string,
+    userId: string,
+    userName: string,
+    studentId?: string,
+    studentName?: string
+): Promise<void> {
     const task = await getTask(taskId);
     if (!task) throw new Error('Task not found');
     if (task.slotsFilled >= task.slotsTotal) throw new Error('Task is full');
 
     const volunteers = [
         ...task.volunteers,
-        { userId, name: userName, timestamp: Timestamp.now() },
+        { userId, name: userName, timestamp: Timestamp.now(), studentId, studentName },
     ];
 
     await updateDoc(doc(db, 'tasks', taskId), {

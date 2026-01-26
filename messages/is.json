@@ -93,7 +93,12 @@
     "pork": "Svínakjöt",
     "vegan": "Vegan",
     "dairy": "Mjólk",
-    "none": "Engar sérþarfir"
+    "none": "Engar sérþarfir",
+    "egg": "Egg",
+    "treenuts": "Trjáhnetur",
+    "fish": "Fiskur",
+    "shellfish": "Skel-/Krabbadýr",
+    "soy": "Soja"
   },
   "admin": {
     "create_announcement": "Búa til auglýsingu",
@@ -486,7 +491,9 @@
       "f6_title": "Minni tími í stjórnun",
       "f6_desc": "Þú tókst að þér að vera bekkjarfulltrúi til að hjálpa, ekki til að vera í fullu starfi. Við gefum þér tímann til baka.",
       "f7_title": "Bekkjarsáttmáli – Lýðræðisleg samskipti",
-      "f7_desc": "Láttu foreldra bekkjarins kjósa saman um sameiginlegar reglur. Afmæli, samfélagsmiðlar, Roblox og skjátími – allt á einum stað með nafnlausri kosningu."
+      "f7_desc": "Láttu foreldra bekkjarins kjósa saman um sameiginlegar reglur. Afmæli, samfélagsmiðlar, Roblox og skjátími – allt á einum stað með nafnlausri kosningu.",
+      "f8_title": "Sanngjörn skipting",
+      "f8_desc": "Kerfið heldur utan um söguna: Hverjir hafa tekið þátt og hverjir eiga eftir. Tryggir að álagið dreifist jafnt á alla foreldra."
     },
     "how": {
       "title": "Þrjú einföld skref",
@@ -583,7 +590,15 @@
       "copy_invite_link": "Afrita boðshlekk",
       "copied": "Afritað!",
       "max_parents_help": "Hægt er að tengja allt að 4 foreldra/forráðamenn við hvert barn"
-    }
+    },
+    "notifications_title": "Tilkynningar",
+    "email_notifications": "Tölvupóstur",
+    "notify_announcements": "Nýjar tilkynningar",
+    "notify_announcements_desc": "Fá tölvupóst þegar nýjar tilkynningar berast frá bekknum.",
+    "notify_reminders": "Áminningar vegna rölts",
+    "notify_reminders_desc": "Fá tölvupóst þegar röltið mitt nálgast.",
+    "notify_marketing": "Markaðsefni",
+    "notify_marketing_desc": "Fá fréttir og tilboð frá Bekknum (sjaldan)."
   },
   "agreement": {
     "title": "Bekkjarsáttmáli",

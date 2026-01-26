@@ -412,11 +412,15 @@ export function useClaimTaskSlot() {
             taskId,
             userId,
             userName,
+            studentId,
+            studentName
         }: {
             taskId: string;
             userId: string;
             userName: string;
-        }) => claimTaskSlot(taskId, userId, userName),
+            studentId?: string;
+            studentName?: string;
+        }) => claimTaskSlot(taskId, userId, userName, studentId, studentName),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['tasks'] });
         },

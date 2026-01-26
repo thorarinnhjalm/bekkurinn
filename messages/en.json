@@ -87,7 +87,12 @@
     "pork": "Pork",
     "vegan": "Vegan",
     "dairy": "Dairy",
-    "none": "No restrictions"
+    "none": "No restrictions",
+    "egg": "Eggs",
+    "treenuts": "Tree nuts",
+    "fish": "Fish",
+    "shellfish": "Shellfish",
+    "soy": "Soy"
   },
   "admin": {
     "create_announcement": "Create Announcement",
@@ -586,7 +591,15 @@
       "copy_invite_link": "Copy Invite Link",
       "copied": "Copied!",
       "max_parents_help": "Up to 4 parents/guardians can be linked to each child"
-    }
+    },
+    "notifications_title": "Notifications",
+    "email_notifications": "Email Notifications",
+    "notify_announcements": "New Announcements",
+    "notify_announcements_desc": "Receive email when new announcements are posted.",
+    "notify_reminders": "Patrol Reminders",
+    "notify_reminders_desc": "Receive email reminders for my patrol shifts.",
+    "notify_marketing": "Marketing",
+    "notify_marketing_desc": "Receive news and offers from Bekkurinn (infrequently)."
   },
   "agreement": {
     "title": "Class Agreement",

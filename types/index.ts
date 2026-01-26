@@ -136,6 +136,8 @@ export type TaskType = 'rolt' | 'event' | 'gift_collection' | 'school_event' | '
 export interface TaskVolunteer {
     userId: string;
     name: string;
+    studentId?: string; // Which child does this shift count for?
+    studentName?: string;
     timestamp: Timestamp;
 }
 

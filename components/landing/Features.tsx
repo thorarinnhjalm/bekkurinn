@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import { Calendar, Shield, Users, Lock, CheckCircle2, Coffee, Vote } from 'lucide-react';
+import { Calendar, Shield, Users, Lock, CheckCircle2, Coffee, Vote, Scale } from 'lucide-react';
 import React from 'react';
 
 export function Features() {
@@ -30,6 +30,11 @@ export function Features() {
                         icon={<Users className="text-gray-900" size={24} />}
                         title={t('features.f3_title')}
                         desc={t('features.f3_desc')}
+                    />
+                    <FeatureCard
+                        icon={<Scale className="text-gray-900" size={24} />}
+                        title={t('features.f8_title')}
+                        desc={t('features.f8_desc')}
                     />
                     <FeatureCard
                         icon={<Lock className="text-gray-900" size={24} />}

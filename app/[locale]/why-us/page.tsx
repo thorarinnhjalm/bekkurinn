@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowRight, Check, X, Shield, Users, Globe, Lock, Calendar, Search } from 'lucide-react';
+import { ArrowRight, Check, X, Shield, Users, Globe, Lock, Calendar, Search, Scale } from 'lucide-react';
 import { NavBar } from '@/components/landing/NavBar';
 import Link from 'next/link';
 
@@ -82,6 +82,23 @@ export default function WhyUsPage() {
                                 <div className="flex flex-col items-center gap-2">
                                     <Calendar size={20} className="text-blue-900" />
                                     <span>Sérsniðið skráningarkerfi.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Row 4: Fairness */}
+                        <div className="grid grid-cols-12 items-center border-t border-gray-100">
+                            <div className="col-span-4 p-6">
+                                <h3 className="font-semibold text-gray-900">Jafnræði</h3>
+                                <p className="text-sm text-gray-500 mt-1">Hvernig dreifist álagið á foreldra?</p>
+                            </div>
+                            <div className="col-span-4 p-6 text-center border-l border-gray-100 text-gray-600">
+                                <p>Erfitt að fylgjast með. Oft sömu aðilarnir sem gera allt.</p>
+                            </div>
+                            <div className="col-span-4 p-6 text-center border-l border-gray-100 bg-blue-50/10 dark-blue-text font-medium">
+                                <div className="flex flex-col items-center gap-2">
+                                    <Scale size={20} className="text-blue-900" />
+                                    <span>Skráir mætingu á hvert barn. Tryggir sanngirni.</span>
                                 </div>
                             </div>
                         </div>
