@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
-// import { Resend } from 'resend';
+import { Resend } from 'resend';
 import { getClassMemberEmails, getSchoolMemberEmails, getClass, getSchool } from '@/services/firestore';
 import { adminAuth } from '@/lib/firebase/admin';
 import { rateLimit, getClientIpFromNextRequest } from '@/lib/rate-limit';
 
-// const resend = new Resend(process.env.RESEND_API_KEY);
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
     try {
@@ -71,19 +71,45 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: 'Engir viðtakendur fundust' }, { status: 200 });
         }
 
-        // 2. Send emails - DISABLED FOR NOW
-        console.log('Email sending is disabled:', { emails, title });
-        /*
-        const results = await Promise.all(
-            emails.map(email => 
+        // 2. Send emails
+        // We use bcc for privacy if sending bulk, or send individual emails.
+        // For simplicity and better deliverability tracking, sending individual emails or batches is often better.
+        // However, Resend supports batching.
+
+        // Let's protect against spam by confirming we don't send to > 500 people at once unwisely.
+        if (emails.length > 500) {
+            return NextResponse.json({ error: 'Of margir viðtakendur (hámark 500)' }, { status: 400 });
+        }
+
+        const emailResults = await Promise.all(
+            emails.map(email =>
                 resend.emails.send({
-                    ...
+                    from: 'Bekkurinn <tilkynningar@bekkurinn.is>',
+                    to: email,
+                    replyTo: 'no-reply@bekkurinn.is',
+                    subject: `[Tilkynning] ${title}`,
+                    html: `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                            <h2>${title}</h2>
+                            <p><strong>Frá:</strong> ${author}</p>
+                            <hr />
+                            <div style="white-space: pre-wrap; font-size: 16px; line-height: 1.5; color: #333;">
+                                ${content}
+                            </div>
+                            <hr style="margin-top: 40px;" />
+                            <p style="font-size: 12px; color: #888; text-align: center;">
+                                Þessi póstur var sendur í gegnum Bekkurinn.is.<br />
+                                Vinsamlegast svarið ekki þessum pósti, þetta netfang er ekki vaktað.
+                            </p>
+                        </div>
+                    `
                 })
             )
         );
-        */
 
-        return NextResponse.json({ success: true, count: emails.length, message: 'Email logic is currently disabled.' });
+        const successCount = emailResults.filter(r => !r.error).length;
+
+        return NextResponse.json({ success: true, count: successCount, total: emails.length });
     } catch (error) {
         console.error('Error sending critical announcement email:', error);
         return NextResponse.json({ error: 'Gat ekki sent tölvupóst' }, { status: 500 });
