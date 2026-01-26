@@ -67,9 +67,14 @@ export default function AdminView() {
         setIsFetching(true);
         try {
             // Fetch Classes
-            const q = query(collection(db, 'classes'), orderBy('schoolName'));
+            // Fetch Classes (without orderBy to include those with missing schoolName)
+            const q = query(collection(db, 'classes'));
             const snapshot = await getDocs(q);
             const classData = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as ClassData));
+
+            // Sort manually
+            classData.sort((a, b) => (a.schoolName || '').localeCompare(b.schoolName || ''));
+
             setClasses(classData);
 
             // Fetch Schools
