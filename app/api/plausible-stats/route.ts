@@ -12,6 +12,8 @@ export async function GET() {
     }
 
     try {
+
+
         // Fetch aggregate stats for the last 30 days
         const aggregateResponse = await fetch(
             `https://plausible.io/api/v1/stats/aggregate?site_id=${PLAUSIBLE_SITE_ID}&period=30d&metrics=visitors,pageviews,bounce_rate,visit_duration`,
