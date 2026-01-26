@@ -520,8 +520,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                         <div
                             onClick={() => router.push(`/${locale}/agreement`)}
                             className={`p-4 rounded-lg border text-center transition-colors cursor-pointer ${agreementData
-                                    ? 'bg-emerald-50 border-emerald-100 hover:bg-emerald-100'
-                                    : 'bg-gray-50 border-gray-100 hover:bg-gray-100'
+                                ? 'bg-emerald-50 border-emerald-100 hover:bg-emerald-100'
+                                : 'bg-gray-50 border-gray-100 hover:bg-gray-100'
                                 }`}
                         >
                             <div className="mb-2 flex justify-center">
@@ -543,7 +543,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Stækka hópinn?</h3>
+                                <h3 className="text-xl font-medium text-white tracking-tight">Stækka hópinn?</h3>
                                 <p className="text-blue-100 text-sm font-medium mt-1 leading-relaxed">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
