@@ -165,14 +165,7 @@ export default function AdminView() {
 
     return (
         <div className="min-h-screen pb-20 space-y-12 animate-in fade-in duration-800">
-            {/* FORCE DEBUG DISPLAY */}
-            <div className="bg-black text-white p-4 font-mono text-xs z-50 relative border-b-2 border-green-500">
-                <p>DEBUG INFO:</p>
-                <p>User: {user?.email}</p>
-                <p>Env: {process.env.NEXT_PUBLIC_ADMIN_EMAILS}</p>
-                <p>Is SuperAdmin: {isSuperAdmin ? 'YES' : 'NO'}</p>
-                <p>Schools: {schools.length}</p>
-            </div>
+
             {/* DEBUGGER */}
             {isSuperAdmin && (
                 <div className="bg-black/90 text-green-400 font-mono text-xs p-4 fixed bottom-0 left-0 right-0 z-50 opacity-90 hover:opacity-100 transition-opacity">
