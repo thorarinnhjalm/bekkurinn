@@ -8,7 +8,7 @@ import { updateDoc, doc, setDoc, getDocs, query, collection, where } from 'fireb
 import { db } from '@/lib/firebase/config';
 import {
     Loader2, User, UserPlus, Check, Calendar, Phone, MapPin, Globe,
-    ChevronDown, Heart, Copy, CheckCircle2, AlertCircle
+    ChevronDown, Heart, Copy, CheckCircle2, AlertCircle, Bell, Mail
 } from 'lucide-react';
 import { Timestamp } from 'firebase/firestore';
 import { ImageUploader } from '@/components/upload/ImageUploader';
@@ -146,7 +146,12 @@ export default function UserProfilePage() {
         fetchOtherParents();
     }, [user, students, classId]);
 
-    // Fetch User Profile Data
+    const [notificationSettings, setNotificationSettings] = useState({
+        email: { announcements: true, reminders: true, marketing: true },
+        push: { announcements: true, reminders: true }
+    });
+
+    // ... existing load logic
     useEffect(() => {
         if (!user) return;
         getDocs(query(collection(db, 'users'), where('__name__', '==', user.uid))).then(sn => {
@@ -157,11 +162,29 @@ export default function UserProfilePage() {
                 if (d.photoURL) setUserPhotoUrl(d.photoURL);
                 else if (user.photoURL) setUserPhotoUrl(user.photoURL);
                 if (d.address) setUserAddress(d.address);
+
+                // Load notification settings
+                if (d.notificationSettings) {
+                    setNotificationSettings(d.notificationSettings);
+                }
             } else if (user.photoURL) {
                 setUserPhotoUrl(user.photoURL);
             }
         });
     }, [user]);
+
+    const handleSaveNotificationSettings = async (newSettings: any) => {
+        if (!user) return;
+        try {
+            await setDoc(doc(db, 'users', user.uid), {
+                notificationSettings: newSettings
+            }, { merge: true });
+            // showToast('Settings saved', 'success'); // Optional: silent save is often better for toggles
+        } catch (e) {
+            console.error(e);
+            showToast('Villa við vistun', 'error');
+        }
+    };
 
     const handleSaveUser = async () => {
         if (!user) return;
@@ -376,6 +399,53 @@ export default function UserProfilePage() {
                                     </Link>
                                 ))}
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Notification Settings */}
+            <section className="glass-card p-6 space-y-6">
+                <div className="flex items-center gap-3 mb-2">
+                    <div className="p-2 bg-indigo-50 rounded-lg">
+                        <Bell className="text-indigo-600" size={24} />
+                    </div>
+                    <h2 className="text-xl font-bold text-gray-900">{t('notifications_title') || 'Tilkynningar'}</h2>
+                </div>
+
+                <div className="space-y-6">
+                    {/* Email Settings */}
+                    <div>
+                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-3 flex items-center gap-2">
+                            <Mail size={16} />
+                            {t('email_notifications') || 'Tölvupóstur'}
+                        </h3>
+                        <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100">
+                            {[
+                                { key: 'announcements', label: t('notify_announcements') || 'Mikilvægar tilkynningar', desc: t('notify_announcements_desc') || 'Frá bekkjarfulltrúum og skóla' },
+                                { key: 'reminders', label: t('notify_reminders') || 'Áminningar', desc: t('notify_reminders_desc') || 'Fyrir viðburði og verkefni' },
+                                { key: 'marketing', label: t('notify_marketing') || 'Fréttir frá Bekknum', desc: t('notify_marketing_desc') || 'Nýjungar og uppfærslur' }
+                            ].map((item) => (
+                                <div key={item.key} className="p-4 flex items-center justify-between">
+                                    <div>
+                                        <p className="font-medium text-gray-900">{item.label}</p>
+                                        <p className="text-xs text-gray-500">{item.desc}</p>
+                                    </div>
+                                    <Switch
+                                        checked={(notificationSettings?.email as any)?.[item.key] ?? true}
+                                        onChange={(checked) => {
+                                            const newSettings = {
+                                                ...notificationSettings,
+                                                email: { ...notificationSettings.email, [item.key]: checked }
+                                            };
+                                            setNotificationSettings(newSettings);
+                                            // Auto-save logic could go here or use a save button
+                                            // For now we'll rely on the blur/state logic or specific save
+                                            handleSaveNotificationSettings(newSettings);
+                                        }}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
@@ -687,5 +757,16 @@ function StudentCard({
                 </div>
             )}
         </div>
+    );
+}
+
+function Switch({ checked, onChange }: { checked: boolean; onChange: (checked: boolean) => void }) {
+    return (
+        <button
+            onClick={() => onChange(!checked)}
+            className={`relative w-11 h-6 rounded-full transition-colors ${checked ? 'bg-green-500' : 'bg-gray-300'}`}
+        >
+            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${checked ? 'left-5' : 'left-0.5'}`} />
+        </button>
     );
 }

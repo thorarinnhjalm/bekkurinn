@@ -40,7 +40,23 @@ export interface User {
     language: UserLanguage;
     photoURL?: string;
     starredStudents?: string[]; // Array of student IDs marked as friends
+
+    // New: Notification Preferences
+    notificationSettings?: NotificationSettings;
+
     createdAt: Timestamp;
+}
+
+export interface NotificationSettings {
+    email: {
+        announcements: boolean; // Critical announcements
+        reminders: boolean; // Event reminders
+        marketing: boolean; // "News from Bekkurinn"
+    };
+    push: {
+        announcements: boolean;
+        reminders: boolean;
+    };
 }
 
 // ========================================

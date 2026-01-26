@@ -4,7 +4,7 @@ import { getClassMemberEmails, getSchoolMemberEmails, getClass, getSchool } from
 import { adminAuth } from '@/lib/firebase/admin';
 import { rateLimit, getClientIpFromNextRequest } from '@/lib/rate-limit';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(req: NextRequest) {
     try {
@@ -59,6 +59,8 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'Tölvupóstþjónusta er ekki stillt' }, { status: 500 });
         }
 
+        const resend = new Resend(process.env.RESEND_API_KEY);
+
         // 1. Fetch member emails
         let emails: string[] = [];
         if (scope === 'school' && schoolId) {
@@ -107,7 +109,7 @@ export async function POST(req: NextRequest) {
             )
         );
 
-        const successCount = emailResults.filter(r => !r.error).length;
+        const successCount = emailResults.filter((r: any) => !r.error).length;
 
         return NextResponse.json({ success: true, count: successCount, total: emails.length });
     } catch (error) {
