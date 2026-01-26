@@ -149,6 +149,7 @@ export interface Task {
     title: string;
     description?: string;
     date: Timestamp;
+    endDate?: Timestamp; // For multi-day events
     slotsTotal: number;
     slotsFilled: number;
     volunteers: TaskVolunteer[];

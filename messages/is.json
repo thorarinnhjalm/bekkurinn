@@ -49,7 +49,9 @@
     "code_parents_label": "Fyrir foreldra (Almennur aðgangur)",
     "code_admin_label": "Fyrir Foreldraráð (Stjórnendur)",
     "code_admin_warning": "Dulin aðgangsheimild. Veitir stjórnendurréttindi. Deildu varlega.",
-    "continue_dashboard": "Áfram á stjórnborð"
+    "continue_dashboard": "Áfram á stjórnborð",
+    "missing_school": "Finnurðu ekki skólann þinn?",
+    "contact_us_school": "Hafðu samband við okkur"
   },
   "navigation": {
     "notifications": "Tilkynningar",

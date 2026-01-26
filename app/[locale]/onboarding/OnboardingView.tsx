@@ -108,6 +108,10 @@ function parseICS(icsContent: string) {
                     currentEvent.dtstart = parts[1];
                     currentEvent.isAllDay = parts[1].length <= 8; // Date only format is usually 8 chars YYYYMMDD
                 }
+            } else if (line.startsWith('DTEND;VALUE=DATE:')) {
+                currentEvent.dtend = line.substring(17);
+            } else if (line.startsWith('DTEND:')) {
+                currentEvent.dtend = line.substring(6);
             }
         }
     }
@@ -185,11 +189,7 @@ export default function OnboardingView() {
         if (codeParam && !foundClass && !checkingCode && !error) {
             setJoinCode(codeParam);
             // Trigger verification automatically
-            // We need to call verification logic here, but handleVerifyCode relies on state that might not be set yet.
-            // Better to just set it and let user click Or use a separate effect that calls the logic if code is set.
-            // Actually, let's call it safely.
             const verify = async () => {
-                // Duplicate logic from handleVerifyCode but using codeParam directly
                 setCheckingCode(true);
                 try {
                     const q = query(collection(db, 'classes'), where('joinCode', '==', codeParam));
@@ -199,8 +199,6 @@ export default function OnboardingView() {
                     const snapshotAdmin = await getDocs(qAdmin);
 
                     if (snapshot.empty && snapshotAdmin.empty) {
-                        // Don't show error immediately on auto-check to avoid flashing red if invalid?
-                        // Or show it? Let's show it.
                         setError('Enginn bekkur fannst með þennan kóða.');
                         setCheckingCode(false);
                         return;
@@ -230,7 +228,7 @@ export default function OnboardingView() {
             };
             verify();
         }
-    }, [searchParams]); // Run when params change (e.g. initial load)
+    }, [searchParams]);
 
     // Handle invite link (join + classId parameters)
     useEffect(() => {
@@ -284,20 +282,13 @@ export default function OnboardingView() {
     const [createdClassInfo, setCreatedClassInfo] = useState<{ id: string, joinCode: string, parentTeamCode: string } | null>(null);
 
     const handleLanguageSelect = (lang: string) => {
-        // Construct new path with selected locale
-        // Current path format: /[locale]/onboarding
-        // We replace [locale] with the selected lang
         const segments = pathname.split('/');
         if (segments.length >= 3) {
-            segments[1] = lang; // Replace existing locale
+            segments[1] = lang;
             const newPath = segments.join('/');
-
-            // Navigate to new locale with ?step=select to skip language screen
             router.replace(`${newPath}?step=select`);
-            // Set state immediately for responsiveness, though page might reload
             setStep('select');
         } else {
-            // Fallback
             router.push(`/${lang}/onboarding?step=select`);
         }
     };
@@ -309,11 +300,9 @@ export default function OnboardingView() {
         setIsAdminCode(false);
 
         try {
-            // Check for standard join code
             const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode));
             const snapshot = await getDocs(q);
 
-            // Also check for Parent Team Code (Admin)
             const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', joinCode));
             const snapshotAdmin = await getDocs(qAdmin);
 
@@ -328,18 +317,16 @@ export default function OnboardingView() {
                 classDoc = snapshot.docs[0];
             } else {
                 classDoc = snapshotAdmin.docs[0];
-                setIsAdminCode(true); // Mark as Admin join
+                setIsAdminCode(true);
             }
 
             const classData = { id: classDoc.id, ...classDoc.data() };
             setFoundClass(classData);
 
-            // Fetch students
             const studentsQ = query(collection(db, 'students'), where('classId', '==', classDoc.id));
             const studentsSnap = await getDocs(studentsQ);
             const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
 
-            // Sort students alphabetically
             studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
             setStudents(studentsList);
 
@@ -358,10 +345,9 @@ export default function OnboardingView() {
             return;
         }
 
-        setJoining(true); // Reuse joining loading state
+        setJoining(true);
 
         try {
-            // 0. Check for duplicates (Simple case-insensitive name check)
             const duplicate = students.find(s => s.name.toLowerCase().trim() === newStudentName.toLowerCase().trim());
             if (duplicate) {
                 setError(`Barn með nafninu "${newStudentName}" er þegar í bekknum. Vinsamlegast veldu það af listanum eða hafðu samband við fulltrúa ef þetta er annað barn með sama nafn.`);
@@ -369,30 +355,27 @@ export default function OnboardingView() {
                 return;
             }
 
-            // 1. Create Student
             const dobDate = new Date(newStudentDob);
             const studentRef = await addDoc(collection(db, 'students'), {
                 classId: foundClass.id,
                 name: newStudentName,
                 birthDate: Timestamp.fromDate(dobDate),
                 dietaryNeeds: [],
-                photoPermission: 'allow', // Default
+                photoPermission: 'allow',
                 createdAt: serverTimestamp(),
             });
 
-            // 2. Link Parent
             const linkId = `${user.uid}_${foundClass.id}`;
             await setDoc(doc(db, 'parentLinks', linkId), {
                 userId: user.uid,
-                studentId: studentRef.id, // Link to new student
+                studentId: studentRef.id,
                 classId: foundClass.id,
                 relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
-                role: isAdminCode ? 'admin' : 'parent', // New Role Logic (supported by updated Firestore rules)
-                status: 'approved', // Auto-approve for MVP launch
+                role: isAdminCode ? 'admin' : 'parent',
+                status: 'approved',
                 createdAt: serverTimestamp(),
             });
 
-            // Redirect
             const segments = pathname.split('/');
             const locale = segments[1] || 'is';
             router.push(`/${locale}/dashboard?welcome=true`);
@@ -413,27 +396,21 @@ export default function OnboardingView() {
         setJoining(true);
 
         try {
-            // Determine status: Admins are auto-approved, others are pending
-            // We check if user is already an admin of the class OR if they used the admin code just now
             const isClassAdmin = foundClass.admins?.includes(user.uid) || isAdminCode;
             const initialStatus = isClassAdmin ? 'approved' : 'pending';
 
-            // Create Parent Link
-            // We use setDoc to enforce the ID format: userId_classId
-            // This is required for security rules (isClassMember) to work correctly
             const linkId = `${user.uid}_${foundClass.id}`;
             await setDoc(doc(db, 'parentLinks', linkId), {
                 userId: user.uid,
                 studentId: selectedStudentId,
                 classId: foundClass.id,
                 relationship: isAdminCode ? 'Class Representative' : 'Foreldri',
-                role: isAdminCode ? 'admin' : 'parent', // New Role Logic
+                role: isAdminCode ? 'admin' : 'parent',
                 status: initialStatus,
                 invitedBy: inviterId || null,
                 createdAt: serverTimestamp(),
             });
 
-            // If joined via invite link, notify the inviter
             if (inviterId && initialStatus === 'pending') {
                 const studentName = students.find(s => s.id === selectedStudentId)?.name || 'Barnið sitt';
                 await createNotification(
@@ -445,9 +422,7 @@ export default function OnboardingView() {
                 );
             }
 
-            // Redirect
             if (initialStatus === 'pending') {
-                // Show a message or redirect with a flag to show "Waiting for approval"
                 router.push(`/${locale}/dashboard?pending=true`);
             } else {
                 router.push(`/${locale}/dashboard?welcome=true`);
@@ -493,7 +468,7 @@ export default function OnboardingView() {
             }, user.uid);
 
             const classId = result.id;
-            setCreatedClassInfo(result); // Store for success screen
+            setCreatedClassInfo(result);
 
             if (calendarUrl) {
                 try {
@@ -508,6 +483,29 @@ export default function OnboardingView() {
 
                         const addPromises = relevantEvents.map((event: any) => {
                             const date = parseDate(event.dtstart);
+
+                            let endDate = null;
+                            if (event.dtend) {
+                                // ICS DTEND is exclusive for all-day events (the day AFTER the event ends)
+                                // Only set endDate if it differs from start date by more than 1 day
+                                const endD = parseDate(event.dtend);
+
+                                // Calculate difference in days
+                                const diffTime = Math.abs(endD.getTime() - date.getTime());
+                                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                                if (diffDays > 1) {
+                                    // It IS a multi-day event.
+                                    // Ideally, we store the exclusive end date or inclusive?
+                                    // Let's store the inclusive end date (DTEND - 1 day) for display purposes if we want "Feb 19 - Feb 21"
+                                    // standard ICS practice: Feb 19 to Feb 22 means 19, 20, 21.
+
+                                    // Let's subtract 1 day from DTEND just to get the last ACTIVE day
+                                    endD.setDate(endD.getDate() - 1);
+                                    endDate = Timestamp.fromDate(endD);
+                                }
+                            }
+
                             return addDoc(collection(db, 'tasks'), {
                                 classId: classId,
                                 schoolId: formData.schoolName ? null : null, // Future proofing
@@ -515,6 +513,7 @@ export default function OnboardingView() {
                                 title: event.summary,
                                 description: 'Samkvæmt skóladagatali',
                                 date: Timestamp.fromDate(date),
+                                endDate: endDate, // Add endDate
                                 isAllDay: event.isAllDay ?? true,
                                 slotsTotal: 0,
                                 slotsFilled: 0,
@@ -529,8 +528,6 @@ export default function OnboardingView() {
                     console.error("Calendar sync failed:", calError);
                 }
             }
-
-            // We don't redirect immediately now, we show the codes first!
         } catch (err: any) {
             console.error(err);
             setError('Gat ekki stofnað bekk. Reyndu aftur.');
@@ -715,6 +712,9 @@ export default function OnboardingView() {
                                 <option value="">Veldu skóla...</option>
                                 {SCHOOLS.map(s => <option key={s.name} value={s.name}>{s.name}</option>)}
                             </select>
+                            <div className="mt-1 text-xs text-right text-gray-500">
+                                {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-blue-600 hover:underline">{t('contact_us_school')}</a>
+                            </div>
                         </div>
 
                         <div>

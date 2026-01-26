@@ -257,13 +257,28 @@ export default function TasksPage() {
                                 <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">
                                     {dateObj ? new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(dateObj) : '---'}
                                 </span>
-                                <span className="text-4xl font-black text-gray-900 leading-none mb-1">
-                                    {dateObj ? dateObj.getDate() : '--'}
-                                </span>
-                                <span className="text-lg font-medium text-nordic-blue">
-                                    {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
-                                </span>
-                                {dateObj && !isAllDay && (
+
+                                {task.endDate ? (
+                                    <div className="flex flex-col items-center">
+                                        <span className="text-3xl font-black text-gray-900 leading-none mb-1">
+                                            {dateObj ? dateObj.getDate() : '--'}-{task.endDate.toDate().getDate()}
+                                        </span>
+                                        <span className="text-lg font-medium text-nordic-blue">
+                                            {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <span className="text-4xl font-black text-gray-900 leading-none mb-1">
+                                            {dateObj ? dateObj.getDate() : '--'}
+                                        </span>
+                                        <span className="text-lg font-medium text-nordic-blue">
+                                            {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
+                                        </span>
+                                    </>
+                                )}
+
+                                {dateObj && !isAllDay && !task.endDate && (
                                     <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
                                         <Clock size={12} />
                                         {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(dateObj)}
