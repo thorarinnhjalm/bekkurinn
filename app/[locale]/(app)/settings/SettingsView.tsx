@@ -46,6 +46,10 @@ function parseICS(icsContent: string) {
                     currentEvent.dtstart = parts[1];
                     currentEvent.isAllDay = parts[1].length <= 8; // Date only format is usually 8 chars YYYYMMDD
                 }
+            } else if (line.startsWith('DTEND;VALUE=DATE:')) {
+                currentEvent.dtend = line.substring(17);
+            } else if (line.startsWith('DTEND:')) {
+                currentEvent.dtend = line.substring(6);
             }
         }
     }
@@ -277,6 +281,29 @@ export default function SettingsView() {
             setSyncStatus(t('adding_events'));
             const addPromises = relevantEvents.map((event: any) => {
                 const date = parseDate(event.dtstart);
+
+                let endDate = null;
+                if (event.dtend) {
+                    // ICS DTEND is exclusive for all-day events (the day AFTER the event ends)
+                    // Only set endDate if it differs from start date by more than 1 day
+                    const endD = parseDate(event.dtend);
+
+                    // Calculate difference in days
+                    const diffTime = Math.abs(endD.getTime() - date.getTime());
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays > 1) {
+                        // It IS a multi-day event.
+                        // Ideally, we store the exclusive end date or inclusive?
+                        // Let's store the inclusive end date (DTEND - 1 day) for display purposes if we want "Feb 19 - Feb 21"
+                        // standard ICS practice: Feb 19 to Feb 22 means 19, 20, 21.
+
+                        // Let's subtract 1 day from DTEND just to get the last ACTIVE day
+                        endD.setDate(endD.getDate() - 1);
+                        endDate = Timestamp.fromDate(endD);
+                    }
+                }
+
                 // Skip past (optional)
                 // if (date < new Date()) return Promise.resolve();
 
@@ -287,6 +314,7 @@ export default function SettingsView() {
                     title: event.summary,
                     description: 'Samkvæmt skóladagatali',
                     date: Timestamp.fromDate(date),
+                    endDate: endDate,
                     isAllDay: event.isAllDay ?? true,
                     slotsTotal: 0,
                     slotsFilled: 0,
