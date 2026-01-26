@@ -2,6 +2,7 @@
 
 import { useRouter, useParams } from 'next/navigation';
 import { ArrowRight, Check, X, Shield, Users, Globe, Lock, Calendar, Search } from 'lucide-react';
+import { NavBar } from '@/components/landing/NavBar';
 import Link from 'next/link';
 
 export default function WhyUsPage() {
@@ -12,17 +13,7 @@ export default function WhyUsPage() {
     return (
         <div className="min-h-screen bg-stone-50 font-sans selection:bg-blue-100 selection:text-blue-900">
             {/* Header */}
-            <nav className="bg-white/80 backdrop-blur-md border-b border-gray-200 fixed w-full top-0 z-50">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex justify-between items-center">
-                    <Link href={`/${locale}`} className="flex items-center gap-2 font-bold text-xl text-blue-900 hover:opacity-80 transition-opacity">
-                        <div className="w-8 h-8 rounded-lg bg-blue-900 flex items-center justify-center text-white shadow-sm">B</div>
-                        <span>Bekkurinn</span>
-                    </Link>
-                    <Link href={`/${locale}/login`} className="px-5 py-2 bg-blue-900 text-white rounded-full font-medium hover:bg-blue-800 transition-colors text-sm">
-                        Skrá sig inn
-                    </Link>
-                </div>
-            </nav>
+            <NavBar locale={locale} />
 
             <main className="pt-32 pb-20">
                 {/* Hero */}

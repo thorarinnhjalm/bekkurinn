@@ -1,6 +1,6 @@
 'use client';
 
-import { TopHeader } from '@/components/navigation/TopHeader';
+import { NavBar } from '@/components/landing/NavBar';
 import { useAuth } from '@/components/providers/AuthProvider';
 import Link from 'next/link';
 
@@ -17,9 +17,7 @@ export default function HandbookLayout({
 
     return (
         <div className="min-h-screen flex flex-col bg-stone-50">
-            <TopHeader
-                className=""
-            />
+            <NavBar locale={locale} />
 
             <main className="flex-grow pt-24 pb-12">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
