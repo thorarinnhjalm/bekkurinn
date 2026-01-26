@@ -135,7 +135,9 @@ service cloud.firestore {
       allow read: if isAuthenticated() &&
                      (request.auth.uid == resource.data.userId || 
                       isClassAdmin(resource.data.classId) ||
-                      isParentOfStudent(resource.data.classId, resource.data.studentId));
+                      isClassAdmin(resource.data.classId) ||
+                      isParentOfStudent(resource.data.classId, resource.data.studentId) ||
+                      isSuperAdmin());
       
       // Users can create their own links
       allow create: if isAuthenticated() &&
