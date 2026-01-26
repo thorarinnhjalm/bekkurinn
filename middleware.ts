@@ -9,7 +9,11 @@ export default createMiddleware({
     defaultLocale,
 
     // Always use a locale prefix for URLs (e.g. /is/dashboard)
-    localePrefix: 'always'
+    localePrefix: 'always',
+
+    // Disable automatic locale detection based on Accept-Language header
+    // This ensures Icelandic is the default even if the user's browser is in English
+    localeDetection: false
 });
 
 export const config = {
