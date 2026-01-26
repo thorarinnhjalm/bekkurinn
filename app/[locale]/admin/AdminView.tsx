@@ -167,17 +167,7 @@ export default function AdminView() {
         <div className="min-h-screen pb-20 space-y-12 animate-in fade-in duration-800">
 
             {/* DEBUGGER */}
-            {isSuperAdmin && (
-                <div className="bg-black/90 text-green-400 font-mono text-xs p-4 fixed bottom-0 left-0 right-0 z-50 opacity-90 hover:opacity-100 transition-opacity">
-                    <p><strong>Admin Debugger:</strong> {user?.email} (SuperAdmin: YES)</p>
-                    <div className="grid grid-cols-4 gap-4 mt-2">
-                        <div>Users (State): {users.length}</div>
-                        <div>Schools (State): {schools.length}</div>
-                        <div>Classes (State): {classes.length}</div>
-                        <div>Stats (Obj): {JSON.stringify(stats)}</div>
-                    </div>
-                </div>
-            )}
+
             {/* Header / Hero Section (Copied Style from Dashboard) */}
             <header className="relative isolate overflow-hidden">
                 {/* Blurry blobs */}
