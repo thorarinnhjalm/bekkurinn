@@ -465,8 +465,14 @@ export async function getClassMemberEmails(classId: string): Promise<string[]> {
         const usersQ = query(collection(db, 'users'), where('uid', 'in', batch));
         const usersSnap = await getDocs(usersQ);
         usersSnap.forEach(doc => {
-            const data = doc.data();
-            if (data.email) emails.push(data.email);
+            const data = doc.data() as User;
+            // Filter based on notification settings
+            // Default to TRUE (opt-out) if settings are missing
+            const sendAnnouncements = data.notificationSettings?.email?.announcements ?? true;
+
+            if (data.email && sendAnnouncements) {
+                emails.push(data.email);
+            }
         });
     }
 
