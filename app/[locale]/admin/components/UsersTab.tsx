@@ -46,13 +46,54 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
         }
     };
 
+    const handleBulkDeleteDemo = async () => {
+        // Find users matching demo criteria
+        const demoUsers = users.filter(u =>
+            u.email?.includes('demo') ||
+            u.email?.includes('test')
+        );
+
+        if (demoUsers.length === 0) {
+            alert('Engir demo notendur fundust í listanum.');
+            return;
+        }
+
+        if (!confirm(`Ertu viss um að þú viljir eyða ${demoUsers.length} demo notendum?\n\nÞetta mun eyða öllum sem hafa "demo" eða "test" í netfanginu.\n\n⚠️ VIÐVÖRUN: Þetta er ÓAFTURKRÆFT!`)) {
+            return;
+        }
+
+        let deletedCount = 0;
+        for (const user of demoUsers) {
+            try {
+                await deleteUser(user.uid);
+                deletedCount++;
+                // Update specific user in UI immediately to show progress
+                setUsers(prev => prev.filter(u => u.uid !== user.uid));
+            } catch (error) {
+                console.error(`Failed to delete ${user.email}`);
+            }
+        }
+        alert(`Búið að eyða ${deletedCount} notendum.`);
+    };
+
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 max-w-5xl mx-auto">
             <div className="professional-card p-6">
-                <h3 className="font-bold text-2xl text-gray-900 mb-4">Notendastjórnun</h3>
-                <p className="text-gray-600 mb-6">
-                    Hér sérðu alla notendur í kerfinu. Notaðu leitina til að finna tiltekinn notanda.
-                </p>
+                <div className="flex justify-between items-start mb-6">
+                    <div>
+                        <h3 className="font-bold text-2xl text-gray-900 mb-2">Notendastjórnun</h3>
+                        <p className="text-gray-600">
+                            Hér sérðu alla notendur í kerfinu. Notaðu leitina til að finna tiltekinn notanda.
+                        </p>
+                    </div>
+                    <button
+                        onClick={handleBulkDeleteDemo}
+                        className="bg-red-100 text-red-700 px-4 py-2 rounded-xl font-bold hover:bg-red-200 transition-colors flex items-center gap-2 border border-red-200"
+                    >
+                        <Trash2 size={16} />
+                        Eyða demo notendum
+                    </button>
+                </div>
 
                 {/* Search */}
                 <div className="relative mb-6">
