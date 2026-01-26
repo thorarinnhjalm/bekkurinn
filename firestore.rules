@@ -78,7 +78,10 @@ service cloud.firestore {
       allow create: if isAuthenticated();
       
       // Update/Delete requires Admin or SuperAdmin
-      allow update, delete: if isSuperAdmin() || resource.data.admins.hasAny([request.auth.uid]) || isClassAdmin(classId);
+      allow update, delete: if isSuperAdmin() || 
+                               resource.data.admins.hasAny([request.auth.uid]) || 
+                               (exists(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)) && 
+                                get(/databases/$(database)/documents/parentLinks/$(request.auth.uid + '_' + classId)).data.role == 'admin');
     }
     
     // ========================================
@@ -357,7 +360,9 @@ service cloud.firestore {
         // We check class membership of the PARENT agreement
         allow write: if isAuthenticated() && 
                         request.auth.uid == userId &&
-                        (isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) || isSuperAdmin());
+                        (isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) || 
+                         isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) || 
+                         isSuperAdmin());
       }
     }
 

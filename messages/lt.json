@@ -348,7 +348,8 @@
       "features": "Funkcijos",
       "how_it_works": "Kaip tai veikia",
       "faq": "DUK",
-      "login": "Prisijungti"
+      "login": "Prisijungti",
+      "locale": "LT"
     },
     "hero": {
       "badge": "Pagaliau sistema klasės atstovams",

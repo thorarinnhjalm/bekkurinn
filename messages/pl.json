@@ -349,7 +349,8 @@
       "features": "Funkcje",
       "how_it_works": "Jak to działa?",
       "faq": "FAQ",
-      "login": "Zaloguj się"
+      "login": "Zaloguj się",
+      "locale": "PL"
     },
     "hero": {
       "badge": "Wreszcie porządny system dla przedstawicieli klas",
