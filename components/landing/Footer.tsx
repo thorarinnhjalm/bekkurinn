@@ -1,9 +1,11 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
+import Link from 'next/link';
 
 export function Footer() {
     const t = useTranslations('landing');
+    const locale = useLocale();
 
     return (
         <footer className="bg-white border-t border-gray-100 py-16">
@@ -17,13 +19,17 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 text-sm text-gray-600 font-medium">
-                    <a href="#" className="hover:text-blue-600 transition-colors">Skilmálar</a>
-                    <a href="#" className="hover:text-blue-600 transition-colors">Persónuvernd</a>
-                    <a href="#" className="hover:text-blue-600 transition-colors">Aðstoð</a>
+                    <Link href={`/${locale}/privacy`} className="hover:text-blue-600 transition-colors">Persónuvernd</Link>
+                    <Link href={`/${locale}/contact`} className="hover:text-blue-600 transition-colors">Aðstoð</Link>
                 </div>
 
-                <div className="text-gray-400 text-sm">
-                    {t('footer.copyright')}
+                <div className="text-gray-400 text-sm text-right">
+                    <p>© {new Date().getFullYear()} Bekkurinn.</p>
+                    <p className="mt-2 text-xs text-gray-300">
+                        Útgefið af Neðri Hóll Hugmyndahús ehf.<br />
+                        Kt: 470126-2480 • VSK: 159950<br />
+                        Álfhólsvegi 97, 200 Kópavogur
+                    </p>
                 </div>
             </div>
         </footer>
