@@ -78,6 +78,8 @@ export default function AdminView() {
             const adminEmails = process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()) || [];
             const isSuperAdmin = user && adminEmails.includes(user.email || '');
 
+
+
             if (isSuperAdmin) {
                 setSchools(allSchools);
 
