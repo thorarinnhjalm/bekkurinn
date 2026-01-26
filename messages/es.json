@@ -41,7 +41,9 @@
     "students": "Estudiantes",
     "search_placeholder": "Buscar estudiante o padre...",
     "directory_subtitle": "Directorio compartido de estudiantes y padres",
-    "settings": "Settings"
+    "settings": "Ajustes",
+    "menu": "Menú",
+    "more": "Más"
   },
   "patrol": {
     "title": "Patrulla del vecindario",

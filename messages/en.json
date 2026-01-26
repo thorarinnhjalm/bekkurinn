@@ -58,7 +58,9 @@
     "my_account": "My Account",
     "class_settings": "Class Settings",
     "sign_out": "Sign Out",
-    "settings": "Settings"
+    "settings": "Settings",
+    "menu": "Menu",
+    "more": "More"
   },
   "class": {
     "home": "Home",

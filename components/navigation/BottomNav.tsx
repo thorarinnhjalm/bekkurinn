@@ -34,7 +34,7 @@ const navItems = [
     {
         key: 'tasks',
         href: '/calendar',
-        icon: Calendar, // Changed icon to Calendar
+        icon: Calendar,
         labelKey: 'class.tasks',
     },
     {
@@ -42,18 +42,6 @@ const navItems = [
         href: '/announcements',
         icon: Megaphone,
         labelKey: 'class.announcements',
-    },
-    {
-        key: 'skutl',
-        href: '/pickup-offers',
-        icon: Car,
-        labelKey: 'class.skutl',
-    },
-    {
-        key: 'agreement',
-        href: '/agreement',
-        icon: ShieldCheck,
-        labelKey: 'agreement.title',
     },
 ] as const;
 
@@ -66,10 +54,12 @@ interface BottomNavProps {
         tasks: string;
         announcements: string;
         agreement: string;
+        more?: string;
     };
+    onMenuToggle: () => void;
 }
 
-export function BottomNav({ locale, translations }: BottomNavProps) {
+export function BottomNav({ locale, translations, onMenuToggle }: BottomNavProps) {
     const pathname = usePathname();
 
     return (
@@ -79,7 +69,7 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
         >
-            <div className="flex items-center justify-around px-2 py-2">
+            <div className="flex items-center justify-around px-1 py-2">
                 {navItems.map((item) => {
                     // Construct the full path with locale
                     const fullPath = `/${locale}${item.href}`;
@@ -93,7 +83,7 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
                             className={cn(
                                 'flex flex-col items-center justify-center gap-1',
                                 'rounded-lg transition-colors duration-200',
-                                'px-3 py-2 min-w-[64px]',
+                                'px-2 py-2 min-w-[60px] relative',
                                 isActive
                                     ? 'text-trust-navy'
                                     : 'text-gray-500'
@@ -105,20 +95,35 @@ export function BottomNav({ locale, translations }: BottomNavProps) {
                             />
                             <span
                                 className={cn(
-                                    'text-xs transition-all',
+                                    'text-[10px] transition-all whitespace-nowrap',
                                     isActive ? 'font-semibold' : 'font-medium'
                                 )}
                             >
-                                {translations[item.key as keyof typeof translations] || (item.key === 'skutl' ? 'Skutl' : item.key)}
+                                {translations[item.key as keyof typeof translations] || item.key}
                             </span>
 
                             {/* Active indicator */}
                             {isActive && (
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-12 bg-trust-navy rounded-t-sm" />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 bg-trust-navy rounded-t-sm" />
                             )}
                         </Link>
                     );
                 })}
+
+                {/* More Button */}
+                <button
+                    onClick={onMenuToggle}
+                    className={cn(
+                        'flex flex-col items-center justify-center gap-1',
+                        'rounded-lg transition-colors duration-200',
+                        'px-2 py-2 min-w-[60px] text-gray-500 hover:text-trust-navy'
+                    )}
+                >
+                    <Menu size={22} strokeWidth={2} />
+                    <span className="text-[10px] font-medium transition-all">
+                        {translations.more || 'Meira'}
+                    </span>
+                </button>
             </div>
         </nav>
     );

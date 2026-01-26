@@ -58,7 +58,9 @@
     "my_account": "Minn Aðgangur",
     "class_settings": "Stillingar Bekkjar",
     "sign_out": "Útskráning",
-    "settings": "Stillingar"
+    "settings": "Stillingar",
+    "menu": "Valmynd",
+    "more": "Meira"
   },
   "class": {
     "home": "Heim",
