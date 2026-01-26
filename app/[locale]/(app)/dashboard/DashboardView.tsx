@@ -543,7 +543,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-[#FFFFFF] tracking-tight">Stækka hópinn?</h3>
+                                <h3 className="text-xl font-bold text-white tracking-tight">Stækkaðu hópinn</h3>
                                 <p className="text-[#FFFFFF]/90 text-sm font-medium mt-1 leading-relaxed">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
