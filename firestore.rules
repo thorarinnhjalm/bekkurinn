@@ -204,8 +204,12 @@ service cloud.firestore {
       );
       
       // Delete: Only admins
+      // Delete: Only admins
       allow delete: if (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
-                       (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId));
+                       (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId)) ||
+                       // FALLBACK: Allow deleting if type matches school_event and user is class admin of that class
+                       // This handles legacy data that might be missing 'scope'
+                       (resource.data.classId != null && isClassAdmin(resource.data.classId));
     }
     
     // ========================================

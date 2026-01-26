@@ -311,6 +311,7 @@ export default function SettingsView() {
                     classId: classId,
                     schoolId: classData?.schoolId || null,
                     type: 'school_event',
+                    scope: 'class', // Add scope to fix permission rule
                     title: event.summary,
                     description: 'Samkvæmt skóladagatali',
                     date: Timestamp.fromDate(date),
