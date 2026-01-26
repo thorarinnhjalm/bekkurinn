@@ -599,7 +599,8 @@
         "title": "Afmæli & Veislur",
         "desc": "Viðmið fyrir afmælisgjafir og boðskort til að tryggja að enginn sé útundan.",
         "gift_amount_q": "Hvað má afmælisgjöf kosta (hámark)?",
-        "invitation_rule_q": "Hvernig bjóðum við í afmæli?"
+        "invitation_rule_q": "Hvernig bjóðum við í afmæli?",
+        "invites_q": "Hvernig bjóðum við í afmæli?"
       },
       "social": {
         "title": "Samskipti & Netnotkun",

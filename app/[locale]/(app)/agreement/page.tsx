@@ -27,6 +27,12 @@ export default function AgreementPage() {
     const deleteAgreementMutation = useDeleteAgreement();
     const signMutation = useSignAgreement();
 
+    // Helper to clean keys for use with t (which already has 'agreement.' prefix)
+    const cleanKey = (key: string) => {
+        if (!key) return '';
+        return key.replace(/^agreement\./, '');
+    };
+
     if (isLoading || userClassLoading) {
         return (
             <div className="min-h-[60vh] flex items-center justify-center">
@@ -137,9 +143,6 @@ export default function AgreementPage() {
 
     const handlePublish = async () => {
         if (!agreement) return;
-        // Logic to calculate winning votes would go here (or be done manually by admin)
-        // For MVP, allow admin to just publish "as is" or we pretend auto-calc happens
-        // Let's simpler: Set status to published
         await updateAgreementMutation.mutateAsync({
             agreementId: agreement.id,
             data: { status: 'published' }
@@ -176,7 +179,6 @@ export default function AgreementPage() {
 
     // 1. VOTING PHASE
     if (agreement.status === 'voting') {
-        const cleanKey = (k: string) => k.replace(/^agreement\./, '');
         const sections: AgreementSection[] = agreement.sections.map((s: any) => ({
             ...s,
             titleKey: cleanKey(s.titleKey),
@@ -332,32 +334,40 @@ export default function AgreementPage() {
                                         </div>
 
                                         <div className="p-6 md:p-8 space-y-8">
-                                            {section.items.map((item: any) => (
-                                                <div key={item.id} className="space-y-4">
-                                                    <div className="flex items-start justify-between gap-4">
-                                                        <div className="flex-1">
-                                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Spurning</div>
-                                                            <h4 className="font-bold text-lg text-gray-900">
-                                                                {t(`sections.${section.id}.${item.id}_q` as any)}
-                                                            </h4>
-                                                        </div>
-                                                        <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
-                                                            <Settings size={18} />
-                                                        </button>
-                                                    </div>
+                                            {section.items.map((item: any) => {
+                                                const questionKey = cleanKey(item.questionKey || `sections.${section.id}.${item.id}_q`);
 
-                                                    <div className="flex flex-wrap gap-2">
-                                                        {item.options.map((opt: any) => (
-                                                            <div key={opt.value} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
-                                                                {t(`options.${opt.labelKey.replace(/^options\./, '')}` as any)}
+                                                return (
+                                                    <div key={item.id} className="space-y-4">
+                                                        <div className="flex items-start justify-between gap-4">
+                                                            <div className="flex-1">
+                                                                <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Spurning</div>
+                                                                <h4 className="font-bold text-lg text-gray-900">
+                                                                    {t(questionKey as any)}
+                                                                </h4>
                                                             </div>
-                                                        ))}
-                                                        <button className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all">
-                                                            + Bæta við
-                                                        </button>
+                                                            <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                                                                <Settings size={18} />
+                                                            </button>
+                                                        </div>
+
+                                                        <div className="flex flex-wrap gap-2">
+                                                            {item.options.map((opt: any) => {
+                                                                const labelKey = cleanKey(opt.labelKey || `options.${opt.value}`);
+
+                                                                return (
+                                                                    <div key={opt.value} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
+                                                                        {t(labelKey as any)}
+                                                                    </div>
+                                                                );
+                                                            })}
+                                                            <button className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all">
+                                                                + Bæta við
+                                                            </button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 ))}
