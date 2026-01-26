@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bekkurinn.vercel.app'),
+  metadataBase: new URL('https://bekkurinn.is'),
   title: {
     default: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
     template: "%s | Bekkurinn"
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
     description: "Allt sem þú þarft fyrir bekkinn á einum stað. Nafnalistar, tilkynningar og viðburðir.",
-    url: 'https://bekkurinn.vercel.app',
+    url: 'https://bekkurinn.is',
     siteName: 'Bekkurinn',
     locale: 'is_IS',
     type: "website",
