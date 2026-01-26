@@ -120,28 +120,52 @@ export interface SystemStats {
  * Get system-wide statistics
  */
 export async function getSystemStats(): Promise<SystemStats> {
-    try {
-        const [usersSnap, classesSnap, schoolsSnap, pendingSnap] = await Promise.all([
-            getDocs(collection(db, 'users')),
-            getDocs(collection(db, 'classes')),
-            getDocs(collection(db, 'schools')),
-            getDocs(query(collection(db, 'parentLinks'), where('status', '==', 'pending')))
-        ]);
+    const stats = {
+        totalUsers: 0,
+        totalClasses: 0,
+        totalSchools: 0,
+        pendingApprovals: 0,
+    };
 
-        return {
-            totalUsers: usersSnap.size,
-            totalClasses: classesSnap.size,
-            totalSchools: schoolsSnap.size,
-            pendingApprovals: pendingSnap.size,
-        };
+    try {
+        // Test Users
+        try {
+            const usersSnap = await getDocs(collection(db, 'users'));
+            stats.totalUsers = usersSnap.size;
+        } catch (e: any) {
+            console.error('Stats Error (Users):', e.message);
+        }
+
+        // Test Classes
+        try {
+            const classesSnap = await getDocs(collection(db, 'classes'));
+            stats.totalClasses = classesSnap.size;
+        } catch (e: any) {
+            console.error('Stats Error (Classes):', e.message);
+        }
+
+        // Test Schools
+        try {
+            const schoolsSnap = await getDocs(collection(db, 'schools'));
+            stats.totalSchools = schoolsSnap.size;
+        } catch (e: any) {
+            console.error('Stats Error (Schools):', e.message);
+        }
+
+        // Test Pending
+        try {
+            const pendingSnap = await getDocs(query(collection(db, 'parentLinks'), where('status', '==', 'pending')));
+            stats.pendingApprovals = pendingSnap.size;
+        } catch (e: any) {
+            console.error('Stats Error (Pending):', e.message);
+        }
+
+        console.log('Final Calculated Stats:', stats);
+        return stats;
+
     } catch (error) {
-        logger.error('Failed to get system stats', error);
-        return {
-            totalUsers: 0,
-            totalClasses: 0,
-            totalSchools: 0,
-            pendingApprovals: 0,
-        };
+        logger.error('Failed to get system stats (General)', error);
+        return stats;
     }
 }
 
