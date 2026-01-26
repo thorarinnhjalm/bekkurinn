@@ -543,8 +543,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <UserPlus size={24} className="text-white" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-white tracking-tight">Stækkaðu hópinn</h3>
-                                <p className="text-[#FFFFFF]/90 text-sm font-medium mt-1 leading-relaxed">
+                                <h3 className="text-xl font-bold !text-white tracking-tight" style={{ color: '#FFFFFF' }}>Stækkaðu hópinn</h3>
+                                <p className="!text-white/90 text-sm font-medium mt-1 leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.9)' }}>
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
                             </div>
