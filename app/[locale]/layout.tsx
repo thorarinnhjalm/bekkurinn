@@ -33,6 +33,20 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     };
 
     return {
+        metadataBase: new URL('https://bekkurinn.is'),
+        alternates: {
+            canonical: `/${locale}`,
+            languages: {
+                'en': '/en',
+                'is': '/is',
+                'pl': '/pl',
+                'es': '/es',
+                'lt': '/lt',
+                'tl': '/tl',
+                'uk': '/uk',
+                'vi': '/vi',
+            },
+        },
         title: {
             template: '%s | Bekkurinn',
             default: titles[locale] || titles['is'],

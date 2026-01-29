@@ -49,7 +49,6 @@ import {
     updateDoc,
     deleteDoc,
     serverTimestamp,
-    DocumentData,
     Timestamp,
     orderBy
 } from 'firebase/firestore';

@@ -18,7 +18,7 @@ interface WelcomeModalProps {
  * Shows only once per user (tracked via Firestore).
  * Warm, encouraging Icelandic copy.
  */
-export function WelcomeModal({ isOnboarding = false, onClose }: WelcomeModalProps) {
+export function WelcomeModal({ onClose }: WelcomeModalProps) {
     const { user } = useAuth();
     const [step, setStep] = useState(1);
     const totalSteps = 3;

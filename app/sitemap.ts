@@ -7,8 +7,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Static routes that exist for every locale
     const routes = [
         '', // Landing page
-        '/login',
-        '/onboarding',
         // Add public routes later as they are built (e.g. /about, /privacy)
     ];
 
@@ -23,12 +21,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     );
 
     return [
-        {
-            url: baseUrl,
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 1,
-        },
         ...localeEntries
     ];
 }

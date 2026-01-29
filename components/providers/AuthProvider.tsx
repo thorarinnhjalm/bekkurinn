@@ -8,7 +8,6 @@ import {
     GoogleAuthProvider,
     onAuthStateChanged,
 } from 'firebase/auth';
-import { serverTimestamp } from 'firebase/firestore';
 import { auth } from '@/lib/firebase/config';
 import { createUser, getUser } from '@/services/firestore';
 import { User } from '@/types';
