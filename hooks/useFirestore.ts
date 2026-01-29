@@ -37,7 +37,7 @@ import {
     getAgreementSignatures
 } from '@/services/agreementService';
 import type { CreateStudentInput, CreateTaskInput, CreateAnnouncementInput, CreateAgreementInput, AgreementVote } from '@/types';
-import { Class, Student, Task, Announcement, ParentLink, LostItem, Agreement } from '@/types';
+import { Class, Student, Task, Announcement, ParentLink, LostItem, Agreement, ClassWithRole } from '@/types';
 import {
     collection,
     doc,
@@ -168,7 +168,7 @@ export function useUserClasses(userId: string | undefined, userEmail?: string | 
             const adminSnap = await getDocs(adminQ);
 
             adminSnap.docs.forEach(doc => {
-                const classData = { id: doc.id, ...doc.data(), role: 'admin' } as any;
+                const classData = { id: doc.id, ...doc.data(), role: 'admin' } as ClassWithRole;
                 classesMap.set(doc.id, classData);
             });
 
@@ -198,7 +198,7 @@ export function useUserClasses(userId: string | undefined, userEmail?: string | 
                     );
                     const batchSnap = await getDocs(batchQuery);
                     batchSnap.docs.forEach(doc => {
-                        const classData = { id: doc.id, ...doc.data(), role: 'parent' } as any;
+                        const classData = { id: doc.id, ...doc.data(), role: 'parent' } as ClassWithRole;
                         classesMap.set(doc.id, classData);
                     });
                 }));
@@ -224,7 +224,7 @@ export function useUserClass(userId: string | undefined, userEmail?: string | nu
     // Legacy support: return the first class from the list
     const { data } = useUserClasses(userId, userEmail);
     // Priority: Admin class > First class found
-    const activeClass = data?.find((c: any) => c.role === 'admin') || data?.[0] || null;
+    const activeClass = data?.find((c: ClassWithRole) => c.role === 'admin') || data?.[0] || null;
     return {
         data: activeClass,
         isLoading: !data,

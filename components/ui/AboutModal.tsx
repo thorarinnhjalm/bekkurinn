@@ -1,7 +1,7 @@
 'use client';
 
 import { X, UserPlus, Cake, ShieldCheck, HelpCircle } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+
 
 interface AboutModalProps {
     isOpen: boolean;

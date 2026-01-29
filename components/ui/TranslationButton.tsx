@@ -78,7 +78,7 @@ export function TranslationButton({ text, className = '' }: TranslationButtonPro
                         <div className="shrink-0 w-0.5 self-stretch bg-blue-400 rounded-full" />
                         <div>
                             <p className="text-sm text-gray-700 leading-relaxed italic">
-                                "{translation}"
+                                &quot;{translation}&quot;
                             </p>
                             <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-medium">
                                 AI Translated

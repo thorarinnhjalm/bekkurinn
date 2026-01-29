@@ -1,4 +1,6 @@
 import { LRUCache } from 'lru-cache';
+import { NextRequest } from 'next/server';
+
 
 /**
  * Rate Limiter Utility for Bekkurinn
@@ -139,7 +141,7 @@ export function withRateLimit(
 /**
  * Helper for Next.js API routes that accept NextRequest
  */
-export function getClientIpFromNextRequest(request: any): string {
+export function getClientIpFromNextRequest(request: NextRequest): string {
     // Try various headers that might contain the real IP
     const headers = [
         'x-forwarded-for',
@@ -157,5 +159,5 @@ export function getClientIpFromNextRequest(request: any): string {
     }
 
     // Fallback
-    return request.ip || 'unknown';
+    return request.headers.get('x-forwarded-for')?.split(',')[0].trim() || (request as any).ip || 'unknown';
 }

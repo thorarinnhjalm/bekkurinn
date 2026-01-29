@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import {
-    User,
+    User as FirebaseUser,
     signInWithPopup,
     signOut as firebaseSignOut,
     GoogleAuthProvider,
@@ -11,10 +11,11 @@ import {
 import { serverTimestamp } from 'firebase/firestore';
 import { auth } from '@/lib/firebase/config';
 import { createUser, getUser } from '@/services/firestore';
+import { User } from '@/types';
 
 interface AuthContextType {
-    user: User | null;
-    userData: any | null;
+    user: FirebaseUser | null;
+    userData: User | null;
     loading: boolean;
     signInWithGoogle: () => Promise<void>;
     signInWithEmail: (email: string, pass: string) => Promise<void>;
@@ -37,8 +38,8 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-    const [user, setUser] = useState<User | null>(null);
-    const [userData, setUserData] = useState<any | null>(null);
+    const [user, setUser] = useState<FirebaseUser | null>(null);
+    const [userData, setUserData] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -48,7 +49,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
             if (firebaseUser) {
                 // Fetch or create user data in Firestore
                 try {
-                    let data = await getUser(firebaseUser.uid);
+                    let data = await getUser(firebaseUser.uid) as User | null;
 
                     if (!data) {
                         // Create user if doesn't exist
@@ -61,7 +62,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
                             isPhoneVisible: true,
                             language: 'is', // Default to Icelandic
                         });
-                        data = await getUser(firebaseUser.uid);
+                        data = await getUser(firebaseUser.uid) as User | null;
                     }
 
                     setUserData(data);

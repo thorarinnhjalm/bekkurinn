@@ -13,7 +13,9 @@ import {
     serverTimestamp,
     Timestamp,
     runTransaction,
-    writeBatch
+    writeBatch,
+    DocumentReference,
+    DocumentData
 } from 'firebase/firestore';
 import { Agreement, AgreementVote, CreateAgreementInput } from '@/types';
 
@@ -68,7 +70,7 @@ export async function castVote(agreementId: string, vote: Omit<AgreementVote, 'i
 
 // Helper for setDoc since I didn't import it above and want to be consistent
 import { setDoc } from 'firebase/firestore';
-async function utilSetDoc(ref: any, data: any) {
+async function utilSetDoc(ref: DocumentReference, data: DocumentData) {
     await setDoc(ref, data);
 }
 
@@ -98,7 +100,7 @@ export async function signAgreement(agreementId: string, signature: { userId: st
 }
 
 // Get all signatures for an agreement
-export async function getAgreementSignatures(agreementId: string): Promise<any[]> {
+export async function getAgreementSignatures(agreementId: string): Promise<DocumentData[]> {
     const q = query(collection(db, COLLECTION_NAME, agreementId, SIGNATURES_SUBCOLLECTION));
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));

@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, writeBatch, GeoPoint, doc } from 'firebase/firestore';
+import { getFirestore, writeBatch, GeoPoint, doc } from 'firebase/firestore';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 import * as fs from 'fs';

@@ -24,7 +24,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+
 
 async function seed() {
     console.log('🌱 Seeding Bekkurinn database...\n');

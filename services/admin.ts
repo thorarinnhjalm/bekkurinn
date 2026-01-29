@@ -132,32 +132,36 @@ export async function getSystemStats(): Promise<SystemStats> {
         try {
             const usersSnap = await getDocs(collection(db, 'users'));
             stats.totalUsers = usersSnap.size;
-        } catch (e: any) {
-            console.error('Stats Error (Users):', e.message);
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error('Stats Error (Users):', msg);
         }
 
         // Test Classes
         try {
             const classesSnap = await getDocs(collection(db, 'classes'));
             stats.totalClasses = classesSnap.size;
-        } catch (e: any) {
-            console.error('Stats Error (Classes):', e.message);
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error('Stats Error (Classes):', msg);
         }
 
         // Test Schools
         try {
             const schoolsSnap = await getDocs(collection(db, 'schools'));
             stats.totalSchools = schoolsSnap.size;
-        } catch (e: any) {
-            console.error('Stats Error (Schools):', e.message);
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error('Stats Error (Schools):', msg);
         }
 
         // Test Pending
         try {
             const pendingSnap = await getDocs(query(collection(db, 'parentLinks'), where('status', '==', 'pending')));
             stats.pendingApprovals = pendingSnap.size;
-        } catch (e: any) {
-            console.error('Stats Error (Pending):', e.message);
+        } catch (e: unknown) {
+            const msg = e instanceof Error ? e.message : String(e);
+            console.error('Stats Error (Pending):', msg);
         }
 
         console.log('Final Calculated Stats:', stats);

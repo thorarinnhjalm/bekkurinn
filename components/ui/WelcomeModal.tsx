@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { X, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { doc, updateDoc } from 'firebase/firestore';

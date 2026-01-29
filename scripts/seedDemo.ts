@@ -115,7 +115,7 @@ async function seedFullDemo() {
         console.log(`✓ Class 1: ${class1Id}`);
 
         // Your Child
-        const myChild1Id = await createStudent({
+        await createStudent({
             classId: class1Id,
             name: 'Emilía (Þitt barn)',
             birthDate: new Date('2018-05-12'),

@@ -2,7 +2,7 @@
 
 import { create } from 'zustand';
 import { X, CheckCircle, AlertCircle, Info } from 'lucide-react';
-import { useEffect } from 'react';
+
 
 /**
  * Toast Notification System for Bekkurinn

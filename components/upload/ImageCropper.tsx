@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback } from 'react';
-import Cropper from 'react-easy-crop';
+import Cropper, { Area } from 'react-easy-crop';
 import { Slider } from '@/components/ui/slider';
 import getCroppedImg from '@/lib/canvasUtils';
 import { Loader2, Check, X } from 'lucide-react';
@@ -15,7 +15,7 @@ interface ImageCropperProps {
 export function ImageCropper({ imageSrc, onCropComplete, onCancel }: ImageCropperProps) {
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState<any>(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<Area | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
     const onCropChange = (crop: { x: number; y: number }) => {
@@ -26,13 +26,14 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel }: ImageCroppe
         setZoom(zoom);
     };
 
-    const onCropCompleteHandler = useCallback((croppedArea: any, croppedAreaPixels: any) => {
+    const onCropCompleteHandler = useCallback((croppedArea: Area, croppedAreaPixels: Area) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
     const handleSave = async () => {
         setIsProcessing(true);
         try {
+            if (!croppedAreaPixels) return;
             const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
             if (croppedImage) {
                 onCropComplete(croppedImage);

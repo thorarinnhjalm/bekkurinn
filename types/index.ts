@@ -24,7 +24,7 @@ export interface LostItem {
     location?: string; // e.g. "Sports Hall"
     isClaimed: boolean;
     claimedBy?: string;
-    createdAt: any; // Timestamp
+    createdAt: Timestamp;
     createdBy: string;
     author: string;
     authorImage?: string;
@@ -78,6 +78,10 @@ export interface Class {
     confidentialityAgreedAt: Timestamp; // Legal requirement
     pactText?: string; // Social contract HTML
     createdAt: Timestamp;
+}
+
+export interface ClassWithRole extends Class {
+    role: 'admin' | 'parent';
 }
 
 // ========================================
@@ -187,7 +191,7 @@ export interface Announcement {
     originalLanguage?: string;
     pollOptions?: PollOption[]; // New: Poll Support
     allowMultipleVotes?: boolean; // New: Poll Configuration
-    createdAt: any;
+    createdAt: Timestamp;
     createdBy: string;
     author: string;
 }
