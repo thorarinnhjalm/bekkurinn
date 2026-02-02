@@ -28,6 +28,8 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
         }
     };
 
+    const cleanKey = (key: string) => key?.replace(/^agreement\./, '') || '';
+
     const renderText = (key: string) => {
         const cleaned = cleanKey(key);
         const translated = t(cleaned as any);
