@@ -455,89 +455,88 @@ export default function AgreementPage() {
                                                 );
                                             })}
                                         </div>
-                                    </div>
-                                    
-                                    {/* Add Question Button at bottom of section */ }
-                                    < div className = "px-6 pb-6 pt-2" >
-                                    <button
-                                        onClick={() => {
-                                            const newItem: AgreementItem = {
-                                                id: `custom_${Date.now()}`,
-                                                type: 'radio',
-                                                questionKey: 'Ný Spurning',
-                                                options: [
-                                                    { value: 'opt1', labelKey: 'Já' },
-                                                    { value: 'opt2', labelKey: 'Nei' }
-                                                ]
-                                            };
-                                            setEditingItem({ sectionId: section.id, item: newItem });
-                                        }}
-                                        className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm font-bold text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2"
-                                    >
-                                        <Plus size={16} />
-                                        Bæta við spurningu
-                                    </button>
+                                        {/* Add Question Button at bottom of section */}
+                                        <div className="px-6 pb-6 pt-2">
+                                            <button
+                                                onClick={() => {
+                                                    const newItem: AgreementItem = {
+                                                        id: `custom_${Date.now()}`,
+                                                        type: 'radio',
+                                                        questionKey: 'Ný Spurning',
+                                                        options: [
+                                                            { value: 'opt1', labelKey: 'Já' },
+                                                            { value: 'opt2', labelKey: 'Nei' }
+                                                        ]
+                                                    };
+                                                    setEditingItem({ sectionId: section.id, item: newItem });
+                                                }}
+                                                className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm font-bold text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2"
+                                            >
+                                                <Plus size={16} />
+                                                Bæta við spurningu
+                                            </button>
+                                        </div>
                                     </div>
                     </div>
                                 ))}
-                </div>
-            </section>
+                    </div>
+                </section>
 
-                        {/* Demo/Preview Area */ }
-        {
-            isAdmin && (
-                <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
-                    <div className="text-center max-w-md mx-auto space-y-4">
-                        <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
-                            <ShieldCheck size={32} />
-                        </div>
-                        <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
-                        <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
-                        <button
-                            onClick={async () => {
-                                if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
-                                if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
+                {/* Demo/Preview Area */}
+                {
+                    isAdmin && (
+                        <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
+                            <div className="text-center max-w-md mx-auto space-y-4">
+                                <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
+                                    <ShieldCheck size={32} />
+                                </div>
+                                <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
+                                <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
+                                <button
+                                    onClick={async () => {
+                                        if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+                                        if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
 
-                                const demoData: any = {
-                                    classId: activeClass.id,
-                                    status: 'published',
-                                    createdBy: user!.uid,
-                                    sections: [
-                                        {
-                                            id: 'birthdays',
-                                            templateId: 'v1',
-                                            titleKey: 'sections.birthdays.title',
-                                            descriptionKey: 'sections.birthdays.desc',
-                                            items: [
+                                        const demoData: any = {
+                                            classId: activeClass.id,
+                                            status: 'published',
+                                            createdBy: user!.uid,
+                                            sections: [
                                                 {
-                                                    id: 'gift_amount',
-                                                    type: 'radio',
-                                                    questionKey: 'sections.birthdays.gift_amount_q',
-                                                    winningValue: 1500,
-                                                    options: [
-                                                        { value: 500, labelKey: 'options.500kr', voteCount: 2 },
-                                                        { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
-                                                        { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
-                                                        { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
-                                                        { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                    id: 'birthdays',
+                                                    templateId: 'v1',
+                                                    titleKey: 'sections.birthdays.title',
+                                                    descriptionKey: 'sections.birthdays.desc',
+                                                    items: [
+                                                        {
+                                                            id: 'gift_amount',
+                                                            type: 'radio',
+                                                            questionKey: 'sections.birthdays.gift_amount_q',
+                                                            winningValue: 1500,
+                                                            options: [
+                                                                { value: 500, labelKey: 'options.500kr', voteCount: 2 },
+                                                                { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
+                                                                { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
+                                                                { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
+                                                                { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                            ]
+                                                        }
                                                     ]
                                                 }
                                             ]
-                                        }
-                                    ]
-                                };
-                                await createAgreementMutation.mutateAsync(demoData);
-                                window.location.reload();
-                            }}
-                            className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
-                        >
-                            Sýna Demo (Fylla með gervigögnum)
-                        </button>
-                    </div>
-                </div>
-            )
-        }
-                    </div >
+                                        };
+                                        await createAgreementMutation.mutateAsync(demoData);
+                                        window.location.reload();
+                                    }}
+                                    className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                                >
+                                    Sýna Demo (Fylla með gervigögnum)
+                                </button>
+                            </div>
+                        </div>
+                    )
+                }
+            </div >
                 </div >
             </div >
         );
