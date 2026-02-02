@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement, useAgreementSignatures, useSignAgreement } from '@/hooks/useFirestore';
-import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool, Settings, PartyPopper, Smartphone } from 'lucide-react';
+import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool, Settings, PartyPopper, Smartphone, Plus, X, Save, Trash2, Edit2 } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
 import { Agreement, AgreementItem, AgreementSection } from '@/types';
@@ -27,10 +27,78 @@ export default function AgreementPage() {
     const deleteAgreementMutation = useDeleteAgreement();
     const signMutation = useSignAgreement();
 
-    // Helper to clean keys for use with t (which already has 'agreement.' prefix)
     const cleanKey = (key: string) => {
         if (!key) return '';
         return key.replace(/^agreement\./, '');
+    };
+
+    const renderText = (key: string) => {
+        const cleaned = cleanKey(key);
+        const translated = t(cleaned as any);
+        return translated.startsWith('agreement.') ? cleaned : translated;
+    };
+
+    // --- EDITING STATE ---
+    const [editingItem, setEditingItem] = useState<{ sectionId: string, item: AgreementItem } | null>(null);
+    const [editingSection, setEditingSection] = useState<{ id: string, titleKey: string, descriptionKey: string } | null>(null);
+
+    // Helpers for editing
+    const handleSaveItem = async (sectionId: string, item: AgreementItem) => {
+        if (!agreement) return;
+
+        const newSections = agreement.sections.map((s: any) => {
+            if (s.id === sectionId) {
+                // Check if item exists
+                const itemExists = s.items.find((i: any) => i.id === item.id);
+                let newItems;
+                if (itemExists) {
+                    newItems = s.items.map((i: any) => i.id === item.id ? item : i);
+                } else {
+                    newItems = [...s.items, item];
+                }
+                return { ...s, items: newItems };
+            }
+            return s;
+        });
+
+        await updateAgreementMutation.mutateAsync({
+            agreementId: agreement.id,
+            data: { sections: newSections }
+        });
+        setEditingItem(null);
+    };
+
+    const handleDeleteItem = async (sectionId: string, itemId: string) => {
+        if (!agreement || !confirm('Ertu viss um að þú viljir eyða þessari spurningu?')) return;
+
+        const newSections = agreement.sections.map((s: any) => {
+            if (s.id === sectionId) {
+                return { ...s, items: s.items.filter((i: any) => i.id !== itemId) };
+            }
+            return s;
+        });
+
+        await updateAgreementMutation.mutateAsync({
+            agreementId: agreement.id,
+            data: { sections: newSections }
+        });
+    };
+
+    const handleSaveSection = async (sectionId: string, title: string, desc: string) => {
+        if (!agreement) return;
+
+        const newSections = agreement.sections.map((s: any) => {
+            if (s.id === sectionId) {
+                return { ...s, titleKey: title, descriptionKey: desc };
+            }
+            return s;
+        });
+
+        await updateAgreementMutation.mutateAsync({
+            agreementId: agreement.id,
+            data: { sections: newSections }
+        });
+        setEditingSection(null);
     };
 
     if (isLoading || userClassLoading) {
@@ -99,13 +167,13 @@ export default function AgreementPage() {
                             ]
                         },
                         {
-                            id: 'gaming_rules',
+                            id: 'gaming_communication',
                             type: 'radio',
-                            questionKey: 'sections.social.gaming_q',
+                            questionKey: 'Viðmið um tölvuleiki (t.d. Roblox, Fortnite)',
                             options: [
-                                { value: 'pegi', labelKey: 'options.pegi' },
-                                { value: 'flexible', labelKey: 'options.flexible_gaming' },
-                                { value: 'open', labelKey: 'options.parents_decide' },
+                                { value: 'monitoring', labelKey: 'Við fylgjumst með vinabeiðnum og spjalli' },
+                                { value: 'education', labelKey: 'Við ræðum um nethegðun og samskiptareglur' },
+                                { value: 'open', labelKey: 'Foreldrar ákveða reglur fyrir sín börn' },
                             ]
                         },
                         {
@@ -324,11 +392,18 @@ export default function AgreementPage() {
                                                     {section.id === 'birthdays' ? <PartyPopper className="text-pink-500" /> : <Smartphone className="text-indigo-500" />}
                                                 </div>
                                                 <div>
-                                                    <h3 className="text-xl font-bold text-gray-900">{t(`sections.${section.id}.title` as any)}</h3>
-                                                    <p className="text-sm text-gray-500 font-medium">{t(`sections.${section.id}.desc` as any)}</p>
+                                                    <h3 className="text-xl font-bold text-gray-900">{renderText(section.titleKey)}</h3>
+                                                    <p className="text-sm text-gray-500 font-medium">{renderText(section.descriptionKey)}</p>
                                                 </div>
                                             </div>
-                                            <button className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors">
+                                            <button
+                                                onClick={() => setEditingSection({
+                                                    id: section.id,
+                                                    titleKey: section.titleKey,
+                                                    descriptionKey: section.descriptionKey
+                                                })}
+                                                className="text-xs font-bold text-indigo-600 bg-indigo-50 px-3 py-1.5 rounded-lg hover:bg-indigo-100 transition-colors"
+                                            >
                                                 Breyta texta
                                             </button>
                                         </div>
@@ -343,10 +418,13 @@ export default function AgreementPage() {
                                                             <div className="flex-1">
                                                                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Spurning</div>
                                                                 <h4 className="font-bold text-lg text-gray-900">
-                                                                    {t(questionKey as any)}
+                                                                    {renderText(questionKey)}
                                                                 </h4>
                                                             </div>
-                                                            <button className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all">
+                                                            <button
+                                                                onClick={() => setEditingItem({ sectionId: section.id, item })}
+                                                                className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
+                                                            >
                                                                 <Settings size={18} />
                                                             </button>
                                                         </div>
@@ -357,11 +435,19 @@ export default function AgreementPage() {
 
                                                                 return (
                                                                     <div key={opt.value} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
-                                                                        {t(labelKey as any)}
+                                                                        {renderText(labelKey)}
                                                                     </div>
                                                                 );
                                                             })}
-                                                            <button className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all">
+                                                            <button
+                                                                onClick={() => {
+                                                                    // Add a new empty option to this item and open editor
+                                                                    const newOption = { value: Date.now(), labelKey: 'Nýr valmöguleiki' };
+                                                                    const newItem = { ...item, options: [...item.options, newOption] };
+                                                                    setEditingItem({ sectionId: section.id, item: newItem });
+                                                                }}
+                                                                className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all"
+                                                            >
                                                                 + Bæta við
                                                             </button>
                                                         </div>
@@ -370,65 +456,90 @@ export default function AgreementPage() {
                                             })}
                                         </div>
                                     </div>
-                                ))}
-                            </div>
-                        </section>
-
-                        {/* Demo/Preview Area */}
-                        {isAdmin && (
-                            <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
-                                <div className="text-center max-w-md mx-auto space-y-4">
-                                    <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
-                                        <ShieldCheck size={32} />
-                                    </div>
-                                    <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
-                                    <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
+                                    
+                                    {/* Add Question Button at bottom of section */ }
+                                    < div className = "px-6 pb-6 pt-2" >
                                     <button
-                                        onClick={async () => {
-                                            if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
-                                            if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
-
-                                            const demoData: any = {
-                                                classId: activeClass.id,
-                                                status: 'published',
-                                                createdBy: user!.uid,
-                                                sections: [
-                                                    {
-                                                        id: 'birthdays',
-                                                        templateId: 'v1',
-                                                        titleKey: 'sections.birthdays.title',
-                                                        descriptionKey: 'sections.birthdays.desc',
-                                                        items: [
-                                                            {
-                                                                id: 'gift_amount',
-                                                                type: 'radio',
-                                                                questionKey: 'sections.birthdays.gift_amount_q',
-                                                                winningValue: 1500,
-                                                                options: [
-                                                                    { value: 500, labelKey: 'options.500kr', voteCount: 2 },
-                                                                    { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
-                                                                    { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
-                                                                    { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
-                                                                    { value: 'free', labelKey: 'options.free', voteCount: 1 },
-                                                                ]
-                                                            }
-                                                        ]
-                                                    }
+                                        onClick={() => {
+                                            const newItem: AgreementItem = {
+                                                id: `custom_${Date.now()}`,
+                                                type: 'radio',
+                                                questionKey: 'Ný Spurning',
+                                                options: [
+                                                    { value: 'opt1', labelKey: 'Já' },
+                                                    { value: 'opt2', labelKey: 'Nei' }
                                                 ]
                                             };
-                                            await createAgreementMutation.mutateAsync(demoData);
-                                            window.location.reload();
+                                            setEditingItem({ sectionId: section.id, item: newItem });
                                         }}
-                                        className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                                        className="w-full py-3 border-2 border-dashed border-gray-200 rounded-xl text-sm font-bold text-gray-400 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all flex items-center justify-center gap-2"
                                     >
-                                        Sýna Demo (Fylla með gervigögnum)
+                                        <Plus size={16} />
+                                        Bæta við spurningu
                                     </button>
-                                </div>
-                            </div>
-                        )}
+                                    </div>
+                    </div>
+                                ))}
+                </div>
+            </section>
+
+                        {/* Demo/Preview Area */ }
+        {
+            isAdmin && (
+                <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
+                    <div className="text-center max-w-md mx-auto space-y-4">
+                        <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
+                            <ShieldCheck size={32} />
+                        </div>
+                        <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
+                        <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
+                        <button
+                            onClick={async () => {
+                                if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+                                if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
+
+                                const demoData: any = {
+                                    classId: activeClass.id,
+                                    status: 'published',
+                                    createdBy: user!.uid,
+                                    sections: [
+                                        {
+                                            id: 'birthdays',
+                                            templateId: 'v1',
+                                            titleKey: 'sections.birthdays.title',
+                                            descriptionKey: 'sections.birthdays.desc',
+                                            items: [
+                                                {
+                                                    id: 'gift_amount',
+                                                    type: 'radio',
+                                                    questionKey: 'sections.birthdays.gift_amount_q',
+                                                    winningValue: 1500,
+                                                    options: [
+                                                        { value: 500, labelKey: 'options.500kr', voteCount: 2 },
+                                                        { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
+                                                        { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
+                                                        { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
+                                                        { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                    ]
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                };
+                                await createAgreementMutation.mutateAsync(demoData);
+                                window.location.reload();
+                            }}
+                            className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                        >
+                            Sýna Demo (Fylla með gervigögnum)
+                        </button>
                     </div>
                 </div>
-            </div>
+            )
+        }
+                    </div >
+                </div >
+            </div >
         );
     }
 
@@ -526,6 +637,160 @@ export default function AgreementPage() {
             )}
 
             <AgreementPoster agreement={agreement} signaturesCount={signatures?.length || 0} />
+
+            {/* ITEM EDITOR MODAL */}
+            {editingItem && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]">
+                        <div className="p-4 border-b border-gray-100 flex items-center justify-between bg-gray-50">
+                            <h3 className="font-bold text-gray-900">Breyta Spurningu</h3>
+                            <button onClick={() => setEditingItem(null)} className="p-2 hover:bg-gray-200 rounded-full text-gray-500">
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        <div className="p-6 overflow-y-auto space-y-6">
+                            {/* Question Title */}
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Spurning</label>
+                                <input
+                                    type="text"
+                                    value={editingItem.item.questionKey} // We edit the key directly as text
+                                    onChange={(e) => setEditingItem({
+                                        ...editingItem,
+                                        item: { ...editingItem.item, questionKey: e.target.value }
+                                    })}
+                                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+
+                            {/* Options */}
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Valmöguleikar</label>
+                                <div className="space-y-3">
+                                    {editingItem.item.options.map((opt, idx) => (
+                                        <div key={idx} className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={opt.labelKey}
+                                                onChange={(e) => {
+                                                    const newOptions = [...editingItem.item.options];
+                                                    newOptions[idx] = { ...opt, labelKey: e.target.value };
+                                                    setEditingItem({
+                                                        ...editingItem,
+                                                        item: { ...editingItem.item, options: newOptions }
+                                                    });
+                                                }}
+                                                className="flex-1 p-2 bg-white border border-gray-200 rounded-lg text-sm font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    const newOptions = editingItem.item.options.filter((_, i) => i !== idx);
+                                                    setEditingItem({
+                                                        ...editingItem,
+                                                        item: { ...editingItem.item, options: newOptions }
+                                                    });
+                                                }}
+                                                className="p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-lg"
+                                            >
+                                                <Trash2 size={16} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                    <button
+                                        onClick={() => {
+                                            const newOption = { value: Date.now(), labelKey: '' };
+                                            setEditingItem({
+                                                ...editingItem,
+                                                item: { ...editingItem.item, options: [...editingItem.item.options, newOption] }
+                                            });
+                                        }}
+                                        className="text-xs font-bold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 mt-2"
+                                    >
+                                        <Plus size={14} /> Bæta við valmöguleika
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-between">
+                            <button
+                                onClick={() => handleDeleteItem(editingItem.sectionId, editingItem.item.id)}
+                                className="px-4 py-2 text-red-600 font-bold text-sm hover:bg-red-50 rounded-lg transition-colors"
+                            >
+                                Eyða spurningu
+                            </button>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setEditingItem(null)}
+                                    className="px-4 py-2 text-gray-500 font-bold text-sm hover:bg-gray-200 rounded-lg transition-colors"
+                                >
+                                    Hætta við
+                                </button>
+                                <button
+                                    onClick={() => handleSaveItem(editingItem.sectionId, editingItem.item)}
+                                    className="px-6 py-2 bg-indigo-600 text-white font-bold text-sm rounded-lg hover:bg-indigo-700 transition-colors shadow-lg shadow-indigo-200"
+                                >
+                                    Vista Breytingar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* SECTION EDITOR MODAL */}
+            {editingSection && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
+                    <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-6">
+                        <h3 className="text-xl font-bold text-gray-900">Breyta texta</h3>
+
+                        <div className="space-y-4">
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Titill</label>
+                                <input
+                                    type="text"
+                                    value={editingSection.titleKey}
+                                    onChange={(e) => setEditingSection({ ...editingSection, titleKey: e.target.value })}
+                                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl font-bold text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Lýsing</label>
+                                <textarea
+                                    value={editingSection.descriptionKey}
+                                    onChange={(e) => setEditingSection({ ...editingSection, descriptionKey: e.target.value })}
+                                    className="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl h-32 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex justify-end gap-3 pt-4">
+                            <button
+                                onClick={() => setEditingSection(null)}
+                                className="px-4 py-2 text-gray-500 font-bold hover:bg-gray-100 rounded-lg"
+                            >
+                                Hætta við
+                            </button>
+                            <button
+                                onClick={() => handleSaveSection(editingSection.id, editingSection.titleKey, editingSection.descriptionKey)}
+                                className="px-6 py-2 bg-indigo-600 text-white font-bold rounded-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200"
+                            >
+                                Vista
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
+}
+
+function TopicItem({ title, desc }: { title: string; desc: string }) {
+    return (
+        <div className="p-4 bg-gray-50 rounded-lg border border-gray-100">
+            <h3 className="font-bold text-gray-900 mb-1">{title}</h3>
+            <p className="text-gray-600 text-sm">{desc}</p>
         </div>
     );
 }

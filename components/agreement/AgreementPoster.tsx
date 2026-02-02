@@ -12,11 +12,17 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
 
     const cleanKey = (key: string) => key?.replace(/^agreement\./, '') || '';
 
+    const renderText = (key: string) => {
+        const cleaned = cleanKey(key);
+        const translated = t(cleaned as any);
+        return translated.startsWith('agreement.') ? cleaned : translated;
+    };
+
     // Helper to find the label for a winning value
     const getWinningLabel = (item: any) => {
         if (!item.winningValue) return 'N/A';
         const opt = item.options.find((o: any) => o.value === item.winningValue);
-        return opt ? t(cleanKey(opt.labelKey) as any) : item.winningValue;
+        return opt ? renderText(opt.labelKey) : item.winningValue;
     };
 
     const getIcon = (sectionId: string) => {
@@ -63,14 +69,14 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
                                 <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm">
                                     {getIcon(section.id)}
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900">{t(cleanKey(section.titleKey) as any)}</h3>
+                                <h3 className="text-xl font-bold text-gray-900">{renderText(section.titleKey)}</h3>
                             </div>
 
                             <div className="space-y-4 text-left">
                                 {section.items.map((item) => (
                                     <div key={item.id} className="group p-4 rounded-xl bg-gray-50/50 hover:bg-white hover:shadow-md transition-all duration-300 border border-transparent hover:border-gray-100">
                                         <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                                            {t(cleanKey(item.questionKey) as any)}
+                                            {renderText(item.questionKey)}
                                         </div>
                                         <div className="text-lg font-bold text-trust-navy flex items-center gap-2">
                                             <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />

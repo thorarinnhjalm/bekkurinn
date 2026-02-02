@@ -28,12 +28,17 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
         }
     };
 
-    const cleanKey = (key: string) => key?.replace(/^agreement\./, '') || '';
+    const renderText = (key: string) => {
+        const cleaned = cleanKey(key);
+        const translated = t(cleaned as any);
+        // If translation appears to be missing (returns key with namespace), return the raw text
+        return translated.startsWith('agreement.') ? cleaned : translated;
+    };
 
     return (
         <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-4 transition-all hover:shadow-md">
             <h3 className="font-bold text-lg text-gray-900 mb-2">
-                {t(cleanKey(item.questionKey) as any)}
+                {renderText(item.questionKey)}
             </h3>
 
             <div className="space-y-2 mt-4">
@@ -52,7 +57,7 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
                                 ${!isVotingOpen ? 'opacity-70 cursor-not-allowed' : ''}
                             `}
                         >
-                            <span className="font-medium">{t(cleanKey(option.labelKey) as any)}</span>
+                            <span className="font-medium">{renderText(option.labelKey)}</span>
                             {submitting && isSelected ? (
                                 <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
                             ) : isSelected ? (
