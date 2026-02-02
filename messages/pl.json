@@ -478,5 +478,21 @@
     "class_settings": "Class Settings",
     "sign_out": "Sign Out",
     "settings": "Settings"
+  },
+  "testimonials": {
+    "prompt_title": "Jak ci się podoba Bekkurinn?",
+    "prompt_subtitle": "Twoja opinia pomaga innym rodzicom nas znaleźć.",
+    "placeholder": "Co podoba ci się najbardziej? Jak ci to pomogło?",
+    "role_parent": "Rodzic",
+    "role_class_rep": "Przedstawiciel klasy",
+    "role_teacher": "Nauczyciel",
+    "school_optional": "Szkoła (opcjonalnie)",
+    "submit": "Wyślij opinię",
+    "later": "Nie teraz",
+    "thank_you_title": "Dziękujemy!",
+    "thank_you_desc": "Bardzo to doceniamy. Twoja opinia pomaga nam ulepszać Bekkurinn.",
+    "close": "Zamknij",
+    "error_stars": "Proszę dać gwiazdki i napisać co najmniej 10 znaków.",
+    "error_generic": "Wystąpił błąd. Spróbuj ponownie."
   }
 }

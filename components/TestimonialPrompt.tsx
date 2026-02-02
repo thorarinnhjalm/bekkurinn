@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { X, Star, Send, Heart } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createTestimonial, hasUserSubmittedTestimonial } from '@/services/firestore';
+import { useTranslations } from 'next-intl';
 
 interface TestimonialPromptProps {
     /** Minimum days since signup before showing prompt */
@@ -13,12 +14,33 @@ interface TestimonialPromptProps {
 }
 
 export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: TestimonialPromptProps) {
+    const t = useTranslations('testimonials');
     const { user } = useAuth();
     const [isVisible, setIsVisible] = useState(false);
     const [rating, setRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
     const [text, setText] = useState('');
-    const [role, setRole] = useState('Parent');
+    // Initial role needs to be localized, but useTranslations hook can't be used in useState initializer typically if static?
+    // Actually it's fine inside component.
+    // However, we want to store the *English* or *Key* in DB? Or just the string?
+    // The previous implementation stored the localized string. 
+    // To keep it simple, we'll default to the first key's translation.
+    const [role, setRole] = useState('');
+
+    useEffect(() => {
+        if (!role) setRole(t('role_parent'));
+    }, [t, role]);
+    // We will set this in useEffect to valid localized string if needed, or just use English key internally?
+    // Admin view expects string. Let's just initialize with empty or update in useEffect.
+
+    // Better: Allow role to be the translation key internally? 
+    // No, existing database has "Parent", "Foreldri" etc. 
+    // Let's stick to storing the localized string for display, OR change AdminView to display keys.
+    // Given the request, "er það ekki?", user wants localized UI. 
+    // I will initialize role with t('role_parent') in a useEffect to avoid hydration mismatch if possible, 
+    // or just use 'Parent' as default and let user switch?
+    // Let's use a useEffect to set default role to localized 'Parent'
+
     const [schoolName, setSchoolName] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -63,7 +85,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
 
     const handleSubmit = async () => {
         if (!user || rating === 0 || text.trim().length < 10) {
-            setError('Please give stars and write at least 10 characters.');
+            setError(t('error_stars'));
             return;
         }
 
@@ -81,7 +103,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
             });
             setIsSubmitted(true);
         } catch (err) {
-            setError('Error occurred. Please try again.');
+            setError(t('error_generic'));
         } finally {
             setIsSubmitting(false);
         }
@@ -115,15 +137,15 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                         <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                             <Heart className="text-green-600" size={32} />
                         </div>
-                        <h2 className="text-2xl font-bold text-gray-900 mb-2">Takk fyrir!</h2>
+                        <h2 className="text-2xl font-bold text-gray-900 mb-2">{t('thank_you_title')}</h2>
                         <p className="text-gray-600 mb-6">
-                            Við kunnum að meta þetta mjög vel. Umsögnin þín hjálpar okkur að bæta Bekkurinn.
+                            {t('thank_you_desc')}
                         </p>
                         <button
                             onClick={handleClose}
                             className="bg-blue-600 text-white px-6 py-2 rounded-xl font-bold hover:bg-blue-700 transition-colors"
                         >
-                            Loka
+                            {t('close')}
                         </button>
                     </div>
                 ) : (
@@ -131,10 +153,10 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                     <div className="space-y-5">
                         <div className="text-center">
                             <h2 className="text-xl font-bold text-gray-900 mb-2">
-                                Hvernig líkar þér Bekkurinn?
+                                {t('prompt_title')}
                             </h2>
                             <p className="text-gray-600 text-sm">
-                                Umsögnin þín hjálpar öðrum foreldrum að finna okkur.
+                                {t('prompt_subtitle')}
                             </p>
                         </div>
 
@@ -152,8 +174,8 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                                     <Star
                                         size={32}
                                         className={`transition-colors ${star <= (hoverRating || rating)
-                                                ? 'fill-yellow-400 text-yellow-400'
-                                                : 'text-gray-300'
+                                            ? 'fill-yellow-400 text-yellow-400'
+                                            : 'text-gray-300'
                                             }`}
                                     />
                                 </button>
@@ -165,7 +187,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                             <textarea
                                 value={text}
                                 onChange={(e) => setText(e.target.value)}
-                                placeholder="Hvað finnst þér best við Bekkurinn? Hvernig hefur það hjálpað þér?"
+                                placeholder={t('placeholder')}
                                 className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none resize-none h-24 text-sm"
                                 maxLength={500}
                             />
@@ -174,17 +196,17 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
 
                         {/* Role Selection */}
                         <div className="flex gap-2">
-                            {['Parent', 'Class Rep', 'Teacher'].map((r) => (
+                            {['role_parent', 'role_class_rep', 'role_teacher'].map((rKey) => (
                                 <button
-                                    key={r}
+                                    key={rKey}
                                     type="button"
-                                    onClick={() => setRole(r)}
-                                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${role === r
-                                            ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
-                                            : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
+                                    onClick={() => setRole(t(rKey))}
+                                    className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${role === t(rKey)
+                                        ? 'bg-blue-100 text-blue-700 border-2 border-blue-300'
+                                        : 'bg-gray-100 text-gray-600 border-2 border-transparent hover:bg-gray-200'
                                         }`}
                                 >
-                                    {r}
+                                    {t(rKey)}
                                 </button>
                             ))}
                         </div>
@@ -194,7 +216,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                             type="text"
                             value={schoolName}
                             onChange={(e) => setSchoolName(e.target.value)}
-                            placeholder="Skóli (valfrjálst)"
+                            placeholder={t('school_optional')}
                             className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none text-sm"
                         />
 
@@ -214,7 +236,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                             ) : (
                                 <>
                                     <Send size={18} />
-                                    Senda umsögn
+                                    {t('submit')}
                                 </>
                             )}
                         </button>
@@ -223,7 +245,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                             onClick={handleClose}
                             className="w-full text-gray-500 hover:text-gray-700 py-2 text-sm transition-colors"
                         >
-                            Ekki núna
+                            {t('later')}
                         </button>
                     </div>
                 )}

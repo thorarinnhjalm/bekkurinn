@@ -718,5 +718,21 @@
       },
       "cta": "Fara í Bekkjarsáttmála"
     }
+  },
+  "testimonials": {
+    "prompt_title": "Hvernig líkar þér Bekkurinn?",
+    "prompt_subtitle": "Umsögnin þín hjálpar öðrum foreldrum að finna okkur.",
+    "placeholder": "Hvað finnst þér best við Bekkurinn? Hvernig hefur það hjálpað þér?",
+    "role_parent": "Foreldri",
+    "role_class_rep": "Bekkjarfulltrúi",
+    "role_teacher": "Kennari",
+    "school_optional": "Skóli (valfrjálst)",
+    "submit": "Senda umsögn",
+    "later": "Ekki núna",
+    "thank_you_title": "Takk fyrir!",
+    "thank_you_desc": "Við kunnum að meta þetta mjög vel. Umsögnin þín hjálpar okkur að bæta Bekkurinn.",
+    "close": "Loka",
+    "error_stars": "Vinsamlegast gefðu stjörnur og skrifaðu að minnsta kosti 10 stafi.",
+    "error_generic": "Villa kom upp. Vinsamlegast reynið aftur."
   }
 }

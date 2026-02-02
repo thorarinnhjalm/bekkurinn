@@ -649,5 +649,21 @@
     "poster": {
       "verified_badge": "Agreed by Class"
     }
+  },
+  "testimonials": {
+    "prompt_title": "How do you like Bekkurinn?",
+    "prompt_subtitle": "Your review helps other parents find us.",
+    "placeholder": "What do you like best? How has it helped you?",
+    "role_parent": "Parent",
+    "role_class_rep": "Class Rep",
+    "role_teacher": "Teacher",
+    "school_optional": "School (optional)",
+    "submit": "Send Review",
+    "later": "Not now",
+    "thank_you_title": "Thank you!",
+    "thank_you_desc": "We really appreciate it. Your review helps us improve Bekkurinn.",
+    "close": "Close",
+    "error_stars": "Please give stars and write at least 10 characters.",
+    "error_generic": "Error occurred. Please try again."
   }
 }
