@@ -477,66 +477,66 @@ export default function AgreementPage() {
                                             </button>
                                         </div>
                                     </div>
-                    </div>
+
                                 ))}
-                    </div>
-                </section>
+                            </div>
+                        </section>
 
-                {/* Demo/Preview Area */}
-                {
-                    isAdmin && (
-                        <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
-                            <div className="text-center max-w-md mx-auto space-y-4">
-                                <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
-                                    <ShieldCheck size={32} />
-                                </div>
-                                <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
-                                <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
-                                <button
-                                    onClick={async () => {
-                                        if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
-                                        if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
+                        {/* Demo/Preview Area */}
+                        {
+                            isAdmin && (
+                                <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
+                                    <div className="text-center max-w-md mx-auto space-y-4">
+                                        <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
+                                            <ShieldCheck size={32} />
+                                        </div>
+                                        <h3 className="text-2xl font-bold text-gray-900">Prufukeyrsla</h3>
+                                        <p className="text-gray-600 font-medium">Viltu sjá strax hvernig niðurstöðurnar munu líta út? Þú getur búið til gervigögn hér.</p>
+                                        <button
+                                            onClick={async () => {
+                                                if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
+                                                if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
 
-                                        const demoData: any = {
-                                            classId: activeClass.id,
-                                            status: 'published',
-                                            createdBy: user!.uid,
-                                            sections: [
-                                                {
-                                                    id: 'birthdays',
-                                                    templateId: 'v1',
-                                                    titleKey: 'sections.birthdays.title',
-                                                    descriptionKey: 'sections.birthdays.desc',
-                                                    items: [
+                                                const demoData: any = {
+                                                    classId: activeClass.id,
+                                                    status: 'published',
+                                                    createdBy: user!.uid,
+                                                    sections: [
                                                         {
-                                                            id: 'gift_amount',
-                                                            type: 'radio',
-                                                            questionKey: 'sections.birthdays.gift_amount_q',
-                                                            winningValue: 1500,
-                                                            options: [
-                                                                { value: 500, labelKey: 'options.500kr', voteCount: 2 },
-                                                                { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
-                                                                { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
-                                                                { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
-                                                                { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                            id: 'birthdays',
+                                                            templateId: 'v1',
+                                                            titleKey: 'sections.birthdays.title',
+                                                            descriptionKey: 'sections.birthdays.desc',
+                                                            items: [
+                                                                {
+                                                                    id: 'gift_amount',
+                                                                    type: 'radio',
+                                                                    questionKey: 'sections.birthdays.gift_amount_q',
+                                                                    winningValue: 1500,
+                                                                    options: [
+                                                                        { value: 500, labelKey: 'options.500kr', voteCount: 2 },
+                                                                        { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
+                                                                        { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
+                                                                        { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
+                                                                        { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                                    ]
+                                                                }
                                                             ]
                                                         }
                                                     ]
-                                                }
-                                            ]
-                                        };
-                                        await createAgreementMutation.mutateAsync(demoData);
-                                        window.location.reload();
-                                    }}
-                                    className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
-                                >
-                                    Sýna Demo (Fylla með gervigögnum)
-                                </button>
-                            </div>
-                        </div>
-                    )
-                }
-            </div >
+                                                };
+                                                await createAgreementMutation.mutateAsync(demoData);
+                                                window.location.reload();
+                                            }}
+                                            className="w-full py-4 bg-indigo-600 text-white font-black rounded-xl hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-600/20 active:scale-95"
+                                        >
+                                            Sýna Demo (Fylla með gervigögnum)
+                                        </button>
+                                    </div>
+                                </div>
+                            )
+                        }
+                    </div >
                 </div >
             </div >
         );
