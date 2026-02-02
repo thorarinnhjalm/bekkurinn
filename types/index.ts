@@ -129,6 +129,7 @@ export interface School {
     id: string;
     name: string;
     admins: string[]; // List of UIDs (Foreldrafélag members)
+    icsUrl?: string; // Optional calendar URL
 }
 
 // ========================================

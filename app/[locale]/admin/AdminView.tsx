@@ -6,7 +6,7 @@ import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X, Calendar, Trash2, Megaphone } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
-import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask, migrateClassToSchool } from '@/services/firestore';
+import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask, migrateClassToSchool, deleteTask } from '@/services/firestore';
 import { getAllUsers, searchUsers, getUserClasses, getAllPendingParentLinks, getSystemStats, type SystemStats, deleteSchool } from '@/services/admin';
 import { useSchoolTasks } from '@/hooks/useFirestore';
 import type { School, User, Task, ParentLink } from '@/types';
@@ -45,6 +45,7 @@ export default function AdminView() {
     // Create School State
     const [newSchoolId, setNewSchoolId] = useState('');
     const [newSchoolName, setNewSchoolName] = useState('');
+    const [newSchoolIcs, setNewSchoolIcs] = useState('');
     const [isCreatingSchool, setIsCreatingSchool] = useState(false);
 
     // User Management State
@@ -133,9 +134,10 @@ export default function AdminView() {
     const handleCreateSchool = async () => {
         if (!newSchoolId || !newSchoolName) return;
         try {
-            await createSchool(newSchoolId, newSchoolName);
+            await createSchool(newSchoolId, newSchoolName, newSchoolIcs);
             setNewSchoolId('');
             setNewSchoolName('');
+            setNewSchoolIcs('');
             setIsCreatingSchool(false);
             fetchData(); // Refresh
         } catch (e) {
@@ -311,6 +313,17 @@ export default function AdminView() {
                                         placeholder="e.g. Grandaskóli"
                                         className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
                                     />
+                                </div>
+                                <div className="md:col-span-2">
+                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Dagatal (ICS Slóð) - Valfrjálst</label>
+                                    <input
+                                        type="text"
+                                        value={newSchoolIcs}
+                                        onChange={e => setNewSchoolIcs(e.target.value)}
+                                        placeholder="https://example.com/calendar.ics"
+                                        className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all font-mono text-sm"
+                                    />
+                                    <p className="text-xs text-blue-500 mt-2">💡 Ef þú setur inn slóð mun kerfið sjálfkrafa fylgjast með starfsdögum og fríum.</p>
                                 </div>
                             </div>
                             <div className="flex justify-end">
@@ -635,7 +648,21 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                                             <p className="text-xs text-gray-500">Skólaviðburður</p>
                                         </div>
                                     </div>
-                                    {/* Future: Add Delete button */}
+                                    <button
+                                        onClick={async () => {
+                                            if (!confirm(`Ertu viss um að þú viljir eyða viðburðinum "${task.title}"?`)) return;
+                                            try {
+                                                await deleteTask(task.id);
+                                                // Lazy refresh to match create flow
+                                                window.location.reload();
+                                            } catch (e) {
+                                                alert('Villa við að eyða viðburði');
+                                            }
+                                        }}
+                                        className="text-gray-400 hover:text-red-600 transition-colors p-2"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
                                 </div>
                             ))
                         ) : (

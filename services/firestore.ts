@@ -141,10 +141,11 @@ export async function getSchool(schoolId: string): Promise<School | null> {
     return { ...docSnap.data(), id: docSnap.id } as School;
 }
 
-export async function createSchool(schoolId: string, name: string): Promise<void> {
+export async function createSchool(schoolId: string, name: string, icsUrl?: string): Promise<void> {
     await setDoc(doc(db, 'schools', schoolId), {
         name,
-        admins: []
+        admins: [],
+        icsUrl: icsUrl || null
     });
 }
 

@@ -10,6 +10,7 @@ import { collection, addDoc, serverTimestamp, Timestamp, query, where, getDocs, 
 import { db } from '@/lib/firebase/config';
 import { OnboardingSchema, validateInput } from '@/lib/validation';
 import { useTranslations } from 'next-intl';
+import { getAllSchools } from '@/services/firestore';
 
 // Define the steps explicitly
 type OnboardingStep = 'language' | 'select' | 'create' | 'join';
@@ -168,6 +169,44 @@ export default function OnboardingView() {
         isSplit: true,
         section: ''
     });
+
+    // School List State
+    const [availableSchools, setAvailableSchools] = useState<any[]>(SCHOOLS);
+
+    // Fetch schools on mount
+    useEffect(() => {
+        const fetchSchools = async () => {
+            try {
+                const firestoreSchools = await getAllSchools();
+
+                // Merge strategy:
+                // 1. Start with hardcoded SCHOOLS (they have verified icsUrls)
+                // 2. Add any Firestore school that isn't already in the list (match by ID)
+                // 3. Sort alphabetically by name
+
+                const mergedMap = new Map();
+
+                // Add static schools first
+                SCHOOLS.forEach(s => mergedMap.set(s.id, s));
+
+                // Add dynamic schools if not exists
+                firestoreSchools.forEach(s => {
+                    if (!mergedMap.has(s.id)) {
+                        mergedMap.set(s.id, s);
+                    }
+                });
+
+                const mergedList = Array.from(mergedMap.values());
+                mergedList.sort((a, b) => a.name.localeCompare(b.name, 'is'));
+
+                setAvailableSchools(mergedList);
+            } catch (err) {
+                console.error("Failed to fetch dynamic schools:", err);
+                // Fallback to static list is automatic since initial state is SCHOOLS
+            }
+        };
+        fetchSchools();
+    }, []);
 
     // Join Class State
     const [joinCode, setJoinCode] = useState(searchParams.get('code') || '');
@@ -452,7 +491,7 @@ export default function OnboardingView() {
         setError(null);
 
         try {
-            const schoolObj = SCHOOLS.find(s => s.name === formData.schoolName);
+            const schoolObj = availableSchools.find(s => s.name === formData.schoolName);
             const calendarUrl = schoolObj?.icsUrl;
 
             const displayName = formData.isSplit
@@ -710,7 +749,7 @@ export default function OnboardingView() {
                                 className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white text-gray-900"
                             >
                                 <option value="">Veldu skóla...</option>
-                                {SCHOOLS.map(s => <option key={s.name} value={s.name}>{s.name}</option>)}
+                                {availableSchools.map(s => <option key={s.id || s.name} value={s.name}>{s.name}</option>)}
                             </select>
                             <div className="mt-1 text-xs text-right text-gray-500">
                                 {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-blue-600 hover:underline">{t('contact_us_school')}</a>
