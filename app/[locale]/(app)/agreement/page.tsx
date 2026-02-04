@@ -247,9 +247,9 @@ export default function AgreementPage() {
                 {isAdmin ? (
                     <button
                         onClick={handleInitialize}
-                        className="bg-trust-navy text-white px-8 py-3 rounded-xl font-bold hover:bg-trust-navy-light transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-2 mx-auto"
+                        className="btn-premium px-8 py-4 text-lg rounded-xl shadow-lg hover:shadow-xl mx-auto"
                     >
-                        <Plus size={20} />
+                        <Plus size={24} />
                         Stofna nýjan sáttmála
                     </button>
                 ) : (
