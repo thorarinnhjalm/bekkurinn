@@ -46,59 +46,74 @@ export default function AgreementPage() {
     const handleSaveItem = async (sectionId: string, item: AgreementItem) => {
         if (!agreement) return;
 
-        const newSections = agreement.sections.map((s: any) => {
-            if (s.id === sectionId) {
-                // Check if item exists
-                const itemExists = s.items.find((i: any) => i.id === item.id);
-                let newItems;
-                if (itemExists) {
-                    newItems = s.items.map((i: any) => i.id === item.id ? item : i);
-                } else {
-                    newItems = [...s.items, item];
+        try {
+            const newSections = agreement.sections.map((s: any) => {
+                if (s.id === sectionId) {
+                    // Check if item exists
+                    const itemExists = s.items.find((i: any) => i.id === item.id);
+                    let newItems;
+                    if (itemExists) {
+                        newItems = s.items.map((i: any) => i.id === item.id ? item : i);
+                    } else {
+                        newItems = [...s.items, item];
+                    }
+                    return { ...s, items: newItems };
                 }
-                return { ...s, items: newItems };
-            }
-            return s;
-        });
+                return s;
+            });
 
-        await updateAgreementMutation.mutateAsync({
-            agreementId: agreement.id,
-            data: { sections: newSections }
-        });
-        setEditingItem(null);
+            await updateAgreementMutation.mutateAsync({
+                agreementId: agreement.id,
+                data: { sections: newSections }
+            });
+            setEditingItem(null);
+        } catch (error) {
+            console.error("Failed to save item:", error);
+            alert("Villa kom upp við að vista breytingar.");
+        }
     };
 
     const handleDeleteItem = async (sectionId: string, itemId: string) => {
         if (!agreement || !confirm('Ertu viss um að þú viljir eyða þessari spurningu?')) return;
 
-        const newSections = agreement.sections.map((s: any) => {
-            if (s.id === sectionId) {
-                return { ...s, items: s.items.filter((i: any) => i.id !== itemId) };
-            }
-            return s;
-        });
+        try {
+            const newSections = agreement.sections.map((s: any) => {
+                if (s.id === sectionId) {
+                    return { ...s, items: s.items.filter((i: any) => i.id !== itemId) };
+                }
+                return s;
+            });
 
-        await updateAgreementMutation.mutateAsync({
-            agreementId: agreement.id,
-            data: { sections: newSections }
-        });
+            await updateAgreementMutation.mutateAsync({
+                agreementId: agreement.id,
+                data: { sections: newSections }
+            });
+        } catch (error) {
+            console.error("Failed to delete item:", error);
+            alert("Villa kom upp við að eyða spurningu.");
+        }
     };
 
     const handleSaveSection = async (sectionId: string, title: string, desc: string) => {
         if (!agreement) return;
 
-        const newSections = agreement.sections.map((s: any) => {
-            if (s.id === sectionId) {
-                return { ...s, titleKey: title, descriptionKey: desc };
-            }
-            return s;
-        });
+        try {
+            const newSections = agreement.sections.map((s: any) => {
+                if (s.id === sectionId) {
+                    return { ...s, titleKey: title, descriptionKey: desc };
+                }
+                return s;
+            });
 
-        await updateAgreementMutation.mutateAsync({
-            agreementId: agreement.id,
-            data: { sections: newSections }
-        });
-        setEditingSection(null);
+            await updateAgreementMutation.mutateAsync({
+                agreementId: agreement.id,
+                data: { sections: newSections }
+            });
+            setEditingSection(null);
+        } catch (error) {
+            console.error("Failed to save section:", error);
+            alert("Villa kom upp við að vista kafla.");
+        }
     };
 
     if (isLoading || userClassLoading) {
@@ -514,11 +529,63 @@ export default function AgreementPage() {
                                                                     questionKey: 'sections.birthdays.gift_amount_q',
                                                                     winningValue: 1500,
                                                                     options: [
-                                                                        { value: 500, labelKey: 'options.500kr', voteCount: 2 },
-                                                                        { value: 1000, labelKey: 'options.1000kr', voteCount: 5 },
-                                                                        { value: 1500, labelKey: 'options.1500kr', voteCount: 12 },
-                                                                        { value: 2000, labelKey: 'options.2000kr', voteCount: 3 },
-                                                                        { value: 'free', labelKey: 'options.free', voteCount: 1 },
+                                                                        { value: 500, labelKey: 'options.500kr' },
+                                                                        { value: 1000, labelKey: 'options.1000kr' },
+                                                                        { value: 1500, labelKey: 'options.1500kr' },
+                                                                        { value: 2000, labelKey: 'options.2000kr' },
+                                                                        { value: 'free', labelKey: 'options.free' },
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    id: 'invites',
+                                                                    type: 'radio',
+                                                                    questionKey: 'sections.birthdays.invitation_rule_q',
+                                                                    winningValue: 'gender_split',
+                                                                    options: [
+                                                                        { value: 'all_class', labelKey: 'options.all_class' },
+                                                                        { value: 'gender_split', labelKey: 'options.gender_split' },
+                                                                        { value: 'small_groups', labelKey: 'options.small_groups' },
+                                                                    ]
+                                                                }
+                                                            ]
+                                                        },
+                                                        {
+                                                            id: 'social',
+                                                            templateId: 'v1',
+                                                            titleKey: 'sections.social.title',
+                                                            descriptionKey: 'sections.social.desc',
+                                                            items: [
+                                                                {
+                                                                    id: 'social_age',
+                                                                    type: 'radio',
+                                                                    questionKey: 'sections.social.social_age_q',
+                                                                    winningValue: 'monitored',
+                                                                    options: [
+                                                                        { value: 'no_social', labelKey: 'options.no_social' },
+                                                                        { value: 'monitored', labelKey: 'options.monitored' },
+                                                                        { value: 'open', labelKey: 'options.open' },
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    id: 'gaming_communication',
+                                                                    type: 'radio',
+                                                                    questionKey: 'Viðmið um tölvuleiki (t.d. Roblox, Fortnite)',
+                                                                    winningValue: 'education',
+                                                                    options: [
+                                                                        { value: 'monitoring', labelKey: 'Við fylgjumst með vinabeiðnum og spjalli' },
+                                                                        { value: 'education', labelKey: 'Við ræðum um nethegðun og samskiptareglur' },
+                                                                        { value: 'open', labelKey: 'Foreldrar ákveða reglur fyrir sín börn' },
+                                                                    ]
+                                                                },
+                                                                {
+                                                                    id: 'screen_time',
+                                                                    type: 'radio',
+                                                                    questionKey: 'sections.social.screen_time_q',
+                                                                    winningValue: 'balanced',
+                                                                    options: [
+                                                                        { value: 'heilsuvera', labelKey: 'options.heilsuvera_guidelines' },
+                                                                        { value: 'balanced', labelKey: 'options.screen_balanced' },
+                                                                        { value: 'open', labelKey: 'options.parents_decide' },
                                                                     ]
                                                                 }
                                                             ]
