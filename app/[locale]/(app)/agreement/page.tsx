@@ -247,8 +247,9 @@ export default function AgreementPage() {
                 {isAdmin ? (
                     <button
                         onClick={handleInitialize}
-                        className="btn-primary"
+                        className="bg-trust-navy text-white px-8 py-3 rounded-xl font-bold hover:bg-trust-navy-light transition-all shadow-lg hover:shadow-xl active:scale-95 flex items-center gap-2 mx-auto"
                     >
+                        <Plus size={20} />
                         Stofna nýjan sáttmála
                     </button>
                 ) : (
@@ -425,7 +426,7 @@ export default function AgreementPage() {
 
                                         <div className="p-6 md:p-8 space-y-8">
                                             {section.items.map((item: any) => {
-                                                const questionKey = cleanKey(item.questionKey || `sections.${section.id}.${item.id}_q`);
+                                                const questionKeyRaw = item.questionKey || `sections.${section.id}.${item.id}_q`;
 
                                                 return (
                                                     <div key={item.id} className="space-y-4">
@@ -433,11 +434,14 @@ export default function AgreementPage() {
                                                             <div className="flex-1">
                                                                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Spurning</div>
                                                                 <h4 className="font-bold text-lg text-gray-900">
-                                                                    {renderText(questionKey)}
+                                                                    {renderText(questionKeyRaw)}
                                                                 </h4>
                                                             </div>
                                                             <button
-                                                                onClick={() => setEditingItem({ sectionId: section.id, item })}
+                                                                onClick={() => {
+                                                                    // We pass the RAW item to the editor
+                                                                    setEditingItem({ sectionId: section.id, item: structuredClone(item) })
+                                                                }}
                                                                 className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-all"
                                                             >
                                                                 <Settings size={18} />
@@ -446,24 +450,25 @@ export default function AgreementPage() {
 
                                                         <div className="flex flex-wrap gap-2">
                                                             {item.options.map((opt: any) => {
-                                                                const labelKey = cleanKey(opt.labelKey || `options.${opt.value}`);
+                                                                const labelKeyRaw = opt.labelKey || `options.${opt.value}`;
 
                                                                 return (
                                                                     <div key={opt.value} className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-lg text-xs font-bold text-gray-600">
-                                                                        {renderText(labelKey)}
+                                                                        {renderText(labelKeyRaw)}
                                                                     </div>
                                                                 );
                                                             })}
                                                             <button
-                                                                onClick={() => {
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
                                                                     // Add a new empty option to this item and open editor
-                                                                    const newOption = { value: Date.now(), labelKey: 'Nýr valmöguleiki' };
+                                                                    const newOption = { value: Date.now().toString(), labelKey: 'Nýr valmöguleiki' };
                                                                     const newItem = { ...item, options: [...item.options, newOption] };
                                                                     setEditingItem({ sectionId: section.id, item: newItem });
                                                                 }}
-                                                                className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all"
+                                                                className="px-3 py-1.5 border border-dashed border-gray-300 rounded-lg text-xs font-black text-gray-400 hover:border-indigo-300 hover:text-indigo-500 transition-all flex items-center gap-1"
                                                             >
-                                                                + Bæta við
+                                                                <Plus size={12} /> Bæta við
                                                             </button>
                                                         </div>
                                                     </div>
@@ -764,8 +769,9 @@ export default function AgreementPage() {
                                         </div>
                                     ))}
                                     <button
-                                        onClick={() => {
-                                            const newOption = { value: Date.now(), labelKey: '' };
+                                        onClick={(e) => {
+                                            e.preventDefault();
+                                            const newOption = { value: Date.now().toString(), labelKey: '' };
                                             setEditingItem({
                                                 ...editingItem,
                                                 item: { ...editingItem.item, options: [...editingItem.item.options, newOption] }

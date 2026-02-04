@@ -21,8 +21,9 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
     // Helper to find the label for a winning value
     const getWinningLabel = (item: any) => {
         if (!item.winningValue) return 'N/A';
-        const opt = item.options.find((o: any) => o.value === item.winningValue);
-        return opt ? renderText(opt.labelKey) : item.winningValue;
+        // Relaxed comparison to handle string/number mismatches
+        const opt = item.options.find((o: any) => String(o.value) === String(item.winningValue));
+        return opt ? renderText(cleanKey(opt.labelKey)) : item.winningValue;
     };
 
     const getIcon = (sectionId: string) => {
