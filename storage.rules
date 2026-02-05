@@ -1,0 +1,75 @@
+rules_version = '2';
+
+// 
+// Storage Security Rules for Bekkurinn
+//
+// Policies:
+// - User Profiles: Public read (or auth read), Owner write
+// - Student Profiles: Auth read, Auth write (refined scope)
+// - Lost & Found: Auth read, Auth write
+// - General: Deny all others
+//
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper: User is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    // Helper: User is accessing their own path
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    // Image validation helper
+    function isImage() {
+      return request.resource.contentType.matches('image/.*')
+             && request.resource.size < 5 * 1024 * 1024; // 5MB max
+    }
+
+    // =========================================================================
+    // USER PROFILES
+    // Path: users/{userId}/profile
+    // =========================================================================
+    match /users/{userId}/{allPaths=**} {
+      // Allow any authenticated user to see profile pictures
+      allow read: if isAuthenticated();
+      
+      // Only the user can upload their own profile picture
+      allow write: if isOwner(userId) && isImage();
+    }
+
+    // =========================================================================
+    // STUDENT PROFILES
+    // Path: students/{studentId}/profile
+    // =========================================================================
+    match /students/{studentId}/{allPaths=**} {
+      // Allow any authenticated user to see student pictures (UI requirement)
+      allow read: if isAuthenticated();
+      
+      // Ideally, only parents of this student should write. 
+      // Without Firestore lookups in Storage rules (complex/expensive), 
+      // we restrict to authenticated users. Application logic handles the correct path.
+      allow write: if isAuthenticated() && isImage();
+    }
+
+    // =========================================================================
+    // LOST & FOUND
+    // Path: lost-found/{classId}/{filename}
+    // =========================================================================
+    match /lost-found/{classId}/{allPaths=**} {
+      // All authenticated users can see/post lost items
+      allow read: if isAuthenticated();
+      allow write: if isAuthenticated() && isImage();
+    }
+
+    // =========================================================================
+    // DEFAULT
+    // =========================================================================
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
