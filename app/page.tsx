@@ -1,3 +1,5 @@
+'use client';
+
 import { NavBar } from '@/components/landing/NavBar';
 import { Hero } from '@/components/landing/Hero';
 import { Features } from '@/components/landing/Features';
