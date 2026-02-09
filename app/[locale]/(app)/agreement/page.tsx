@@ -397,7 +397,7 @@ export default function AgreementPage() {
                 {/* Header Section */}
                 <header className="relative isolate overflow-hidden">
                     <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl opacity-20" aria-hidden="true">
-                        <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-amber-100 to-orange-200"
+                        <div className="aspect-[1155/678] w-[60rem] bg-linear-to-tr from-amber-100 to-orange-200"
                             style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
                         />
                     </div>
@@ -557,7 +557,7 @@ export default function AgreementPage() {
                         {/* Demo/Preview Area */}
                         {
                             isAdmin && (
-                                <div className="glass-card p-10 bg-gradient-to-br from-indigo-50/50 to-white border-indigo-100/50">
+                                <div className="glass-card p-10 bg-linear-to-br from-indigo-50/50 to-white border-indigo-100/50">
                                     <div className="text-center max-w-md mx-auto space-y-4">
                                         <div className="w-16 h-16 bg-white rounded-2xl shadow-sm border border-indigo-100 flex items-center justify-center mx-auto text-indigo-600">
                                             <ShieldCheck size={32} />
@@ -685,7 +685,7 @@ export default function AgreementPage() {
             {/* Header Section */}
             <header className="relative isolate overflow-hidden">
                 <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl opacity-20" aria-hidden="true">
-                    <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-emerald-100 to-indigo-200"
+                    <div className="aspect-[1155/678] w-[60rem] bg-linear-to-tr from-emerald-100 to-indigo-200"
                         style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }}
                     />
                 </div>
@@ -730,7 +730,7 @@ export default function AgreementPage() {
 
             {/* Signature CTA */}
             {!hasSigned && !isAdmin && (
-                <div className="professional-card p-8 border-l-4 border-l-trust-navy bg-gradient-to-br from-white to-gray-50">
+                <div className="professional-card p-8 border-l-4 border-l-trust-navy bg-linear-to-br from-white to-gray-50">
                     <div className="flex flex-col md:flex-row items-center gap-8">
                         <div className="w-16 h-16 rounded-2xl bg-indigo-50 flex items-center justify-center text-trust-navy shadow-sm">
                             <PenTool size={32} />
