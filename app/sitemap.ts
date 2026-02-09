@@ -16,11 +16,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
             url: `${baseUrl}/${locale}${route}`,
             lastModified: new Date(),
             changeFrequency: 'weekly' as const,
-            priority: route === '' ? 1 : 0.8,
+            priority: route === '' ? 0.9 : 0.8,
         }))
     );
 
+    // Root landing page (Icelandic default)
+    const rootEntry = {
+        url: baseUrl,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 1,
+    };
+
     return [
+        rootEntry,
         ...localeEntries
     ];
 }
