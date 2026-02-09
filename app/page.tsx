@@ -1,5 +1,6 @@
-'use client';
-
+import { getMessages } from 'next-intl/server';
+import { NextIntlClientProvider } from 'next-intl';
+import { AuthProvider } from '@/components/providers/AuthProvider';
 import { NavBar } from '@/components/landing/NavBar';
 import { Hero } from '@/components/landing/Hero';
 import { Features } from '@/components/landing/Features';
@@ -22,20 +23,27 @@ import { Footer } from '@/components/landing/Footer';
  * - etc.
  */
 
-export default function HomePage() {
+export default async function HomePage() {
   const locale = 'is'; // Default to Icelandic for root page
 
+  // Fetch messages for the default locale
+  const messages = await getMessages({ locale });
+
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-blue-100 selection:text-blue-900">
-      <NavBar locale={locale} />
-      <main>
-        <Hero locale={locale} />
-        <Features />
-        <HowItWorks locale={locale} />
-        <FAQ />
-        <CallToAction locale={locale} />
-        <Footer />
-      </main>
-    </div>
+    <NextIntlClientProvider messages={messages} locale={locale}>
+      <AuthProvider>
+        <div className="min-h-screen bg-white font-sans selection:bg-blue-100 selection:text-blue-900">
+          <NavBar locale={locale} />
+          <main>
+            <Hero locale={locale} />
+            <Features />
+            <HowItWorks locale={locale} />
+            <FAQ />
+            <CallToAction locale={locale} />
+            <Footer />
+          </main>
+        </div>
+      </AuthProvider>
+    </NextIntlClientProvider>
   );
 }
