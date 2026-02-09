@@ -22,16 +22,29 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
     const getWinningLabel = (item: any) => {
         if (!item.winningValue) return 'N/A';
         // Relaxed comparison to handle string/number mismatches
-        const opt = item.options.find((o: any) => String(o.value) === String(item.winningValue));
-        return opt ? renderText(cleanKey(opt.labelKey)) : item.winningValue;
+        // For info-type items, just display the question text (which is the info content)
+        if (item.type === 'info') {
+            return renderText(item.questionKey);
+        }
+
+        // For votable items, display the winning option
+        if (!item.winningValue) return t('options.pending') || 'Pending...';
+
+        const winningOption = item.options?.find((opt: any) => opt.value === item.winningValue);
+        if (winningOption) {
+            return renderText(winningOption.labelKey);
+        }
+
+        return String(item.winningValue);
     };
 
     const getIcon = (sectionId: string) => {
-        switch (sectionId) {
-            case 'birthdays': return <PartyPopper className="text-pink-500" size={20} />;
-            case 'social': return <Smartphone className="text-indigo-500" size={20} />;
-            default: return <Info className="text-blue-500" size={20} />;
-        }
+        if (sectionId.includes('birthday')) return <PartyPopper size={14} />;
+        if (sectionId.includes('social')) return <Users size={14} />;
+        if (sectionId.includes('kopavogur') || sectionId.includes('phonefree')) return <Smartphone size={14} />;
+        if (sectionId.includes('gaming')) return <Gamepad2 size={14} />;
+        if (sectionId.includes('screen')) return <Smartphone size={14} />;
+        return <CheckCircle2 size={14} />;
     };
 
     const getItemIcon = (itemId: string) => {
@@ -64,23 +77,32 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
                     {agreement.sections.map((section, sIdx) => (
                         <div
                             key={section.id}
-                            className={`p-8 ${sIdx === 0 && agreement.sections.length > 1 ? 'lg:border-r border-gray-100' : ''} ${sIdx > 0 ? 'border-t lg:border-t-0 border-gray-100' : ''}`}
+                            className={`p-8 ${sIdx === 0 && agreement.sections.length > 1 ? 'lg:border-r border-gray-100' : ''} ${sIdx > 0 ? 'border-t lg:border-t-0 border-gray-100' : ''} ${section.isMunicipalityMandated ? 'bg-blue-50/30' : ''}`}
                         >
                             <div className="flex items-center gap-3 mb-6">
-                                <div className="w-10 h-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-100 shadow-sm">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center border shadow-sm ${section.isMunicipalityMandated ? 'bg-blue-100 border-blue-200' : 'bg-gray-50 border-gray-100'}`}>
                                     {getIcon(section.id)}
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900">{renderText(section.titleKey)}</h3>
+                                <div className="flex-1">
+                                    <h3 className="text-xl font-bold text-gray-900">{renderText(section.titleKey)}</h3>
+                                    {section.isMunicipalityMandated && (
+                                        <p className="text-xs text-blue-600 font-semibold mt-0.5">Kópavogsbær</p>
+                                    )}
+                                </div>
                             </div>
 
                             <div className="space-y-4 text-left">
                                 {section.items.map((item) => (
-                                    <div key={item.id} className="group p-4 rounded-xl bg-gray-50/50 hover:bg-white hover:shadow-md transition-all duration-300 border border-transparent hover:border-gray-100">
-                                        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
-                                            {renderText(item.questionKey)}
-                                        </div>
-                                        <div className="text-lg font-bold text-trust-navy flex items-center gap-2">
-                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                    <div key={item.id} className={`group p-4 rounded-xl transition-all duration-300 border ${item.type === 'info' ? 'bg-white border-blue-100' : 'bg-gray-50/50 hover:bg-white hover:shadow-md border-transparent hover:border-gray-100'}`}>
+                                        {item.type !== 'info' && (
+                                            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1 flex items-center gap-1.5">
+                                                {renderText(item.questionKey)}
+                                            </div>
+                                        )}
+                                        <div className={`font-bold flex items-center gap-2 ${item.type === 'info' ? 'text-base text-gray-700' : 'text-lg text-trust-navy'}`}>
+                                            {item.type !== 'info' && (
+                                                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
+                                            )}
                                             {getWinningLabel(item)}
                                         </div>
                                     </div>

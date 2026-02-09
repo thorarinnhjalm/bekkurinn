@@ -9,6 +9,7 @@ import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
 import { Agreement, AgreementItem, AgreementSection } from '@/types';
 import { Timestamp } from 'firebase/firestore';
+import { SCHOOLS } from '@/constants/schools';
 
 export default function AgreementPage() {
     const t = useTranslations('agreement');
@@ -128,82 +129,133 @@ export default function AgreementPage() {
     const handleInitialize = async () => {
         if (!activeClass || !user) return;
 
+        // Check if school is in Kópavogur municipality
+        const isKopavogur = activeClass.schoolId && SCHOOLS.some(s => s.id === activeClass.schoolId);
+
         // Template for a standard agreement
         // In a real app, this might come from a localized constant or generator function
+        const sections: any[] = [];
+
+        // Add Kópavogur phone-free section if applicable
+        if (isKopavogur) {
+            sections.push({
+                id: 'kopavogur_phonefree',
+                templateId: 'municipality_v1',
+                titleKey: 'sections.kopavogur_phonefree.title',
+                descriptionKey: 'sections.kopavogur_phonefree.desc',
+                isMunicipalityMandated: true,
+                items: [
+                    {
+                        id: 'rules_1_7',
+                        type: 'info',
+                        questionKey: 'sections.kopavogur_phonefree.rules_1_7',
+                        options: []
+                    },
+                    {
+                        id: 'rules_8_10',
+                        type: 'info',
+                        questionKey: 'sections.kopavogur_phonefree.rules_8_10',
+                        options: []
+                    },
+                    {
+                        id: 'breaks',
+                        type: 'info',
+                        questionKey: 'sections.kopavogur_phonefree.breaks',
+                        options: []
+                    },
+                    {
+                        id: 'parent_commitment',
+                        type: 'info',
+                        questionKey: 'sections.kopavogur_phonefree.parent_commitment',
+                        options: []
+                    },
+                    {
+                        id: 'staff_commitment',
+                        type: 'info',
+                        questionKey: 'sections.kopavogur_phonefree.staff_commitment',
+                        options: []
+                    }
+                ]
+            });
+        }
+
+        // Add standard votable sections
+        sections.push(
+            {
+                id: 'birthdays',
+                templateId: 'v1',
+                titleKey: 'sections.birthdays.title',
+                descriptionKey: 'sections.birthdays.desc',
+                items: [
+                    {
+                        id: 'gift_amount',
+                        type: 'radio',
+                        questionKey: 'sections.birthdays.gift_amount_q',
+                        options: [
+                            { value: 500, labelKey: 'options.500kr' },
+                            { value: 1000, labelKey: 'options.1000kr' },
+                            { value: 1500, labelKey: 'options.1500kr' },
+                            { value: 2000, labelKey: 'options.2000kr' },
+                            { value: 'free', labelKey: 'options.free' },
+                        ]
+                    },
+                    {
+                        id: 'invites',
+                        type: 'radio',
+                        questionKey: 'sections.birthdays.invitation_rule_q',
+                        options: [
+                            { value: 'all_class', labelKey: 'options.all_class' },
+                            { value: 'gender_split', labelKey: 'options.gender_split' },
+                            { value: 'small_groups', labelKey: 'options.small_groups' },
+                        ]
+                    }
+                ]
+            },
+            {
+                id: 'social',
+                templateId: 'v1',
+                titleKey: 'sections.social.title',
+                descriptionKey: 'sections.social.desc',
+                items: [
+                    {
+                        id: 'social_age',
+                        type: 'radio',
+                        questionKey: 'sections.social.social_age_q',
+                        options: [
+                            { value: 'no_social', labelKey: 'options.no_social' },
+                            { value: 'monitored', labelKey: 'options.monitored' },
+                            { value: 'open', labelKey: 'options.open' },
+                        ]
+                    },
+                    {
+                        id: 'gaming_communication',
+                        type: 'radio',
+                        questionKey: 'Viðmið um tölvuleiki (t.d. Roblox, Fortnite)',
+                        options: [
+                            { value: 'monitoring', labelKey: 'Við fylgjumst með vinabeiðnum og spjalli' },
+                            { value: 'education', labelKey: 'Við ræðum um nethegðun og samskiptareglur' },
+                            { value: 'open', labelKey: 'Foreldrar ákveða reglur fyrir sín börn' },
+                        ]
+                    },
+                    {
+                        id: 'screen_time',
+                        type: 'radio',
+                        questionKey: 'sections.social.screen_time_q',
+                        options: [
+                            { value: 'heilsuvera', labelKey: 'options.heilsuvera_guidelines' },
+                            { value: 'balanced', labelKey: 'options.screen_balanced' },
+                            { value: 'open', labelKey: 'options.parents_decide' },
+                        ]
+                    }
+                ]
+            }
+        );
+
         const newAgreement: any = {
             classId: activeClass.id,
             status: 'draft', // Start as draft
             createdBy: user.uid,
-            sections: [
-                {
-                    id: 'birthdays',
-                    templateId: 'v1',
-                    titleKey: 'sections.birthdays.title',
-                    descriptionKey: 'sections.birthdays.desc',
-                    items: [
-                        {
-                            id: 'gift_amount',
-                            type: 'radio',
-                            questionKey: 'sections.birthdays.gift_amount_q',
-                            options: [
-                                { value: 500, labelKey: 'options.500kr' },
-                                { value: 1000, labelKey: 'options.1000kr' },
-                                { value: 1500, labelKey: 'options.1500kr' },
-                                { value: 2000, labelKey: 'options.2000kr' },
-                                { value: 'free', labelKey: 'options.free' },
-                            ]
-                        },
-                        {
-                            id: 'invites',
-                            type: 'radio',
-                            questionKey: 'sections.birthdays.invitation_rule_q',
-                            options: [
-                                { value: 'all_class', labelKey: 'options.all_class' },
-                                { value: 'gender_split', labelKey: 'options.gender_split' },
-                                { value: 'small_groups', labelKey: 'options.small_groups' },
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 'social',
-                    templateId: 'v1',
-                    titleKey: 'sections.social.title',
-                    descriptionKey: 'sections.social.desc',
-                    items: [
-                        {
-                            id: 'social_age',
-                            type: 'radio',
-                            questionKey: 'sections.social.social_age_q',
-                            options: [
-                                { value: 'no_social', labelKey: 'options.no_social' },
-                                { value: 'monitored', labelKey: 'options.monitored' },
-                                { value: 'open', labelKey: 'options.open' },
-                            ]
-                        },
-                        {
-                            id: 'gaming_communication',
-                            type: 'radio',
-                            questionKey: 'Viðmið um tölvuleiki (t.d. Roblox, Fortnite)',
-                            options: [
-                                { value: 'monitoring', labelKey: 'Við fylgjumst með vinabeiðnum og spjalli' },
-                                { value: 'education', labelKey: 'Við ræðum um nethegðun og samskiptareglur' },
-                                { value: 'open', labelKey: 'Foreldrar ákveða reglur fyrir sín börn' },
-                            ]
-                        },
-                        {
-                            id: 'screen_time',
-                            type: 'radio',
-                            questionKey: 'sections.social.screen_time_q',
-                            options: [
-                                { value: 'heilsuvera', labelKey: 'options.heilsuvera_guidelines' },
-                                { value: 'balanced', labelKey: 'options.screen_balanced' },
-                                { value: 'open', labelKey: 'options.parents_decide' },
-                            ]
-                        }
-                    ]
-                }
-            ]
+            sections
         };
 
         await createAgreementMutation.mutateAsync(newAgreement);

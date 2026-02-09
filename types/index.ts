@@ -307,7 +307,7 @@ export interface AgreementOption {
 
 export interface AgreementItem {
     id: string; // e.g., 'gift_amount'
-    type: 'select' | 'radio' | 'boolean';
+    type: 'select' | 'radio' | 'boolean' | 'info'; // 'info' = display-only, no voting
     questionKey: string;
     options: AgreementOption[];
     winningValue?: string | number; // Populated by admin or auto-calc
@@ -319,6 +319,7 @@ export interface AgreementSection {
     titleKey: string;
     descriptionKey: string;
     items: AgreementItem[];
+    isMunicipalityMandated?: boolean; // Mark sections from municipalities as non-editable
 }
 
 export interface Agreement {

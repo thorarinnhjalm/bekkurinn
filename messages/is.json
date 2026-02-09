@@ -627,6 +627,16 @@
         "social_age_q": "Hvenær mega börnin vera á samfélagsmiðlum?",
         "gaming_q": "Hver er afstaðan til netleikja þar sem möguleiki er á spjalli (t.d. Roblox, Fortnite)?",
         "screen_time_q": "Viðmið um skjátíma?"
+      },
+      "kopavogur_phonefree": {
+        "title": "Sáttmáli um símafrí (Kópavogsbær)",
+        "desc": "Kópavogsbær hefur samþykkt sáttmála um símafrí í öllum grunnskólum bæjarins. Markmið er að skapa námsfrið og vellíðan.",
+        "rules_1_7": "1.-7. bekkur: Símar og símaúr heima eða á hljóðri stillingu í tösku",
+        "rules_8_10": "8.-10. bekkur: Símar á hljóðri stillingu þar sem þeir trufla ekki. Undantekningar með leyfi kennara.",
+        "breaks": "Frímínútur: Alveg skjálausar fyrir alla til að stuðla að samskiptum, hreyfingu og leikjum",
+        "parent_commitment": "Foreldrar styðja við sáttmálann og hringja ekki í börnin á skólatíma",
+        "staff_commitment": "Starfsfólk er fyrirmynd með skjálausri samveru í frímínútum",
+        "info_note": "Þetta er bindandi sáttmáli frá Kópavogsbæ fyrir alla grunnskóla í bænum."
       }
     },
     "options": {
