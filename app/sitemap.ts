@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         '', // Landing page
         '/bekkjarsattmali',
         '/foreldrarolt',
+        '/samanburdur',
         // Add public routes later as they are built (e.g. /about, /privacy)
     ];
 

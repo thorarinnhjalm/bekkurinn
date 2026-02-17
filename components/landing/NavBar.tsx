@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Globe } from 'lucide-react';
+import { Globe, ChevronDown } from 'lucide-react';
 
 export function NavBar({ locale }: { locale: string }) {
     const t = useTranslations('landing');
@@ -25,10 +25,25 @@ export function NavBar({ locale }: { locale: string }) {
 
                     {/* Desktop Links */}
                     <div className="hidden md:flex items-center gap-8">
-                        <Link href={`/${locale}/why-us`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-                            {t('nav.why_us') || "Af hverju Bekkurinn?"}
+                        <Link href={`/${locale}/samanburdur`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                            {t('nav.why_us') || "Samanburður"}
                         </Link>
-                        <a href="#features" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.features')}</a>
+
+                        {/* Features Dropdown */}
+                        <div className="relative group">
+                            <button className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                                {t('nav.features') || "Virkni"}
+                                <ChevronDown size={16} />
+                            </button>
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
+                                <Link href={`/${locale}/bekkjarsattmali`} className="block px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-gray-50">
+                                    Bekkjarsáttmáli
+                                </Link>
+                                <Link href={`/${locale}/foreldrarolt`} className="block px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors">
+                                    Foreldrarölt
+                                </Link>
+                            </div>
+                        </div>
                         <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.how_it_works')}</a>
                         <Link href={`/${locale}/handbok`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
                             Handbók

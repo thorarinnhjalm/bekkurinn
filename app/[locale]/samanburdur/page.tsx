@@ -171,7 +171,7 @@ export default function WhyUsPage() {
                 {/* Final CTA */}
                 <section className="text-center py-12 bg-gray-900 text-white rounded-none md:rounded-3xl max-w-5xl mx-auto md:mb-12">
                     <h2 className="text-3xl font-bold mb-4">Prófaðu kerfið í dag</h2>
-                    <p className="text-gray-400 mb-8 max-w-xl mx-auto">Enginn kostnaður, engin skuldbinding. Einfaldaðu utanumhaldið.</p>
+                    <p className="text-gray-300 mb-8 max-w-xl mx-auto">Enginn kostnaður, engin skuldbinding. Einfaldaðu utanumhaldið.</p>
                     <Link
                         href={`/${locale}/onboarding`}
                         className="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 rounded-full font-bold hover:bg-gray-100 transition-colors"
