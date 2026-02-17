@@ -468,21 +468,21 @@
     },
     "hero": {
       "badge": "Loksins almennilegt kerfi fyrir bekkjarfulltrúa",
-      "title_start": "Allt sem bekkurinn þarf.",
-      "title_highlight": "Á einum stað.",
-      "subtitle": "Einfaldaðu bekkjarstarfið. Bekkurinn heldur utan um rölt, viðburði og tengiliði á <strong>öruggan og þægilegan</strong> hátt fyrir alla.",
-      "cta_primary": "Byrja núna",
+      "title_start": "Fullkomið kerfi fyrir",
+      "title_highlight": "bekkjarfulltrúa.",
+      "subtitle": "Einfaldaðu bekkjarstarfið. Bekkurinn heldur utan um <strong>foreldrarölt</strong>, <strong>bekkjarsáttmála</strong> og tengiliði á öruggan og þægilegan hátt.",
+      "cta_primary": "Stofna bekk (Frítt)",
       "cta_secondary": "Hvernig virkar þetta?",
       "beta_badge": "Opið fyrir nýskráningar – vertu með frá byrjun!"
     },
     "features": {
-      "title": "Verkfærin sem létta lífið",
+      "title": "Verkfærin sem létta bekkjarfulltrúum lífið",
       "subtitle": "Hannað sérstaklega fyrir foreldra og bekkjarfulltrúa. Einfalt, öruggt og þægilegt.",
-      "f1_title": "Skóladagatalið alltaf við hendina",
+      "f1_title": "Sjálfvirkt Skóladagatal",
       "f1_desc": "Starfsdagar, frí og viðburðir skrá sig sjálfir. Þú þarft aldrei að elta uppi skóladagatalið aftur – það er sjálfvirkt.",
       "f2_title": "Skilvirkari samskipti",
       "f2_desc": "Allar upplýsingar á einum stað. Engir týndir póstar eða óljós skilaboð í hópum.",
-      "f3_title": "Röltið skipulagt á augabragði",
+      "f3_title": "Rafrænt Foreldrarölt",
       "f3_desc": "Sanngjarnt kerfi sem auðveldar niðurröðun á vöktum. Kerfið sér um áminningar svo þú þurfir ekki að hafa áhyggjur.",
       "f4_title": "Persónuvernd í fyrirrúmi",
       "f4_desc": "Við pössum upp á gögnin ykkar. Kerfið er hannað með öryggi barnanna og persónuverndarlög í huga.",
@@ -497,14 +497,14 @@
     },
     "how": {
       "title": "Þrjú einföld skref",
-      "subtitle": "Það tekur innan við 2 mínútur að byrja",
+      "subtitle": "Það tekur innan við 2 mínútur að stofna bekk",
       "step1_title": "Stofnaðu bekkinn",
-      "step1_desc": "Stofnaðu bekkinn og fáðu sendan aðgangskóða. Það er einfalt og fljótlegt.",
+      "step1_desc": "Stofnaðu bekkinn og fáðu sendan aðgangskóða. Það er einfalt, fljótlegt og frítt.",
       "step2_title": "Bjóddu foreldrum",
       "step2_desc": "Foreldrar skrá sig inn með kóðanum. Það tekur enga stund að komast inn.",
       "step3_title": "Allt klárt",
       "step3_desc": "Dagatal, rölt og tengiliðir eru komin í lag. Kerfið sér um afganginn og heldur utan um hlutina.",
-      "cta": "Stofna bekk",
+      "cta": "Stofna bekk núna",
       "fine_print": "Klárt á 2 mínútum"
     },
     "beta": {
@@ -744,5 +744,72 @@
     "close": "Loka",
     "error_stars": "Vinsamlegast gefðu stjörnur og skrifaðu að minnsta kosti 10 stafi.",
     "error_generic": "Villa kom upp. Vinsamlegast reynið aftur."
+  },
+  "landing_agreement": {
+    "hero": {
+      "badge": "Ókeypis sniðmát og rafræn kosning",
+      "title": "Gerðu bekkjarsáttmála á 2 mínútum",
+      "subtitle": "Slepptu löngum foreldrafundum. Notaðu tilbúin sniðmát til að semja lýðræðislegar reglur um skjátíma, afmælisgjafir og samfélagsmiðla.",
+      "cta": "Stofna bekk og byrja kosningu"
+    },
+    "features": {
+      "anonymous_title": "Nafnlaus kosning",
+      "anonymous_desc": "Foreldrar greiða atkvæði nafnlaust. Þetta tryggir að allir þori að segja sína raunverulegu skoðun án þrýstings.",
+      "templates_title": "Tilbúin sniðmát",
+      "templates_desc": "Þú þarft ekki að finna upp hjólið. Við erum með spurningar um Roblox, Snapchat, gjafaverð og fleira sem þú getur notað strax.",
+      "result_title": "Skýr niðurstaða",
+      "result_desc": "Kerfið tekur saman niðurstöðurnar og býr til fallegan sáttmála sem hægt er að senda á alla foreldra."
+    },
+    "topics": {
+      "title": "Hvað er í sáttmálanum?",
+      "t1": "Afmælisgjafir (verðþak)",
+      "t2": "Samfélagsmiðlar (aldurstakmark)",
+      "t3": "Skjátími og netleikir",
+      "t4": "Boðsreglur í afmæli",
+      "t5": "Heimsóknir og útivist"
+    },
+    "faq": {
+      "title": "Algengar spurningar um bekkjarsáttmála",
+      "q1": "Er þetta virkilega nafnlaust?",
+      "a1": "Já. Sem bekkjarfulltrúi sérð þú bara hversu margir kjósa hvað, en aldrei hver kaus hvað.",
+      "q2": "Kostar að nota þetta?",
+      "a2": "Nei, bekkjarsáttmálinn er hluti af grunnkerfi Bekkjarins og er alfarið ókeypis.",
+      "q3": "Hvað ef foreldrar eru ósammála?",
+      "a3": "Mælt er með að fylgja meirihlutanum en hafa svigrúm. Sáttmálinn er viðmið, ekki lög."
+    }
+  },
+  "landing_patrol": {
+    "hero": {
+      "badge": "Einfalt og sanngjarnt foreldrarölt",
+      "title": "Rafrænt foreldrarölt sem virkar",
+      "subtitle": "Engin Excel skjöl, engir gleymdir listar. Sjálfvirkar áminningar og auðveld skráning fyrir foreldra.",
+      "cta": "Byrja að skipuleggja röltið"
+    },
+    "features": {
+      "schedule_title": "Sjálfvirk niðurröðun",
+      "schedule_desc": "Kerfið hjálpar þér að dreifa vöktum jafnt yfir skólaárið svo allir viti hvenær þeir eiga að mæta.",
+      "reminders_title": "Áminningar",
+      "reminders_desc": "Foreldrar fá tölvupóst og áminningar áður en vaktin hefst. Þú þarft ekki að hringja í neinn.",
+      "report_title": "Rafræn skráning",
+      "report_desc": "Foreldrar haka við mætingu í símanum. Þú sérð strax hverjir mættu og hverjir ekki."
+    },
+    "steps": {
+      "title": "Hvernig virkar þetta?",
+      "s1_title": "Stofna rölt",
+      "s1_desc": "Veldu dagsetningar og tíma sem henta bekknum.",
+      "s2_title": "Foreldrar skrá sig",
+      "s2_desc": "Sendu hlekk á foreldra. Þeir velja vaktir sem passa þeim.",
+      "s3_title": "Kerfið sér um rest",
+      "s3_desc": "Áminningar og mætingarlisti sjá um sig sjálf."
+    },
+    "faq": {
+      "title": "Algengar spurningar um foreldrarölt",
+      "q1": "Hvað ef enginn skráir sig?",
+      "a1": "Kerfið sýnir stöðuna (t.d. 50% mannað) sem hvetur foreldra til að taka þátt.",
+      "q2": "Er hægt að breyta vöktum?",
+      "a2": "Já, foreldrar geta afskráð sig og aðrir tekið vaktina ef forföll verða.",
+      "q3": "Kostar þetta?",
+      "a3": "Foreldraröltið er innifalið í grunnkerfi Bekkjarins og kostar ekkert."
+    }
   }
 }

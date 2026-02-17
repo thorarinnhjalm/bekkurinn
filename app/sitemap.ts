@@ -7,6 +7,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Static routes that exist for every locale
     const routes = [
         '', // Landing page
+        '/bekkjarsattmali',
+        '/foreldrarolt',
         // Add public routes later as they are built (e.g. /about, /privacy)
     ];
 

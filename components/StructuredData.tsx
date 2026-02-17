@@ -20,7 +20,7 @@ export default function StructuredData({ locale }: Props) {
             "priceCurrency": "ISK"
         },
         "description": locale === 'is'
-            ? "Einfalt, öruggt og þægilegt kerfi fyrir bekkjarfulltrúa og foreldra. Rölt, viðburðir og tengiliðir á einum stað."
+            ? "Fullkomið kerfi fyrir bekkjarfulltrúa og foreldra. Haltu utan um skólarölt, bekkjarsáttmála, viðburði og tengiliði á einum stað. Einfalt, öruggt og frítt."
             : "Simple, secure, and convenient system for class representatives and parents. Patrol, events, and contacts in one place.",
         "aggregateRating": {
             "@type": "AggregateRating",

@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     };
 
     const descriptions: Record<string, string> = {
-        is: 'Einfalt, öruggt og þægilegt kerfi fyrir bekkjarfulltrúa og foreldra. Rölt, viðburðir og tengiliðir á einum stað.',
+        is: 'Fullkomið kerfi fyrir bekkjarfulltrúa og foreldra. Haltu utan um foreldrarölt, bekkjarsáttmála, viðburði og tengiliði á einum stað. Einfalt, öruggt og frítt.',
         en: 'Simple, secure, and convenient system for class representatives and parents. Patrol, events, and contacts in one place.',
         pl: 'Prosty, bezpieczny i wygodny system dla przedstawicieli klas i rodziców. Patrole, wydarzenia i kontakty w jednym miejscu.',
         lt: 'Paprasta, saugi ir patogi sistema klasės atstovams ir tėvams. Patruliavimas, renginiai ir kontaktai vienoje vietoje.'

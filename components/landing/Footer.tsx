@@ -19,6 +19,8 @@ export function Footer() {
                 </div>
 
                 <div className="flex flex-col md:flex-row gap-8 text-sm text-gray-600 font-medium">
+                    <Link href={`/${locale}/bekkjarsattmali`} className="hover:text-blue-600 transition-colors">Bekkjarsáttmáli</Link>
+                    <Link href={`/${locale}/foreldrarolt`} className="hover:text-blue-600 transition-colors">Foreldrarölt</Link>
                     <Link href={`/${locale}/privacy`} className="hover:text-blue-600 transition-colors">Persónuvernd</Link>
                     <Link href={`/${locale}/contact`} className="hover:text-blue-600 transition-colors">Aðstoð</Link>
                 </div>
