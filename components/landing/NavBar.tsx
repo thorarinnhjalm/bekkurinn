@@ -3,11 +3,13 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Globe, ChevronDown } from 'lucide-react';
+import { Globe, ChevronDown, Menu, X } from 'lucide-react';
+import { useState } from 'react';
 
 export function NavBar({ locale }: { locale: string }) {
     const t = useTranslations('landing');
     const { user } = useAuth();
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
         <nav className="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
@@ -23,6 +25,16 @@ export function NavBar({ locale }: { locale: string }) {
                         </span>
                     </Link>
 
+                    {/* Mobile Menu Button */}
+                    <div className="md:hidden">
+                        <button
+                            onClick={() => setIsOpen(!isOpen)}
+                            className="text-gray-600 hover:text-blue-600 p-2"
+                        >
+                            {isOpen ? <X size={24} /> : <Menu size={24} />}
+                        </button>
+                    </div>
+
                     {/* Desktop Links */}
                     <div className="hidden md:flex items-center gap-8">
                         <Link href={`/${locale}/samanburdur`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
@@ -35,7 +47,7 @@ export function NavBar({ locale }: { locale: string }) {
                                 {t('nav.features') || "Virkni"}
                                 <ChevronDown size={16} />
                             </button>
-                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
+                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 z-50">
                                 <Link href={`/${locale}/bekkjarsattmali`} className="block px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-gray-50">
                                     Bekkjarsáttmáli
                                 </Link>
@@ -82,6 +94,74 @@ export function NavBar({ locale }: { locale: string }) {
                     </div>
                 </div>
             </div>
+
+            {/* Mobile Menu */}
+            {isOpen && (
+                <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 px-4 py-6 shadow-lg flex flex-col gap-4 h-screen overflow-y-auto pb-32">
+                    <Link
+                        href={`/${locale}/samanburdur`}
+                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {t('nav.why_us') || "Samanburður"}
+                    </Link>
+                    <Link
+                        href={`/${locale}/bekkjarsattmali`}
+                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Bekkjarsáttmáli
+                    </Link>
+                    <Link
+                        href={`/${locale}/foreldrarolt`}
+                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Foreldrarölt
+                    </Link>
+                    <Link
+                        href={`/${locale}/handbok`}
+                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        Handbók
+                    </Link>
+                    <a
+                        href="#how-it-works"
+                        className="text-lg font-medium text-gray-600 py-2"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {t('nav.how_it_works')}
+                    </a>
+                    <a
+                        href="#faq"
+                        className="text-lg font-medium text-gray-600 py-2"
+                        onClick={() => setIsOpen(false)}
+                    >
+                        {t('nav.faq')}
+                    </a>
+
+                    <div className="pt-4 flex flex-col gap-4">
+                        {user ? (
+                            <Link
+                                href={`/${locale}/dashboard`}
+                                className="bg-blue-900 text-white px-6 py-3 rounded-xl font-medium text-center shadow-sm"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                Mælaborð
+                            </Link>
+                        ) : (
+                            <Link
+                                href={`/${locale}/login`}
+                                className="bg-gray-100 text-gray-900 px-6 py-3 rounded-xl font-medium text-center"
+                                onClick={() => setIsOpen(false)}
+                            >
+                                {t('nav.login')}
+                            </Link>
+                        )}
+                    </div>
+                </div>
+            )}
         </nav>
     );
 }
