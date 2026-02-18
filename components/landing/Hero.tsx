@@ -50,7 +50,7 @@ export function Hero({ locale }: { locale: string }) {
                         {t('hero.cta_primary')} <ArrowRight size={20} />
                     </Link>
                     <Link
-                        href="#features"
+                        href="#how-it-works"
                         className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 border border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all"
                     >
                         {t('hero.cta_secondary')}

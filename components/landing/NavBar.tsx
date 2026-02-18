@@ -40,27 +40,11 @@ export function NavBar({ locale }: { locale: string }) {
                         <Link href={`/${locale}/samanburdur`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
                             {t('nav.why_us') || "Samanburður"}
                         </Link>
-
-                        {/* Features Dropdown */}
-                        <div className="relative group">
-                            <button className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-                                {t('nav.features') || "Virkni"}
-                                <ChevronDown size={16} />
-                            </button>
-                            <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 z-50">
-                                <Link href={`/${locale}/bekkjarsattmali`} className="block px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors border-b border-gray-50">
-                                    Bekkjarsáttmáli
-                                </Link>
-                                <Link href={`/${locale}/foreldrarolt`} className="block px-4 py-3 text-sm hover:bg-blue-50 hover:text-blue-600 transition-colors">
-                                    Foreldrarölt
-                                </Link>
-                            </div>
-                        </div>
-                        <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.how_it_works')}</a>
+                        <Link href={`/${locale}/bekkjarsattmali`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Bekkjarsáttmáli</Link>
+                        <Link href={`/${locale}/foreldrarolt`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Foreldrarölt</Link>
                         <Link href={`/${locale}/handbok`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
                             Handbók
                         </Link>
-                        <a href="#faq" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">{t('nav.faq')}</a>
 
                         {/* Language Switcher */}
                         <div className="relative group">
@@ -126,20 +110,20 @@ export function NavBar({ locale }: { locale: string }) {
                     >
                         Handbók
                     </Link>
-                    <a
-                        href="#how-it-works"
+                    <Link
+                        href={`/${locale}/#how-it-works`}
                         className="text-lg font-medium text-gray-600 py-2"
                         onClick={() => setIsOpen(false)}
                     >
                         {t('nav.how_it_works')}
-                    </a>
-                    <a
-                        href="#faq"
+                    </Link>
+                    <Link
+                        href={`/${locale}/#faq`}
                         className="text-lg font-medium text-gray-600 py-2"
                         onClick={() => setIsOpen(false)}
                     >
                         {t('nav.faq')}
-                    </a>
+                    </Link>
 
                     <div className="pt-4 flex flex-col gap-4">
                         {user ? (
