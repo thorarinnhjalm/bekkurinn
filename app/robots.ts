@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/admin/', '/api/', '/_next/', '/*/login', '/*/onboarding'],
         },
-        sitemap: 'https://bekkurinn.is/sitemap.xml',
+        sitemap: 'https://www.bekkurinn.is/sitemap.xml',
     };
 }

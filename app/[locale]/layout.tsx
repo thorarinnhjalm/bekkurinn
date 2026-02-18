@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     };
 
     return {
-        metadataBase: new URL('https://bekkurinn.is'),
+        metadataBase: new URL('https://www.bekkurinn.is'),
         alternates: {
             canonical: `/${locale}`,
             languages: {

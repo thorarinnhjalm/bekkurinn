@@ -11,7 +11,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bekkurinn.is'),
+  metadataBase: new URL('https://www.bekkurinn.is'),
   title: {
     default: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
     template: "%s | Bekkurinn"
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Bekkurinn - Kerfi fyrir bekkjarfulltrúa",
     description: "Allt sem þú þarft fyrir bekkinn á einum stað. Nafnalistar, tilkynningar og viðburðir.",
-    url: 'https://bekkurinn.is',
+    url: 'https://www.bekkurinn.is',
     siteName: 'Bekkurinn',
     locale: 'is_IS',
     type: "website",
@@ -55,7 +55,7 @@ export default function RootLayout({
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "Bekkurinn",
-              "url": "https://bekkurinn.is",
+              "url": "https://www.bekkurinn.is",
               "description": "Skipulagt kerfi fyrir bekkjarfulltrúa á Íslandi. Bekkjarlisti, afmælisáminningar, viðburðir og tilkynningar á einum stað.",
               "applicationCategory": "EducationalApplication",
               "operatingSystem": "Web",
@@ -67,7 +67,7 @@ export default function RootLayout({
               "author": {
                 "@type": "Organization",
                 "name": "Bekkurinn",
-                "url": "https://bekkurinn.is"
+                "url": "https://www.bekkurinn.is"
               },
               "inLanguage": ["is", "en", "pl", "lt", "es"],
               "audience": {

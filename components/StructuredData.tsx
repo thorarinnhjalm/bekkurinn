@@ -5,7 +5,7 @@ interface Props {
 }
 
 export default function StructuredData({ locale }: Props) {
-    const baseUrl = 'https://bekkurinn.is';
+    const baseUrl = 'https://www.bekkurinn.is';
 
     // SoftwareApplication Schema
     const softwareSchema = {

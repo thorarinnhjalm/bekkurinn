@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { locales } from '@/i18n-config';
 
 export default function sitemap(): MetadataRoute.Sitemap {
-    const baseUrl = 'https://bekkurinn.is';
+    const baseUrl = 'https://www.bekkurinn.is';
 
     // Static routes that exist for every locale
     const routes = [
