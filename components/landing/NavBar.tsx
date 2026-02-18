@@ -21,7 +21,7 @@ export function NavBar({ locale }: { locale: string }) {
                             B
                         </div>
                         <span className="text-2xl font-bold text-gray-900 tracking-tight">
-                            Bekkurinn
+                            Bekkurinn.
                         </span>
                     </Link>
 
