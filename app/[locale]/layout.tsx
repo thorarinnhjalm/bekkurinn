@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 import { notFound } from 'next/navigation';
 import { locales } from '@/i18n-config';
-import { QueryProvider } from '@/components/providers/QueryProvider';
 import { AuthProvider } from '@/components/providers/AuthProvider';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { ToastContainer } from '@/components/ui/Toast';
@@ -93,15 +92,13 @@ export default async function LocaleLayout({
 
     return (
         <ErrorBoundary>
-            <QueryProvider>
-                <NextIntlClientProvider messages={messages} locale={locale}>
-                    <AuthProvider>
-                        <StructuredData locale={locale} />
-                        {children}
-                        <ToastContainer />
-                    </AuthProvider>
-                </NextIntlClientProvider>
-            </QueryProvider>
+            <NextIntlClientProvider messages={messages} locale={locale}>
+                <AuthProvider>
+                    <StructuredData locale={locale} />
+                    {children}
+                    <ToastContainer />
+                </AuthProvider>
+            </NextIntlClientProvider>
         </ErrorBoundary>
     );
 }
