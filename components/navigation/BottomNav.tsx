@@ -64,7 +64,7 @@ export function BottomNav({ locale, translations, onMenuToggle }: BottomNavProps
 
     return (
         <nav
-            className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 md:hidden"
+            className="fixed bottom-0 left-0 right-0 z-50 glass-nav border-t border-outline-variant/20 md:hidden"
             style={{
                 paddingBottom: 'env(safe-area-inset-bottom, 0px)',
             }}
@@ -85,8 +85,8 @@ export function BottomNav({ locale, translations, onMenuToggle }: BottomNavProps
                                 'rounded-lg transition-colors duration-200',
                                 'px-2 py-2 min-w-[60px] relative',
                                 isActive
-                                    ? 'text-trust-navy'
-                                    : 'text-gray-500'
+                                    ? 'text-primary'
+                                    : 'text-on-surface-variant'
                             )}
                         >
                             <Icon
@@ -104,7 +104,7 @@ export function BottomNav({ locale, translations, onMenuToggle }: BottomNavProps
 
                             {/* Active indicator */}
                             {isActive && (
-                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 bg-trust-navy rounded-t-sm" />
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 w-10 bg-primary rounded-t-sm" />
                             )}
                         </Link>
                     );
@@ -116,7 +116,7 @@ export function BottomNav({ locale, translations, onMenuToggle }: BottomNavProps
                     className={cn(
                         'flex flex-col items-center justify-center gap-1',
                         'rounded-lg transition-colors duration-200',
-                        'px-2 py-2 min-w-[60px] text-gray-500 hover:text-trust-navy'
+                        'px-2 py-2 min-w-[60px] text-on-surface-variant hover:text-primary'
                     )}
                 >
                     <Menu size={22} strokeWidth={2} />
