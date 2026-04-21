@@ -1,18 +1,15 @@
 'use client';
 
-import { Heart, Pin, Loader2, MessageSquare, Edit2, Plus, Megaphone, Info, BarChart2, CheckCircle, XCircle, PlusCircle, MinusCircle } from 'lucide-react';
+import { Pin, Loader2, MessageSquare, Plus, Megaphone, Info, BarChart2, CheckCircle, PlusCircle, MinusCircle } from 'lucide-react';
 import { useAnnouncements, useUserClasses, useCreateAnnouncement, useDeleteAnnouncement, useSchool, useVoteAnnouncement } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
 import { useState } from 'react';
 import { Babelfish } from '@/components/Babelfish';
-import { PollOption } from '@/types';
 import { useTranslations } from 'next-intl';
 
 /**
- * Announcements Page - Auglýsingataflan V2
- * 
- * V2: Nordic Glass Cards, Premium Pinning, Smooth Animations
+ * Announcements Page — Auglýsingataflan (fjord_moss redesign)
  */
 
 export default function AnnouncementsPage() {
@@ -23,7 +20,7 @@ export default function AnnouncementsPage() {
     const t = useTranslations('announcements');
 
     // Dynamic Class ID
-    const { data: userClasses, isLoading: classesLoading } = useUserClasses(user?.uid || '', user?.email);
+    const { data: userClasses } = useUserClasses(user?.uid || '', user?.email);
     const activeClassId = userClasses?.[0]?.id || '';
     const activeClass = userClasses?.find(c => c.id === activeClassId);
     const isAdmin = activeClass?.role === 'admin';
@@ -89,7 +86,7 @@ export default function AnnouncementsPage() {
 
     if (authLoading || announcementsLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center pt-24 text-nordic-blue">
+            <div className="min-h-screen flex items-center justify-center pt-24 text-primary">
                 <Loader2 size={40} className="animate-spin" />
             </div>
         );
@@ -118,12 +115,12 @@ export default function AnnouncementsPage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-50 border border-amber-100 text-xs font-bold text-amber-700 uppercase tracking-wide mb-3 animate-in fade-in slide-in-from-left-2">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-tertiary-fixed/60 text-xs font-bold text-on-tertiary-fixed uppercase tracking-wide mb-3 animate-in fade-in slide-in-from-left-2">
                         <Megaphone size={12} />
                         {t('badge')}
                     </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
-                    <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
+                    <h1 className="text-4xl font-extrabold text-on-surface tracking-tight">{t('title')}</h1>
+                    <p className="text-xl text-on-surface-variant max-w-xl mt-2 leading-relaxed">
                         {t('subtitle')}
                     </p>
                 </div>
@@ -131,7 +128,7 @@ export default function AnnouncementsPage() {
                 {(isAdmin || isSchoolAdmin) && (
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="trust-button flex items-center gap-2"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                     >
                         <Plus size={18} />
                         {t('new_announcement')}
@@ -141,10 +138,10 @@ export default function AnnouncementsPage() {
 
             {/* Global Translation Notice (if not Icelandic) */}
             {locale !== 'is' && (
-                <div className="max-w-4xl mx-auto p-4 bg-blue-50 border border-blue-200 rounded-lg flex items-start gap-3">
-                    <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-blue-700 leading-relaxed italic">
-                        <strong>Translation Notice:</strong> Messages are automatically translated into your language. Original text is preserved for accuracy.
+                <div className="max-w-4xl mx-auto p-4 bg-surface-container-low ghost-border rounded-2xl flex items-start gap-3">
+                    <Info size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-on-surface-variant leading-relaxed italic">
+                        <strong className="text-on-surface">Translation Notice:</strong> Messages are automatically translated into your language. Original text is preserved for accuracy.
                     </p>
                 </div>
             )}
@@ -152,25 +149,30 @@ export default function AnnouncementsPage() {
             {/* Announcements Feed */}
             <div className="space-y-6 max-w-4xl mx-auto pt-6">
                 {sortedAnnouncements.length === 0 && (
-                    <div className="text-center py-20 bg-white rounded-lg border-2 border-dashed border-gray-300">
-                        <p className="text-gray-400 font-medium">{t('empty')}</p>
+                    <div className="text-center py-20 bg-surface-container-lowest rounded-3xl shadow-ambient">
+                        <p className="text-on-surface-variant font-medium">{t('empty')}</p>
                     </div>
                 )}
 
-                {sortedAnnouncements.map((announcement, index) => (
+                {sortedAnnouncements.map((announcement) => (
                     <div
                         key={announcement.id}
-                        className={`trust-card relative overflow-hidden ${announcement.pinned ? 'bg-amber-50/30 border-amber-200' : ''}`}
+                        className={`relative overflow-hidden rounded-3xl shadow-ambient ${announcement.pinned ? 'bg-tertiary-fixed/40 ring-1 ring-tertiary-fixed' : 'bg-surface-container-lowest'}`}
                     >
+                        {/* Pinned accent bar */}
+                        {announcement.pinned && (
+                            <div className="absolute top-0 left-0 w-1 h-full bg-tertiary" />
+                        )}
+
                         {/* Tags / Badges */}
                         <div className="absolute top-0 right-0 p-4 flex gap-2">
                             {announcement.scope === 'school' && (
-                                <span className="flex items-center gap-1.5 px-3 py-1 bg-purple-100 text-purple-800 text-xs font-bold rounded-full uppercase tracking-wide shadow-sm">
+                                <span className="flex items-center gap-1.5 px-3 py-1 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-full uppercase tracking-wide">
                                     <Megaphone size={12} fill="currentColor" /> {t('tag_school')}
                                 </span>
                             )}
                             {announcement.pinned && (
-                                <span className="flex items-center gap-1.5 px-3 py-1 bg-amber-100 text-amber-800 text-xs font-bold rounded-full uppercase tracking-wide shadow-sm">
+                                <span className="flex items-center gap-1.5 px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed text-xs font-bold rounded-full uppercase tracking-wide">
                                     <Pin size={12} fill="currentColor" /> {t('tag_important')}
                                 </span>
                             )}
@@ -179,31 +181,31 @@ export default function AnnouncementsPage() {
                         <div className="p-8">
                             <div className="flex items-center gap-4 mb-6">
                                 {/* Author Avatar */}
-                                <div className={`w-12 h-12 rounded-lg flex items-center justify-center font-bold text-lg shadow-sm ${announcement.pinned ? 'bg-amber-100 text-amber-700' : 'bg-blue-50 text-blue-700'}`}>
+                                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center font-bold text-lg ${announcement.pinned ? 'bg-tertiary-fixed text-on-tertiary-fixed' : 'bg-surface-container-high text-primary'}`}>
                                     {(announcement.author || 'S')[0]}
                                 </div>
                                 <div className="flex-1">
                                     <div className="flex items-center gap-2">
-                                        <p className="font-bold text-gray-900 leading-tight">
+                                        <p className="font-bold text-on-surface leading-tight">
                                             {getAuthorLabel(announcement)}
                                         </p>
                                         {announcement.originalLanguage && announcement.originalLanguage !== 'is' && (
-                                            <span className="text-[10px] bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
+                                            <span className="text-[10px] bg-surface-container-high text-on-surface-variant px-1.5 py-0.5 rounded uppercase font-bold tracking-tight">
                                                 {announcement.originalLanguage}
                                             </span>
                                         )}
                                     </div>
-                                    <p className="text-xs font-bold text-gray-400 uppercase tracking-wider mt-0.5">
+                                    <p className="text-xs font-bold text-on-surface-variant uppercase tracking-wider mt-0.5">
                                         {formatDate(announcement.createdAt)}
                                     </p>
                                 </div>
                             </div>
 
-                            <h2 className="text-2xl font-bold text-gray-900 mb-4 tracking-tight leading-snug">
+                            <h2 className="text-2xl font-bold text-on-surface mb-4 tracking-tight leading-snug">
                                 {announcement.title}
                             </h2>
 
-                            <div className="prose prose-lg prose-gray max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
+                            <div className="prose prose-lg max-w-none text-on-surface-variant leading-relaxed whitespace-pre-wrap">
                                 {announcement.content}
                             </div>
 
@@ -216,8 +218,8 @@ export default function AnnouncementsPage() {
 
                             {/* POLL UI */}
                             {announcement.pollOptions && announcement.pollOptions.length > 0 && (
-                                <div className="mt-6 bg-gray-50 rounded-xl p-6 space-y-4 border border-gray-100">
-                                    <div className="flex items-center gap-2 text-sm font-bold text-gray-700 uppercase tracking-wide mb-2">
+                                <div className="mt-6 bg-surface-container-low rounded-2xl p-6 space-y-4 ghost-border">
+                                    <div className="flex items-center gap-2 text-sm font-bold text-on-surface-variant uppercase tracking-wide mb-2">
                                         <BarChart2 size={16} />
                                         <span>{t('poll')}</span>
                                     </div>
@@ -239,14 +241,14 @@ export default function AnnouncementsPage() {
                                                         toggle: hasVoted
                                                     });
                                                 }}
-                                                className={`relative overflow-hidden rounded-lg border-2 cursor-pointer transition-all group
-                                                    ${hasVoted ? 'border-nordic-blue bg-blue-50' : 'border-gray-200 hover:border-gray-300 bg-white'}
+                                                className={`relative overflow-hidden rounded-xl cursor-pointer transition-all group
+                                                    ${hasVoted ? 'ring-2 ring-primary bg-primary-container/15' : 'ghost-border bg-surface-container-lowest hover:ring-1 hover:ring-primary/30'}
                                                 `}
                                             >
                                                 {/* Progress Bar Background */}
                                                 <div
-                                                    className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out opacity-20
-                                                        ${hasVoted ? 'bg-nordic-blue' : 'bg-gray-400'}
+                                                    className={`absolute top-0 left-0 h-full transition-all duration-500 ease-out opacity-25
+                                                        ${hasVoted ? 'bg-primary' : 'bg-on-surface-variant/40'}
                                                     `}
                                                     style={{ width: `${percentage}%` }}
                                                 />
@@ -254,36 +256,36 @@ export default function AnnouncementsPage() {
                                                 <div className="relative p-3 flex items-center justify-between z-10">
                                                     <div className="flex items-center gap-3">
                                                         <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-colors
-                                                            ${hasVoted ? 'border-nordic-blue bg-nordic-blue text-white' : 'border-gray-300'}
+                                                            ${hasVoted ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant'}
                                                         `}>
                                                             {hasVoted && <CheckCircle size={12} />}
                                                         </div>
-                                                        <span className={`font-medium ${hasVoted ? 'text-nordic-blue font-bold' : 'text-gray-700'}`}>
+                                                        <span className={`font-medium ${hasVoted ? 'text-primary font-bold' : 'text-on-surface'}`}>
                                                             {option.text}
                                                         </span>
                                                     </div>
-                                                    <span className="text-xs font-bold text-gray-500">
+                                                    <span className="text-xs font-bold text-on-surface-variant">
                                                         {percentage}% ({votes})
                                                     </span>
                                                 </div>
                                             </div>
                                         );
                                     })}
-                                    <p className="text-center text-xs text-gray-400 font-medium pt-2">
+                                    <p className="text-center text-xs text-on-surface-variant font-medium pt-2">
                                         {announcement.pollOptions?.reduce((acc, curr) => acc + (curr.votes?.length || 0), 0)} {t('votes_total')}
                                     </p>
                                 </div>
                             )}
 
                             {(isAdmin || isSchoolAdmin) && (
-                                <div className="mt-8 pt-4 border-t border-gray-100 flex justify-end">
+                                <div className="mt-8 pt-4 border-t border-outline-variant/30 flex justify-end">
                                     <button
                                         onClick={() => {
                                             if (confirm(t('delete_confirm'))) {
                                                 deleteAnnouncementMutation.mutate(announcement.id);
                                             }
                                         }}
-                                        className="text-xs font-bold text-red-500 hover:text-red-700 px-3 py-1 bg-red-50 hover:bg-red-100 rounded-lg transition-colors"
+                                        className="text-xs font-bold text-error px-3 py-1 bg-error-container/40 hover:bg-error-container rounded-full transition-colors"
                                     >
                                         {t('delete_btn')}
                                     </button>
@@ -297,30 +299,30 @@ export default function AnnouncementsPage() {
             {/* Create Modal */}
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-lg p-8 max-w-lg w-full space-y-6 shadow-lg relative overflow-hidden">
-                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-nordic-blue to-purple-600 left-0" />
+                    <div className="bg-surface-container-lowest rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-ambient relative overflow-hidden">
+                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-primary to-primary-container left-0" />
 
                         <div className="text-center">
-                            <div className="w-14 h-14 bg-indigo-50 rounded-lg flex items-center justify-center mx-auto mb-4 text-indigo-600 shadow-sm">
+                            <div className="w-14 h-14 bg-primary-container/15 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary shadow-ambient">
                                 <MessageSquare size={28} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('modal_title')}</h2>
-                            <p className="text-gray-500 font-medium mt-1">{t('modal_subtitle')}</p>
+                            <h2 className="text-3xl font-black text-on-surface tracking-tight">{t('modal_title')}</h2>
+                            <p className="text-on-surface-variant font-medium mt-1">{t('modal_subtitle')}</p>
                         </div>
 
                         <div className="space-y-4">
                             {/* Scope Selector (Only if School Admin) */}
                             {isSchoolAdmin && (
-                                <div className="flex bg-gray-100 p-1 rounded-xl">
+                                <div className="flex bg-surface-container-low p-1 rounded-xl">
                                     <button
                                         onClick={() => setScope('class')}
-                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-surface-container-lowest text-on-surface shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     >
                                         Bekkur
                                     </button>
                                     <button
                                         onClick={() => setScope('school')}
-                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-surface-container-lowest text-primary shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     >
                                         Allur Skólinn (Foreldrafélag)
                                     </button>
@@ -332,7 +334,7 @@ export default function AnnouncementsPage() {
                                 value={newTitle}
                                 onChange={e => setNewTitle(e.target.value)}
                                 placeholder={t('placeholder_title')}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-bold text-lg"
+                                className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-bold text-lg text-on-surface"
                                 autoFocus
                             />
 
@@ -340,53 +342,40 @@ export default function AnnouncementsPage() {
                                 value={newContent}
                                 onChange={e => setNewContent(e.target.value)}
                                 placeholder={t('placeholder_content')}
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none h-40 resize-none font-medium text-gray-600"
+                                className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none h-40 resize-none font-medium text-on-surface"
                             />
 
-                            <div className="flex border-t border-gray-100 pt-4 flex-col gap-3">
-                                <div className="flex items-center gap-3 p-4 bg-amber-50 rounded-xl border border-amber-100 cursor-pointer flex-1" onClick={() => setNewPinned(!newPinned)}>
-                                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${newPinned ? 'bg-amber-500 border-amber-500 text-white' : 'border-amber-300 bg-white'}`}>
+                            <div className="flex border-t border-outline-variant/30 pt-4 flex-col gap-3">
+                                <div className="flex items-center gap-3 p-4 bg-tertiary-fixed/50 rounded-2xl cursor-pointer flex-1" onClick={() => setNewPinned(!newPinned)}>
+                                    <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${newPinned ? 'bg-tertiary border-tertiary text-on-tertiary' : 'border-on-tertiary-fixed/40 bg-surface-container-lowest'}`}>
                                         {newPinned && <Pin size={14} />}
                                     </div>
-                                    <span className="font-bold text-amber-900 text-sm">{t('pin_action')}</span>
+                                    <span className="font-bold text-on-tertiary-fixed text-sm">{t('pin_action')}</span>
                                 </div>
-
-                                {/* Kjarnorku sending - DISABLED FOR NOW */}
-                                {/* {(isAdmin || isSchoolAdmin) && (
-                                    <div className="flex items-center gap-3 p-4 bg-red-50 rounded-xl border border-red-100 cursor-pointer flex-1" onClick={() => setIsCritical(!isCritical)}>
-                                        <div className={`w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all ${isCritical ? 'bg-red-500 border-red-500 text-white' : 'border-red-300 bg-white'}`}>
-                                            {isCritical && <Megaphone size={14} />}
-                                        </div>
-                                        <div className="flex-1">
-                                            <span className="font-bold text-red-900 text-sm block">Kjarnorku sending</span>
-                                            <span className="text-[10px] text-red-600 font-medium leading-tight">Senda sem tölvupóst á alla (trompar stillingar)</span>
-                                        </div>
-                                    </div>
-                                )} */}
                             </div>
 
                             {/* Poll Creator */}
                             <div className="pt-2">
                                 <button
                                     onClick={() => setIsPoll(!isPoll)}
-                                    className={`flex items-center gap-2 text-sm font-bold transition-colors ${isPoll ? 'text-nordic-blue' : 'text-gray-400 hover:text-gray-600'}`}
+                                    className={`flex items-center gap-2 text-sm font-bold transition-colors ${isPoll ? 'text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}
                                 >
-                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${isPoll ? 'border-nordic-blue bg-nordic-blue text-white' : 'border-gray-300'}`}>
+                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center ${isPoll ? 'border-primary bg-primary text-on-primary' : 'border-outline-variant'}`}>
                                         {isPoll && <CheckCircle size={14} />}
                                     </div>
                                     {t('create_poll')}
                                 </button>
 
                                 {isPoll && (
-                                    <div className="mt-4 space-y-3 bg-gray-50 p-4 rounded-xl border border-gray-100 animate-in slide-in-from-top-2">
-                                        <label className="text-xs font-bold text-gray-500 uppercase">{t('poll_options')}</label>
+                                    <div className="mt-4 space-y-3 bg-surface-container-low p-4 rounded-2xl ghost-border animate-in slide-in-from-top-2">
+                                        <label className="text-xs font-bold text-on-surface-variant uppercase">{t('poll_options')}</label>
 
                                         {pollOptions.map((opt) => (
                                             <div key={opt.id} className="flex gap-2 animate-in fade-in">
-                                                <div className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm font-medium text-gray-700">
+                                                <div className="flex-1 px-3 py-2 bg-surface-container-lowest rounded-lg text-sm font-medium text-on-surface">
                                                     {opt.text}
                                                 </div>
-                                                <button onClick={() => removePollOption(opt.id)} className="text-red-400 hover:text-red-600">
+                                                <button onClick={() => removePollOption(opt.id)} className="text-error hover:opacity-80">
                                                     <MinusCircle size={20} />
                                                 </button>
                                             </div>
@@ -400,9 +389,9 @@ export default function AnnouncementsPage() {
                                                     if (e.key === 'Enter') addPollOption();
                                                 }}
                                                 placeholder={t('add_option')}
-                                                className="flex-1 px-3 py-2 bg-white border border-gray-200 rounded-lg text-sm outline-none focus:border-nordic-blue"
+                                                className="flex-1 px-3 py-2 bg-surface-container-lowest rounded-lg text-sm outline-none focus:ring-2 focus:ring-primary/40 text-on-surface"
                                             />
-                                            <button onClick={addPollOption} className="text-nordic-blue hover:text-blue-700">
+                                            <button onClick={addPollOption} className="text-primary hover:opacity-80">
                                                 <PlusCircle size={32} />
                                             </button>
                                         </div>
@@ -411,10 +400,10 @@ export default function AnnouncementsPage() {
                             </div>
                         </div>
 
-                        <div className="flex gap-3 pt-4 border-t border-gray-100">
+                        <div className="flex gap-3 pt-4 border-t border-outline-variant/30">
                             <button
                                 onClick={() => setIsCreating(false)}
-                                className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors"
                             >
                                 Hætta við
                             </button>
@@ -435,7 +424,7 @@ export default function AnnouncementsPage() {
                                             title: newTitle,
                                             content: newContent,
                                             pinned: false,
-                                            isCritical: false, // Default to false
+                                            isCritical: false,
                                             originalLanguage: locale,
                                             pollOptions: isPoll ? pollOptions.map(opt => ({ ...opt, votes: [] })) : [],
                                             allowMultipleVotes: false,
@@ -446,13 +435,12 @@ export default function AnnouncementsPage() {
                                         setNewContent('');
                                         setIsCreating(false);
                                         setNuclearKeyword('');
-                                        setIsCritical(false); // Assuming setIsNuclear was a typo for setIsCritical
-                                        // Reset Poll
+                                        setIsCritical(false);
                                         setIsPoll(false);
                                         setPollOptions([]);
                                     }
                                 }}
-                                className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('publish')}
                             </button>
@@ -462,28 +450,28 @@ export default function AnnouncementsPage() {
             )}
             {/* Nuclear Confirmation Modal */}
             {showNuclearConfirm && (
-                <div className="fixed inset-0 bg-red-900/80 backdrop-blur-xl flex items-center justify-center p-4 z-[60] animate-in fade-in duration-300">
-                    <div className="bg-white rounded-[2rem] p-10 max-w-md w-full space-y-8 shadow-2xl relative overflow-hidden border-4 border-red-500">
+                <div className="fixed inset-0 bg-error/80 backdrop-blur-xl flex items-center justify-center p-4 z-[60] animate-in fade-in duration-300">
+                    <div className="bg-surface-container-lowest rounded-3xl p-10 max-w-md w-full space-y-8 shadow-ambient relative overflow-hidden ring-4 ring-error">
                         <div className="text-center space-y-4">
-                            <div className="w-20 h-20 bg-red-100 rounded-lg flex items-center justify-center mx-auto text-red-600">
+                            <div className="w-20 h-20 bg-error-container rounded-2xl flex items-center justify-center mx-auto text-error">
                                 <Megaphone size={40} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight italic uppercase">VARÚÐ!</h2>
-                            <p className="text-gray-600 font-bold leading-relaxed">
-                                Þessi tilkynning verður send sem tölvupóstur á <span className="text-red-600 underline text-lg">alla foreldra</span> í hópnum.
+                            <h2 className="text-3xl font-black text-on-surface tracking-tight italic uppercase">VARÚÐ!</h2>
+                            <p className="text-on-surface-variant font-bold leading-relaxed">
+                                Þessi tilkynning verður send sem tölvupóstur á <span className="text-error underline text-lg">alla foreldra</span> í hópnum.
                                 <br /><br />
                                 Þetta trompar allar stillingar notenda og er ekki hægt að afturkalla.
                             </p>
                         </div>
 
                         <div className="space-y-4">
-                            <p className="text-center text-xs font-black text-gray-400 uppercase tracking-[0.2em]">Skrifaðu staðfestingarorðið hér að neðan</p>
+                            <p className="text-center text-xs font-black text-on-surface-variant uppercase tracking-[0.2em]">Skrifaðu staðfestingarorðið hér að neðan</p>
                             <input
                                 type="text"
                                 value={nuclearKeyword}
                                 onChange={e => setNuclearKeyword(e.target.value)}
                                 placeholder="SENDA"
-                                className="w-full text-center px-6 py-4 rounded-lg bg-gray-50 border-2 border-gray-200 focus:border-red-500 focus:bg-white transition-all outline-none font-bold text-2xl tracking-[0.3em] uppercase placeholder:opacity-20"
+                                className="w-full text-center px-6 py-4 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-error transition-all outline-none font-bold text-2xl tracking-[0.3em] uppercase placeholder:opacity-30 text-on-surface"
                                 autoFocus
                             />
                         </div>
@@ -517,7 +505,6 @@ export default function AnnouncementsPage() {
                                         });
                                     } catch (err) {
                                         console.error("Failed to send emails:", err);
-                                        // We don't block the UI here as the announcement is already created in Firestore
                                     }
 
                                     setIsCreating(false);
@@ -526,7 +513,7 @@ export default function AnnouncementsPage() {
                                     setNewTitle(''); setNewContent(''); setNewPinned(false); setScope('class'); setIsCritical(false);
                                 }}
                                 disabled={nuclearKeyword.toUpperCase() !== 'SENDA'}
-                                className="w-full py-5 rounded-lg font-bold text-white bg-red-600 shadow-md hover:bg-red-700 hover:shadow-lg active:scale-98 transition-all disabled:opacity-30 disabled:cursor-not-allowed text-xl"
+                                className="w-full py-5 rounded-xl font-bold text-on-error bg-error shadow-ambient hover:opacity-90 active:scale-98 transition-all disabled:opacity-30 disabled:cursor-not-allowed text-xl"
                             >
                                 SENDA NÚNA
                             </button>
@@ -535,7 +522,7 @@ export default function AnnouncementsPage() {
                                     setShowNuclearConfirm(false);
                                     setNuclearKeyword('');
                                 }}
-                                className="w-full py-4 rounded-lg font-semibold text-gray-500 hover:text-gray-700 transition-colors"
+                                className="w-full py-4 rounded-xl font-semibold text-on-surface-variant hover:text-on-surface transition-colors"
                             >
                                 Hætta við
                             </button>
