@@ -1,167 +1,216 @@
 @import "tailwindcss";
 
 /* ========================================
-   PROFESSIONAL TRUST SYSTEM
-   Bekkurinn - Traust, Áreiðanleiki, Einfaldleiki
+   NORDIC TRUST OS — fjord_moss
+   The Academic Sanctuary
+   Source: design/stitch/nordic_trust_os/fjord_moss/DESIGN.md
    ======================================== */
 
 :root {
-  /* --- Primary Colors: Trust & Reliability --- */
-  --trust-navy: #1E3A5F;
-  --trust-navy-light: #2E4A6F;
-  --trust-navy-dark: #0F1F3F;
+  /* --- Primary: Deep Fjord --- */
+  --primary: #12362e;
+  --primary-container: #2a4d44;
+  --on-primary: #ffffff;
+  --on-primary-container: #c8ffdf;
+  --primary-fixed: #b0f1cd;
+  --primary-fixed-dim: #95d4b2;
 
-  /* --- Neutral Grays: Clean & Minimal --- */
-  --gray-50: #F9FAFB;
-  --gray-100: #F3F4F6;
-  --gray-200: #E5E7EB;
-  --gray-300: #D1D5DB;
-  --gray-400: #9CA3AF;
-  --gray-500: #6B7280;
-  --gray-600: #4B5563;
-  --gray-700: #374151;
-  --gray-800: #1F2937;
-  --gray-900: #111827;
+  /* --- Secondary: Moss & Earth (Terracotta) --- */
+  --secondary: #934a2c;
+  --secondary-container: #bceed1;
+  --on-secondary: #ffffff;
+  --on-secondary-container: #406d56;
 
-  /* --- Functional Colors: Semantic Only --- */
-  --color-success: #10B981;
-  --color-warning: #F59E0B;
-  --color-error: #EF4444;
-  --color-info: #3B82F6;
+  /* --- Tertiary: Human amber --- */
+  --tertiary: #7a4c00;
+  --tertiary-container: #9b6200;
+  --tertiary-fixed: #ffddb8;
+  --tertiary-fixed-dim: #ffb95f;
+  --on-tertiary: #ffffff;
+  --on-tertiary-fixed: #2a1700;
+  --on-tertiary-fixed-variant: #653e00;
 
-  /* --- Legacy Support (for gradual migration) --- */
-  --nordic-blue: var(--trust-navy);
-  --nordic-blue-light: var(--trust-navy-light);
-  --nordic-blue-dark: var(--trust-navy-dark);
+  /* --- Error --- */
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-error: #ffffff;
+  --on-error-container: #93000a;
 
-  /* --- Backgrounds --- */
-  --bg-primary: #FFFFFF;
-  --bg-secondary: var(--gray-50);
-  --bg-tertiary: var(--gray-100);
+  /* --- Surfaces (tonal layering) --- */
+  --surface: #fbf9f2;
+  --surface-dim: #d6d4ce;
+  --surface-bright: #f2f0e9;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f6f4ec;
+  --surface-container: #eceae4;
+  --surface-container-high: #e6e4de;
+  --surface-container-highest: #e0ded8;
 
-  /* --- Borders --- */
-  --border-light: var(--gray-200);
-  --border-medium: var(--gray-300);
-  --border-dark: var(--gray-400);
+  /* --- Text --- */
+  --on-surface: #1b1c18;
+  --on-surface-variant: #404943;
+  --on-background: #1a1c1c;
 
-  /* --- Text Colors --- */
-  --text-primary: var(--gray-900);
-  --text-secondary: var(--gray-600);
-  --text-tertiary: var(--gray-400);
+  /* --- Outline --- */
+  --outline: #707973;
+  --outline-variant: #c1c8c4;
 
-  /* --- Shadows: Subtle & Professional --- */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  /* --- Shadow (tinted teal, never grey) --- */
+  --shadow-ambient: 0 12px 32px rgba(18, 54, 46, 0.06);
 
-  /* --- Border Radius: Minimal & Clean --- */
-  --radius-sm: 0.375rem;
-  /* 6px */
-  --radius-md: 0.5rem;
-  /* 8px */
-  --radius-lg: 0.75rem;
-  /* 12px */
-  --radius-xl: 1rem;
-  /* 16px - Reserved for special elements */
+  /* --- Radius --- */
+  --radius-sm: 0.375rem;  /* 6px */
+  --radius-md: 0.5rem;    /* 8px */
+  --radius-lg: 0.75rem;   /* 12px */
+  --radius-xl: 1.5rem;    /* 24px — primary CTAs */
+  --radius-full: 9999px;
 
-  /* --- Legacy Shadow Support --- */
+  /* --- Legacy aliases (removed in Phase 2) --- */
+  --trust-navy: var(--primary);
+  --trust-navy-light: var(--primary-container);
+  --trust-navy-dark: #0a2620;
+  --nordic-blue: var(--primary);
+  --nordic-blue-light: var(--primary-container);
+  --nordic-blue-dark: #0a2620;
+  --bg-primary: var(--surface-container-lowest);
+  --bg-secondary: var(--surface);
+  --bg-tertiary: var(--surface-container-low);
+  --border-light: var(--outline-variant);
+  --border-medium: var(--outline);
+  --border-dark: var(--on-surface-variant);
+  --text-primary: var(--on-surface);
+  --text-secondary: var(--on-surface-variant);
+  --text-tertiary: var(--outline);
+  --shadow-sm: 0 1px 2px 0 rgba(18, 54, 46, 0.04);
+  --shadow-md: var(--shadow-ambient);
+  --shadow-lg: 0 16px 40px rgba(18, 54, 46, 0.08);
+  --shadow-xl: 0 24px 56px rgba(18, 54, 46, 0.10);
   --shadow-glass: var(--shadow-sm);
   --shadow-glass-hover: var(--shadow-md);
   --shadow-float: var(--shadow-lg);
-
-  /* --- White & Black --- */
-  --white: #FFFFFF;
+  --gray-50: var(--surface);
+  --gray-100: var(--surface-container-low);
+  --gray-200: var(--surface-container);
+  --gray-300: var(--surface-container-high);
+  --gray-400: var(--surface-dim);
+  --gray-500: var(--outline);
+  --gray-600: var(--on-surface-variant);
+  --gray-700: var(--on-surface);
+  --gray-800: var(--on-surface);
+  --gray-900: var(--on-background);
+  --white: #ffffff;
   --black: #000000;
+  --color-success: #0d5137;
+  --color-warning: var(--tertiary);
+  --color-error: var(--error);
+  --color-info: var(--primary);
 }
 
-/* @theme directive is not standard CSS - these variables are defined in :root instead */
-/*
 @theme {
   --font-inter: "Inter", sans-serif;
 
-  --color-trust-navy: var(--trust-navy);
-  --color-trust-navy-light: var(--trust-navy-light);
-  --color-trust-navy-dark: var(--trust-navy-dark);
+  --color-primary: var(--primary);
+  --color-primary-container: var(--primary-container);
+  --color-on-primary: var(--on-primary);
+  --color-on-primary-container: var(--on-primary-container);
+  --color-secondary: var(--secondary);
+  --color-secondary-container: var(--secondary-container);
+  --color-on-secondary: var(--on-secondary);
+  --color-on-secondary-container: var(--on-secondary-container);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-fixed: var(--tertiary-fixed);
+  --color-on-tertiary-fixed: var(--on-tertiary-fixed);
+  --color-error: var(--error);
+  --color-error-container: var(--error-container);
+  --color-on-error: var(--on-error);
+  --color-on-error-container: var(--on-error-container);
+  --color-surface: var(--surface);
+  --color-surface-dim: var(--surface-dim);
+  --color-surface-bright: var(--surface-bright);
+  --color-surface-container-lowest: var(--surface-container-lowest);
+  --color-surface-container-low: var(--surface-container-low);
+  --color-surface-container: var(--surface-container);
+  --color-surface-container-high: var(--surface-container-high);
+  --color-surface-container-highest: var(--surface-container-highest);
+  --color-on-surface: var(--on-surface);
+  --color-on-surface-variant: var(--on-surface-variant);
+  --color-on-background: var(--on-background);
+  --color-outline: var(--outline);
+  --color-outline-variant: var(--outline-variant);
 
-  --color-nordic-blue: var(--trust-navy);
-  --color-nordic-blue-light: var(--trust-navy-light);
-  --color-nordic-blue-dark: var(--trust-navy-dark);
+  /* Legacy Tailwind color aliases */
+  --color-trust-navy: var(--primary);
+  --color-trust-navy-light: var(--primary-container);
+  --color-nordic-blue: var(--primary);
 
-  --shadow-sm: var(--shadow-sm);
-  --shadow-md: var(--shadow-md);
-  --shadow-lg: var(--shadow-lg);
-  --shadow-xl: var(--shadow-xl);
+  --shadow-ambient: var(--shadow-ambient);
 }
-*/
 
 /* --- Global Reset & Base --- */
 body {
-  background-color: var(--gray-50);
-  color: var(--text-primary);
+  background-color: var(--surface);
+  color: var(--on-surface);
   font-family: var(--font-inter);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* --- Component Utilities --- */
-
-/* === PROFESSIONAL CARD SYSTEM === */
-/* Clean, solid cards with minimal styling */
-.professional-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+::selection {
+  background-color: var(--primary-container);
+  color: var(--on-primary-container);
 }
 
-.professional-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--border-medium);
-}
-
-/* Backward compatibility - map old classes to new system */
-.glass-card,
-.nordic-card,
-.trust-card {
-  background: var(--bg-primary);
-  border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
-  transition: box-shadow 0.15s ease, border-color 0.15s ease;
-}
-
-.glass-card:hover,
-.nordic-card:hover,
-.trust-card:hover {
-  box-shadow: var(--shadow-md);
-  border-color: var(--border-medium);
-}
-
-/* Typography - Clean & Readable */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  letter-spacing: -0.015em;
+/* --- Typography --- */
+h1, h2, h3, h4, h5, h6 {
+  letter-spacing: -0.02em;
   font-weight: 700;
-  color: var(--text-primary);
+  color: var(--on-surface);
 }
 
-/* Professional Buttons */
-.btn-premium,
+/* --- Depth utilities --- */
+.ambient-shadow {
+  box-shadow: var(--shadow-ambient);
+}
+
+.ghost-border {
+  /* outline-variant at 15% opacity — felt, not seen. */
+  box-shadow: inset 0 0 0 1px rgb(193 200 196 / 0.15);
+}
+
+.glass-nav {
+  background-color: color-mix(in oklab, var(--surface) 80%, transparent);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* --- Cards (Academic Sanctuary) --- */
+.nordic-card,
+.professional-card,
+.glass-card,
+.trust-card {
+  background-color: var(--surface-container-lowest);
+  border: none;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-ambient);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nordic-card:hover,
+.professional-card:hover {
+  transform: translateY(-1px);
+}
+
+/* --- Buttons --- */
 .nordic-button,
+.btn-premium,
 .trust-button {
-  background: var(--trust-navy);
-  color: white;
-  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary), var(--primary-container));
+  color: var(--on-primary);
+  border-radius: var(--radius-full);
   padding: 0.75rem 1.5rem;
   font-weight: 600;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
+  box-shadow: var(--shadow-ambient);
+  transition: opacity 0.2s ease, transform 0.2s ease;
   border: none;
   cursor: pointer;
   display: inline-flex;
@@ -170,71 +219,64 @@ h6 {
   gap: 0.5rem;
 }
 
-.btn-premium:hover,
 .nordic-button:hover,
-.trust-button:hover {
-  background: var(--trust-navy-light);
-  box-shadow: var(--shadow-md);
+.btn-premium:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
 }
 
-.btn-premium:active,
 .nordic-button:active,
-.trust-button:active {
-  background: var(--trust-navy-dark);
-  box-shadow: var(--shadow-sm);
+.btn-premium:active {
+  transform: translateY(0);
 }
 
-/* Secondary Button */
 .btn-secondary {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-medium);
-  border-radius: var(--radius-md);
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  border: none;
+  border-radius: var(--radius-full);
   padding: 0.75rem 1.5rem;
   font-weight: 600;
-  transition: all 0.2s ease;
+  transition: opacity 0.2s ease;
   cursor: pointer;
 }
 
 .btn-secondary:hover {
-  background: var(--gray-50);
-  border-color: var(--border-dark);
+  opacity: 0.9;
 }
 
-/* Scrollbar - Minimal & Clean */
+/* --- Tap target (mobile) --- */
+.tap-target {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Scrollbar --- */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--gray-100);
+  background: var(--surface-container-low);
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--gray-300);
+  background: var(--outline-variant);
   border-radius: var(--radius-md);
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--gray-400);
+  background: var(--outline);
 }
 
-/* Focus States - Accessible */
+/* --- Focus (accessible) --- */
 *:focus-visible {
-  outline: 2px solid var(--trust-navy);
+  outline: 2px solid var(--primary);
   outline-offset: 2px;
 }
 
-/* Utility Classes */
-.text-trust {
-  color: var(--trust-navy);
-}
-
-.bg-trust {
-  background-color: var(--trust-navy);
-}
-
-.border-trust {
-  border-color: var(--trust-navy);
-}
+/* --- Legacy color utilities (kept only to avoid breaking unmigrated screens) --- */
+.text-trust    { color: var(--primary); }
+.bg-trust      { background-color: var(--primary); }
+.border-trust  { border-color: var(--primary); }

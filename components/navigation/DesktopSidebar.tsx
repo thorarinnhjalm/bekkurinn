@@ -105,14 +105,14 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
         <aside
             className={cn(
                 "hidden md:flex flex-col w-72 h-screen fixed left-0 top-0 z-40",
-                "bg-white border-r border-gray-200 shadow-sm",
+                "bg-surface-container-low border-r border-outline-variant/20 shadow-ambient",
                 className
             )}
         >
             {/* Logo Area */}
-            <div className="p-6 border-b border-gray-100">
+            <div className="p-6 border-b border-outline-variant/15">
                 <Link href={`/${locale}/dashboard`} className="flex items-center gap-3 group">
-                    <div className="w-10 h-10 rounded-lg bg-blue-900 flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
+                    <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center shadow-ambient transition-shadow">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="8" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
                             <circle cx="16" cy="9" r="3.5" stroke="white" strokeWidth="1.5" fill="none" />
@@ -120,11 +120,11 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                         </svg>
                     </div>
                     <div>
-                        <span className="font-bold text-xl block tracking-tight text-gray-900">
+                        <span className="font-bold text-xl block tracking-tight text-on-surface">
                             Bekkurinn
                         </span>
                         <div className="flex items-center gap-1">
-                            <span className="text-xs text-gray-500 font-medium">
+                            <span className="text-xs text-on-surface-variant font-medium">
                                 Skólafélagið
                             </span>
                             {isVerified && (
@@ -149,8 +149,8 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             className={cn(
                                 'flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200',
                                 isActive
-                                    ? 'text-blue-900 font-semibold bg-gray-50 border-l-2 border-blue-900'
-                                    : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
+                                    ? 'text-primary font-semibold bg-surface-container-high border-l-2 border-primary'
+                                    : 'text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high'
                             )}
                         >
                             <Icon
@@ -165,8 +165,8 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
             </nav>
 
             {/* User Profile / Footer */}
-            <div className="p-4 border-t border-gray-100">
-                <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+            <div className="p-4 border-t border-outline-variant/15">
+                <div className="bg-surface-container-low rounded-lg p-4 border border-outline-variant/25">
                     <div className="flex items-center gap-3 mb-3">
                         {user?.photoURL ? (
                             <Image
@@ -177,15 +177,15 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                                 className="rounded-full"
                             />
                         ) : (
-                            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold text-sm">
+                            <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface-variant font-semibold text-sm">
                                 {user?.email?.[0]?.toUpperCase()}
                             </div>
                         )}
                         <div className="flex-1 min-w-0">
-                            <p className="font-semibold text-sm text-gray-900 truncate">
+                            <p className="font-semibold text-sm text-on-surface truncate">
                                 {user?.displayName || 'User'}
                             </p>
-                            <p className="text-xs text-gray-500 truncate">
+                            <p className="text-xs text-on-surface-variant truncate">
                                 {user?.email}
                             </p>
                         </div>
@@ -194,14 +194,14 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                     <div className="grid grid-cols-2 gap-2 mb-3">
                         <Link
                             href={`/${locale}/settings`}
-                            className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-gray-100 text-xs font-medium text-gray-700 transition-colors"
+                            className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-surface-container text-xs font-medium text-on-surface transition-colors"
                         >
                             <Settings size={14} />
                             {translations.settings || 'Settings'}
                         </Link>
                         <button
                             onClick={() => signOut()}
-                            className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-red-50 text-xs font-medium text-red-600 transition-colors"
+                            className="flex items-center justify-center gap-1.5 p-2 rounded-md hover:bg-error-container/40 text-xs font-medium text-error transition-colors"
                         >
                             <LogOut size={14} />
                             {translations.logout || 'Sign Out'}

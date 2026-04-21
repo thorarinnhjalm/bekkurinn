@@ -38,19 +38,19 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
             {/* Drawer */}
             <div
                 className={cn(
-                    "fixed right-0 top-0 bottom-0 z-[70] w-[280px] bg-white shadow-2xl transition-transform duration-300 ease-in-out md:hidden",
+                    "fixed right-0 top-0 bottom-0 z-[70] w-[280px] bg-surface-container-low shadow-2xl transition-transform duration-300 ease-in-out md:hidden",
                     "flex flex-col",
                     isOpen ? "translate-x-0" : "translate-x-full"
                 )}
             >
                 {/* Header */}
-                <div className="flex items-center justify-between p-4 border-b border-gray-100">
-                    <span className="font-bold text-lg text-trust-navy">{translations.menu || 'Valmynd'}</span>
+                <div className="flex items-center justify-between p-4 border-b border-outline-variant/15">
+                    <span className="font-bold text-lg text-primary">{translations.menu || 'Valmynd'}</span>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+                        className="p-2 rounded-full hover:bg-surface-container transition-colors"
                     >
-                        <X size={24} className="text-gray-500" />
+                        <X size={24} className="text-on-surface-variant" />
                     </button>
                 </div>
 
@@ -58,7 +58,7 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                 <div className="flex-1 overflow-y-auto py-4 px-2 space-y-2">
                     {/* User Section */}
                     {user && (
-                        <div className="px-4 py-4 mb-4 bg-gray-50 rounded-xl mx-2">
+                        <div className="px-4 py-4 mb-4 bg-surface-container-low rounded-xl mx-2">
                             <div className="flex items-center gap-3">
                                 {user.photoURL ? (
                                     <Image
@@ -69,15 +69,15 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                                         className="rounded-full ring-2 ring-white"
                                     />
                                 ) : (
-                                    <div className="w-12 h-12 rounded-full bg-trust-navy flex items-center justify-center text-white font-bold text-xl">
+                                    <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold text-xl">
                                         {(user.displayName || user.email || 'U')[0].toUpperCase()}
                                     </div>
                                 )}
                                 <div className="flex-1 min-w-0">
-                                    <p className="font-bold text-sm text-gray-900 truncate">
+                                    <p className="font-bold text-sm text-on-surface truncate">
                                         {user.displayName || translations.user || 'Notandi'}
                                     </p>
-                                    <p className="text-xs text-gray-500 truncate">
+                                    <p className="text-xs text-on-surface-variant truncate">
                                         {user.email}
                                     </p>
                                 </div>
@@ -89,29 +89,29 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                     <Link
                         href={`/${locale}/agreement`}
                         onClick={onClose}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors"
                     >
-                        <ShieldCheck size={20} className="text-gray-600" />
+                        <ShieldCheck size={20} className="text-on-surface-variant" />
                         <span className="font-medium">{translations.agreement}</span>
                     </Link>
 
-                    <div className="h-px bg-gray-100 my-2 mx-4" />
+                    <div className="h-px bg-outline-variant/20 my-2 mx-4" />
 
                     <Link
                         href={`/${locale}/user/profile`}
                         onClick={onClose}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors"
                     >
-                        <User size={20} className="text-gray-600" />
+                        <User size={20} className="text-on-surface-variant" />
                         <span className="font-medium">{translations.my_account || 'Reikningurinn minn'}</span>
                     </Link>
 
                     <Link
                         href={`/${locale}/settings`}
                         onClick={onClose}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
+                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-surface-container-low transition-colors"
                     >
-                        <Settings size={20} className="text-gray-600" />
+                        <Settings size={20} className="text-on-surface-variant" />
                         <span className="font-medium">{translations.class_settings || 'Stillingar bekkjar'}</span>
                     </Link>
 
@@ -120,7 +120,7 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                             signOut();
                             onClose();
                         }}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-error-container/40 text-error transition-colors"
                     >
                         <LogOut size={20} />
                         <span className="font-medium">{translations.logout || 'Skrá út'}</span>
@@ -128,9 +128,9 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-100">
-                    <div className="flex items-center gap-2 text-gray-400">
-                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                <div className="p-6 border-t border-outline-variant/15">
+                    <div className="flex items-center gap-2 text-outline">
+                        <div className="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <circle cx="8" cy="9" r="3.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
                                 <circle cx="16" cy="9" r="3.5" stroke="currentColor" strokeWidth="1.5" fill="none" />
