@@ -10,48 +10,59 @@ export function Hero({ locale }: { locale: string }) {
     const t = useTranslations('landing');
     const { user } = useAuth();
 
-    // Rich text handling - clean bold
     const richText = {
         strong: (chunks: React.ReactNode) => (
-            <span className="font-semibold text-gray-900">{chunks}</span>
-        )
+            <span className="font-semibold text-on-surface">{chunks}</span>
+        ),
     };
 
     return (
-        <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 overflow-hidden bg-white">
-            {/* Subtle background - very clean */}
-            <div className="absolute top-0 inset-0 h-full w-full bg-[#fafafa] -z-20" />
+        <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-40 overflow-hidden">
+            {/* Ambient radial background - fjord teal + warm amber haze */}
+            <div
+                className="absolute inset-0 -z-10"
+                aria-hidden="true"
+                style={{
+                    background:
+                        'radial-gradient(ellipse 80% 60% at 50% -10%, color-mix(in oklab, var(--primary-container) 25%, transparent), transparent 60%), radial-gradient(ellipse 60% 50% at 85% 30%, color-mix(in oklab, var(--tertiary-fixed) 40%, transparent), transparent 60%), var(--surface)',
+                }}
+            />
 
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+                {/* Status chip - tertiary-fixed amber with pulse dot */}
                 <div className="flex justify-center">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white border border-gray-200 text-gray-600 text-sm font-medium mb-8 shadow-sm">
-                        {t('hero.badge')}
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed text-sm font-medium mb-8 shadow-ambient">
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary" />
+                        </span>
+                        {t('hero.beta_badge')}
                     </div>
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-bold text-gray-900 tracking-tight mb-8 leading-[1.1] text-center">
+                <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-center text-on-surface">
                     {t('hero.title_start')}{' '}
-                    <span className="text-gray-900">
+                    <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">
                         {t('hero.title_highlight')}
                     </span>
                 </h1>
 
                 <div className="flex justify-center w-full mb-12">
-                    <p className="text-xl text-gray-500 max-w-2xl leading-relaxed font-normal text-center">
+                    <p className="text-xl text-on-surface-variant max-w-2xl leading-relaxed font-normal text-center">
                         {t.rich('hero.subtitle', richText)}
                     </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <div className="flex flex-col items-center gap-4">
                     <Link
                         href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                        className="w-full sm:w-auto px-8 py-4 bg-black text-white rounded-xl font-semibold text-lg hover:bg-gray-800 transition-all shadow-sm hover:translate-y-[-1px] flex items-center justify-center gap-2"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 active:translate-y-0 bg-gradient-to-r from-primary to-primary-container"
                     >
                         {t('hero.cta_primary')} <ArrowRight size={20} />
                     </Link>
                     <Link
                         href="#how-it-works"
-                        className="w-full sm:w-auto px-8 py-4 bg-white text-gray-900 border border-gray-200 rounded-xl font-semibold text-lg hover:bg-gray-50 transition-all"
+                        className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors underline-offset-4 hover:underline"
                     >
                         {t('hero.cta_secondary')}
                     </Link>

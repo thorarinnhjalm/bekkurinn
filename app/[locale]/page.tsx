@@ -14,7 +14,7 @@ export default function HomePage() {
     const locale = (params.locale as string) || 'is';
 
     return (
-        <div className="min-h-screen bg-white font-sans selection:bg-blue-100 selection:text-blue-900">
+        <div className="min-h-screen bg-surface text-on-surface font-sans">
             <NavBar locale={locale} />
             <main>
                 <Hero locale={locale} />

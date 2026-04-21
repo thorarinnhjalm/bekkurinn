@@ -3,7 +3,7 @@
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { Globe, ChevronDown, Menu, X } from 'lucide-react';
+import { Globe, Menu, X, Users } from 'lucide-react';
 import { useState } from 'react';
 
 export function NavBar({ locale }: { locale: string }) {
@@ -12,15 +12,18 @@ export function NavBar({ locale }: { locale: string }) {
     const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <nav className="fixed w-full z-50 transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-gray-100/50">
+        <nav className="fixed top-0 inset-x-0 z-50 glass-nav border-b border-outline-variant/20">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between items-center h-20">
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-                        <div className="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow-sm">
-                            B
+                    <Link
+                        href={`/${locale}`}
+                        className="flex-shrink-0 flex items-center gap-2 cursor-pointer"
+                    >
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-on-primary shadow-ambient bg-gradient-to-br from-primary to-primary-container">
+                            <Users size={20} />
                         </div>
-                        <span className="text-2xl font-bold text-gray-900 tracking-tight">
+                        <span className="text-2xl font-bold text-on-surface tracking-tight">
                             Bekkurinn
                         </span>
                     </Link>
@@ -29,7 +32,8 @@ export function NavBar({ locale }: { locale: string }) {
                     <div className="md:hidden">
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-600 hover:text-blue-600 p-2"
+                            className="tap-target text-on-surface-variant hover:text-primary p-2 rounded-lg"
+                            aria-label="Menu"
                         >
                             {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
@@ -37,43 +41,55 @@ export function NavBar({ locale }: { locale: string }) {
 
                     {/* Desktop Links */}
                     <div className="hidden md:flex items-center gap-8">
-                        <Link href={`/${locale}/samanburdur`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
-                            {t('nav.why_us') || "Samanburður"}
+                        <Link href={`/${locale}/samanburdur`} className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">
+                            {t('nav.why_us')}
                         </Link>
-                        <Link href={`/${locale}/bekkjarsattmali`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Bekkjarsáttmáli</Link>
-                        <Link href={`/${locale}/foreldrarolt`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Foreldrarölt</Link>
-                        <Link href={`/${locale}/handbok`} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+                        <Link href={`/${locale}/bekkjarsattmali`} className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">
+                            Bekkjarsáttmáli
+                        </Link>
+                        <Link href={`/${locale}/foreldrarolt`} className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">
+                            Foreldrarölt
+                        </Link>
+                        <Link href={`/${locale}/handbok`} className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors">
                             Handbók
                         </Link>
 
                         {/* Language Switcher */}
                         <div className="relative group">
-                            <button className="flex items-center gap-1 text-gray-600 hover:text-blue-600 transition-colors">
+                            <button className="flex items-center gap-1 text-on-surface-variant hover:text-primary transition-colors">
                                 <Globe size={20} />
                                 <span className="uppercase text-xs font-bold">{t('nav.locale')}</span>
                             </button>
-                            <div className="absolute top-full right-0 mt-2 w-32 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0">
-                                <a href="/is" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇮🇸 Íslenska</a>
-                                <a href="/en" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇬🇧 English</a>
-                                <a href="/pl" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇵🇱 Polski</a>
-                                <a href="/lt" className="block px-4 py-2 text-sm hover:bg-blue-50 hover:text-blue-600">🇱🇹 Lietuvių</a>
+                            <div className="absolute top-full right-0 mt-2 w-36 rounded-xl shadow-ambient overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 bg-surface-container-lowest ghost-border">
+                                <a href="/is" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇮🇸 Íslenska</a>
+                                <a href="/en" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇬🇧 English</a>
+                                <a href="/pl" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇵🇱 Polski</a>
+                                <a href="/lt" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇱🇹 Lietuvių</a>
                             </div>
                         </div>
 
                         {user ? (
                             <Link
                                 href={`/${locale}/dashboard`}
-                                className="bg-blue-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-blue-800 transition-all shadow-sm hover:shadow-md"
+                                className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
                             >
                                 Mælaborð
                             </Link>
                         ) : (
-                            <Link
-                                href={`/${locale}/login`}
-                                className="text-gray-600 hover:text-blue-600 font-medium transition-colors"
-                            >
-                                {t('nav.login')}
-                            </Link>
+                            <>
+                                <Link
+                                    href={`/${locale}/login`}
+                                    className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
+                                >
+                                    {t('nav.login')}
+                                </Link>
+                                <Link
+                                    href={`/${locale}/onboarding`}
+                                    className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                                >
+                                    {t('hero.cta_primary')}
+                                </Link>
+                            </>
                         )}
                     </div>
                 </div>
@@ -81,45 +97,45 @@ export function NavBar({ locale }: { locale: string }) {
 
             {/* Mobile Menu */}
             {isOpen && (
-                <div className="md:hidden bg-white border-t border-gray-100 absolute w-full left-0 px-4 py-6 shadow-lg flex flex-col gap-4 h-screen overflow-y-auto pb-32">
+                <div className="md:hidden absolute w-full left-0 px-4 py-6 flex flex-col gap-4 h-screen overflow-y-auto pb-32 bg-surface-container-low border-t border-outline-variant/20">
                     <Link
                         href={`/${locale}/samanburdur`}
-                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        className="text-lg font-medium text-on-surface py-2 border-b border-outline-variant/20"
                         onClick={() => setIsOpen(false)}
                     >
-                        {t('nav.why_us') || "Samanburður"}
+                        {t('nav.why_us')}
                     </Link>
                     <Link
                         href={`/${locale}/bekkjarsattmali`}
-                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        className="text-lg font-medium text-on-surface py-2 border-b border-outline-variant/20"
                         onClick={() => setIsOpen(false)}
                     >
                         Bekkjarsáttmáli
                     </Link>
                     <Link
                         href={`/${locale}/foreldrarolt`}
-                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        className="text-lg font-medium text-on-surface py-2 border-b border-outline-variant/20"
                         onClick={() => setIsOpen(false)}
                     >
                         Foreldrarölt
                     </Link>
                     <Link
                         href={`/${locale}/handbok`}
-                        className="text-lg font-medium text-gray-900 py-2 border-b border-gray-50"
+                        className="text-lg font-medium text-on-surface py-2 border-b border-outline-variant/20"
                         onClick={() => setIsOpen(false)}
                     >
                         Handbók
                     </Link>
                     <Link
                         href={`/${locale}/#how-it-works`}
-                        className="text-lg font-medium text-gray-600 py-2"
+                        className="text-lg font-medium text-on-surface-variant py-2"
                         onClick={() => setIsOpen(false)}
                     >
                         {t('nav.how_it_works')}
                     </Link>
                     <Link
                         href={`/${locale}/#faq`}
-                        className="text-lg font-medium text-gray-600 py-2"
+                        className="text-lg font-medium text-on-surface-variant py-2"
                         onClick={() => setIsOpen(false)}
                     >
                         {t('nav.faq')}
@@ -129,19 +145,28 @@ export function NavBar({ locale }: { locale: string }) {
                         {user ? (
                             <Link
                                 href={`/${locale}/dashboard`}
-                                className="bg-blue-900 text-white px-6 py-3 rounded-xl font-medium text-center shadow-sm"
+                                className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Mælaborð
                             </Link>
                         ) : (
-                            <Link
-                                href={`/${locale}/login`}
-                                className="bg-gray-100 text-gray-900 px-6 py-3 rounded-xl font-medium text-center"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                {t('nav.login')}
-                            </Link>
+                            <>
+                                <Link
+                                    href={`/${locale}/login`}
+                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-medium text-on-surface bg-surface-container-high"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {t('nav.login')}
+                                </Link>
+                                <Link
+                                    href={`/${locale}/onboarding`}
+                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container"
+                                    onClick={() => setIsOpen(false)}
+                                >
+                                    {t('hero.cta_primary')}
+                                </Link>
+                            </>
                         )}
                     </div>
                 </div>
