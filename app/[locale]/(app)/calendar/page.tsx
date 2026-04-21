@@ -123,7 +123,7 @@ export default function TasksPage() {
     if (authLoading || classesLoading || tasksLoading) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
-                <Loader2 size={40} className="animate-spin text-nordic-blue" />
+                <Loader2 size={40} className="animate-spin text-primary" />
             </div>
         );
     }
@@ -162,34 +162,31 @@ export default function TasksPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-20 relative">
-            {/* Background blobs */}
-            <div className="fixed top-20 right-0 w-96 h-96 bg-purple-100 rounded-full blur-3xl opacity-20 -z-10 pointer-events-none" />
-            <div className="fixed bottom-0 left-0 w-96 h-96 bg-blue-100 rounded-full blur-3xl opacity-20 -z-10 pointer-events-none" />
-
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-                <div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
-                    <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
+                <div className="max-w-2xl">
+                    <h1 className="text-4xl md:text-5xl font-bold text-on-surface tracking-tight mb-3">
+                        {t('title')}
+                    </h1>
+                    <p className="text-lg text-on-surface-variant leading-relaxed">
                         {t('subtitle')}
                     </p>
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                     {(isAdmin || isSchoolAdmin) && (
                         <button
                             onClick={() => setIsCreating(true)}
-                            className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
                         >
-                            <Plus size={20} />
+                            <Plus size={18} />
                             {t('new_event')}
                         </button>
                     )}
-                    {/* Birthday Button - Visible to everyone */}
                     <button
                         onClick={() => setIsBirthdayModalOpen(true)}
-                        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-pink-50 text-pink-600 font-bold hover:bg-pink-100 transition-all border border-pink-100"
+                        className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-semibold hover:opacity-90 transition-all"
                     >
-                        <span className="text-xl">🎂</span>
+                        <span>🎂</span>
                         {t('register_birthday')}
                     </button>
                 </div>
@@ -197,38 +194,32 @@ export default function TasksPage() {
 
             {/* Filter Tabs */}
             <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
-                <button
-                    onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'all' ? 'bg-gray-900 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
-                >
-                    {t('filter_all')}
-                </button>
-                <button
-                    onClick={() => setFilter('event')}
-                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'event' ? 'bg-nordic-blue text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
-                >
-                    {t('filter_events')}
-                </button>
-                <button
-                    onClick={() => setFilter('rolt')}
-                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'rolt' ? 'bg-indigo-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
-                >
-                    {t('filter_patrol')}
-                </button>
-                <button
-                    onClick={() => setFilter('birthday')}
-                    className={`px-4 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all ${filter === 'birthday' ? 'bg-pink-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'}`}
-                >
-                    {t('filter_birthday')}
-                </button>
+                {([
+                    { id: 'all', label: t('filter_all') },
+                    { id: 'event', label: t('filter_events') },
+                    { id: 'rolt', label: t('filter_patrol') },
+                    { id: 'birthday', label: t('filter_birthday') },
+                ] as const).map(({ id, label }) => (
+                    <button
+                        key={id}
+                        onClick={() => setFilter(id)}
+                        className={`whitespace-nowrap px-4 py-2 rounded-full font-medium text-sm transition-colors ${
+                            filter === id
+                                ? 'bg-secondary-container text-on-secondary-container'
+                                : 'bg-surface-container-low hover:bg-surface-container-high text-on-surface ghost-border'
+                        }`}
+                    >
+                        {label}
+                    </button>
+                ))}
             </div>
 
-            {/* Global Translation Notice (if not Icelandic) */}
+            {/* Translation Notice (non-Icelandic) */}
             {locale !== 'is' && (
-                <div className="max-w-4xl mx-auto p-4 bg-blue-50/50 border border-blue-100 rounded-2xl flex items-start gap-3">
-                    <Info size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-xs text-blue-700 leading-relaxed italic">
-                        <strong>Translation Notice:</strong> Task descriptions are automatically translated into your language. Original text is preserved for accuracy.
+                <div className="max-w-4xl mx-auto p-4 bg-surface-container-low rounded-2xl flex items-start gap-3 ghost-border">
+                    <Info size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <p className="text-xs text-on-surface-variant leading-relaxed italic">
+                        <strong className="text-on-surface">Translation Notice:</strong> Task descriptions are automatically translated into your language. Original text is preserved for accuracy.
                     </p>
                 </div>
             )}
@@ -246,71 +237,72 @@ export default function TasksPage() {
                     const isBirthday = task.type === 'birthday';
                     const isRolt = task.type === 'rolt';
 
-                    // Styling Strategy
-                    let borderClass = "border-l-4 border-gray-200"; // Default
-                    let bgClass = "bg-white";
-                    let badgeLabel = "";
-                    let badgeColor = "";
+                    // Styling Strategy - MD3 tokens via fjord_moss palette
+                    let accentBar = 'bg-outline-variant';
+                    let badgeLabel = '';
+                    let badgeColor = '';
 
                     if (isSchool) {
-                        borderClass = "border-l-4 border-purple-500";
+                        accentBar = 'bg-tertiary';
                         badgeLabel = t('type_school');
-                        badgeColor = "bg-purple-100 text-purple-700";
+                        badgeColor = 'bg-tertiary-fixed text-on-tertiary-fixed';
                     } else if (isBirthday) {
-                        borderClass = "border-l-4 border-pink-400";
+                        accentBar = 'bg-secondary';
                         badgeLabel = t('type_birthday');
-                        badgeColor = "bg-pink-100 text-pink-700";
+                        badgeColor = 'bg-tertiary-fixed/60 text-on-tertiary-fixed';
                     } else if (isRolt) {
-                        borderClass = "border-l-4 border-indigo-500";
+                        accentBar = 'bg-primary-container';
                         badgeLabel = t('type_patrol');
-                        badgeColor = "bg-indigo-100 text-indigo-700";
+                        badgeColor = 'bg-secondary-container text-on-secondary-container';
                     } else {
-                        // Class Event
-                        borderClass = "border-l-4 border-nordic-blue";
+                        accentBar = 'bg-primary';
                         badgeLabel = t('type_class');
-                        badgeColor = "bg-blue-100 text-blue-700";
+                        badgeColor = 'bg-primary-container/15 text-primary';
                     }
 
                     return (
                         <div
                             key={task.id}
-                            className={`glass-card p-0 flex flex-col md:flex-row overflow-hidden group ${!isTaskUpcoming ? 'opacity-70 grayscale-[0.5] hover:grayscale-0' : ''} ${borderClass}`}
+                            className={`bg-surface-container-lowest rounded-3xl shadow-ambient flex flex-col md:flex-row overflow-hidden group relative ${!isTaskUpcoming ? 'opacity-70 grayscale-[0.5] hover:grayscale-0' : ''}`}
                             style={{ animationDelay: `${index * 100}ms` }}
                         >
+                            {/* Accent bar */}
+                            <div className={`absolute top-0 left-0 w-1 h-full ${accentBar}`} aria-hidden="true" />
+
                             {/* Date Column */}
-                            <div className="md:w-48 bg-gray-50/50 md:border-r border-gray-100 p-6 flex flex-col justify-center items-center text-center group-hover:bg-blue-50/30 transition-colors">
-                                <span className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">
+                            <div className="md:w-48 bg-surface md:border-r border-outline-variant/20 p-6 flex flex-col justify-center items-center text-center transition-colors">
+                                <span className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-1">
                                     {dateObj ? new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(dateObj) : '---'}
                                 </span>
 
                                 {task.endDate ? (
                                     <div className="flex flex-col items-center">
-                                        <span className="text-3xl font-black text-gray-900 leading-none mb-1">
+                                        <span className="text-3xl font-bold text-on-surface leading-none mb-1">
                                             {dateObj ? dateObj.getDate() : '--'}-{task.endDate.toDate().getDate()}
                                         </span>
-                                        <span className="text-lg font-medium text-nordic-blue">
+                                        <span className="text-base font-medium text-primary">
                                             {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
                                         </span>
                                     </div>
                                 ) : (
                                     <>
-                                        <span className="text-4xl font-black text-gray-900 leading-none mb-1">
+                                        <span className="text-4xl font-bold text-on-surface leading-none mb-1">
                                             {dateObj ? dateObj.getDate() : '--'}
                                         </span>
-                                        <span className="text-lg font-medium text-nordic-blue">
+                                        <span className="text-base font-medium text-primary">
                                             {dateObj ? new Intl.DateTimeFormat(locale, { month: 'short' }).format(dateObj) : '---'}
                                         </span>
                                     </>
                                 )}
 
                                 {dateObj && !isAllDay && !task.endDate && (
-                                    <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-gray-500 bg-white px-3 py-1 rounded-full shadow-sm">
+                                    <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-on-surface-variant bg-surface-container-lowest px-3 py-1 rounded-full shadow-ambient">
                                         <Clock size={12} />
                                         {new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(dateObj)}
                                     </div>
                                 )}
                                 {isAllDay && (
-                                    <div className="mt-3 flex items-center gap-1.5 text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                                    <div className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-primary bg-primary-container/15 px-3 py-1 rounded-full">
                                         {t('label_allday')}
                                     </div>
                                 )}
@@ -320,37 +312,37 @@ export default function TasksPage() {
                             <div className="flex-1 p-6 md:p-8 flex flex-col justify-center">
                                 <div className="flex items-start justify-between gap-4 mb-2">
                                     <div className="flex-1">
-
-                                        {/* Type Badge Header */}
-                                        <div className="flex items-center gap-2 mb-2">
+                                        <div className="flex items-center gap-2 mb-2 flex-wrap">
                                             <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${badgeColor}`}>
                                                 {badgeLabel}
                                             </span>
-                                            {task.scope === 'school' && !isSchool && <span className="px-2 py-0.5 bg-purple-50 text-purple-700 rounded text-[10px] font-bold uppercase tracking-wider">{t('scope_school')}</span>}
+                                            {task.scope === 'school' && !isSchool && (
+                                                <span className="px-2 py-0.5 bg-tertiary-fixed/60 text-on-tertiary-fixed rounded text-[10px] font-bold uppercase tracking-wider">{t('scope_school')}</span>
+                                            )}
                                         </div>
 
-                                        <h3 className="text-2xl font-bold text-gray-900 leading-tight group-hover:text-nordic-blue transition-colors">
+                                        <h3 className="text-xl md:text-2xl font-bold text-on-surface leading-tight">
                                             {task.title}
                                         </h3>
                                     </div>
 
                                     <div className="flex items-center gap-2">
-                                        {/* Additional Context Badges */}
-                                        {task.type === 'gift_collection' && <span className="px-3 py-1 bg-green-50 text-green-700 text-xs font-bold rounded-lg uppercase tracking-wide">💵 Söfnun</span>}
+                                        {task.type === 'gift_collection' && (
+                                            <span className="px-3 py-1 bg-secondary-container text-on-secondary-container text-xs font-bold rounded-lg uppercase tracking-wide">💵 Söfnun</span>
+                                        )}
 
-                                        {/* Admin Controls */}
                                         {(isAdmin || isSchoolAdmin) && (
                                             <div className="flex items-center gap-1 ml-2">
                                                 <button
                                                     onClick={() => setEditingTask(task)}
-                                                    className="p-1.5 text-gray-400 hover:text-nordic-blue hover:bg-blue-50 rounded-lg transition-all"
+                                                    className="p-1.5 text-on-surface-variant hover:text-primary hover:bg-surface-container-high rounded-lg transition-colors"
                                                     title="Breyta"
                                                 >
                                                     <Edit2 size={16} />
                                                 </button>
                                                 <button
                                                     onClick={() => handleDelete(task.id)}
-                                                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                                                    className="p-1.5 text-on-surface-variant hover:text-error hover:bg-error-container/40 rounded-lg transition-colors"
                                                     title="Eyða"
                                                 >
                                                     <Trash2 size={16} />
@@ -360,7 +352,7 @@ export default function TasksPage() {
                                     </div>
                                 </div>
 
-                                <p className="text-gray-600 leading-relaxed mb-4 max-w-2xl">
+                                <p className="text-on-surface-variant leading-relaxed mb-4 max-w-2xl">
                                     {task.description || t('desc_empty')}
                                 </p>
 
@@ -377,15 +369,15 @@ export default function TasksPage() {
                                 {/* Progress / Action Area */}
                                 <div className="mt-auto">
                                     {(task.slotsTotal > 0) ? (
-                                        <div className="flex items-center gap-4 bg-gray-50/80 p-4 rounded-xl border border-gray-100">
+                                        <div className="flex items-center gap-4 bg-surface p-4 rounded-2xl ghost-border">
                                             <div className="flex-1">
-                                                <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-gray-500 mb-2">
+                                                <div className="flex justify-between text-xs font-bold uppercase tracking-wide text-on-surface-variant mb-2">
                                                     <span>{t('volunteers')}</span>
                                                     <span>{task.slotsFilled} / {task.slotsTotal}</span>
                                                 </div>
-                                                <div className="h-2 w-full bg-gray-200 rounded-full overflow-hidden">
+                                                <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
                                                     <div
-                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-green-500' : 'bg-nordic-blue'}`}
+                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-primary' : 'bg-gradient-to-r from-primary to-primary-container'}`}
                                                         style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
                                                     />
                                                 </div>
@@ -394,16 +386,16 @@ export default function TasksPage() {
                                             <button
                                                 onClick={() => handleVolunteerClick(task.id)}
                                                 disabled={isFull || !isTaskUpcoming}
-                                                className={`px-6 py-2.5 rounded-xl font-bold text-sm transition-all shadow-sm ${isFull
-                                                    ? 'bg-green-100 text-green-700 cursor-default'
-                                                    : 'bg-white border-2 border-nordic-blue text-nordic-blue hover:bg-nordic-blue hover:text-white'
+                                                className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${isFull
+                                                    ? 'bg-primary-container/15 text-primary cursor-default'
+                                                    : 'text-on-primary shadow-ambient hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container'
                                                     }`}
                                             >
                                                 {isFull ? t('full') : t('sign_up')}
                                             </button>
                                         </div>
                                     ) : (
-                                        <div className="py-2 text-sm text-gray-400 font-medium italic flex items-center gap-2">
+                                        <div className="py-2 text-sm text-on-surface-variant font-medium italic flex items-center gap-2">
                                             <Info size={14} />
                                             {t('no_signup_needed')}
                                         </div>
@@ -415,16 +407,16 @@ export default function TasksPage() {
                 })}
 
                 {sortedEvents.length === 0 && (
-                    <div className="text-center py-24 glass-card">
-                        <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <Calendar className="text-gray-300" size={40} />
+                    <div className="text-center py-24 bg-surface-container-lowest rounded-3xl shadow-ambient">
+                        <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-6">
+                            <Calendar className="text-on-surface-variant" size={40} />
                         </div>
-                        <h3 className="text-2xl font-bold text-gray-900">{t('empty_title')}</h3>
-                        <p className="text-gray-500">{t('empty_desc')}</p>
+                        <h3 className="text-2xl font-bold text-on-surface">{t('empty_title')}</h3>
+                        <p className="text-on-surface-variant">{t('empty_desc')}</p>
                         {filter !== 'all' && (
                             <button
                                 onClick={() => setFilter('all')}
-                                className="mt-4 text-nordic-blue font-bold hover:underline"
+                                className="mt-4 text-primary font-bold hover:underline"
                             >
                                 {t('show_all')}
                             </button>
@@ -436,29 +428,29 @@ export default function TasksPage() {
             {/* Simple Create Modal (Reused Logic) */}
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300 relative overflow-hidden">
-                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-nordic-blue to-purple-600 left-0" />
+                    <div className="bg-surface-container-lowest rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-ambient scale-100 animate-in zoom-in-95 duration-300 relative overflow-hidden">
+                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-primary to-primary-container left-0" />
 
                         <div className="text-center">
-                            <div className="w-14 h-14 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-nordic-blue shadow-sm">
+                            <div className="w-14 h-14 bg-primary-container/15 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary shadow-ambient">
                                 <Edit2 size={28} />
                             </div>
-                            <h2 className="text-3xl font-black text-gray-900 tracking-tight">{t('modal_title')}</h2>
+                            <h2 className="text-3xl font-black text-on-surface tracking-tight">{t('modal_title')}</h2>
                         </div>
 
                         <div className="space-y-4">
                             {/* Scope Selector */}
                             {isSchoolAdmin && (
-                                <div className="flex bg-gray-100 p-1 rounded-xl">
+                                <div className="flex bg-surface-container-low p-1 rounded-xl">
                                     <button
                                         onClick={() => setScope('class')}
-                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'class' ? 'bg-surface-container-lowest text-on-surface shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     >
                                         {t('scope_class')}
                                     </button>
                                     <button
                                         onClick={() => setScope('school')}
-                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-white text-purple-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                                        className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all ${scope === 'school' ? 'bg-surface-container-lowest text-primary shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}`}
                                     >
                                         {t('scope_school')}
                                     </button>
@@ -466,32 +458,32 @@ export default function TasksPage() {
                             )}
 
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_title')}</label>
+                                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">{t('label_title')}</label>
                                 <input
                                     type="text"
                                     value={createTitle}
                                     onChange={e => setCreateTitle(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                    className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium text-on-surface"
                                     placeholder="t.d. Kökubasar"
                                 />
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_date')}</label>
+                                    <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">{t('label_date')}</label>
                                     <input
                                         type="date"
                                         value={createDate}
                                         onChange={e => setCreateDate(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                        className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium text-on-surface"
                                     />
                                 </div>
                                 <div className={createIsAllDay ? 'opacity-30 pointer-events-none' : ''}>
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_time')}</label>
+                                    <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">{t('label_time')}</label>
                                     <input
                                         type="time"
                                         value={createTime}
                                         onChange={e => setCreateTime(e.target.value)}
-                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                        className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium text-on-surface"
                                     />
                                 </div>
                             </div>
@@ -501,42 +493,42 @@ export default function TasksPage() {
                                     id="isAllDay"
                                     checked={createIsAllDay}
                                     onChange={(e) => setCreateIsAllDay(e.target.checked)}
-                                    className="w-5 h-5 rounded border-gray-300 text-nordic-blue focus:ring-nordic-blue"
+                                    className="w-5 h-5 rounded border-outline-variant text-primary focus:ring-primary"
                                 />
-                                <label htmlFor="isAllDay" className="text-sm font-bold text-gray-700 cursor-pointer">{t('label_allday')}</label>
+                                <label htmlFor="isAllDay" className="text-sm font-bold text-on-surface cursor-pointer">{t('label_allday')}</label>
                             </div>
                             <div>
-                                <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_desc')}</label>
+                                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">{t('label_desc')}</label>
                                 <textarea
                                     value={createDesc}
                                     onChange={e => setCreateDesc(e.target.value)}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium h-24"
+                                    className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium h-24 text-on-surface"
                                     placeholder="Nánari upplýsingar..."
                                 />
                             </div>
                             <div className="flex items-center justify-between gap-4">
                                 <div className="flex-1">
-                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-wider ml-1">{t('label_slots')}</label>
+                                    <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">{t('label_slots')}</label>
                                     <input
                                         type="number"
                                         value={createSlots}
                                         onChange={e => setCreateSlots(Number(e.target.value))}
-                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-medium"
+                                        className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium text-on-surface"
                                         min={0}
                                     />
                                 </div>
                                 <div className="pt-5">
-                                    <span className="text-xs text-gray-400 font-medium leading-tight inline-block max-w-[140px]">
+                                    <span className="text-xs text-on-surface-variant font-medium leading-tight inline-block max-w-[140px]">
                                         {t('slots_help')}
                                     </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div className="flex gap-3 pt-4 border-t border-gray-100">
+                        <div className="flex gap-3 pt-4 border-t border-outline-variant/30">
                             <button
                                 onClick={() => setIsCreating(false)}
-                                className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors"
                             >
                                 {t('cancel')}
                             </button>
@@ -563,7 +555,7 @@ export default function TasksPage() {
                                     setIsCreating(false);
                                     setCreateTitle(''); setCreateDesc(''); setScope('class');
                                 }}
-                                className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('publish')}
                             </button>
