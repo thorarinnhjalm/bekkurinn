@@ -54,8 +54,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
-// ... existing code ...
-
 // ==========================================
 // AGREEMENT HOOKS
 // ==========================================
@@ -147,8 +145,6 @@ export function useSignAgreement() {
         },
     });
 }
-
-// ... other hooks ...
 
 // ========================================
 // USER / CONTEXT HOOKS

@@ -216,45 +216,6 @@ export type CreateTaskInput = Omit<Task, 'id' | 'createdAt' | 'slotsFilled' | 'v
 export type CreateAnnouncementInput = Omit<Announcement, 'id' | 'createdAt'>;
 
 // ========================================
-// PICKUP OFFERS
-// ========================================
-
-export interface PickupOffer {
-    id: string;
-    classId: string;
-
-    // Who's offering help
-    offeredBy: string; // Parent UID
-    offeredByName: string;
-    offeredByStudentId: string; // Their child's ID
-
-    // Offer details
-    title: string; // "Skutl heim kl 14:00"
-    description?: string; // Optional context
-    date: Timestamp; // When they're picking up
-    time: string; // "14:00"
-    availableSlots: number; // How many extra kids can they take
-
-    // Targeting
-    sentToParents: string[]; // Array of parent UIDs (starred friends' parents)
-    onlyStarredFriends: boolean; // If true, only sent to starred
-
-    // Responses
-    acceptances: {
-        parentId: string;
-        parentName: string;
-        studentId: string;
-        studentName: string;
-        timestamp: Timestamp;
-    }[];
-
-    createdAt: Timestamp;
-    isActive: boolean; // Can be closed by creator
-}
-
-export type CreatePickupOfferInput = Omit<PickupOffer, 'id' | 'createdAt' | 'acceptances'>;
-
-// ========================================
 // NOTIFICATIONS
 // ========================================
 

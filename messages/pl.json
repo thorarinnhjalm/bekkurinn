@@ -33,7 +33,6 @@
     "patrol": "Patrol",
     "tasks": "Zadania",
     "announcements": "Ogłoszenia",
-    "skutl": "Podwóz",
     "my_children": "Moje dzieci",
     "parents": "Rodzice",
     "students": "Uczniowie",
@@ -257,50 +256,6 @@
       "found_label": "Znalezione (Biuro Rzeczy Znalezionych)",
       "solved": "Rozwiązane",
       "claim_mine": "To moje!"
-    }
-  },
-  "pickup_offers": {
-    "title": "Podwóz",
-    "subtitle": "Pomagajmy sobie nawzajem",
-    "offer_help": "Oferuję pomoc",
-    "received_offers": "Oferty wysłane do mnie",
-    "empty_received_title": "Brak ofert",
-    "empty_received_desc": "Kiedy rodzice zaproponują Ci pomoc, oferty pojawią się tutaj.",
-    "my_offers": "Moje oferty",
-    "empty_created_title": "Brak wysłanych ofert",
-    "empty_created_desc": "Nie wysłałeś jeszcze żadnych ofert.",
-    "create_offer": "Utwórz ofertę",
-    "card": {
-      "no_student": "Brak powiązanego ucznia",
-      "confirm_cancel": "Czy na pewno chcesz anulować tę ofertę?",
-      "error_generic": "Wystąpił błąd",
-      "today": "Dziś",
-      "your_offer": "Twoja oferta",
-      "accepted": "Zaakceptowane",
-      "full": "Pełne",
-      "spots_left": "miejsc",
-      "children_accepted": "dzieci przyjęte",
-      "child": "dziecko",
-      "children": "dzieci",
-      "accept_for": "Zaakceptuj dla",
-      "cancel_offer": "Anuluj ofertę"
-    },
-    "modal": {
-      "no_starred": "Nie oznaczyłeś żadnych przyjaciół. Wybierz 'Wyślij do całej klasy' lub oznacz przyjaciół.",
-      "title_default": "Podwóz do domu o",
-      "send_success": "Oferta wysłana do {count} rodziców!",
-      "create_error": "Błąd podczas tworzenia oferty",
-      "modal_title": "Zaoferuj pomoc w transporcie",
-      "label_time": "Kiedy odbierasz?",
-      "label_slots": "Ile dzieci mogę zabrać?",
-      "label_desc": "Opis (opcjonalny)",
-      "placeholder_desc": "Np. \"Mogę pomóc dzisiaj\"",
-      "label_target": "Wyślij tylko do przyjaciół dziecka",
-      "target_friends": "Zostanie wysłane do {count} rodziców (oznaczeni przyjaciele)",
-      "target_all": "Zostanie wysłane do wszystkich w klasie ({count} rodziców)",
-      "cancel": "Anuluj",
-      "sending": "Wysyłanie...",
-      "submit": "Wyślij ofertę"
     }
   },
   "privacy_page": {

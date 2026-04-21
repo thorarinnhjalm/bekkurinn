@@ -3,7 +3,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { Home, Users, Calendar, Megaphone, Menu, Camera, Car, ShieldCheck } from 'lucide-react';
+import { Home, Users, Calendar, Megaphone, Menu, Camera, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 /**

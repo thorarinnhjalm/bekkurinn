@@ -35,7 +35,6 @@
     "tasks": "Tasks",
     "announcements": "Announcements",
     "lost_found": "Lost & Found",
-    "skutl": "Carpool",
     "my_children": "Mis hijos",
     "parents": "Padres",
     "students": "Estudiantes",
@@ -261,50 +260,6 @@
       "found_label": "Encontrado (Objetos Perdidos)",
       "solved": "Resuelto",
       "claim_mine": "¡Es mío!"
-    }
-  },
-  "pickup_offers": {
-    "title": "Compartir coche",
-    "subtitle": "Ayudarse mutuamente a recoger a los niños",
-    "offer_help": "Ofrecer ayuda",
-    "received_offers": "Ofertas enviadas a mí",
-    "empty_received_title": "Sin ofertas",
-    "empty_received_desc": "Cuando los padres te ofrezcan transporte, aparecerá aquí.",
-    "my_offers": "Mis ofertas",
-    "empty_created_title": "Sin ofertas enviadas",
-    "empty_created_desc": "Aún no has enviado ofertas de transporte.",
-    "create_offer": "Crear oferta",
-    "card": {
-      "no_student": "Sin estudiante vinculado",
-      "confirm_cancel": "¿Estás seguro de que quieres cancelar esta oferta?",
-      "error_generic": "Ocurrió un error",
-      "today": "Hoy",
-      "your_offer": "Tu oferta",
-      "accepted": "Aceptado",
-      "full": "Lleno",
-      "spots_left": "lugares",
-      "children_accepted": "niños aceptados",
-      "child": "niño",
-      "children": "niños",
-      "accept_for": "Aceptar para",
-      "cancel_offer": "Cancelar oferta"
-    },
-    "modal": {
-      "no_starred": "No has marcado amigos como favoritos. Por favor elige 'Enviar a toda la clase' o marca amigos primero.",
-      "title_default": "Transporte a casa a las",
-      "send_success": "¡Oferta enviada a {count} padres!",
-      "create_error": "Error al crear oferta",
-      "modal_title": "Ofrecer ayuda de transporte",
-      "label_time": "¿Cuándo recoges?",
-      "label_slots": "¿Cuántos niños puedo llevar?",
-      "label_desc": "Descripción (opcional)",
-      "placeholder_desc": "Ej. \"Poco personal hoy, puedo ayudar\"",
-      "label_target": "Enviar solo a amigos del niño",
-      "target_friends": "Se enviará a {count} padres (amigos favoritos)",
-      "target_all": "Se enviará a todos en la clase ({count} padres)",
-      "cancel": "Cancelar",
-      "sending": "Enviando...",
-      "submit": "Enviar oferta"
     }
   },
   "user": {

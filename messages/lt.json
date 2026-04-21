@@ -35,7 +35,6 @@
     "tasks": "Užduotys",
     "announcements": "Skelbimai",
     "lost_found": "Lost & Found",
-    "skutl": "Pavėžėjimas",
     "my_children": "Mano vaikai",
     "parents": "Tėvai",
     "students": "Mokiniai"
@@ -297,50 +296,6 @@
       "found_label": "Rasta (Pamestų daiktų biuras)",
       "solved": "Išspręsta",
       "claim_mine": "Tai mano!"
-    }
-  },
-  "pickup_offers": {
-    "title": "Pavėžėjimas",
-    "subtitle": "Padėkite vieni kitiems pasiimti vaikus",
-    "offer_help": "Siūlyti pagalbą",
-    "received_offers": "Gauti pasiūlymai",
-    "empty_received_title": "Pasiūlymų nėra",
-    "empty_received_desc": "Kai tėvai pasiūlys pavėžėti, pasiūlymai atsiras čia.",
-    "my_offers": "Mano pasiūlymai",
-    "empty_created_title": "Išsiųstų pasiūlymų nėra",
-    "empty_created_desc": "Dar neišsiuntėte jokių pavėžėjimo pasiūlymų.",
-    "create_offer": "Sukurti pasiūlymą",
-    "card": {
-      "no_student": "Nėra susieto mokinio",
-      "confirm_cancel": "Ar tikrai norite atšaukti šį pasiūlymą?",
-      "error_generic": "Įvyko klaida",
-      "today": "Šiandien",
-      "your_offer": "Jūsų pasiūlymas",
-      "accepted": "Priimta",
-      "full": "Pilna",
-      "spots_left": "vietų liko",
-      "children_accepted": "vaikų priimta",
-      "child": "vaikas",
-      "children": "vaikai",
-      "accept_for": "Priimti už",
-      "cancel_offer": "Atšaukti pasiūlymą"
-    },
-    "modal": {
-      "no_starred": "Nepažymėjote jokių draugų. Pasirinkite „Siųsti visai klasei“ arba pirmiau pažymėkite draugus.",
-      "title_default": "Pavėžėjimas namo",
-      "send_success": "Pasiūlymas išsiųstas {count} tėvams!",
-      "create_error": "Klaida kuriant pasiūlymą",
-      "modal_title": "Siūlyti pavėžėjimo pagalbą",
-      "label_time": "Kada pasiimate?",
-      "label_slots": "Kiek vaikų galiu paimti?",
-      "label_desc": "Aprašymas (neprivaloma)",
-      "placeholder_desc": "Pvz. „Galiu padėti šiandien“",
-      "label_target": "Siųsti tik vaiko draugams",
-      "target_friends": "Bus išsiųsta {count} tėvams (pažymėtiems draugams)",
-      "target_all": "Bus išsiųsta visiems klasėje ({count} tėvų)",
-      "cancel": "Atšaukti",
-      "sending": "Siunčiama...",
-      "submit": "Siųsti pasiūlymą"
     }
   },
   "landing": {

@@ -13,7 +13,6 @@ interface MobileNavWrapperProps {
         tasks: string;
         announcements: string;
         agreement: string;
-        skutl: string;
         settings?: string;
         logout?: string;
         my_account?: string;

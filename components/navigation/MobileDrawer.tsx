@@ -1,6 +1,6 @@
 'use client';
 
-import { X, User, Settings, LogOut, ShieldCheck, Car, HelpCircle } from 'lucide-react';
+import { X, User, Settings, LogOut, ShieldCheck, HelpCircle } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/AuthProvider';
@@ -11,7 +11,6 @@ interface MobileDrawerProps {
     onClose: () => void;
     locale: string;
     translations: {
-        skutl: string;
         agreement: string;
         settings?: string;
         logout?: string;
@@ -87,15 +86,6 @@ export function MobileDrawer({ isOpen, onClose, locale, translations }: MobileDr
                     )}
 
                     {/* Nav Items */}
-                    <Link
-                        href={`/${locale}/pickup-offers`}
-                        onClick={onClose}
-                        className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                        <Car size={20} className="text-gray-600" />
-                        <span className="font-medium">{translations.skutl}</span>
-                    </Link>
-
                     <Link
                         href={`/${locale}/agreement`}
                         onClick={onClose}
