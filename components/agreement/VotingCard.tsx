@@ -33,13 +33,12 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
     const renderText = (key: string) => {
         const cleaned = cleanKey(key);
         const translated = t(cleaned as any);
-        // If translation appears to be missing (returns key with namespace), return the raw text
         return translated.startsWith('agreement.') ? cleaned : translated;
     };
 
     return (
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-4 transition-all hover:shadow-md">
-            <h3 className="font-bold text-lg text-gray-900 mb-2">
+        <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-ambient mb-4 transition-all hover:-translate-y-0.5">
+            <h3 className="font-bold text-lg text-on-surface mb-2">
                 {renderText(item.questionKey)}
             </h3>
 
@@ -51,19 +50,19 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
                             key={option.value}
                             onClick={() => handleVote(option.value)}
                             disabled={!isVotingOpen || submitting}
-                            className={`w-full text-left px-4 py-3 rounded-lg border-2 transition-all flex items-center justify-between
+                            className={`w-full text-left px-4 py-3 rounded-xl transition-all flex items-center justify-between
                                 ${isSelected
-                                    ? 'border-indigo-600 bg-indigo-50 text-indigo-900'
-                                    : 'border-gray-100 hover:bg-gray-50 text-gray-700'
+                                    ? 'ring-2 ring-primary bg-primary-container/15 text-primary'
+                                    : 'bg-surface-container-low hover:bg-surface-container-high text-on-surface'
                                 }
                                 ${!isVotingOpen ? 'opacity-70 cursor-not-allowed' : ''}
                             `}
                         >
                             <span className="font-medium">{renderText(option.labelKey)}</span>
                             {submitting && isSelected ? (
-                                <Loader2 className="w-5 h-5 animate-spin text-indigo-600" />
+                                <Loader2 className="w-5 h-5 animate-spin text-primary" />
                             ) : isSelected ? (
-                                <Check className="w-5 h-5 text-indigo-600" />
+                                <Check className="w-5 h-5 text-primary" />
                             ) : null}
                         </button>
                     );
@@ -71,7 +70,7 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
             </div>
 
             {existingVote && isVotingOpen && (
-                <p className="text-xs text-center text-gray-400 mt-3 font-medium uppercase tracking-wide">
+                <p className="text-xs text-center text-on-surface-variant mt-3 font-medium uppercase tracking-wide">
                     {t('your_vote')}
                 </p>
             )}
