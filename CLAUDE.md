@@ -70,7 +70,7 @@ The root [app/page.tsx](app/page.tsx) renders the Icelandic landing directly (no
 
 ### Styling
 
-Tailwind v4 (via `@tailwindcss/postcss`) + custom Nordic design tokens in [app/globals.css](app/globals.css). Reusable classes worth knowing: `.nordic-card`, `.nordic-button`, `.tap-target` (44px min for mobile). Brand color is `--sage-green: #3d7a5d`.
+Tailwind v4 (via `@tailwindcss/postcss`) + Material 3 design tokens in [app/globals.css](app/globals.css) implementing the **fjord_moss / Academic Sanctuary** system (see `design/stitch/nordic_trust_os/fjord_moss/DESIGN.md`). Primary is Deep Fjord teal `--primary: #12362e`; secondary is muted terracotta `--secondary: #934a2c`; base surface is Soft Bone `--surface: #fbf9f2`. Reusable classes worth knowing: `.nordic-card` (now a tonal card — no border, ambient teal shadow), `.nordic-button` (gradient primary), `.glass-nav` (80% surface + 20px blur), `.ambient-shadow`, `.ghost-border`, `.tap-target` (44px min for mobile). Primitive components in `components/ui/` — `Button`, `Card`, `Chip`, `Input`. The legacy `--trust-navy` / `--nordic-blue` / `--bg-*` / `--text-*` vars are aliased to the new tokens and scheduled for removal in Phase 2.
 
 ## Repo hygiene
 
