@@ -7,15 +7,14 @@ import { DietaryIcon } from '@/components/icons/DietaryIcons';
 import { useStudents, useClass, useUserParentLink } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { useRouter, useParams } from 'next/navigation';
-import type { Student, DietaryNeed } from '@/types';
+import type { DietaryNeed } from '@/types';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { useTranslations } from 'next-intl';
 
 /**
  * Directory Page - Sameiginleg skrá bekkjarins
- * 
- * V2: Glass Cards, Floating Search, Animated Interactions
+ * fjord_moss / Academic Sanctuary redesign.
  */
 
 export default function DirectoryPage() {
@@ -26,7 +25,7 @@ export default function DirectoryPage() {
     const t = useTranslations('directory');
     const [classId, setClassId] = useState<string | null>(null);
 
-    // 1. Fetch User Class (Newest)
+    // Fetch user's newest admin class
     useEffect(() => {
         async function fetchUserClass() {
             if (!user) return;
@@ -36,7 +35,6 @@ export default function DirectoryPage() {
                     where('admins', 'array-contains', user.uid)
                 );
                 const snapshot = await getDocs(q);
-
                 if (!snapshot.empty) {
                     const sortedDocs = snapshot.docs.sort((a, b) => {
                         const tA = a.data().createdAt?.toMillis() || 0;
@@ -61,7 +59,7 @@ export default function DirectoryPage() {
     const [starredStudents, setStarredStudents] = useState<Set<string>>(new Set());
     const [parentsMap, setParentsMap] = useState<Map<string, any[]>>(new Map());
 
-    // Load starred students from Firestore
+    // Load starred
     useEffect(() => {
         async function loadStarredStudents() {
             if (!user?.uid) return;
@@ -75,21 +73,18 @@ export default function DirectoryPage() {
         if (user?.uid) loadStarredStudents();
     }, [user?.uid]);
 
-    // Redirect to login if not authenticated
+    // Auth redirect
     useEffect(() => {
         if (!authLoading && !user) {
             router.push(`/${locale}/login`);
         }
     }, [authLoading, user, router, locale]);
 
-    // Fetch parent data for all students
+    // Fetch parents
     useEffect(() => {
         async function fetchParents() {
             if (!studentsData || studentsData.length === 0) return;
-
             try {
-                // Fetch all parent links for the class (efficient)
-                // We utilize the fact that parentLinks also store the classId
                 const parentLinksQuery = query(
                     collection(db, 'parentLinks'),
                     where('classId', '==', classId),
@@ -98,21 +93,13 @@ export default function DirectoryPage() {
                 const parentLinksSnap = await getDocs(parentLinksQuery);
                 let parentLinks = parentLinksSnap.docs.map(d => ({ id: d.id, ...d.data() }));
 
-                // ---------------------------------------------------------
-                // Fallback Strategy for Legacy Data (missing classId)
-                // ---------------------------------------------------------
-
-                // 1. Identify which students have NO parents found yet
+                // Fallback for legacy links missing classId
                 const studentsWithParents = new Set(parentLinks.map((pl: any) => pl.studentId));
                 const studentsWithoutParents = studentsData.filter(s => !studentsWithParents.has(s.id));
 
                 if (studentsWithoutParents.length > 0) {
-                    console.log(`Checking fallback for ${studentsWithoutParents.length} students...`);
-
-                    // Batch request for remaining students (max 10 per batch for 'in' query)
                     const studentIds = studentsWithoutParents.map(s => s.id);
                     const BATCH_SIZE = 10;
-
                     for (let i = 0; i < studentIds.length; i += BATCH_SIZE) {
                         const batch = studentIds.slice(i, i + BATCH_SIZE);
                         try {
@@ -123,8 +110,6 @@ export default function DirectoryPage() {
                             );
                             const fallbackSnap = await getDocs(fallbackQuery);
                             const fallbackLinks = fallbackSnap.docs.map(d => ({ id: d.id, ...d.data() }));
-
-                            // Add to our main list
                             parentLinks = [...parentLinks, ...fallbackLinks];
                         } catch (err) {
                             console.error('Fallback query failed', err);
@@ -132,11 +117,8 @@ export default function DirectoryPage() {
                     }
                 }
 
-                // Filter out links for students not in our list (just in case)
                 const studentIdSet = new Set(studentsData.map(s => s.id));
                 const textLinks = parentLinks.filter((pl: any) => studentIdSet.has(pl.studentId));
-
-                // Get unique user IDs
                 const userIds = [...new Set(textLinks.map((pl: any) => pl.userId))];
 
                 if (userIds.length === 0) {
@@ -144,7 +126,6 @@ export default function DirectoryPage() {
                     return;
                 }
 
-                // Fetch user data for all parents
                 const usersQuery = query(
                     collection(db, 'users'),
                     where('__name__', 'in', userIds)
@@ -155,7 +136,6 @@ export default function DirectoryPage() {
                     usersData.set(d.id, { id: d.id, ...d.data() });
                 });
 
-                // Build map: studentId -> array of parent user objects
                 const newParentsMap = new Map<string, any[]>();
                 parentLinks.forEach((link: any) => {
                     const parentUser = usersData.get(link.userId);
@@ -174,43 +154,26 @@ export default function DirectoryPage() {
         fetchParents();
     }, [studentsData, classId]);
 
-    // Format helpers and event handlers...
     const toggleStar = async (studentId: string) => {
         if (!user?.uid) return;
-
         const newStarred = new Set(starredStudents);
         const isCurrentlyStarred = newStarred.has(studentId);
-
-        if (isCurrentlyStarred) {
-            newStarred.delete(studentId);
-        } else {
-            newStarred.add(studentId);
-        }
-
-        // Update UI optimistically
+        if (isCurrentlyStarred) newStarred.delete(studentId);
+        else newStarred.add(studentId);
         setStarredStudents(newStarred);
-
-        // Persist to Firestore
         try {
-            if (isCurrentlyStarred) {
-                await removeStarredStudent(user.uid, studentId);
-            } else {
-                await addStarredStudent(user.uid, studentId);
-            }
+            if (isCurrentlyStarred) await removeStarredStudent(user.uid, studentId);
+            else await addStarredStudent(user.uid, studentId);
         } catch (error) {
             console.error('Error toggling star:', error);
-            // Revert on error
             setStarredStudents(starredStudents);
         }
     };
 
     const toggleExpand = (studentId: string) => {
         const newExpanded = new Set(expandedCards);
-        if (newExpanded.has(studentId)) {
-            newExpanded.delete(studentId);
-        } else {
-            newExpanded.add(studentId);
-        }
+        if (newExpanded.has(studentId)) newExpanded.delete(studentId);
+        else newExpanded.add(studentId);
         setExpandedCards(newExpanded);
     };
 
@@ -220,21 +183,18 @@ export default function DirectoryPage() {
         return new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
     };
 
-    // Loading state
     if (authLoading || studentsLoading || !classId) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin" style={{ color: 'var(--nordic-blue)' }} />
-                    <p style={{ color: 'var(--text-secondary)' }}>Hleður gögnum...</p>
+                    <Loader2 size={40} className="animate-spin text-primary" />
+                    <p className="text-on-surface-variant">Hleður gögnum...</p>
                 </div>
             </div>
         );
     }
 
     const students = studentsData || [];
-
-    // Filter and sort students
     const sortedStudents = [...students]
         .filter(s => s.name.toLowerCase().includes(searchQuery.toLowerCase()))
         .sort((a, b) => {
@@ -248,7 +208,7 @@ export default function DirectoryPage() {
     const starredCount = starredStudents.size;
     const displayName = classData?.name || (classData?.grade ? `${classData.grade}. Bekkur` : 'Bekkurinn');
 
-    // FAIR PHOTO LOGIC
+    // Fair photo logic — both sides share photos or neither sees them
     const myStudent = students.find(s => s.id === parentLink?.studentId);
     const userHasPhoto = !!user?.photoURL;
     const childHasPhoto = !!myStudent?.photoUrl;
@@ -256,51 +216,51 @@ export default function DirectoryPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-20">
-            {/* Header with Glass Effect */}
-            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4 relative">
-                {/* Decorative background blur */}
-                <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
-
-                <div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
-                    <p className="text-lg text-gray-500 max-w-lg">
-                        {t('subtitle_prefix')} <span className="font-semibold text-nordic-blue">{displayName}</span> {t('subtitle_suffix')}
+            {/* Header */}
+            <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div className="max-w-2xl">
+                    <h1 className="text-4xl md:text-5xl font-bold text-on-surface tracking-tight mb-3">
+                        {t('title')}
+                    </h1>
+                    <p className="text-lg text-on-surface-variant leading-relaxed">
+                        {t('subtitle_prefix')}{' '}
+                        <span className="font-semibold text-primary">{displayName}</span>{' '}
+                        {t('subtitle_suffix')}
                     </p>
                 </div>
                 {starredCount > 0 && (
-                    <div className="glass-card px-5 py-2 flex items-center gap-2 text-amber-600 font-bold animate-in zoom-in bg-amber-50/50 border-amber-100">
+                    <div className="px-5 py-2 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center gap-2 font-semibold shadow-ambient animate-in zoom-in">
                         <Star size={18} fill="currentColor" />
                         <span>{starredCount} {t('starred_friends')}</span>
                     </div>
                 )}
             </header>
 
-            {/* Floating Search Bar */}
-            <div className="sticky top-4 z-20">
-                <div className="relative group max-w-2xl mx-auto shadow-md rounded-lg">
-                    <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
-                        <Search className="h-5 w-5 text-gray-400 group-focus-within:text-nordic-blue transition-colors" />
-                    </div>
+            {/* Utility bar: search + (future) filters */}
+            <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+                <div className="relative w-full md:w-96">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" size={20} />
                     <input
                         type="search"
                         placeholder={t('search_placeholder')}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 rounded-lg border outline-none border-gray-200 bg-white focus:border-nordic-blue focus:ring-1 focus:ring-nordic-blue/20 transition-all text-lg placeholder:text-gray-400"
+                        className="w-full bg-surface-container-high text-on-surface placeholder:text-on-surface-variant rounded-full py-3 pl-12 pr-4 border-0 focus:outline-none focus:ring-2 focus:ring-primary/40 transition-all"
                     />
                 </div>
+
+                {students.length > 0 && (
+                    <div className="flex items-center gap-2 text-xs font-bold text-on-surface-variant uppercase tracking-widest md:ml-auto">
+                        <Users size={14} />
+                        <span>
+                            {t('student_count', { current: sortedStudents.length, total: students.length })}
+                        </span>
+                    </div>
+                )}
             </div>
 
-            {/* Student Count */}
-            {students.length > 0 && (
-                <div className="flex items-center justify-center gap-2 text-sm font-bold text-gray-400 uppercase tracking-widest">
-                    <Users size={14} />
-                    <span>{t('student_count', { current: sortedStudents.length, total: students.length })}</span>
-                </div>
-            )}
-
-            {/* Student Grid - Glass Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+            {/* Student Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 items-start">
                 {sortedStudents.map((student) => {
                     const isExpanded = expandedCards.has(student.id);
                     const isStarred = starredStudents.has(student.id);
@@ -309,109 +269,151 @@ export default function DirectoryPage() {
                     return (
                         <div
                             key={student.id}
-                            className={`glass-card group relative overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-nordic-blue/20 bg-white' : 'hover:bg-white/60'} ${isStarred ? 'ring-2 ring-amber-100 bg-amber-50/10' : ''}`}
+                            className={`relative bg-surface-container-lowest rounded-3xl shadow-ambient overflow-hidden transition-all duration-300 ${
+                                isExpanded ? 'ring-2 ring-primary/25' : ''
+                            } ${isStarred ? 'ring-2 ring-tertiary-fixed' : ''}`}
                         >
                             {/* Star Button */}
                             <button
                                 onClick={(e) => { e.stopPropagation(); toggleStar(student.id); }}
-                                className={`absolute top-4 right-4 p-2 rounded-full transition-all z-10 ${isStarred ? 'text-amber-400 bg-amber-50 scale-110' : 'text-gray-300 hover:text-amber-400 hover:bg-amber-50'}`}
+                                className={`absolute top-4 right-4 p-2 rounded-full transition-all z-10 ${
+                                    isStarred
+                                        ? 'text-tertiary bg-tertiary-fixed scale-110'
+                                        : 'text-on-surface-variant/50 hover:text-tertiary hover:bg-surface-container-high'
+                                }`}
+                                aria-label={isStarred ? 'Fjarlægja stjörnu' : 'Bæta við stjörnu'}
                             >
-                                <Star size={20} fill={isStarred ? "currentColor" : "none"} />
+                                <Star size={20} fill={isStarred ? 'currentColor' : 'none'} />
                             </button>
 
-                            {/* Child Info - Clickable to expand */}
+                            {/* Child Info */}
                             <div
                                 onClick={() => toggleExpand(student.id)}
                                 className="p-6 cursor-pointer"
                             >
-                                <div className="flex items-center gap-5">
+                                <div className="flex items-center gap-4 pr-10">
                                     {/* Avatar */}
-                                    <div className="relative w-20 h-20 rounded-lg flex items-center justify-center text-2xl font-semibold shadow-sm transition-transform duration-300 group-hover:scale-105 bg-blue-50 text-blue-700">
+                                    <div className="relative w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold bg-surface-container-high text-primary shrink-0">
                                         {canViewPhotos && student.photoUrl ? (
-                                            <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover rounded-lg" />
+                                            <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover rounded-full" />
                                         ) : (
                                             <span>{student.name[0]}</span>
                                         )}
                                         {/* Dietary Badge */}
                                         {student.dietaryNeeds?.length ? (
-                                            <div className="absolute -bottom-1 -right-1 bg-white p-1 rounded-full shadow-md border border-gray-50 z-20" title={student.dietaryNeeds.join(', ')}>
-                                                <div className="w-6 h-6">
-                                                    <DietaryIcon type={student.dietaryNeeds[0] as DietaryNeed} showLabel={false} size={16} />
+                                            <div
+                                                className="absolute -bottom-1 -right-1 bg-surface-container-lowest p-1 rounded-full shadow-ambient z-20"
+                                                title={student.dietaryNeeds.join(', ')}
+                                            >
+                                                <div className="w-5 h-5">
+                                                    <DietaryIcon type={student.dietaryNeeds[0] as DietaryNeed} showLabel={false} size={14} />
                                                 </div>
                                             </div>
                                         ) : null}
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="text-xl font-bold text-gray-900 group-hover:text-nordic-blue transition-colors truncate">
-                                            {student.name.split(' ')[0]} <span className="text-gray-400 font-normal">{student.name.split(' ').slice(1).join(' ')}</span>
+                                        <h3 className="text-lg font-bold text-on-surface truncate">
+                                            {student.name.split(' ')[0]}{' '}
+                                            <span className="text-on-surface-variant font-normal">
+                                                {student.name.split(' ').slice(1).join(' ')}
+                                            </span>
                                         </h3>
-                                        <p className="text-sm font-medium text-gray-500 mt-1 flex items-center gap-1.5">
+                                        <p className="text-sm text-on-surface-variant mt-0.5 flex items-center gap-1.5">
                                             <span>🎂</span>
                                             {student.birthDate ? formatBirthDate(student.birthDate) : t('missing_birthday')}
                                         </p>
                                     </div>
                                 </div>
+
+                                {/* Dietary pills (full list if multiple) */}
+                                {student.dietaryNeeds && student.dietaryNeeds.length > 0 && (
+                                    <div className="flex flex-wrap gap-2 mt-4">
+                                        {student.dietaryNeeds.map((need) => (
+                                            <div
+                                                key={need}
+                                                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-error-container/40 text-on-error-container text-xs font-medium"
+                                            >
+                                                <DietaryIcon type={need as DietaryNeed} showLabel={false} size={14} />
+                                                <span>{need}</span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
 
                             {/* Expanded Parent Info */}
                             {isExpanded && (
-                                <div className="bg-gray-50/50 border-t border-gray-100 p-6 animate-in slide-in-from-top-2">
-                                    <div className="space-y-4">
-                                        <h4 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-3">{t('parents_title')}</h4>
+                                <div className="bg-surface px-6 py-5 border-t border-outline-variant/20 animate-in slide-in-from-top-2">
+                                    <h4 className="text-xs font-bold text-on-surface-variant uppercase tracking-widest mb-3">
+                                        {t('parents_title')}
+                                    </h4>
+                                    <div className="space-y-3">
                                         {parents.length > 0 ? (
                                             parents.map((parent) => (
-                                                <div key={parent.id} className="flex items-start gap-4 p-3 rounded-xl bg-white border border-gray-100 shadow-sm">
-                                                    <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-sm font-bold text-gray-600 flex-shrink-0">
-                                                        {parent.displayName?.[0] || 'F'}
-                                                    </div>
-                                                    <div className="flex-1 min-w-0">
-                                                        <p className="font-bold text-gray-900 text-sm">{parent.displayName}</p>
-                                                        <p className="text-xs text-gray-500 mb-2">{parent.role === 'admin' ? t('teacher_role') : t('parent_role')}</p>
-
-                                                        <div className="flex flex-wrap gap-2">
-                                                            {parent.phone && parent.isPhoneVisible && (
-                                                                <a href={`tel:${parent.phone}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-50 text-green-700 text-xs font-bold hover:bg-green-100 transition-colors">
-                                                                    <Phone size={12} /> {t('call')}
-                                                                </a>
-                                                            )}
-                                                            <a href={`mailto:${parent.email}`} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold hover:bg-blue-100 transition-colors">
-                                                                <Mail size={12} /> {t('email')}
-                                                            </a>
+                                                <div
+                                                    key={parent.id}
+                                                    className="p-4 rounded-2xl bg-surface-container-lowest shadow-ambient"
+                                                >
+                                                    <div className="flex items-center gap-3 mb-3">
+                                                        <div className="w-9 h-9 rounded-full bg-primary-container/15 text-primary flex items-center justify-center text-sm font-bold shrink-0">
+                                                            {parent.displayName?.[0] || 'F'}
                                                         </div>
-
-                                                        {parent.address && (
-                                                            <div className="mt-3">
-                                                                <a
-                                                                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
-                                                                    target="_blank"
-                                                                    rel="noopener noreferrer"
-                                                                    className="flex items-start gap-1.5 text-xs text-gray-500 hover:text-nordic-blue transition-colors group/addr"
-                                                                >
-                                                                    <MapPin size={14} className="mt-0.5 text-gray-400 group-hover/addr:text-nordic-blue" />
-                                                                    <span className="flex-1 underline-offset-2 group-hover/addr:underline">
-                                                                        {parent.address}
-                                                                    </span>
-                                                                </a>
-                                                            </div>
-                                                        )}
+                                                        <div className="flex-1 min-w-0">
+                                                            <p className="font-semibold text-on-surface text-sm truncate">
+                                                                {parent.displayName}
+                                                            </p>
+                                                            <p className="text-xs text-on-surface-variant">
+                                                                {parent.role === 'admin' ? t('teacher_role') : t('parent_role')}
+                                                            </p>
+                                                        </div>
                                                     </div>
+
+                                                    <div className="flex flex-wrap gap-2">
+                                                        {parent.phone && parent.isPhoneVisible && (
+                                                            <a
+                                                                href={`tel:${parent.phone}`}
+                                                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-xs font-medium hover:bg-surface-container transition-colors"
+                                                            >
+                                                                <Phone size={13} /> {t('call')}
+                                                            </a>
+                                                        )}
+                                                        <a
+                                                            href={`mailto:${parent.email}`}
+                                                            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface text-xs font-medium hover:bg-surface-container transition-colors"
+                                                        >
+                                                            <Mail size={13} /> {t('email')}
+                                                        </a>
+                                                    </div>
+
+                                                    {parent.address && (
+                                                        <a
+                                                            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(parent.address)}`}
+                                                            target="_blank"
+                                                            rel="noopener noreferrer"
+                                                            className="mt-3 flex items-start gap-1.5 text-xs text-on-surface-variant hover:text-primary transition-colors group/addr"
+                                                        >
+                                                            <MapPin size={14} className="mt-0.5 shrink-0" />
+                                                            <span className="underline-offset-2 group-hover/addr:underline">
+                                                                {parent.address}
+                                                            </span>
+                                                        </a>
+                                                    )}
                                                 </div>
                                             ))
                                         ) : (
-                                            <div className="text-center py-4 bg-white/50 rounded-xl border border-dashed border-gray-200">
-                                                <p className="text-sm text-gray-400">{t('no_parents')}</p>
+                                            <div className="text-center py-4 rounded-xl bg-surface-container-low">
+                                                <p className="text-sm text-on-surface-variant">{t('no_parents')}</p>
                                             </div>
                                         )}
                                     </div>
 
-                                    {/* Collapse Button */}
                                     <button
                                         onClick={() => toggleExpand(student.id)}
-                                        className="w-full mt-4 flex items-center justify-center gap-2 text-gray-400 hover:text-gray-600 py-2 transition-colors"
+                                        className="w-full mt-4 flex items-center justify-center gap-2 text-on-surface-variant hover:text-on-surface py-2 transition-colors"
                                     >
                                         <ChevronUp size={16} />
-                                        <span className="text-xs font-bold uppercase">{t('close')}</span>
+                                        <span className="text-xs font-bold uppercase tracking-wide">{t('close')}</span>
                                     </button>
                                 </div>
                             )}
@@ -420,14 +422,14 @@ export default function DirectoryPage() {
                 })}
             </div>
 
-            {/* Empty State */}
+            {/* Empty state */}
             {sortedStudents.length === 0 && (
-                <div className="glass-card p-12 text-center max-w-lg mx-auto mt-12 bg-white/50">
-                    <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <Users className="text-gray-300" size={40} />
+                <div className="bg-surface-container-lowest rounded-3xl shadow-ambient p-12 text-center max-w-lg mx-auto mt-12">
+                    <div className="w-20 h-20 bg-surface-container-high rounded-full flex items-center justify-center mx-auto mb-4">
+                        <Users className="text-on-surface-variant" size={40} />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">{t('no_results_title')}</h3>
-                    <p className="text-gray-500 mt-2">{t('no_results_desc')}</p>
+                    <h3 className="text-xl font-bold text-on-surface">{t('no_results_title')}</h3>
+                    <p className="text-on-surface-variant mt-2">{t('no_results_desc')}</p>
                 </div>
             )}
         </div>
