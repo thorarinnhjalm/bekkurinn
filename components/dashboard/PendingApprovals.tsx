@@ -94,23 +94,23 @@ export default function PendingApprovals({ classId, myStudentId, isAdmin }: Pend
     if (requests.length === 0) return null;
 
     return (
-        <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6 animate-in fade-in slide-in-from-top-4">
-            <h3 className="font-bold text-amber-800 mb-3 flex items-center gap-2">
+        <div className="bg-tertiary-fixed/60 rounded-2xl p-5 animate-in fade-in slide-in-from-top-4 shadow-ambient">
+            <h3 className="font-bold text-on-tertiary-fixed mb-4 flex items-center gap-2">
                 <User size={20} />
                 Beiðnir um aðgang ({requests.length})
             </h3>
             <div className="space-y-3">
                 {requests.map(req => (
-                    <div key={req.id} className="bg-white p-3 rounded-lg border border-amber-100 flex items-center justify-between shadow-sm">
+                    <div key={req.id} className="bg-surface-container-lowest p-3 rounded-xl flex items-center justify-between shadow-ambient">
                         <div>
-                            <p className="font-medium text-gray-900">{req.requesterName}</p>
-                            <p className="text-xs text-gray-500">Vill tengjast barninu þínu</p>
+                            <p className="font-medium text-on-surface">{req.requesterName}</p>
+                            <p className="text-xs text-on-surface-variant">Vill tengjast barninu þínu</p>
                         </div>
                         <div className="flex gap-2">
                             <button
                                 onClick={() => handleApprove(req.id)}
                                 disabled={!!processingId}
-                                className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors disabled:opacity-50"
+                                className="p-2 bg-primary-container/15 text-primary rounded-full hover:bg-primary-container/25 transition-colors disabled:opacity-50"
                                 title="Samþykkja"
                             >
                                 {processingId === req.id ? <Loader2 className="animate-spin" size={18} /> : <Check size={18} />}
@@ -118,7 +118,7 @@ export default function PendingApprovals({ classId, myStudentId, isAdmin }: Pend
                             <button
                                 onClick={() => handleDeny(req.id)}
                                 disabled={!!processingId}
-                                className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors disabled:opacity-50"
+                                className="p-2 bg-error-container text-on-error-container rounded-full hover:opacity-80 transition-colors disabled:opacity-50"
                                 title="Hafna"
                             >
                                 <X size={18} />
