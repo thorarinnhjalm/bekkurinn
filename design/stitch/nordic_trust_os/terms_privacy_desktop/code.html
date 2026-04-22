@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Persónuvernd &amp; Skilmálar - Hljóðlát</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-fixed": "#002113",
+                      "tertiary-container": "#9b6200",
+                      "secondary-container": "#bceed1",
+                      "on-error-container": "#93000a",
+                      "surface-dim": "#dadad9",
+                      "secondary-fixed-dim": "#a1d1b5",
+                      "on-background": "#1a1c1c",
+                      "surface-bright": "#f9f9f8",
+                      "outline-variant": "#bfc9c1",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-low": "#f4f4f3",
+                      "surface-container-high": "#e8e8e7",
+                      "on-primary-fixed-variant": "#0d5137",
+                      "surface-container": "#eeeeed",
+                      "error-container": "#ffdad6",
+                      "surface": "#f9f9f8",
+                      "surface-container-lowest": "#ffffff",
+                      "inverse-primary": "#95d4b2",
+                      "error": "#ba1a1a",
+                      "tertiary": "#7a4c00",
+                      "on-tertiary-fixed-variant": "#653e00",
+                      "primary": "#226146",
+                      "surface-variant": "#e2e2e2",
+                      "on-secondary": "#ffffff",
+                      "surface-tint": "#2c694e",
+                      "secondary-fixed": "#bceed1",
+                      "tertiary-fixed": "#ffddb8",
+                      "surface-container-highest": "#e2e2e2",
+                      "on-primary-fixed": "#002113",
+                      "on-secondary-container": "#406d56",
+                      "secondary": "#3a6750",
+                      "on-surface-variant": "#404943",
+                      "outline": "#707973",
+                      "tertiary-fixed-dim": "#ffb95f",
+                      "on-tertiary-fixed": "#2a1700",
+                      "primary-fixed": "#b0f1cd",
+                      "on-primary-container": "#c8ffdf",
+                      "on-primary": "#ffffff",
+                      "primary-fixed-dim": "#95d4b2",
+                      "on-surface": "#1a1c1c",
+                      "on-secondary-fixed-variant": "#224f3a",
+                      "inverse-on-surface": "#f1f1f0",
+                      "on-error": "#ffffff",
+                      "inverse-surface": "#2f3130",
+                      "background": "#f9f9f8",
+                      "primary-container": "#3d7a5d",
+                      "on-tertiary-container": "#fff0e3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {},
+              "fontFamily": {
+                      "headline": ["Inter", "sans-serif"],
+                      "body": ["Inter", "sans-serif"],
+                      "label": ["Inter", "sans-serif"]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .glass-gradient {
+            background: linear-gradient(135deg, #226146 0%, #3d7a5d 100%);
+        }
+        .ambient-shadow {
+            box-shadow: 0px 12px 32px rgba(47, 49, 48, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 bg-stone-50/80 backdrop-blur-md shadow-sm shadow-emerald-900/5 font-inter tracking-tight leading-none text-emerald-800">
+<div class="max-w-7xl mx-auto flex justify-between items-center px-8 h-20">
+<div class="text-2xl font-bold tracking-tighter text-emerald-950">Hljóðlát</div>
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-stone-600 font-medium hover:text-emerald-700 transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">Product</a>
+<a class="text-stone-600 font-medium hover:text-emerald-700 transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">Resources</a>
+<a class="text-stone-600 font-medium hover:text-emerald-700 transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">FAQ</a>
+<a class="text-stone-600 font-medium hover:text-emerald-700 transition-all duration-300 scale-95 active:scale-90 transition-transform" href="#">About</a>
+</nav>
+<button class="glass-gradient text-on-primary px-6 py-3 rounded-xl font-medium tracking-wide hover:opacity-90 transition-opacity">Get Started</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-32 pb-24 max-w-7xl mx-auto w-full px-8">
+<!-- Hero Section -->
+<div class="mb-16 md:mb-24">
+<h1 class="font-headline text-5xl md:text-6xl font-bold tracking-tight text-on-surface mb-6">Persónuvernd &amp; Skilmálar</h1>
+<p class="text-xl text-on-surface-variant max-w-2xl leading-relaxed">
+                Við tökum persónuvernd alvarlega og förum eftir lögum og reglum um persónuvernd og vinnslu persónuupplýsinga. Hér má finna ítarlegar upplýsingar um hvernig við söfnum og notum gögn.
+            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-12 gap-12 lg:gap-24 relative">
+<!-- Table of Contents (Sticky Side Nav) -->
+<aside class="md:col-span-3 hidden md:block">
+<div class="sticky top-32 space-y-2">
+<p class="font-headline text-sm font-semibold tracking-wider uppercase text-on-surface-variant mb-6">Efnisyfirlit</p>
+<nav class="flex flex-col gap-1">
+<a class="py-2 px-3 rounded-lg bg-surface-container-low text-primary font-medium transition-colors" href="#inngangur">1. Inngangur</a>
+<a class="py-2 px-3 rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors" href="#sofnun">2. Söfnun upplýsinga</a>
+<a class="py-2 px-3 rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors" href="#notkun">3. Notkun upplýsinga</a>
+<a class="py-2 px-3 rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors" href="#rettindi">4. Þín réttindi (GDPR)</a>
+<a class="py-2 px-3 rounded-lg hover:bg-surface-container-low text-on-surface-variant transition-colors" href="#oyggi">5. Gagnaöryggi</a>
+</nav>
+<!-- Trust Card -->
+<div class="mt-12 p-6 bg-surface-container-low rounded-xl ambient-shadow">
+<span class="material-symbols-outlined text-primary mb-4 block" style="font-variation-settings: 'FILL' 1;">shield</span>
+<h3 class="font-headline font-semibold text-on-surface mb-2">GDPR Samhæft</h3>
+<p class="text-sm text-on-surface-variant">Öll gögn eru hýst innan Evrópska Efnahagssvæðisins í samræmi við lög um persónuvernd.</p>
+</div>
+</div>
+</aside>
+<!-- Long-form Content Area -->
+<article class="md:col-span-9 max-w-3xl space-y-16">
+<section class="scroll-mt-32" id="inngangur">
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-6">1. Inngangur</h2>
+<div class="prose prose-lg text-on-surface-variant leading-loose">
+<p class="mb-6">Í þessari persónuverndarstefnu er útskýrt hvernig Hljóðlát Sanctuary vinnur með persónuupplýsingar í tengslum við veitingu þjónustunnar. Við leggjum ríka áherslu á að tryggja öryggi og trúnað við vinnslu slíkra upplýsinga.</p>
+<p>Markmið okkar er að bjóða upp á öruggt og friðsælt stafrænt umhverfi fyrir skólastarf, þar sem persónuvernd er höfð að leiðarljósi við alla hönnun (e. privacy by design).</p>
+</div>
+</section>
+<section class="scroll-mt-32" id="sofnun">
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-6">2. Söfnun upplýsinga</h2>
+<div class="bg-surface-container-lowest p-8 rounded-xl ambient-shadow mb-8">
+<h3 class="font-headline text-lg font-semibold text-on-surface mb-4">Upplýsingar sem við söfnum milliliðalaust</h3>
+<ul class="space-y-4 text-on-surface-variant">
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">account_circle</span>
+<div>
+<strong class="text-on-surface block">Grunnupplýsingar</strong>
+<span>Nafn, netfang og starfsheiti við nýskráningu reiknings.</span>
+</div>
+</li>
+<li class="flex items-start gap-4">
+<span class="material-symbols-outlined text-primary mt-1">history</span>
+<div>
+<strong class="text-on-surface block">Notkunargögn</strong>
+<span>Upplýsingar um hvernig kerfið er notað til að bæta virkni, án þess að rekja einstaka notendur niður.</span>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section class="scroll-mt-32" id="notkun">
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-6">3. Notkun upplýsinga</h2>
+<div class="prose prose-lg text-on-surface-variant leading-loose">
+<p class="mb-6">Við notum upplýsingarnar eingöngu í þeim tilgangi að veita umbeðna þjónustu, tryggja öryggi kerfisins og sinna nauðsynlegu viðhaldi. Við deilum aldrei upplýsingum til þriðja aðila í markaðsskyni.</p>
+<p>Allar upplýsingar eru geymdar á öruggum netþjónum innan EES og eru dulkóðaðar bæði í hvíld og flutningi.</p>
+</div>
+</section>
+<section class="scroll-mt-32" id="rettindi">
+<h2 class="font-headline text-3xl font-bold tracking-tight text-on-surface mb-6">4. Þín réttindi (GDPR)</h2>
+<div class="prose prose-lg text-on-surface-variant leading-loose">
+<p class="mb-6">Samkvæmt lögum um persónuvernd og vinnslu persónuupplýsinga átt þú rétt á að:</p>
+<ul class="list-disc pl-6 space-y-2 mb-6">
+<li>Fá upplýsingar um hvaða gögn við vinnum um þig.</li>
+<li>Krefjast þess að röng gögn séu leiðrétt.</li>
+<li>Óska eftir að gögnum um þig sé eytt ("rétturinn til að gleymast").</li>
+<li>Andmæla vinnslu gagnanna.</li>
+</ul>
+</div>
+</section>
+</article>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full border-t border-transparent bg-stone-100 font-inter text-sm tracking-normal leading-relaxed text-emerald-900">
+<div class="w-full px-8 py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+<div>
+<div class="text-lg font-bold text-emerald-950 mb-2">Hljóðlát Sanctuary</div>
+<p class="text-stone-500 opacity-80">© 2024 Hljóðlát Sanctuary. Built for the dignity of educators.</p>
+</div>
+<nav class="flex flex-wrap gap-6 md:justify-end">
+<a class="text-stone-500 hover:text-emerald-900 transition-colors opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-emerald-800 underline underline-offset-4 opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-stone-500 hover:text-emerald-900 transition-colors opacity-80 hover:opacity-100" href="#">Cookie Policy</a>
+<a class="text-stone-500 hover:text-emerald-900 transition-colors opacity-80 hover:opacity-100" href="#">Accessibility</a>
+</nav>
+</div>
+</footer>
+</body></html>

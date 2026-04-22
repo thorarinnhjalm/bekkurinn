@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Yfirlit</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary": "#2a4d44",
+                        "on-primary": "#ffffff",
+                        "primary-container": "#b0d1c3",
+                        "on-primary-container": "#002018",
+                        "secondary": "#49635a",
+                        "on-secondary": "#ffffff",
+                        "secondary-container": "#cbe8dc",
+                        "on-secondary-container": "#052018",
+                        "tertiary": "#426277",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#c6e7ff",
+                        "on-tertiary-container": "#001e2e",
+                        "error": "#ba1a1a",
+                        "on-error": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-error-container": "#410002",
+                        "background": "#fbfcf9",
+                        "on-background": "#191c1b",
+                        "surface": "#fbfcf9",
+                        "on-surface": "#191c1b",
+                        "surface-variant": "#dbe5e0",
+                        "on-surface-variant": "#3f4946",
+                        "outline": "#6f7975",
+                        "outline-variant": "#bfc9c4",
+                        "surface-container-highest": "#e2e3e1",
+                        "surface-container-high": "#e7e9e6",
+                        "surface-container": "#ededea",
+                        "surface-container-low": "#f3f4f1",
+                        "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #fbfcf9; color: #191c1b; }
+    </style>
+</head>
+<body class="bg-background text-on-surface flex min-h-screen selection:bg-primary-container selection:text-on-primary-container">
+<aside class="hidden md:flex flex-col fixed left-0 top-0 h-full p-6 bg-surface-container-lowest h-screen w-64 border-r-0 z-40 shadow-none border-r border-outline-variant/15">
+<div class="flex items-center gap-3 mb-10">
+<img alt="Bekkurinn Logo" class="w-10 h-10 rounded-lg object-cover shrink-0" src="https://lh3.googleusercontent.com/aida/ADBb0ugpCg1IBUHp3xGZ9d-FVOtP4Tc3B7eAKBus_U6itiiRS0R-QXxcJ8T6gxi5teNzIeVYd0yqhHljbQa8JN4TDHNpZFlzieyb7BDT1HZwk7jwi-M5NReBnwdgp6-7SNQK2Zvn1T4XCGwJqTViWV_rlJaxbwxw6OCrXmGx5Jjd-73U0odpDzSg3jRwCBoTm7AqmhSaVFnUX1GLdqgpee0UPhv7sGDrlWH-fAglRFgkB_nfkqi3EIMfYR2DQ3M"/>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-primary">Bekkurinn</h1>
+<p class="text-xs text-on-surface-variant">Hljóðlátur griðastaður</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-primary font-semibold border-r-4 border-primary bg-surface-container-high font-inter text-sm tracking-tight transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Yfirlit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-inter text-sm font-medium tracking-tight transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span>Bekkir</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-inter text-sm font-medium tracking-tight transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span>Dagatal</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-inter text-sm font-medium tracking-tight transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="folder">folder</span>
+<span>Skjöl</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-on-surface-variant hover:text-primary hover:bg-surface-container-low font-inter text-sm font-medium tracking-tight transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Stillingar</span>
+</a>
+</nav>
+</aside>
+<main class="flex-1 md:ml-64 p-6 md:p-12 pb-24 md:pb-12 max-w-7xl mx-auto w-full">
+<header class="mb-12">
+<h1 class="text-3xl md:text-4xl font-headline font-bold tracking-tight text-on-surface mb-2">Góðan daginn, Jón Ari</h1>
+<p class="text-lg text-on-surface-variant font-body">Hér er yfirlit dagsins í dag.</p>
+</header>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+<div class="lg:col-span-2 space-y-6 lg:space-y-8">
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0px_12px_32px_rgba(47,49,48,0.06)]">
+<h2 class="text-xl font-headline font-bold text-on-surface mb-6 tracking-tight">Hvað er framundan?</h2>
+<div class="space-y-4">
+<div class="flex items-start gap-4 p-4 rounded-xl bg-surface hover:bg-surface-container-low transition-colors group border border-outline-variant/15">
+<div class="w-12 h-12 rounded-full bg-tertiary-container flex items-center justify-center text-on-tertiary-container shrink-0">
+<span class="material-symbols-outlined" data-icon="cake">cake</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h3 class="font-semibold text-on-surface">Afmæli: Ari Jónsson</h3>
+<span class="text-xs font-medium text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Í dag</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Verður 12 ára í dag. Mundu að óska honum til hamingju!</p>
+</div>
+</div>
+<div class="flex items-start gap-4 p-4 rounded-xl bg-surface hover:bg-surface-container-low transition-colors group border border-outline-variant/15">
+<div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container shrink-0">
+<span class="material-symbols-outlined" data-icon="security">security</span>
+</div>
+<div class="flex-1">
+<div class="flex items-center justify-between">
+<h3 class="font-semibold text-on-surface">Röltið: Næsta vakt</h3>
+<span class="text-xs font-medium text-on-surface-variant bg-surface-container px-2 py-1 rounded-md">Á morgun</span>
+</div>
+<p class="text-sm text-on-surface-variant mt-1">Föstudagur, 20:00 - 22:00. Skráðir: Jón Ari og Guðrún.</p>
+</div>
+</div>
+</div>
+</section>
+<section class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary"></div>
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary" data-icon="push_pin" data-weight="fill" style="font-variation-settings: 'FILL' 1;">push_pin</span>
+<h2 class="text-xl font-headline font-bold text-on-surface tracking-tight">Nýjasta tilkynningin</h2>
+</div>
+<div class="bg-surface-container-low rounded-lg p-5">
+<h3 class="font-semibold text-on-surface mb-2">Foreldrafundur framundan</h3>
+<p class="text-sm text-on-surface-variant mb-4 leading-relaxed">Minnum á foreldrafundinn næstkomandi þriðjudag kl. 17:00 í matsal skólans. Mikilvægt að allir mæti þar sem farið verður yfir vorferðina.</p>
+<div class="flex items-center justify-between mt-4 pt-4 border-t border-outline-variant/20">
+<span class="text-xs text-on-surface-variant">Birt af: Skólastjórn fyrir 2 dögum</span>
+<button class="text-sm font-medium text-primary hover:text-primary-container transition-colors">Sjá nánar</button>
+</div>
+</div>
+</section>
+</div>
+<div class="space-y-6 lg:space-y-8">
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)]">
+<h2 class="text-lg font-headline font-bold text-on-surface mb-4 tracking-tight">Afmæli framundan</h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border-2 border-tertiary flex items-center justify-center">
+<span class="text-xs font-bold text-on-surface">15</span>
+</div>
+<span class="text-sm font-medium text-on-surface">María Jónsdóttir</span>
+</div>
+<span class="text-xs text-on-surface-variant">Mán</span>
+</li>
+<li class="flex items-center justify-between p-3 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full border-2 border-outline-variant/30 flex items-center justify-center">
+<span class="text-xs font-bold text-on-surface">22</span>
+</div>
+<span class="text-sm font-medium text-on-surface">Pétur Guðmundsson</span>
+</div>
+<span class="text-xs text-on-surface-variant">Næsta vika</span>
+</li>
+</ul>
+</section>
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)]">
+<h2 class="text-lg font-headline font-bold text-on-surface mb-4 tracking-tight">Flýtileiðir</h2>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="campaign">campaign</span>
+<span class="text-xs font-medium text-on-surface text-center">Ný tilkynning</span>
+</button>
+<button class="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<span class="material-symbols-outlined text-primary mb-2 group-hover:scale-110 transition-transform" data-icon="directions_walk">directions_walk</span>
+<span class="text-xs font-medium text-on-surface text-center">Skrá á röltið</span>
+</button>
+</div>
+</section>
+</div>
+</div>
+</main>
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe pt-3 md:hidden bg-white/80 backdrop-blur-xl docked full-width rounded-t-3xl shadow-[0px_-12px_32px_rgba(47,49,48,0.06)]">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-2xl px-5 py-2 font-inter text-[11px] font-medium transition-colors duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="home" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Heim</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container px-5 py-2 rounded-2xl font-inter text-[11px] font-medium transition-colors duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="school">school</span>
+<span>Bekkur</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container px-5 py-2 rounded-2xl font-inter text-[11px] font-medium transition-colors duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="notifications">notifications</span>
+<span>Tilkynningar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container px-5 py-2 rounded-2xl font-inter text-[11px] font-medium transition-colors duration-300" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="person">person</span>
+<span>Prófíll</span>
+</a>
+</nav>
+</body></html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Týnt &amp; Fundið</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {},
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen antialiased flex flex-col">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 w-full z-50 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-colors hidden md:block">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d]">Bekkurinn</div>
+<div class="flex items-center gap-4">
+<button class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 p-2 rounded-full scale-98 active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 p-2 rounded-full scale-98 active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-24 pb-32 md:pb-24 px-6 max-w-screen-xl mx-auto w-full">
+<!-- Header Section -->
+<div class="mb-12 max-w-3xl">
+<h1 class="font-headline text-5xl font-extrabold tracking-tight text-on-background mb-4">Týnt &amp; Fundið</h1>
+<p class="font-body text-lg text-on-surface-variant leading-relaxed">
+                Hér má sjá muni sem hafa fundist á skólalóðinni eða inni í skólanum, sem og tilkynningar um hluti sem nemendur sakna. 
+            </p>
+</div>
+<!-- Filters (Tonal Layering approach) -->
+<div class="flex flex-wrap gap-3 mb-10">
+<button class="px-6 py-2.5 rounded-full font-label text-sm font-semibold bg-surface-container-lowest text-on-surface shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-all duration-200">
+                Allt
+            </button>
+<button class="px-6 py-2.5 rounded-full font-label text-sm font-medium bg-surface text-on-surface-variant hover:bg-surface-container-low transition-all duration-200">
+                Óskilamunir
+            </button>
+<button class="px-6 py-2.5 rounded-full font-label text-sm font-medium bg-surface text-on-surface-variant hover:bg-surface-container-low transition-all duration-200">
+                Tapað
+            </button>
+</div>
+<!-- Grid Layout (Bento-inspired, asymmetrical hints) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1: Found Item -->
+<article class="bg-surface-container-low rounded-2xl overflow-hidden flex flex-col relative group transition-all duration-300 hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-container">
+<div class="relative h-56 w-full bg-surface-variant overflow-hidden">
+<img alt="Blá úlpa" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500 group-hover:scale-105" data-alt="A durable dark blue winter jacket resting on a clean light wooden surface, natural daylight, minimalist aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDyuBnOpmmJR1fHNKe-xgRKptuFiozO9FQZ2AlLoFle7aUgkkuoqkuhkNRdPKwnSr5jlTLOZYJ0agJk_QVrDF5LQ9lvRu9SH1nAjLRjNa94C_4c82evblqfR-2XwKGdZXUsoyPZy6S8qBAHWvJqp4NBKGSZAdsxCwAONwuMp2N1sNKBSBF6rclYuDIQiSyinpfVheVTvKh8PfNJMXT5ebHVaB28dEO1XEOkirmU_lPL5bReEPI0BXgDzWqBxziI5daQ0QL-DS5sLpA"/>
+<!-- 'Anthro' Chip - Success/Found -->
+<div class="absolute top-4 left-4 bg-[#c8ffdf]/90 backdrop-blur-md text-[#002113] px-3 py-1.5 rounded-full font-label text-xs font-bold tracking-wide shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                        FUNDIÐ!
+                    </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<h2 class="font-headline text-xl font-semibold text-on-surface mb-2">Blá úlpa (66°Norður)</h2>
+<p class="font-body text-on-surface-variant leading-relaxed text-sm mb-4">
+                            Fannst á bekk við inngang B í morgun. Stærð 140. Vel farin.
+                        </p>
+<div class="flex items-center gap-2 text-sm text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span class="font-medium">Í dag, 08:15</span>
+</div>
+</div>
+<!-- Primary Button (Gradient) -->
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-xl py-3.5 font-label font-semibold tracking-wide hover:opacity-90 transition-opacity flex items-center justify-center gap-2 shadow-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">front_hand</span>
+                        Ég á þetta!
+                    </button>
+</div>
+</article>
+<!-- Card 2: Lost Item -->
+<article class="bg-surface-container-low rounded-2xl overflow-hidden flex flex-col relative group transition-all duration-300 hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-container">
+<div class="relative h-56 w-full bg-surface-variant overflow-hidden flex items-center justify-center">
+<img alt="Vatnsbrúsi" class="w-full h-full object-cover opacity-80 group-hover:opacity-90 transition-opacity duration-500" data-alt="A sleek stainless steel water bottle with a slight dent on a neutral grey background, studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBN1MV1Wa2_1STgZJgEpcc4GFVNfau5_rygO1Rmd6DuXAkS3snWRT0CO8S1_i6QJCc0S91TAEsrG12rUrhwIZo1iEHrhxcJYrmLFsNHKmUMju08qYvVuBq6nxixhzRSPXyIJEGr5jQoWC3crcmkeroVeuCgjZWLPLscgyvpopMC_jvZhr-x8oy3X_Tm733UN0_Qskpa4Ai3gqCJ9JLOMQSgoiqVaoZASE6fAMM1YWVtU1sXfwDj0_NIWPeXpPKyXMl8gSrp8_8GDfQ"/>
+<!-- 'Anthro' Chip - Action/Lost (Tertiary) -->
+<div class="absolute top-4 left-4 bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1.5 rounded-full font-label text-xs font-bold tracking-wide shadow-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">search</span>
+                        Týnt
+                    </div>
+</div>
+<div class="p-6 flex-1 flex flex-col justify-between">
+<div>
+<h2 class="font-headline text-xl font-semibold text-on-surface mb-2">Stál vatnsbrúsi</h2>
+<p class="font-body text-on-surface-variant leading-relaxed text-sm mb-4">
+                            Týndist líklega í íþróttahúsinu í gær. Hann er með lítilli beyglu á botninum og límmiða af Pokémon.
+                        </p>
+<div class="flex items-center gap-2 text-sm text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">person</span>
+<span class="font-medium">Jón Jónsson (4. bekkur)</span>
+</div>
+</div>
+<!-- Secondary Action -->
+<button class="w-full bg-surface-container-highest text-on-surface rounded-xl py-3.5 font-label font-semibold tracking-wide hover:bg-surface-variant transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">visibility</span>
+                        Ég hef séð þetta
+                    </button>
+</div>
+</article>
+<!-- Card 3: Found Item (No Photo) -->
+<article class="bg-surface-container-low rounded-2xl overflow-hidden flex flex-col relative group transition-all duration-300 hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-container lg:translate-y-4">
+<div class="p-6 flex-1 flex flex-col justify-between relative mt-4">
+<!-- 'Anthro' Chip - Success/Found -->
+<div class="absolute top-0 left-6 bg-[#c8ffdf]/90 text-[#002113] px-3 py-1.5 rounded-full font-label text-xs font-bold tracking-wide flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                        FUNDIÐ!
+                    </div>
+<div class="mt-8">
+<div class="w-12 h-12 rounded-full bg-surface-variant flex items-center justify-center text-outline mb-4">
+<span class="material-symbols-outlined text-2xl">vpn_key</span>
+</div>
+<h2 class="font-headline text-xl font-semibold text-on-surface mb-2">Húsalyklar í rauðri ól</h2>
+<p class="font-body text-on-surface-variant leading-relaxed text-sm mb-4">
+                            Kippa með þremur lyklum fannst á róló. Skilað á skrifstofu ritara.
+                        </p>
+<div class="flex items-center gap-2 text-sm text-on-surface-variant mb-6">
+<span class="material-symbols-outlined text-[18px]">location_on</span>
+<span class="font-medium">Skrifstofa</span>
+</div>
+</div>
+<!-- Tertiary Text Action -->
+<button class="w-full text-primary rounded-xl py-3.5 font-label font-semibold tracking-wide hover:bg-primary/5 transition-colors flex items-center justify-center gap-2">
+                        Hafa samband
+                        <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+</main>
+<!-- BottomNavBar (Hidden on desktop, visible on mobile as per Responsive Pivot rule) -->
+<!-- Note: Following strict JSON transcription for styles, highlighting 'Feed' as fallback active -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 rounded-t-3xl shadow-[0px_-8px_24px_rgba(47,49,48,0.04)]">
+<div class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 ease-out cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">group</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Directory</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 ease-out cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">calendar_month</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Calendar</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 ease-out cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">volunteer_activism</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Patrol</span>
+</div>
+<!-- Active State (Feed logic) -->
+<div class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 scale-110 transition-transform duration-300 ease-out cursor-pointer">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Feed</span>
+</div>
+<div class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 ease-out cursor-pointer group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">gavel</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Agreement</span>
+</div>
+</nav>
+</body></html>

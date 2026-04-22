@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+
+<html lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Týnt &amp; Fundið</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen relative font-body antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed w-full z-40 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 top-0 shadow-[0px_12px_32px_rgba(47,49,48,0.06)]">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d]">Bekkurinn</div>
+<div class="flex gap-4">
+<button class="text-[#226146] dark:text-[#3d7a5d] hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-[#226146] dark:text-[#3d7a5d] hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 p-2 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-32 px-4 max-w-md mx-auto relative">
+<!-- Page Title & Header Actions -->
+<div class="mb-8 flex justify-between items-end">
+<div>
+<h1 class="text-3xl font-headline font-extrabold text-primary tracking-tight mb-2">Týnt &amp; Fundið</h1>
+<p class="text-on-surface-variant text-base leading-relaxed">Sjáðu hvað hefur fundist eða skráðu nýjan hlut.</p>
+</div>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-3 mb-8 overflow-x-auto pb-2 scrollbar-hide">
+<button class="bg-primary/10 text-primary px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap">Öll gögn</button>
+<button class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap hover:bg-surface-variant transition-colors">Týnt</button>
+<button class="bg-surface-container-high text-on-surface-variant px-5 py-2 rounded-full font-medium text-sm whitespace-nowrap hover:bg-surface-variant transition-colors">Fundið</button>
+</div>
+<!-- Item Cards (Bento/Layered style) -->
+<div class="space-y-5">
+<!-- Card 1: Found -->
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] flex gap-4 items-center group hover:bg-surface-container-low transition-colors duration-300">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-surface-container-high">
+<img alt="child's winter gloves on a bench" class="w-full h-full object-cover" data-alt="a pair of bright red child's winter mittens left on a wooden school bench, soft natural daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9FlThIG_HR-XowcN6b3zFK30r6dmAL2vWJgJbkEwfR6cLM8PnBJtXl8PISfcTbKRCbx_G-1SwM3Pkaw4HSF3jx4H-jbBL2FCSwku32SxEuNd0M8poJJLX0KqkGuK8gC7o1RTCOkqek4A42C3IovYXB_561aIdnzD1DwxaPqEvXKKAvOy-6Wxj2TrkiT2RIhvtHApUfi5gU8OKYRdroh6XtJHT1EEAKW2koyaG6cBBIgqKP4a6AOcyriF0qcDEcL6thr2V5qj1WhI"/>
+</div>
+<div class="flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">Fundið</span>
+<span class="text-xs text-on-surface-variant">Í gær</span>
+</div>
+<h3 class="font-bold text-lg text-on-surface leading-tight mb-1">Rauðir vettlingar</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                        Við inngang A
+                    </p>
+</div>
+</div>
+<!-- Card 2: Lost -->
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] flex gap-4 items-center group hover:bg-surface-container-low transition-colors duration-300">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-outline-variant" style="font-variation-settings: 'FILL' 0;">help</span>
+</div>
+<div class="flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-tertiary-fixed text-on-tertiary-fixed">Týnt</span>
+<span class="text-xs text-on-surface-variant">2. okt</span>
+</div>
+<h3 class="font-bold text-lg text-on-surface leading-tight mb-1">Svört húfa (66°N)</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">school</span>
+                        Líklegast í leikfimi
+                    </p>
+</div>
+</div>
+<!-- Card 3: Found -->
+<div class="bg-surface-container-lowest rounded-2xl p-4 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] flex gap-4 items-center group hover:bg-surface-container-low transition-colors duration-300">
+<div class="w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-surface-container-high">
+<img alt="water bottle" class="w-full h-full object-cover" data-alt="a blue reusable water bottle sitting on a stone wall, shallow depth of field, outdoor setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1pnPeWzWVbCSPka5pdGdvOOLnE-FPiGs9lWD84JLGfFp5Segl6QgYRm9SyOGMtym1m98VH4KrN-74NQz-Kd2J__dRtx9lTtPoHFLHgnbp4h5ffpoAdOd0ETobAv8E3eni-_LhxLXkg2E2P1yKKUBGrJpQeUym9qDRv2hOzboTI-2DzY26jyyNDduYrW6fTySmpyNOQ3PSJTNgJacdXD48AIoV6LaYaBcVRbPEpkxUwhyAWydGE6-24oQXa3GAOeyQcpciIl5zwEA"/>
+</div>
+<div class="flex flex-col flex-grow">
+<div class="flex justify-between items-start mb-1">
+<span class="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-primary/10 text-primary">Fundið</span>
+<span class="text-xs text-on-surface-variant">28. sept</span>
+</div>
+<h3 class="font-bold text-lg text-on-surface leading-tight mb-1">Blár vatnsbrúsi</h3>
+<p class="text-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+                        Kaffistofa
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 rounded-t-3xl shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] md:hidden">
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">group</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Directory</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Calendar</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">volunteer_activism</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Patrol</span>
+</button>
+<!-- Active Item: Feed (Closest match for a board/bulletin) -->
+<button class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<span class="text-label-md font-inter font-medium text-[10px] font-bold">Feed</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 0;">gavel</span>
+<span class="text-label-md font-inter font-medium text-[10px]">Agreement</span>
+</button>
+</nav>
+<!-- Modal Overlay: Skrá nýjan hlut -->
+<div class="fixed inset-0 z-50 flex items-end justify-center bg-inverse-surface/40 backdrop-blur-sm md:items-center">
+<!-- Modal Content (Bottom Sheet on Mobile) -->
+<div class="bg-surface w-full max-w-lg rounded-t-[32px] md:rounded-3xl p-6 shadow-2xl animate-[slideUp_0.3s_ease-out]">
+<div class="flex justify-between items-center mb-6">
+<h2 class="text-2xl font-headline font-bold text-primary tracking-tight">Skrá nýjan hlut</h2>
+<button class="p-2 bg-surface-container-low rounded-full text-on-surface-variant hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<form class="space-y-4">
+<!-- Type Selection -->
+<div class="grid grid-cols-2 gap-3 mb-6">
+<label class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-primary/20 bg-primary/5 cursor-pointer hover:bg-primary/10 transition-colors">
+<input checked="" class="hidden" name="item_type" type="radio" value="lost"/>
+<span class="material-symbols-outlined text-primary mb-2 text-3xl" style="font-variation-settings: 'FILL' 1;">search</span>
+<span class="font-medium text-primary">Týnt</span>
+</label>
+<label class="flex flex-col items-center justify-center p-4 rounded-xl border-2 border-transparent bg-surface-container-high cursor-pointer hover:bg-surface-container transition-colors">
+<input class="hidden" name="item_type" type="radio" value="found"/>
+<span class="material-symbols-outlined text-on-surface-variant mb-2 text-3xl">inventory_2</span>
+<span class="font-medium text-on-surface-variant">Fundið</span>
+</label>
+</div>
+<!-- Input: Title -->
+<div>
+<label class="block text-sm font-medium text-on-surface-variant mb-1 ml-1">Hvað er þetta?</label>
+<input class="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:bg-surface-bright transition-all" placeholder="T.d. Bláir vettlingar..." type="text"/>
+</div>
+<!-- Input: Location/Details -->
+<div>
+<label class="block text-sm font-medium text-on-surface-variant mb-1 ml-1">Staðsetning eða nánari lýsing</label>
+<textarea class="w-full bg-surface-container-high border-none rounded-xl px-4 py-3 text-on-surface placeholder:text-outline focus:ring-2 focus:ring-primary/40 focus:bg-surface-bright transition-all resize-none" placeholder="Hvar sást það síðast eða fannst?" rows="2"></textarea>
+</div>
+<!-- Photo Upload (Visual only) -->
+<button class="w-full flex items-center justify-center gap-2 py-4 border-2 border-dashed border-outline-variant rounded-xl text-on-surface-variant hover:bg-surface-container-low hover:border-primary/50 transition-all" type="button">
+<span class="material-symbols-outlined">add_a_photo</span>
+<span class="font-medium text-sm">Bæta við mynd</span>
+</button>
+<!-- Actions -->
+<div class="pt-4 mt-2">
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300" type="button">
+                        Skrá hlut
+                    </button>
+</div>
+</form>
+</div>
+</div>
+</body></html>

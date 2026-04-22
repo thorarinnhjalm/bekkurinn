@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Algengar Spurningar</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-container": "#9b6200",
+                        "secondary-container": "#bceed1",
+                        "on-error-container": "#93000a",
+                        "surface-dim": "#dadad9",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-background": "#1a1c1c",
+                        "surface-bright": "#f9f9f8",
+                        "outline-variant": "#bfc9c1",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f4f4f3",
+                        "surface-container-high": "#e8e8e7",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-container": "#eeeeed",
+                        "error-container": "#ffdad6",
+                        "surface": "#f9f9f8",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "error": "#ba1a1a",
+                        "tertiary": "#7a4c00",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "primary": "#226146",
+                        "surface-variant": "#e2e2e2",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#2c694e",
+                        "secondary-fixed": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container-highest": "#e2e2e2",
+                        "on-primary-fixed": "#002113",
+                        "on-secondary-container": "#406d56",
+                        "secondary": "#3a6750",
+                        "on-surface-variant": "#404943",
+                        "outline": "#707973",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-tertiary-fixed": "#2a1700",
+                        "primary-fixed": "#b0f1cd",
+                        "on-primary-container": "#c8ffdf",
+                        "on-primary": "#ffffff",
+                        "primary-fixed-dim": "#95d4b2",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "background": "#f9f9f8",
+                        "primary-container": "#3d7a5d",
+                        "on-tertiary-container": "#fff0e3"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-background font-body min-h-screen flex flex-col antialiased selection:bg-primary selection:text-on-primary">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-stone-50/80 dark:bg-zinc-950/80 backdrop-blur-md shadow-sm shadow-emerald-900/5">
+<div class="max-w-7xl mx-auto flex justify-between items-center px-8 h-20">
+<div class="text-2xl font-bold tracking-tighter text-emerald-950 dark:text-emerald-50 font-headline">Hljóðlát</div>
+<div class="hidden md:flex gap-8 items-center font-inter tracking-tight leading-none">
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-emerald-700 dark:hover:text-emerald-300 transition-all duration-300" href="#">Product</a>
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-emerald-700 dark:hover:text-emerald-300 transition-all duration-300" href="#">Resources</a>
+<a class="text-emerald-900 dark:text-emerald-100 font-semibold border-b-2 border-emerald-900 dark:border-emerald-100 pb-1" href="#">FAQ</a>
+<a class="text-stone-600 dark:text-stone-400 font-medium hover:text-emerald-700 dark:hover:text-emerald-300 transition-all duration-300" href="#">About</a>
+</div>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-xl font-medium tracking-tight hover:opacity-90 transition-opacity scale-95 active:scale-90 transition-transform">
+                Get Started
+            </button>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow pt-32 pb-24 px-8 max-w-4xl mx-auto w-full">
+<!-- Header -->
+<header class="mb-16 text-center md:text-left">
+<h1 class="text-5xl font-headline font-extrabold tracking-tight text-on-background mb-4">Algengar Spurningar</h1>
+<p class="text-xl text-on-surface-variant font-body leading-relaxed max-w-2xl">Svör við helstu spurningum um Bekkinn og hvernig við styðjum við skólastarf.</p>
+</header>
+<!-- FAQ Content (Bento-ish Asymmetric Layout) -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
+<!-- Left Sidebar Navigation (Sticky) -->
+<div class="md:col-span-4 sticky top-32 flex flex-col gap-2">
+<a class="px-5 py-3 rounded-xl bg-surface-container-highest text-on-background font-medium hover:bg-surface-container-highest transition-colors" href="#general">Almennt</a>
+<a class="px-5 py-3 rounded-xl hover:bg-surface-container text-on-surface-variant font-medium transition-colors" href="#security">Öryggi &amp; Gögn</a>
+<a class="px-5 py-3 rounded-xl hover:bg-surface-container text-on-surface-variant font-medium transition-colors" href="#features">Virkni</a>
+</div>
+<!-- Right Content Area (Questions) -->
+<div class="md:col-span-8 flex flex-col gap-6">
+<!-- Category: General -->
+<section class="scroll-mt-32" id="general">
+<h2 class="text-sm font-label font-bold text-primary uppercase tracking-widest mb-4">Almennt</h2>
+<div class="flex flex-col gap-3">
+<!-- Q1 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-headline font-semibold text-on-background">Er þetta virkilega frítt?</h3>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">expand_more</span>
+</div>
+<p class="text-on-surface-variant font-body leading-relaxed hidden">Já, grunnútgáfa kerfisins verður alltaf frí fyrir kennara. Við teljum að öll börn eigi rétt á góðu skólaumhverfi óháð fjárráðum skólans.</p>
+</div>
+</div>
+</section>
+<!-- Category: Security -->
+<section class="scroll-mt-32 mt-8" id="security">
+<h2 class="text-sm font-label font-bold text-primary uppercase tracking-widest mb-4">Öryggi &amp; Gögn</h2>
+<div class="flex flex-col gap-3">
+<!-- Q2 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-headline font-semibold text-on-background">Hvernig er öryggið í kerfinu?</h3>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">expand_more</span>
+</div>
+<p class="text-on-surface-variant font-body leading-relaxed hidden">Öll gögn eru dulkóðuð og hýst á öruggum þjónum í Evrópu. Við fylgjum öllum stöðlum GDPR um persónuvernd.</p>
+</div>
+</div>
+</section>
+<!-- Category: Features -->
+<section class="scroll-mt-32 mt-8" id="features">
+<h2 class="text-sm font-label font-bold text-primary uppercase tracking-widest mb-4">Virkni</h2>
+<div class="flex flex-col gap-3">
+<!-- Q3 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:bg-surface-bright transition-colors cursor-pointer group">
+<div class="flex justify-between items-center mb-2">
+<h3 class="text-lg font-headline font-semibold text-on-background">Hvað er Bekkjarsáttmálinn?</h3>
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">expand_more</span>
+</div>
+<p class="text-on-surface-variant font-body leading-relaxed hidden">Bekkjarsáttmálinn er tól sem hjálpar nemendum að setja sameiginleg markmið og reglur fyrir bekkinn sinn, og fylgjast með hvernig gengur að halda þau.</p>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full bg-stone-100 dark:bg-zinc-900 border-t border-transparent tonal background shift to surface-container-low flat no shadows">
+<div class="w-full px-8 py-16 grid grid-cols-1 md:grid-cols-2 gap-8 items-center max-w-7xl mx-auto">
+<div class="flex flex-col gap-2">
+<span class="text-lg font-bold text-emerald-950 dark:text-emerald-50 font-headline tracking-tight">Hljóðlát</span>
+<p class="text-emerald-900 dark:text-emerald-100 font-inter text-sm tracking-normal leading-relaxed opacity-80">© 2024 Hljóðlát Sanctuary. Built for the dignity of educators.</p>
+</div>
+<div class="flex flex-wrap gap-6 md:justify-end font-inter text-sm tracking-normal leading-relaxed">
+<a class="text-stone-500 dark:text-stone-400 hover:text-emerald-900 dark:hover:text-emerald-50 transition-colors" href="#">Terms of Service</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-emerald-900 dark:hover:text-emerald-50 transition-colors" href="#">Privacy Policy</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-emerald-900 dark:hover:text-emerald-50 transition-colors" href="#">Cookie Policy</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-emerald-900 dark:hover:text-emerald-50 transition-colors" href="#">Accessibility</a>
+</div>
+</div>
+</footer>
+</body></html>

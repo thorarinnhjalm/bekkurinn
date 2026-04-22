@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+
+<html lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Foreldrarölt - Bekkurinn</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="docked full-width top-0 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 bg-[#f4f4f3] dark:bg-stone-800 transition-colors shadow-[0px_12px_32px_rgba(47,49,48,0.06)] z-40 sticky">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d]">Bekkurinn</span>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-label-md font-inter font-medium text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-1.5 rounded-lg" href="#">Directory</a>
+<a class="text-label-md font-inter font-medium text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-1.5 rounded-lg" href="#">Calendar</a>
+<a class="text-label-md font-inter font-medium text-[#226146] font-bold border-b-2 border-[#226146] pb-1 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-1.5 rounded-lg" href="#">Patrol</a>
+<a class="text-label-md font-inter font-medium text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-1.5 rounded-lg" href="#">Feed</a>
+<a class="text-label-md font-inter font-medium text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-1.5 rounded-lg" href="#">Agreement</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#226146] dark:text-[#3d7a5d] p-2 rounded-full hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+<button class="text-[#226146] dark:text-[#3d7a5d] p-2 rounded-full hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="max-w-5xl mx-auto px-6 py-12 md:py-16 pb-32">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+<div>
+<h1 class="font-headline text-5xl tracking-tight text-on-surface mb-3 font-bold">Foreldrarölt</h1>
+<p class="font-body text-lg text-on-surface-variant max-w-2xl leading-relaxed">Skráðu þig á röltið og taktu þátt í samfélaginu. Mikilvægt er að sem flestir taki þátt til að halda umhverfinu öruggu.</p>
+</div>
+<button class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-medium tracking-wide shadow-[0px_12px_32px_rgba(47,49,48,0.06)] hover:shadow-lg transition-all duration-300 flex items-center gap-2">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 0;">add</span>
+                Nýtt rölt
+            </button>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Column: Upcoming Shifts -->
+<div class="lg:col-span-8 space-y-8">
+<h2 class="font-headline text-2xl font-semibold tracking-tight text-on-surface flex items-center gap-3">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+                    Næstu Vaktir
+                </h2>
+<!-- Shift Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-primary rounded-l-xl"></div>
+<div class="flex flex-col sm:flex-row justify-between gap-6">
+<div class="space-y-4 flex-grow">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-headline text-xl font-semibold text-on-surface mb-1">Föstudagur, 12. Maí</h3>
+<p class="font-body text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0;">schedule</span>
+                                        20:00 - 22:30
+                                    </p>
+</div>
+<span class="bg-tertiary-fixed/30 text-on-tertiary-fixed text-sm px-3 py-1 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">group</span>
+                                    2 af 4 vöktum skipaðar
+                                </span>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="bg-surface-container-low px-4 py-2 rounded-lg flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="Portrait of a smiling woman with dark hair" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFTF4EPUcZzwMqBRcXC1iz2R4YZhh-9pG67EpLna1OoUVfcoOD1xDw0PhTSQdxlXlx_LKOYSyuE8sc2MZmNbsfgy4_2UA1XxxH7Jj2BaFdpiacRIkcdom8FbWBCaQ2s0rXnx9delhgFVOsLneYJt4dh6SOoGHz-un8reLUP-40sXUdVkb-H7OLE07g2JgCOX8rin5ZF3guYQ6SjMw8qyHi0oOhLTqtesM8EgZdlzaN4EWt3270KVUpcwj0qFlfVEGVxd07kMNU8cI"/>
+</div>
+<span class="font-medium text-sm">Anna Jónsdóttir</span>
+</div>
+<div class="bg-surface-container-low px-4 py-2 rounded-lg flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-surface-variant overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="Portrait of a man with glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKpyBufyAzagLNfKtc9b44fXWNwpEQrI1p6lpoFAZy8x7Xm0q2ijCJF8YCgUQaYO8tF6dWgrwTR-ZtrBxQfVAu-96n0-L68zm7GmpygGoF2ZL9BrTFZRzAu_I9j3G6IXytgOTIOQgr6Aww1DXcbXifcOzgBVyC4rl0Ni1o2ksP1ejRXv1ad6p07zIN6ka2iDBX9L88adwbQj7bUrvBsuJQWd_tsacJfm6pZQvQBOq3fM7CW8vhipee_cVw02TD4GIhJ8gmmcNNPFo"/>
+</div>
+<span class="font-medium text-sm">Jón Pálsson</span>
+</div>
+<div class="border border-outline-variant border-dashed px-4 py-2 rounded-lg flex items-center justify-center text-outline-variant font-medium text-sm">
+                                    + 2 laus pláss
+                                </div>
+</div>
+</div>
+<div class="flex items-center sm:items-end justify-end">
+<button class="bg-secondary-container text-on-secondary-container px-5 py-2.5 rounded-xl font-medium hover:bg-secondary-fixed transition-colors w-full sm:w-auto">
+                                Taka vaktina
+                            </button>
+</div>
+</div>
+</div>
+<!-- Shift Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1.5 h-full bg-surface-variant rounded-l-xl"></div>
+<div class="flex flex-col sm:flex-row justify-between gap-6">
+<div class="space-y-4 flex-grow">
+<div class="flex items-start justify-between">
+<div>
+<h3 class="font-headline text-xl font-semibold text-on-surface mb-1">Laugardagur, 13. Maí</h3>
+<p class="font-body text-on-surface-variant flex items-center gap-2">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 0;">schedule</span>
+                                        20:00 - 23:00
+                                    </p>
+</div>
+<span class="bg-surface-container text-on-surface-variant text-sm px-3 py-1 rounded-full font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 1;">group</span>
+                                    0 af 4 vöktum skipaðar
+                                </span>
+</div>
+<div class="flex flex-wrap gap-3">
+<div class="border border-outline-variant border-dashed px-4 py-2 rounded-lg flex items-center justify-center text-outline-variant font-medium text-sm">
+                                    + 4 laus pláss
+                                </div>
+</div>
+</div>
+<div class="flex items-center sm:items-end justify-end">
+<button class="bg-secondary-container text-on-secondary-container px-5 py-2.5 rounded-xl font-medium hover:bg-secondary-fixed transition-colors w-full sm:w-auto">
+                                Taka vaktina
+                            </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Right Column: My Shifts & Info -->
+<div class="lg:col-span-4 space-y-6">
+<div class="bg-surface-container-low rounded-2xl p-6 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 text-primary opacity-5">
+<span class="material-symbols-outlined text-9xl" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+</div>
+<h2 class="font-headline text-xl font-semibold tracking-tight text-on-surface mb-6 relative z-10">Þínar vaktir</h2>
+<div class="space-y-4 relative z-10">
+<div class="bg-surface-container-lowest p-4 rounded-xl shadow-sm border border-surface-variant">
+<div class="flex justify-between items-start mb-3">
+<div>
+<h4 class="font-semibold text-on-surface">Föstudagur, 5. Maí</h4>
+<p class="text-sm text-on-surface-variant">Hverfið: Hlíðar</p>
+</div>
+<span class="bg-primary-container/10 text-primary-container text-xs px-2 py-1 rounded font-medium">Framundan</span>
+</div>
+<button class="text-error text-sm font-medium hover:underline flex items-center gap-1 mt-2">
+<span class="material-symbols-outlined text-xs" style="font-variation-settings: 'FILL' 0;">cancel</span>
+                                Hætta við
+                            </button>
+</div>
+</div>
+</div>
+<div class="bg-primary/5 rounded-2xl p-6 border border-primary/10">
+<h3 class="font-headline font-semibold text-primary-container mb-3 flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">info</span>
+                        Upplýsingar
+                    </h3>
+<p class="font-body text-sm text-on-surface-variant leading-relaxed">
+                        Foreldraröltið er mikilvægur þáttur í að tryggja öryggi í nærumhverfinu. Við mælumst til þess að mæta í skólann 10 mínútum fyrir vakt. Endurskinsvesti eru geymd í anddyri.
+                    </p>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 no-border bg-[#f4f4f3] dark:bg-stone-800 shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] rounded-t-3xl">
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-[#226146]" style="font-variation-settings: 'FILL' 0;">group</span>
+<span class="text-label-md font-inter font-medium text-xs group-hover:text-[#226146]">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-[#226146]" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+<span class="text-label-md font-inter font-medium text-xs group-hover:text-[#226146]">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">volunteer_activism</span>
+<span class="text-label-md font-inter font-medium text-xs">Patrol</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-[#226146]" style="font-variation-settings: 'FILL' 0;">campaign</span>
+<span class="text-label-md font-inter font-medium text-xs group-hover:text-[#226146]">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out group" href="#">
+<span class="material-symbols-outlined mb-1 group-hover:text-[#226146]" style="font-variation-settings: 'FILL' 0;">gavel</span>
+<span class="text-label-md font-inter font-medium text-xs group-hover:text-[#226146]">Agreement</span>
+</a>
+</nav>
+</body></html>
