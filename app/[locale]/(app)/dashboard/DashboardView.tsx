@@ -482,8 +482,8 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                                 <UserPlus size={22} className="text-on-primary" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold tracking-tight text-on-primary">Stækkaðu hópinn</h3>
-                                <p className="text-on-primary/85 text-sm mt-1 leading-relaxed">
+                                <h3 className="text-xl font-bold tracking-tight text-white">Stækkaðu hópinn</h3>
+                                <p className="opacity-90 text-sm mt-1 leading-relaxed text-white">
                                     Vantar fleiri foreldra í bekkinn? Deildu hlekknum beint á þá eða í Facebook-hópinn.
                                 </p>
                             </div>
