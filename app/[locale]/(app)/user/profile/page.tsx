@@ -30,7 +30,7 @@ function Toast({ message, type, onClose }: { message: string; type: 'success' | 
     }, [onClose]);
 
     return (
-        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
+        <div className={`fixed bottom-24 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg shadow-lg flex items-center gap-2 animate-in slide-in-from-bottom-4 fade-in duration-300 ${type === 'success' ? 'bg-primary text-white' : 'bg-error text-white'
             }`}>
             {type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
             <span className="font-medium">{message}</span>
@@ -270,7 +270,7 @@ export default function UserProfilePage() {
     if (!user) {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
-                <p className="text-gray-500">Please sign in.</p>
+                <p className="text-on-surface-variant">Please sign in.</p>
             </div>
         );
     }
@@ -279,8 +279,8 @@ export default function UserProfilePage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin text-[#1E3A5F]" />
-                    <p className="text-gray-500">Loading data...</p>
+                    <Loader2 size={40} className="animate-spin text-primary" />
+                    <p className="text-on-surface-variant">Loading data...</p>
                 </div>
             </div>
         );
@@ -292,9 +292,9 @@ export default function UserProfilePage() {
 
             {/* Header */}
             <header className="relative">
-                <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
-                <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
-                <p className="text-lg text-gray-500">
+                <div className="absolute -top-10 -left-10 w-64 h-64 bg-primary-container/20 rounded-full blur-3xl opacity-30 -z-10" />
+                <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-2">{t('title')}</h1>
+                <p className="text-lg text-on-surface-variant">
                     {t('subtitle')}
                 </p>
             </header>
@@ -303,25 +303,25 @@ export default function UserProfilePage() {
             <section className="glass-card p-6">
                 <div className="flex items-start gap-5">
                     {/* Avatar */}
-                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-blue-50 text-blue-700 overflow-hidden flex-shrink-0">
+                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-primary-container/15 text-primary overflow-hidden flex-shrink-0">
                         {userPhotoUrl ? (
                             <img src={userPhotoUrl} alt={user.displayName || ''} className="w-full h-full object-cover" />
                         ) : (
-                            <User size={32} className="text-blue-400" />
+                            <User size={32} className="text-primary" />
                         )}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                        <h2 className="text-xl font-bold text-gray-900 truncate">{user.displayName || 'Notandi'}</h2>
-                        <p className="text-sm text-gray-500 truncate">{user.email}</p>
+                        <h2 className="text-xl font-bold text-on-surface truncate">{user.displayName || 'Notandi'}</h2>
+                        <p className="text-sm text-on-surface-variant truncate">{user.email}</p>
                     </div>
                 </div>
 
                 <div className="mt-6 space-y-4">
                     {/* Phone */}
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                            <Phone size={18} className="text-gray-500" />
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                            <Phone size={18} className="text-on-surface-variant" />
                         </div>
                         <input
                             type="tel"
@@ -329,28 +329,28 @@ export default function UserProfilePage() {
                             onChange={(e) => setUserPhone(e.target.value)}
                             onBlur={handleSaveUser}
                             placeholder={t('phone_placeholder')}
-                            className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all"
+                            className="flex-1 px-3 py-2.5 bg-surface border border-outline-variant/30 rounded-lg focus:bg-surface-container-lowest focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
                         />
                     </div>
 
                     {/* Phone Visibility */}
                     <div className="flex items-center justify-between pl-14">
-                        <span className="text-sm text-gray-600">{t('show_in_list')}</span>
+                        <span className="text-sm text-on-surface-variant">{t('show_in_list')}</span>
                         <button
                             onClick={() => {
                                 setUserIsPhoneVisible(!userIsPhoneVisible);
                                 setTimeout(handleSaveUser, 100);
                             }}
-                            className={`relative w-11 h-6 rounded-full transition-colors ${userIsPhoneVisible ? 'bg-green-500' : 'bg-gray-300'}`}
+                            className={`relative w-11 h-6 rounded-full transition-colors ${userIsPhoneVisible ? 'bg-primary' : 'bg-surface-container-high'}`}
                         >
-                            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${userIsPhoneVisible ? 'left-5' : 'left-0.5'}`} />
+                            <div className={`absolute top-0.5 w-5 h-5 bg-surface-container-lowest rounded-full shadow transition-transform ${userIsPhoneVisible ? 'left-5' : 'left-0.5'}`} />
                         </button>
                     </div>
 
                     {/* Address */}
                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                            <MapPin size={18} className="text-gray-500" />
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                            <MapPin size={18} className="text-on-surface-variant" />
                         </div>
                         <div className="flex-1">
                             <AddressAutocomplete
@@ -380,19 +380,19 @@ export default function UserProfilePage() {
 
                     {/* Language Switcher */}
                     <div className="flex items-start gap-4 pt-2">
-                        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center flex-shrink-0">
-                            <Globe size={18} className="text-gray-500" />
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                            <Globe size={18} className="text-on-surface-variant" />
                         </div>
                         <div className="flex-1">
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Tungumál / Language</label>
+                            <label className="block text-sm font-medium text-on-surface mb-2">Tungumál / Language</label>
                             <div className="flex flex-wrap gap-2">
                                 {locales.map((l) => (
                                     <Link
                                         key={l}
                                         href={`/${l}${window.location.pathname.replace(/^\/[a-z]{2}/, '')}${window.location.search}`}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border ${locale === l
-                                            ? 'bg-[#1E3A5F] text-white border-[#1E3A5F]'
-                                            : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                                            ? 'bg-primary text-white border-primary'
+                                            : 'bg-surface-container-lowest text-on-surface-variant border-outline-variant/30 hover:border-outline-variant'
                                             }`}
                                     >
                                         {l.toUpperCase()}
@@ -407,20 +407,20 @@ export default function UserProfilePage() {
             {/* Notification Settings */}
             <section className="glass-card p-6 space-y-6">
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-indigo-50 rounded-lg">
-                        <Bell className="text-indigo-600" size={24} />
+                    <div className="p-2 bg-primary-container/15 rounded-lg">
+                        <Bell className="text-primary" size={24} />
                     </div>
-                    <h2 className="text-xl font-bold text-gray-900">{t('notifications_title') || 'Tilkynningar'}</h2>
+                    <h2 className="text-xl font-bold text-on-surface">{t('notifications_title') || 'Tilkynningar'}</h2>
                 </div>
 
                 <div className="space-y-6">
                     {/* Email Settings */}
                     <div>
-                        <h3 className="text-sm font-bold text-gray-900 uppercase tracking-wide mb-3 flex items-center gap-2">
+                        <h3 className="text-sm font-bold text-on-surface uppercase tracking-wide mb-3 flex items-center gap-2">
                             <Mail size={16} />
                             {t('email_notifications') || 'Tölvupóstur'}
                         </h3>
-                        <div className="bg-gray-50 rounded-xl border border-gray-100 divide-y divide-gray-100">
+                        <div className="bg-surface rounded-xl border border-outline-variant/30 divide-y divide-outline-variant/30">
                             {[
                                 { key: 'announcements', label: t('notify_announcements') || 'Mikilvægar tilkynningar', desc: t('notify_announcements_desc') || 'Frá bekkjarfulltrúum og skóla' },
                                 { key: 'reminders', label: t('notify_reminders') || 'Áminningar', desc: t('notify_reminders_desc') || 'Fyrir viðburði og verkefni' },
@@ -428,8 +428,8 @@ export default function UserProfilePage() {
                             ].map((item) => (
                                 <div key={item.key} className="p-4 flex items-center justify-between">
                                     <div>
-                                        <p className="font-medium text-gray-900">{item.label}</p>
-                                        <p className="text-xs text-gray-500">{item.desc}</p>
+                                        <p className="font-medium text-on-surface">{item.label}</p>
+                                        <p className="text-xs text-on-surface-variant">{item.desc}</p>
                                     </div>
                                     <Switch
                                         checked={(notificationSettings?.email as any)?.[item.key] ?? true}
@@ -454,10 +454,10 @@ export default function UserProfilePage() {
             {/* Children Section */}
             <section className="space-y-4">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900">{t('my_children')}</h2>
+                    <h2 className="text-2xl font-bold text-on-surface">{t('my_children')}</h2>
                     <a
                         href={`/${locale}/onboarding?step=join`}
-                        className="text-sm font-semibold text-[#1E3A5F] hover:underline flex items-center gap-1"
+                        className="text-sm font-semibold text-primary hover:underline flex items-center gap-1"
                     >
                         <UserPlus size={16} />
                         {t('add_child')}
@@ -487,13 +487,13 @@ export default function UserProfilePage() {
                     </div>
                 ) : (
                     <div className="glass-card p-8 text-center">
-                        <div className="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-                            <Heart size={28} className="text-gray-400" />
+                        <div className="w-16 h-16 bg-surface-container-high rounded-xl flex items-center justify-center mx-auto mb-4">
+                            <Heart size={28} className="text-on-surface-variant" />
                         </div>
-                        <p className="text-gray-500 mb-4">{t('no_children')}</p>
+                        <p className="text-on-surface-variant mb-4">{t('no_children')}</p>
                         <a
                             href={`/${locale}/onboarding?step=join`}
-                            className="inline-flex items-center gap-2 bg-[#1E3A5F] text-white px-5 py-2.5 rounded-lg font-medium hover:bg-[#2E4A6F] transition"
+                            className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-medium hover:bg-primary-container transition"
                         >
                             <UserPlus size={18} />
                             {t('add_child')}
@@ -575,60 +575,60 @@ function StudentCard({
     const initials = student.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase() || '?';
 
     return (
-        <div className={`glass-card overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-[#1E3A5F]/20' : ''}`}>
+        <div className={`glass-card overflow-hidden transition-all duration-300 ${isExpanded ? 'ring-2 ring-primary/20' : ''}`}>
             {/* Header - Always visible */}
             <button
                 onClick={onToggleExpand}
-                className="w-full p-5 flex items-center gap-4 hover:bg-gray-50/50 transition text-left"
+                className="w-full p-5 flex items-center gap-4 hover:bg-surface/50 transition text-left"
             >
-                <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-primary-container/15 flex items-center justify-center overflow-hidden flex-shrink-0">
                     {student.photoUrl ? (
                         <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover" />
                     ) : (
-                        <span className="text-xl font-bold text-blue-600">{initials}</span>
+                        <span className="text-xl font-bold text-primary">{initials}</span>
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
-                    <h3 className="text-lg font-bold text-gray-900 truncate">{student.name}</h3>
+                    <h3 className="text-lg font-bold text-on-surface truncate">{student.name}</h3>
                     <div className="flex items-center gap-3 mt-0.5">
                         {birthDateDisplay && (
-                            <span className="text-sm text-gray-500 flex items-center gap-1">
+                            <span className="text-sm text-on-surface-variant flex items-center gap-1">
                                 <Calendar size={14} />
                                 {birthDateDisplay}
                             </span>
                         )}
                         {otherParents.length > 0 && (
-                            <span className="text-sm text-green-600 flex items-center gap-1">
+                            <span className="text-sm text-primary flex items-center gap-1">
                                 <User size={14} />
                                 {otherParents[0].displayName?.split(' ')[0] || 'Maki'}
                             </span>
                         )}
                     </div>
                 </div>
-                <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
-                    <ChevronDown size={18} className="text-gray-500" />
+                <div className={`w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                    <ChevronDown size={18} className="text-on-surface-variant" />
                 </div>
             </button>
 
             {/* Expanded Content */}
             {isExpanded && (
-                <div className="bg-gray-50/50 border-t border-gray-100 p-5 space-y-5 animate-in slide-in-from-top-2">
+                <div className="bg-surface/50 border-t border-outline-variant/30 p-5 space-y-5 animate-in slide-in-from-top-2">
 
                     {/* Name */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.name_label')}</label>
+                        <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">{t('child_card.name_label')}</label>
                         <input
                             type="text"
                             value={editedName}
                             onChange={(e) => setEditedName(e.target.value)}
                             onBlur={() => editedName !== student.name && onSaveName(editedName)}
-                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all font-medium"
+                            className="w-full px-3 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all font-medium"
                         />
                     </div>
 
                     {/* Birthday */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.birthday_label')}</label>
+                        <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">{t('child_card.birthday_label')}</label>
                         <input
                             type="date"
                             value={editedBirthDate}
@@ -636,13 +636,13 @@ function StudentCard({
                                 setEditedBirthDate(e.target.value);
                                 onSaveBirthDate(e.target.value);
                             }}
-                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all"
+                            className="w-full px-3 py-2.5 bg-surface-container-lowest border border-outline-variant/30 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
                         />
                     </div>
 
                     {/* Gender */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.gender_label')}</label>
+                        <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">{t('child_card.gender_label')}</label>
                         <div className="flex gap-2">
                             {[
                                 { value: 'boy', label: t('child_card.boy') },
@@ -653,8 +653,8 @@ function StudentCard({
                                     key={option.value}
                                     onClick={() => onSaveGender(option.value)}
                                     className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${student.gender === option.value
-                                        ? 'bg-[#1E3A5F] text-white shadow-sm'
-                                        : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+                                        ? 'bg-primary text-white shadow-sm'
+                                        : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:border-outline-variant'
                                         }`}
                                 >
                                     {option.label}
@@ -665,7 +665,7 @@ function StudentCard({
 
                     {/* Dietary Needs */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.dietary_label')}</label>
+                        <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">{t('child_card.dietary_label')}</label>
                         <div className="flex flex-wrap gap-2">
                             {DIETARY_KEYS.map((key) => {
                                 const isSelected = dietaryNeeds.includes(key);
@@ -674,8 +674,8 @@ function StudentCard({
                                         key={key}
                                         onClick={() => toggleDietaryNeed(key)}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-1.5 ${isSelected
-                                            ? 'bg-red-50 text-red-700 border border-red-200'
-                                            : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
+                                            ? 'bg-error-container/40 text-error border border-error/30'
+                                            : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant hover:border-outline-variant'
                                             }`}
                                     >
                                         {tDietary(key)}
@@ -688,7 +688,7 @@ function StudentCard({
 
                     {/* Photo Upload */}
                     <div>
-                        <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">{t('child_card.photo_label')}</label>
+                        <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">{t('child_card.photo_label')}</label>
                         <ImageUploader
                             currentImageUrl={student.photoUrl || ''}
                             onUploadComplete={(url) => onSavePhoto(url)}
@@ -699,25 +699,25 @@ function StudentCard({
 
                     {/* Other Parents */}
                     {otherParents.length > 0 && (
-                        <div className="pt-2 border-t border-gray-200">
-                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
+                        <div className="pt-2 border-t border-outline-variant/30">
+                            <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">
                                 {t('child_card.other_parents_label')}
                             </label>
                             <div className="space-y-2">
                                 {otherParents.map((parent) => (
-                                    <div key={parent.id} className="flex items-center gap-3 p-3 bg-green-50 border border-green-100 rounded-lg">
-                                        <div className="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <div key={parent.id} className="flex items-center gap-3 p-3 bg-primary-container/15 border border-primary/20 rounded-lg">
+                                        <div className="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center overflow-hidden flex-shrink-0">
                                             {parent.photoURL ? (
                                                 <img src={parent.photoURL} alt={parent.displayName || ''} className="w-full h-full object-cover" />
                                             ) : (
-                                                <User size={18} className="text-green-600" />
+                                                <User size={18} className="text-primary" />
                                             )}
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="font-medium text-gray-900 truncate">{parent.displayName || t('child_card.parent')}</p>
-                                            <p className="text-xs text-green-600">{t('child_card.connected')}</p>
+                                            <p className="font-medium text-on-surface truncate">{parent.displayName || t('child_card.parent')}</p>
+                                            <p className="text-xs text-primary">{t('child_card.connected')}</p>
                                         </div>
-                                        <CheckCircle2 size={18} className="text-green-500 flex-shrink-0" />
+                                        <CheckCircle2 size={18} className="text-primary flex-shrink-0" />
                                     </div>
                                 ))}
                             </div>
@@ -726,15 +726,15 @@ function StudentCard({
 
                     {/* Invite - always visible (up to 4 parents allowed) */}
                     {otherParents.length < 3 && (
-                        <div className={otherParents.length === 0 ? 'pt-2 border-t border-gray-200' : 'pt-3'}>
-                            <label className="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 block">
+                        <div className={otherParents.length === 0 ? 'pt-2 border-t border-outline-variant/30' : 'pt-3'}>
+                            <label className="text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-2 block">
                                 {t('child_card.invite_parent')}
                             </label>
                             <button
                                 onClick={handleCopyInvite}
                                 className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
-                                    ? 'bg-green-50 text-green-700 border border-green-200'
-                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                    ? 'bg-primary-container/15 text-primary border border-primary/30'
+                                    : 'bg-surface-container-lowest border border-outline-variant/30 text-on-surface hover:border-primary hover:text-primary'
                                     }`}
                             >
                                 {copiedInvite ? (
@@ -749,7 +749,7 @@ function StudentCard({
                                     </>
                                 )}
                             </button>
-                            <p className="text-xs text-gray-400 mt-2 text-center">
+                            <p className="text-xs text-on-surface-variant mt-2 text-center">
                                 {t('child_card.max_parents_help')}
                             </p>
                         </div>
@@ -764,9 +764,9 @@ function Switch({ checked, onChange }: { checked: boolean; onChange: (checked: b
     return (
         <button
             onClick={() => onChange(!checked)}
-            className={`relative w-11 h-6 rounded-full transition-colors ${checked ? 'bg-green-500' : 'bg-gray-300'}`}
+            className={`relative w-11 h-6 rounded-full transition-colors ${checked ? 'bg-primary' : 'bg-surface-container-high'}`}
         >
-            <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform ${checked ? 'left-5' : 'left-0.5'}`} />
+            <div className={`absolute top-0.5 w-5 h-5 bg-surface-container-lowest rounded-full shadow transition-transform ${checked ? 'left-5' : 'left-0.5'}`} />
         </button>
     );
 }

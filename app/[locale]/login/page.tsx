@@ -108,11 +108,11 @@ export default function LoginPage() {
     }
 
     return (
-        <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 flex-col gap-4">
+        <div className="min-h-screen flex items-center justify-center p-4 bg-surface flex-col gap-4">
             {isIAB && (
-                <div className="w-full max-w-md bg-amber-50 border border-amber-200 p-4 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4">
+                <div className="w-full max-w-md bg-tertiary-fixed/40 border border-tertiary/40 p-4 rounded-xl flex items-start gap-3 animate-in fade-in slide-in-from-top-4">
                     <span className="text-xl">⚠️</span>
-                    <div className="text-sm text-amber-900">
+                    <div className="text-sm text-on-tertiary-fixed">
                         <p className="font-bold">In-App vafri greindur</p>
                         <p className="">Google innskráning gæti hrunið hér. Mælt er með að opna þessa síðu í <strong>Safari</strong> eða <strong>Chrome</strong> fyrir bestu upplifun.</p>
                     </div>
@@ -123,46 +123,46 @@ export default function LoginPage() {
                 {/* Logo and Title */}
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-blue-600 shadow-md">
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-primary shadow-md">
                             <Users size={40} color="white" />
                         </div>
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold text-gray-900">
+                        <h1 className="text-4xl font-bold text-on-surface">
                             Bekkurinn
                         </h1>
-                        <p className="text-lg mt-2 text-gray-600">
+                        <p className="text-lg mt-2 text-on-surface-variant">
                             Hættu að leita í Excel-skrám og Facebook-hópum
                         </p>
-                        <p className="text-sm mt-2 text-gray-500">
+                        <p className="text-sm mt-2 text-on-surface-variant">
                             Bekkjarlisti • Afmæli • Óskilamunir • Viðburðir — allt á einum stað
                         </p>
                     </div>
                 </div>
 
                 {/* Explanatory Box (Why Login?) - CENTERED REDESIGN */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-6">
-                    <h2 className="text-xl font-bold text-center text-gray-900">
+                <div className="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 space-y-6">
+                    <h2 className="text-xl font-bold text-center text-on-surface">
                         Af hverju að skrá sig inn?
                     </h2>
 
-                    <div className="space-y-6 text-sm text-gray-600 leading-relaxed">
+                    <div className="space-y-6 text-sm text-on-surface-variant leading-relaxed">
                         <div className="flex flex-col items-center text-center gap-2">
-                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                            <div className="p-2 bg-primary-container/15 rounded-full text-primary mb-1">
                                 <Shield size={24} />
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-900 mb-1">Öryggi og Persónuvernd</p>
+                                <p className="font-semibold text-on-surface mb-1">Öryggi og Persónuvernd</p>
                                 <p className="max-w-xs mx-auto">Við biðjum um innskráningu til að tryggja öryggi upplýsinga um börn og foreldra. Aðeins staðfestir foreldrar fá aðgang.</p>
                             </div>
                         </div>
 
                         <div className="flex flex-col items-center text-center gap-2">
-                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                            <div className="p-2 bg-primary-container/15 rounded-full text-primary mb-1">
                                 <Users size={24} />
                             </div>
                             <div>
-                                <p className="font-semibold text-gray-900 mb-1">Einn aðgangur</p>
+                                <p className="font-semibold text-on-surface mb-1">Einn aðgangur</p>
                                 <p className="max-w-xs mx-auto">Þú getur séð alla bekkina þína á einum stað og samnýtt upplýsingar með öðrum foreldrum.</p>
                             </div>
                         </div>
@@ -170,16 +170,16 @@ export default function LoginPage() {
                 </div>
 
                 {/* Login Method Toggle */}
-                <div className="bg-white p-1 rounded-xl border border-gray-200 flex shadow-sm">
+                <div className="bg-surface-container-lowest p-1 rounded-xl border border-outline-variant/30 flex shadow-sm">
                     <button
                         onClick={() => setLoginMethod('social')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'social' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'social' ? 'bg-primary-container/15 text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         Google
                     </button>
                     <button
                         onClick={() => setLoginMethod('email')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'email' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'email' ? 'bg-primary-container/15 text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         Netfang
                     </button>
@@ -188,13 +188,13 @@ export default function LoginPage() {
                 {loginMethod === 'social' ? (
                     <div className="space-y-4 animate-in fade-in slide-in-from-left-4 duration-300">
                         {error && (
-                            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2">
+                            <div className="bg-error-container/40 text-error p-3 rounded-lg text-sm flex items-center gap-2">
                                 <span>⚠️</span> {error}
                             </div>
                         )}
                         <button
                             onClick={handleSignIn}
-                            className="w-full bg-white border border-gray-300 text-gray-700 hover:bg-gray-50 font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-sm"
+                            className="w-full bg-surface-container-lowest border border-outline-variant text-on-surface hover:bg-surface font-bold py-4 rounded-xl flex items-center justify-center gap-3 transition-transform active:scale-[0.98] shadow-sm"
                         >
                             <LogIn size={24} />
                             <span>Skrá inn með Google</span>
@@ -203,41 +203,41 @@ export default function LoginPage() {
                 ) : (
                     <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
                         {error && (
-                            <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm flex items-center gap-2">
+                            <div className="bg-error-container/40 text-error p-3 rounded-lg text-sm flex items-center gap-2">
                                 <span>⚠️</span> {error}
                             </div>
                         )}
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Netfang</label>
+                            <label className="block text-sm font-medium text-on-surface mb-1">Netfang</label>
                             <input
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
-                                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                className="w-full p-3 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-shadow"
                                 placeholder="name@example.com"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">Lykilorð</label>
+                            <label className="block text-sm font-medium text-on-surface mb-1">Lykilorð</label>
                             <input
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                className="w-full p-3 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-shadow"
                                 placeholder="••••••••"
                             />
                         </div>
 
                         {mode === 'signup' && (
                             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Nafn</label>
+                                <label className="block text-sm font-medium text-on-surface mb-1">Nafn</label>
                                 <input
                                     type="text"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
-                                    className="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none transition-shadow"
+                                    className="w-full p-3 border border-outline-variant/30 rounded-xl focus:ring-2 focus:ring-primary outline-none transition-shadow"
                                     placeholder="Jón Jónsson"
                                 />
                             </div>
@@ -246,7 +246,7 @@ export default function LoginPage() {
                         <button
                             onClick={handleEmailAuth}
                             disabled={mailLoading}
-                            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-blue-900/10 active:scale-[0.98]"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg active:scale-[0.98]"
                         >
                             {mailLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                             {mode === 'login' ? 'Skrá inn' : 'Nýskráning (Sign up)'}
@@ -257,70 +257,70 @@ export default function LoginPage() {
                                 setMode(mode === 'login' ? 'signup' : 'login');
                                 setError(null);
                             }}
-                            className="w-full text-sm text-gray-500 hover:text-gray-800 py-2 transition-colors"
+                            className="w-full text-sm text-on-surface-variant hover:text-on-surface py-2 transition-colors"
                         >
                             {mode === 'login' ? 'Vantar þig aðgang? Nýskráning' : 'Áttu aðgang? Skráðu þig inn'}
                         </button>
                     </div>
                 )}
 
-                <p className="text-xs text-center text-gray-400">
+                <p className="text-xs text-center text-on-surface-variant">
                     Með því að skrá þig inn samþykkir þú{' '}
-                    <a href={`/${locale}/terms`} className="underline hover:text-gray-600">
+                    <a href={`/${locale}/terms`} className="underline hover:text-on-surface-variant">
                         notkunarskilmála
                     </a>{' '}
                     og{' '}
-                    <a href={`/${locale}/privacy`} className="underline hover:text-gray-600">
+                    <a href={`/${locale}/privacy`} className="underline hover:text-on-surface-variant">
                         persónuverndarstefnu
                     </a>{' '}
                     okkar
                 </p>
 
                 {/* Why not Facebook? Comparison Section */}
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
-                    <h3 className="text-lg font-bold text-center text-gray-900">
+                <div className="bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 space-y-4">
+                    <h3 className="text-lg font-bold text-center text-on-surface">
                         Af hverju ekki Facebook?
                     </h3>
                     <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="space-y-3">
-                            <div className="font-semibold text-gray-400 text-center pb-2 border-b border-gray-100">
+                            <div className="font-semibold text-on-surface-variant text-center pb-2 border-b border-outline-variant/30">
                                 Facebook hópar
                             </div>
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface-variant">
+                                <X size={16} className="text-error/70 flex-shrink-0" />
                                 <span>Upplýsingar týnast í straumi</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface-variant">
+                                <X size={16} className="text-error/70 flex-shrink-0" />
                                 <span>Erfitt að finna símanúmer</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface-variant">
+                                <X size={16} className="text-error/70 flex-shrink-0" />
                                 <span>Engin afmælisáminnning</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface-variant">
+                                <X size={16} className="text-error/70 flex-shrink-0" />
                                 <span>Auglýsingar og truflun</span>
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <div className="font-semibold text-blue-600 text-center pb-2 border-b border-blue-100">
+                            <div className="font-semibold text-primary text-center pb-2 border-b border-primary/20">
                                 Bekkurinn
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface">
+                                <Check size={16} className="text-primary flex-shrink-0" />
                                 <span>Allt skipulagt á einum stað</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface">
+                                <Check size={16} className="text-primary flex-shrink-0" />
                                 <span>Bekkjarlisti með símum</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface">
+                                <Check size={16} className="text-primary flex-shrink-0" />
                                 <span>Sjálfvirk afmælisáminnning</span>
                             </div>
-                            <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                            <div className="flex items-center gap-2 text-on-surface">
+                                <Check size={16} className="text-primary flex-shrink-0" />
                                 <span>Engar auglýsingar, aldrei</span>
                             </div>
                         </div>
@@ -331,14 +331,14 @@ export default function LoginPage() {
                 <TestimonialsCarousel maxCount={5} />
 
                 {/* Footer */}
-                <div className="text-center text-sm text-gray-400 space-y-2">
+                <div className="text-center text-sm text-on-surface-variant space-y-2">
                     <p>Fyrir foreldra í grunnskólum á Íslandi</p>
                     <div className="flex items-center justify-center gap-4">
-                        <a href={`/${locale}/how-it-works`} className="hover:text-gray-600 transition-colors">
+                        <a href={`/${locale}/how-it-works`} className="hover:text-on-surface-variant transition-colors">
                             Hvernig virkar þetta?
                         </a>
                         <span>•</span>
-                        <a href={`/${locale}/contact`} className="hover:text-gray-600 transition-colors">
+                        <a href={`/${locale}/contact`} className="hover:text-on-surface-variant transition-colors">
                             Hafðu samband
                         </a>
                     </div>
