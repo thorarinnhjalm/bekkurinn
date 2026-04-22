@@ -123,7 +123,7 @@ export default function LoginPage() {
                 {/* Logo and Title */}
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
-                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-blue-600 shadow-md">
+                        <div className="w-20 h-20 rounded-full flex items-center justify-center bg-primary shadow-md">
                             <Users size={40} color="white" />
                         </div>
                     </div>
@@ -148,7 +148,7 @@ export default function LoginPage() {
 
                     <div className="space-y-6 text-sm text-gray-600 leading-relaxed">
                         <div className="flex flex-col items-center text-center gap-2">
-                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                            <div className="p-2 bg-surface-container-low rounded-full text-primary mb-1">
                                 <Shield size={24} />
                             </div>
                             <div>
@@ -158,7 +158,7 @@ export default function LoginPage() {
                         </div>
 
                         <div className="flex flex-col items-center text-center gap-2">
-                            <div className="p-2 bg-blue-50 rounded-full text-blue-600 mb-1">
+                            <div className="p-2 bg-surface-container-low rounded-full text-primary mb-1">
                                 <Users size={24} />
                             </div>
                             <div>
@@ -173,13 +173,13 @@ export default function LoginPage() {
                 <div className="bg-white p-1 rounded-xl border border-gray-200 flex shadow-sm">
                     <button
                         onClick={() => setLoginMethod('social')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'social' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'social' ? 'bg-surface-container-low text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                     >
                         Google
                     </button>
                     <button
                         onClick={() => setLoginMethod('email')}
-                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'email' ? 'bg-blue-50 text-blue-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                        className={`flex-1 py-2 text-sm font-medium rounded-lg transition-all ${loginMethod === 'email' ? 'bg-surface-container-low text-primary shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
                     >
                         Netfang
                     </button>
@@ -246,7 +246,7 @@ export default function LoginPage() {
                         <button
                             onClick={handleEmailAuth}
                             disabled={mailLoading}
-                            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-blue-900/10 active:scale-[0.98]"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-ambient active:scale-[0.98]"
                         >
                             {mailLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                             {mode === 'login' ? 'Skrá inn' : 'Nýskráning (Sign up)'}
@@ -304,7 +304,7 @@ export default function LoginPage() {
                             </div>
                         </div>
                         <div className="space-y-3">
-                            <div className="font-semibold text-blue-600 text-center pb-2 border-b border-blue-100">
+                            <div className="font-semibold text-primary text-center pb-2 border-b border-outline-variant">
                                 Bekkurinn
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">

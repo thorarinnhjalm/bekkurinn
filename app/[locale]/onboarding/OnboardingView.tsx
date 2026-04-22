@@ -32,9 +32,9 @@ function ProgressIndicator({ currentStep, totalSteps, labels }: {
                     <div key={i} className="flex-1 flex items-center">
                         <div
                             className={`h-2 flex-1 rounded-full transition-all duration-300 ${i < currentStep
-                                ? 'bg-blue-600'
+                                ? 'bg-primary'
                                 : i === currentStep
-                                    ? 'bg-blue-400'
+                                    ? 'bg-primary'
                                     : 'bg-gray-200'
                                 }`}
                         />
@@ -580,7 +580,7 @@ export default function OnboardingView() {
         return (
             <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
                 <div className="text-center space-y-3">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
+                    <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
                         <Globe className="text-white" size={32} />
                     </div>
                     <h1 className="text-3xl font-bold text-gray-900">{t('language_select_title')}</h1>
@@ -639,7 +639,7 @@ export default function OnboardingView() {
                     >
                         <Globe size={14} /> {t('change_language')}
                     </button>
-                    <h1 className="text-3xl font-bold text-nordic-blue-dark">{t('welcome_main_title')}</h1>
+                    <h1 className="text-3xl font-bold text-primary-dark">{t('welcome_main_title')}</h1>
                     <p className="text-text-secondary">{t('welcome_select_method')}</p>
                 </div>
 
@@ -648,14 +648,14 @@ export default function OnboardingView() {
                         onClick={() => setStep('join')}
                         className="nordic-card p-6 flex items-center gap-4 hover:border-nordic-blue transition-all group text-left"
                     >
-                        <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
-                            <Users className="text-nordic-blue" size={24} />
+                        <div className="bg-surface-container-low p-3 rounded-full group-hover:bg-surface-container transition-colors">
+                            <Users className="text-primary" size={24} />
                         </div>
                         <div>
                             <h3 className="font-bold text-lg">{t('join_class')}</h3>
                             <p className="text-sm text-text-secondary">{t('join_class_desc')}</p>
                         </div>
-                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-nordic-blue" />
+                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
                     </button>
 
                     <button
@@ -690,15 +690,15 @@ export default function OnboardingView() {
                         <h2 className="text-2xl font-bold text-gray-900">{t('success_title')}</h2>
                         <p className="text-gray-600">{t('success_desc')}</p>
 
-                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 space-y-4 text-left">
+                        <div className="bg-surface-container-low p-6 rounded-xl border border-outline-variant space-y-4 text-left">
                             <div>
-                                <p className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-1">{t('code_parents_label')}</p>
-                                <div className="text-3xl font-mono font-bold text-blue-800 bg-white p-3 rounded-lg border border-blue-200 text-center tracking-widest select-all">
+                                <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">{t('code_parents_label')}</p>
+                                <div className="text-3xl font-mono font-bold text-primary bg-white p-3 rounded-lg border border-outline-variant text-center tracking-widest select-all">
                                     {createdClassInfo.joinCode}
                                 </div>
                             </div>
 
-                            <hr className="border-blue-200" />
+                            <hr className="border-outline-variant" />
 
                             <div>
                                 <p className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-1">{t('code_admin_label')}</p>
@@ -715,7 +715,7 @@ export default function OnboardingView() {
                                 const locale = segments[1] || 'is';
                                 router.push(`/${locale}/dashboard?welcome=true`);
                             }}
-                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all shadow-lg"
                         >
                             {t('continue_dashboard')}
                         </button>
@@ -736,7 +736,7 @@ export default function OnboardingView() {
                         <button onClick={() => setStep('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
                             ← Til baka
                         </button>
-                        <h1 className="text-2xl font-bold text-nordic-blue-dark">{t('create_class_title')}</h1>
+                        <h1 className="text-2xl font-bold text-primary-dark">{t('create_class_title')}</h1>
                         <p className="text-text-secondary">{t('create_class_subtitle')}</p>
                     </header>
 
@@ -752,7 +752,7 @@ export default function OnboardingView() {
                                 {availableSchools.map(s => <option key={s.id || s.name} value={s.name}>{s.name}</option>)}
                             </select>
                             <div className="mt-1 text-xs text-right text-gray-500">
-                                {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-blue-600 hover:underline">{t('contact_us_school')}</a>
+                                {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-primary hover:underline">{t('contact_us_school')}</a>
                             </div>
                         </div>
 
@@ -771,16 +771,16 @@ export default function OnboardingView() {
                             </select>
                         </div>
 
-                        <div className="bg-blue-50 p-4 rounded-lg space-y-3">
-                            <label className="block text-sm font-medium text-nordic-blue-dark">Hvernig er árganginum skipt?</label>
+                        <div className="bg-surface-container-low p-4 rounded-lg space-y-3">
+                            <label className="block text-sm font-medium text-primary-dark">Hvernig er árganginum skipt?</label>
 
-                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-blue-300">
+                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-primary">
                                 <input
                                     type="radio"
                                     checked={!formData.isSplit}
                                     onChange={() => setFormData({ ...formData, isSplit: false })}
                                     name="structure"
-                                    className="w-4 h-4 text-nordic-blue"
+                                    className="w-4 h-4 text-primary"
                                 />
                                 <div>
                                     <span className="font-semibold block text-sm">Heill árgangur saman</span>
@@ -788,13 +788,13 @@ export default function OnboardingView() {
                                 </div>
                             </label>
 
-                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-blue-300">
+                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-primary">
                                 <input
                                     type="radio"
                                     checked={formData.isSplit}
                                     onChange={() => setFormData({ ...formData, isSplit: true })}
                                     name="structure"
-                                    className="w-4 h-4 text-nordic-blue"
+                                    className="w-4 h-4 text-primary"
                                 />
                                 <div>
                                     <span className="font-semibold block text-sm">Skipt í bekki/deildir</span>
@@ -827,7 +827,7 @@ export default function OnboardingView() {
                         <button
                             onClick={handleCreate}
                             disabled={loading}
-                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all transform active:scale-95 shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all transform active:scale-95 shadow-lg shadow-ambient flex items-center justify-center gap-2"
                         >
                             {loading && <Loader2 className="animate-spin" />}
                             {loading && <Loader2 className="animate-spin" />}
@@ -869,8 +869,8 @@ export default function OnboardingView() {
                         Til baka
                     </button>
 
-                    <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <QrCode className="text-nordic-blue" size={32} />
+                    <div className="w-16 h-16 bg-surface-container-low rounded-full flex items-center justify-center mx-auto mb-4">
+                        <QrCode className="text-primary" size={32} />
                     </div>
 
                     {!foundClass ? (
@@ -892,11 +892,11 @@ export default function OnboardingView() {
                             </p>
 
                             {user && (
-                                <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-800 flex gap-2 items-start text-left">
+                                <div className="bg-surface-container-low p-3 rounded-lg text-xs text-primary flex gap-2 items-start text-left">
                                     <Globe size={14} className="mt-0.5 flex-shrink-0" />
                                     <span>
                                         Ertu að leita að kóðanum þínum? <br />
-                                        <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-blue-900">
+                                        <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-primary">
                                             Skoðaðu mælaborðið
                                         </a>
                                     </span>
@@ -910,7 +910,7 @@ export default function OnboardingView() {
                             <button
                                 onClick={handleVerifyCode}
                                 disabled={!joinCode || checkingCode}
-                                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                             >
                                 {checkingCode && <Loader2 className="animate-spin" size={20} />}
                                 Áfram
@@ -947,7 +947,7 @@ export default function OnboardingView() {
                                         </select>
                                         <button
                                             onClick={() => setIsCreatingStudent(true)}
-                                            className="text-sm text-blue-600 hover:text-blue-800 mt-3 flex items-center gap-1 font-medium"
+                                            className="text-sm text-primary hover:text-primary mt-3 flex items-center gap-1 font-medium"
                                         >
                                             <Plus size={14} /> Barnið mitt er ekki á listanum (Stofna nýtt)
                                         </button>
@@ -956,7 +956,7 @@ export default function OnboardingView() {
                                     <button
                                         onClick={handleJoinClass}
                                         disabled={!selectedStudentId || joining}
-                                        className="w-full bg-[#4A7C9E] text-white py-3 rounded-xl font-bold hover:bg-[#2E5A75] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                                     >
                                         {joining && <Loader2 className="animate-spin" size={20} />}
                                         Skrá mig í bekkinn
@@ -1006,7 +1006,7 @@ export default function OnboardingView() {
                                         <button
                                             onClick={handleCreateStudentAndJoin}
                                             disabled={!newStudentName || !newStudentDob || joining}
-                                            className="px-4 py-3 bg-[#4A7C9E] text-white rounded-xl font-bold hover:bg-[#2E5A75] disabled:opacity-50 flex justify-center items-center gap-2"
+                                            className="px-4 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary disabled:opacity-50 flex justify-center items-center gap-2"
                                         >
                                             {joining ? <Loader2 className="animate-spin" size={18} /> : 'Skrá og klára'}
                                         </button>
@@ -1026,7 +1026,7 @@ function LanguageCard({ lang, flag, name, sub, onClick }: any) {
     return (
         <button
             onClick={onClick}
-            className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all text-left group"
+            className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-xl hover:border-primary hover:shadow-md transition-all text-left group"
         >
             <span className="text-4xl group-hover:scale-110 transition-transform">{flag}</span>
             <div>

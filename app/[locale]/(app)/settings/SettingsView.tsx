@@ -413,7 +413,7 @@ export default function SettingsView() {
     if (authLoading || classLoading) {
         return (
             <div className="flex justify-center pt-20">
-                <Loader2 className="animate-spin text-nordic-blue" size={40} />
+                <Loader2 className="animate-spin text-primary" size={40} />
             </div>
         );
     }
@@ -430,7 +430,7 @@ export default function SettingsView() {
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="hidden sm:flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 shadow-sm border-none"
+                    className="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 shadow-sm border-none"
                 >
                     {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                     {t('save_btn')}
@@ -450,10 +450,10 @@ export default function SettingsView() {
 
 
             {/* Invite Code Section */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 space-y-6">
+            <section className="bg-white p-6 rounded-xl shadow-sm border border-outline-variant space-y-6">
                 <div>
                     <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <Users className="text-[#4A7C9E]" size={24} />
+                        <Users className="text-primary" size={24} />
                         {t('invite_section_title')}
                     </h2>
                     <p className="text-sm text-gray-500">
@@ -462,17 +462,17 @@ export default function SettingsView() {
                 </div>
 
                 {/* Standard Join Code */}
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <label className="block text-sm font-semibold text-blue-900 uppercase tracking-wider mb-2">
+                <div className="bg-surface-container-low p-4 rounded-lg border border-outline-variant">
+                    <label className="block text-sm font-semibold text-primary uppercase tracking-wider mb-2">
                         {t('general_code_label')}
                     </label>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <div className="bg-white px-4 py-3 rounded-lg border border-blue-200 flex-1 min-w-0">
+                        <div className="bg-white px-4 py-3 rounded-lg border border-outline-variant flex-1 min-w-0">
                             <input
                                 type="text"
                                 value={formData.joinCode}
                                 readOnly
-                                className="text-2xl sm:text-3xl font-mono font-bold text-[#4A7C9E] tracking-widest bg-white border border-blue-200 rounded-lg outline-none w-full uppercase text-center select-all p-2"
+                                className="text-2xl sm:text-3xl font-mono font-bold text-primary tracking-widest bg-white border border-outline-variant rounded-lg outline-none w-full uppercase text-center select-all p-2"
                                 placeholder="KÓÐI"
                             />
                         </div>
@@ -483,7 +483,7 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(url);
                                     alert(t('link_copied') + '\n\n' + url);
                                 }}
-                                className="flex-1 sm:flex-none px-4 py-2 bg-[#4A7C9E] text-white rounded-lg hover:bg-[#2E5A75] transition-colors text-sm font-medium"
+                                className="flex-1 sm:flex-none px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary transition-colors text-sm font-medium"
                                 title={t('copy_link')}
                             >
                                 📋 {t('copy_link')}
@@ -493,14 +493,14 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(formData.joinCode);
                                     alert(t('code_copied'));
                                 }}
-                                className="px-4 py-2 bg-white text-[#4A7C9E] border border-[#B3CDE0] rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
+                                className="px-4 py-2 bg-white text-primary border border-outline-variant rounded-lg hover:bg-surface-container-low transition-colors text-sm font-medium"
                                 title={t('copy_code')}
                             >
                                 {t('copy_code')}
                             </button>
                         </div>
                     </div>
-                    <p className="text-xs text-blue-700 mt-2">
+                    <p className="text-xs text-primary mt-2">
                         ℹ️ {t('parent_info')}
                     </p>
                 </div>
@@ -552,8 +552,8 @@ export default function SettingsView() {
             {/* Admin Management */}
             <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                        <Shield className="text-nordic-blue" size={24} />
+                    <div className="p-2 bg-surface-container-low rounded-lg">
+                        <Shield className="text-primary" size={24} />
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">{t('admins_section_title')}</h2>
@@ -568,7 +568,7 @@ export default function SettingsView() {
                         {adminUsers.map((admin) => (
                             <div key={admin.uid} className="p-3 flex items-center justify-between hover:bg-gray-50">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-nordic-blue text-white flex items-center justify-center text-sm font-bold">
+                                    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
                                         {admin.displayName[0]?.toUpperCase() || 'U'}
                                     </div>
                                     <div>
@@ -610,7 +610,7 @@ export default function SettingsView() {
                         <button
                             onClick={handleAddAdmin}
                             disabled={isAddingAdmin || !newAdminEmail.trim()}
-                            className="flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:opacity-90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isAddingAdmin ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
                             {t('add_btn')}
@@ -626,8 +626,8 @@ export default function SettingsView() {
             {/* General Settings */}
             <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                        <School className="text-nordic-blue" size={24} />
+                    <div className="p-2 bg-surface-container-low rounded-lg">
+                        <School className="text-primary" size={24} />
                     </div>
                     <h2 className="text-xl font-semibold">{t('general_settings_title')}</h2>
                 </div>
@@ -662,12 +662,12 @@ export default function SettingsView() {
 
                     {/* Calendar Sync Section */}
                     {formData.calendarUrl && (
-                        <div className="bg-blue-50 p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="bg-surface-container-low p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <Calendar className="text-nordic-blue" />
+                                <Calendar className="text-primary" />
                                 <div>
-                                    <p className="font-medium text-nordic-blue-dark">{t('calendar_found')}</p>
-                                    <p className="text-xs text-nordic-blue">
+                                    <p className="font-medium text-primary-dark">{t('calendar_found')}</p>
+                                    <p className="text-xs text-primary">
                                         {t('calendar_sync_desc')}
                                     </p>
                                 </div>
@@ -675,7 +675,7 @@ export default function SettingsView() {
                             <button
                                 onClick={handleSyncCalendar}
                                 disabled={isSyncing}
-                                className="flex items-center gap-2 bg-white text-nordic-blue border border-blue-200 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors"
+                                className="flex items-center gap-2 bg-white text-primary border border-outline-variant px-3 py-1.5 rounded-md text-sm font-medium hover:bg-surface-container-low transition-colors"
                             >
                                 {isSyncing ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}
                                 {syncStatus || t('update_calendar')}
@@ -719,7 +719,7 @@ export default function SettingsView() {
                     <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 border-none"
+                        className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 border-none"
                     >
                         {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                         {t('save_changes')}
@@ -747,7 +747,7 @@ export default function SettingsView() {
                         <div className="flex items-center gap-3">
                             <span className="font-bold text-gray-400 text-lg">{formData.grade}. bekkur</span>
                             <ChevronRight className="text-gray-400" />
-                            <span className="font-bold text-nordic-blue text-lg">{Number(formData.grade) + 1}. bekkur</span>
+                            <span className="font-bold text-primary text-lg">{Number(formData.grade) + 1}. bekkur</span>
                         </div>
 
                         <button

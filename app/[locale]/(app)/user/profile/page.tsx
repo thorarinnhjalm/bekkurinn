@@ -279,7 +279,7 @@ export default function UserProfilePage() {
         return (
             <div className="min-h-screen flex items-center justify-center pt-24">
                 <div className="flex flex-col items-center gap-3">
-                    <Loader2 size={40} className="animate-spin text-[#1E3A5F]" />
+                    <Loader2 size={40} className="animate-spin text-primary" />
                     <p className="text-gray-500">Loading data...</p>
                 </div>
             </div>
@@ -292,7 +292,7 @@ export default function UserProfilePage() {
 
             {/* Header */}
             <header className="relative">
-                <div className="absolute -top-10 -left-10 w-64 h-64 bg-blue-100 rounded-full blur-3xl opacity-30 -z-10" />
+                <div className="absolute -top-10 -left-10 w-64 h-64 bg-surface-container rounded-full blur-3xl opacity-30 -z-10" />
                 <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">{t('title')}</h1>
                 <p className="text-lg text-gray-500">
                     {t('subtitle')}
@@ -303,11 +303,11 @@ export default function UserProfilePage() {
             <section className="glass-card p-6">
                 <div className="flex items-start gap-5">
                     {/* Avatar */}
-                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-blue-50 text-blue-700 overflow-hidden flex-shrink-0">
+                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-surface-container-low text-primary overflow-hidden flex-shrink-0">
                         {userPhotoUrl ? (
                             <img src={userPhotoUrl} alt={user.displayName || ''} className="w-full h-full object-cover" />
                         ) : (
-                            <User size={32} className="text-blue-400" />
+                            <User size={32} className="text-primary" />
                         )}
                     </div>
 
@@ -329,7 +329,7 @@ export default function UserProfilePage() {
                             onChange={(e) => setUserPhone(e.target.value)}
                             onBlur={handleSaveUser}
                             placeholder={t('phone_placeholder')}
-                            className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all"
+                            className="flex-1 px-3 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:bg-white focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
                         />
                     </div>
 
@@ -391,7 +391,7 @@ export default function UserProfilePage() {
                                         key={l}
                                         href={`/${l}${window.location.pathname.replace(/^\/[a-z]{2}/, '')}${window.location.search}`}
                                         className={`px-3 py-2 rounded-lg text-sm font-medium transition-all border ${locale === l
-                                            ? 'bg-[#1E3A5F] text-white border-[#1E3A5F]'
+                                            ? 'bg-primary text-white border-primary'
                                             : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
                                             }`}
                                     >
@@ -407,8 +407,8 @@ export default function UserProfilePage() {
             {/* Notification Settings */}
             <section className="glass-card p-6 space-y-6">
                 <div className="flex items-center gap-3 mb-2">
-                    <div className="p-2 bg-indigo-50 rounded-lg">
-                        <Bell className="text-indigo-600" size={24} />
+                    <div className="p-2 bg-surface-container-low rounded-lg">
+                        <Bell className="text-primary" size={24} />
                     </div>
                     <h2 className="text-xl font-bold text-gray-900">{t('notifications_title') || 'Tilkynningar'}</h2>
                 </div>
@@ -457,7 +457,7 @@ export default function UserProfilePage() {
                     <h2 className="text-2xl font-bold text-gray-900">{t('my_children')}</h2>
                     <a
                         href={`/${locale}/onboarding?step=join`}
-                        className="text-sm font-semibold text-[#1E3A5F] hover:underline flex items-center gap-1"
+                        className="text-sm font-semibold text-primary hover:underline flex items-center gap-1"
                     >
                         <UserPlus size={16} />
                         {t('add_child')}
@@ -493,7 +493,7 @@ export default function UserProfilePage() {
                         <p className="text-gray-500 mb-4">{t('no_children')}</p>
                         <a
                             href={`/${locale}/onboarding?step=join`}
-                            className="inline-flex items-center gap-2 bg-[#1E3A5F] text-white px-5 py-2.5 rounded-lg font-medium hover:bg-[#2E4A6F] transition"
+                            className="inline-flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg font-medium hover:opacity-90 transition"
                         >
                             <UserPlus size={18} />
                             {t('add_child')}
@@ -581,11 +581,11 @@ function StudentCard({
                 onClick={onToggleExpand}
                 className="w-full p-5 flex items-center gap-4 hover:bg-gray-50/50 transition text-left"
             >
-                <div className="w-16 h-16 rounded-xl bg-blue-50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-surface-container-low flex items-center justify-center overflow-hidden flex-shrink-0">
                     {student.photoUrl ? (
                         <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover" />
                     ) : (
-                        <span className="text-xl font-bold text-blue-600">{initials}</span>
+                        <span className="text-xl font-bold text-primary">{initials}</span>
                     )}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -622,7 +622,7 @@ function StudentCard({
                             value={editedName}
                             onChange={(e) => setEditedName(e.target.value)}
                             onBlur={() => editedName !== student.name && onSaveName(editedName)}
-                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all font-medium"
+                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all font-medium"
                         />
                     </div>
 
@@ -636,7 +636,7 @@ function StudentCard({
                                 setEditedBirthDate(e.target.value);
                                 onSaveBirthDate(e.target.value);
                             }}
-                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-[#1E3A5F] focus:ring-1 focus:ring-[#1E3A5F]/20 outline-none transition-all"
+                            className="w-full px-3 py-2.5 bg-white border border-gray-200 rounded-lg focus:border-primary focus:ring-1 focus:ring-primary/20 outline-none transition-all"
                         />
                     </div>
 
@@ -653,7 +653,7 @@ function StudentCard({
                                     key={option.value}
                                     onClick={() => onSaveGender(option.value)}
                                     className={`flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-all ${student.gender === option.value
-                                        ? 'bg-[#1E3A5F] text-white shadow-sm'
+                                        ? 'bg-primary text-white shadow-sm'
                                         : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-300'
                                         }`}
                                 >
@@ -734,7 +734,7 @@ function StudentCard({
                                 onClick={handleCopyInvite}
                                 className={`w-full py-3 rounded-lg font-medium transition-all flex items-center justify-center gap-2 ${copiedInvite
                                     ? 'bg-green-50 text-green-700 border border-green-200'
-                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-[#1E3A5F] hover:text-[#1E3A5F]'
+                                    : 'bg-white border border-gray-200 text-gray-700 hover:border-primary hover:text-primary'
                                     }`}
                             >
                                 {copiedInvite ? (
