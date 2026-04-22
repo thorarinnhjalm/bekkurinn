@@ -5,13 +5,13 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useUserClasses, useSchool, useLostItems, useCreateLostItem } from '@/hooks/useFirestore';
 import { LostItemCard } from '@/components/cards/LostItemCard';
 import { ImageUploader } from '@/components/upload/ImageUploader';
-import { Loader2, Plus, Search, Filter, Camera } from 'lucide-react';
+import { Loader2, Plus, Search, Camera } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 export default function LostFoundPage() {
     const { user, loading: authLoading } = useAuth();
-    const router = useRouter(); // Added missing router import if not present, checking imports... it was present.
+    const router = useRouter();
     const params = useParams();
     const locale = (params.locale as string) || 'is';
     const t = useTranslations('lost_found');
@@ -35,14 +35,10 @@ export default function LostFoundPage() {
     const [newItemTitle, setNewItemTitle] = useState('');
     const [newItemDesc, setNewItemDesc] = useState('');
     const [newItemLocation, setNewItemLocation] = useState('');
-    const [newItemImage, setNewItemImage] = useState(''); // URL from uploader
+    const [newItemImage, setNewItemImage] = useState('');
 
-    // Permissions
     const isAdmin = activeClass?.role === 'admin';
-    // Admins can post "Found" items (School scope). Parents usually post "Lost" items (Class scope).
-    // Actually, let's allow anyone to post anything, but default logic suggests admins handle "Found" pile.
 
-    // Redirect
     if (!authLoading && !user) {
         router.push(`/${locale}/login`);
         return null;
@@ -50,7 +46,7 @@ export default function LostFoundPage() {
 
     if (authLoading || isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center text-nordic-blue">
+            <div className="min-h-screen flex items-center justify-center text-primary">
                 <Loader2 size={40} className="animate-spin" />
             </div>
         );
@@ -70,19 +66,16 @@ export default function LostFoundPage() {
             location: newItemLocation,
             imageUrl: newItemImage,
             type: newItemType,
-            // Scope logic: Found items are usually school-wide. Lost items are class-wide (usually).
-            // Let's simplify and make everything School-wide for visibility, but tag appropriately.
             classId: activeClassId,
             schoolId: activeClass?.schoolId || '',
             scope: newItemType === 'found' ? 'school' : 'class',
             isClaimed: false,
             createdBy: user?.uid || '',
             author: user?.displayName || 'Notandi',
-            createdAt: new Date(), // Hook handles serverTimestamp
+            createdAt: new Date(),
         } as any);
 
         setIsCreating(false);
-        // Reset form
         setNewItemTitle(''); setNewItemDesc(''); setNewItemLocation(''); setNewItemImage('');
     };
 
@@ -91,19 +84,19 @@ export default function LostFoundPage() {
             {/* Header */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div>
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 text-xs font-bold text-blue-700 uppercase tracking-wide mb-3">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-xs font-bold uppercase tracking-wide mb-3">
                         <Camera size={12} />
                         {t('badge')}
                     </div>
-                    <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">{t('title')}</h1>
-                    <p className="text-xl text-gray-500 max-w-xl mt-2 leading-relaxed">
+                    <h1 className="text-4xl font-extrabold text-on-surface tracking-tight">{t('title')}</h1>
+                    <p className="text-xl text-on-surface-variant max-w-xl mt-2 leading-relaxed">
                         {t('subtitle')}
                     </p>
                 </div>
 
                 <button
                     onClick={() => setIsCreating(true)}
-                    className="btn-premium flex items-center gap-2 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                 >
                     <Plus size={20} />
                     {t('register_item')}
@@ -114,24 +107,24 @@ export default function LostFoundPage() {
             <div className="flex items-center gap-2 overflow-x-auto pb-2">
                 <button
                     onClick={() => setFilter('all')}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap
-                        ${filter === 'all' ? 'bg-gray-900 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-gray-50'}
+                    className={`px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap
+                        ${filter === 'all' ? 'bg-primary text-on-primary shadow-ambient' : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface ghost-border'}
                     `}
                 >
                     {t('filter_all')}
                 </button>
                 <button
                     onClick={() => setFilter('found')}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2
-                        ${filter === 'found' ? 'bg-blue-600 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-blue-50'}
+                    className={`px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2
+                        ${filter === 'found' ? 'bg-secondary-container text-on-secondary-container shadow-ambient' : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface ghost-border'}
                     `}
                 >
                     {t('filter_found')}
                 </button>
                 <button
                     onClick={() => setFilter('lost')}
-                    className={`px-4 py-2 rounded-xl text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2
-                        ${filter === 'lost' ? 'bg-red-500 text-white shadow-md' : 'bg-white text-gray-600 hover:bg-red-50'}
+                    className={`px-4 py-2 rounded-full text-sm font-bold transition-all whitespace-nowrap flex items-center gap-2
+                        ${filter === 'lost' ? 'bg-error-container text-on-error-container shadow-ambient' : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface ghost-border'}
                     `}
                 >
                     {t('filter_lost')}
@@ -150,30 +143,30 @@ export default function LostFoundPage() {
             </div>
 
             {filteredItems.length === 0 && (
-                <div className="text-center py-20 bg-white/50 rounded-3xl border-2 border-dashed border-gray-200">
-                    <div className="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 text-gray-300">
+                <div className="text-center py-20 bg-surface-container-lowest rounded-3xl shadow-ambient">
+                    <div className="w-16 h-16 bg-surface-container-high rounded-2xl flex items-center justify-center mx-auto mb-4 text-on-surface-variant">
                         <Search size={32} />
                     </div>
-                    <h3 className="text-lg font-bold text-gray-900">{t('empty_title')}</h3>
-                    <p className="text-gray-500">{t('empty_desc')}</p>
+                    <h3 className="text-lg font-bold text-on-surface">{t('empty_title')}</h3>
+                    <p className="text-on-surface-variant">{t('empty_desc')}</p>
                 </div>
             )}
 
             {/* Create Modal */}
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-                    <div className="bg-white rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300 overflow-y-auto max-h-[90vh]">
+                    <div className="bg-surface-container-lowest rounded-3xl p-6 md:p-8 max-w-lg w-full space-y-6 shadow-ambient scale-100 animate-in zoom-in-95 duration-300 overflow-y-auto max-h-[90vh]">
                         <div className="text-center">
-                            <h2 className="text-2xl font-black text-gray-900">{t('modal_title')}</h2>
-                            <p className="text-gray-500 text-sm">{t('modal_subtitle')}</p>
+                            <h2 className="text-2xl font-black text-on-surface">{t('modal_title')}</h2>
+                            <p className="text-on-surface-variant text-sm">{t('modal_subtitle')}</p>
                         </div>
 
                         {/* Type Toggle */}
-                        <div className="flex bg-gray-100 p-1 rounded-xl">
+                        <div className="flex bg-surface-container-low p-1 rounded-xl">
                             <button
                                 onClick={() => setNewItemType('lost')}
                                 className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2
-                                    ${newItemType === 'lost' ? 'bg-white text-red-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}
+                                    ${newItemType === 'lost' ? 'bg-surface-container-lowest text-error shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}
                                 `}
                             >
                                 {t('type_lost')}
@@ -181,7 +174,7 @@ export default function LostFoundPage() {
                             <button
                                 onClick={() => setNewItemType('found')}
                                 className={`flex-1 py-3 text-sm font-bold rounded-lg transition-all flex items-center justify-center gap-2
-                                    ${newItemType === 'found' ? 'bg-white text-blue-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'}
+                                    ${newItemType === 'found' ? 'bg-surface-container-lowest text-primary shadow-ambient' : 'text-on-surface-variant hover:text-on-surface'}
                                 `}
                             >
                                 {t('type_found')}
@@ -190,62 +183,61 @@ export default function LostFoundPage() {
 
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_image')}</label>
-                                <div className="h-40 bg-gray-50 rounded-xl border-2 border-dashed border-gray-200 overflow-hidden relative group">
+                                <label className="block text-xs font-bold text-on-surface-variant uppercase mb-1">{t('label_image')}</label>
+                                <div className="h-40 bg-surface-container-low rounded-xl border-2 border-dashed border-outline-variant/50 overflow-hidden relative group">
                                     <ImageUploader
                                         onUploadComplete={(url) => setNewItemImage(url)}
                                         currentImageUrl={newItemImage}
                                         storagePath={`lost-found/${activeClassId}`}
                                     />
-                                    {/* Overlay hint if needed, handled by ImageUploader usually */}
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_title')}</label>
+                                <label className="block text-xs font-bold text-on-surface-variant uppercase mb-1">{t('label_title')}</label>
                                 <input
                                     type="text"
                                     value={newItemTitle}
                                     onChange={e => setNewItemTitle(e.target.value)}
                                     placeholder={newItemType === 'lost' ? t('placeholder_title_lost') : t('placeholder_title_found')}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none font-bold"
+                                    className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-bold text-on-surface"
                                 />
                             </div>
 
                             <div>
-                                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_desc')}</label>
+                                <label className="block text-xs font-bold text-on-surface-variant uppercase mb-1">{t('label_desc')}</label>
                                 <textarea
                                     value={newItemDesc}
                                     onChange={e => setNewItemDesc(e.target.value)}
                                     placeholder={t('placeholder_desc')}
-                                    className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none h-24 resize-none"
+                                    className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none h-24 resize-none text-on-surface"
                                 />
                             </div>
 
                             {newItemType === 'found' && (
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">{t('label_location')}</label>
+                                    <label className="block text-xs font-bold text-on-surface-variant uppercase mb-1">{t('label_location')}</label>
                                     <input
                                         type="text"
                                         value={newItemLocation}
                                         onChange={e => setNewItemLocation(e.target.value)}
                                         placeholder={t('placeholder_location')}
-                                        className="w-full px-4 py-3 rounded-xl bg-gray-50 border-2 border-gray-100 focus:border-nordic-blue focus:bg-white transition-all outline-none"
+                                        className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none text-on-surface"
                                     />
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex gap-3 pt-4 border-t border-gray-100">
+                        <div className="flex gap-3 pt-4 border-t border-outline-variant/30">
                             <button
                                 onClick={() => setIsCreating(false)}
-                                className="flex-1 py-3 rounded-xl font-bold text-gray-500 hover:bg-gray-50 transition-colors"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-surface-variant hover:bg-surface-container-low transition-colors"
                             >
                                 {t('cancel')}
                             </button>
                             <button
                                 onClick={handleCreate}
-                                className="flex-1 py-3 rounded-xl font-bold text-white bg-gray-900 shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('submit')}
                             </button>
