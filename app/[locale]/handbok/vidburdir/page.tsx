@@ -1,15 +1,15 @@
-import { Calendar, Music, Sparkles } from 'lucide-react';
+import { Calendar, Sparkles } from 'lucide-react';
 
 export default function EventsPage() {
     return (
-        <article className="max-w-3xl mx-auto prose prose-blue prose-lg bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+        <article className="max-w-3xl mx-auto prose prose-lg bg-surface-container-lowest p-8 md:p-12 rounded-3xl shadow-ambient">
             <div className="flex items-center gap-4 mb-8 not-prose">
-                <div className="w-16 h-16 bg-green-100 rounded-2xl flex items-center justify-center text-green-600">
+                <div className="w-16 h-16 bg-primary-container/20 rounded-2xl flex items-center justify-center text-primary">
                     <Sparkles size={32} />
                 </div>
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 m-0">Hugmyndabanki</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Hvað er hægt að gera annað en að fara í bíó?</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-on-surface m-0">Hugmyndabanki</h1>
+                    <p className="text-on-surface-variant mt-2 font-medium">Hvað er hægt að gera annað en að fara í bíó?</p>
                 </div>
             </div>
 
@@ -60,9 +60,9 @@ export default function EventsPage() {
                 />
             </div>
 
-            <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 not-prose my-8">
-                <h3 className="font-bold text-blue-900 mb-2">Gullna reglan</h3>
-                <p className="text-blue-800">
+            <div className="bg-tertiary-fixed/50 p-6 rounded-2xl not-prose my-8">
+                <h3 className="font-bold text-on-tertiary-fixed mb-2">Gullna reglan</h3>
+                <p className="text-on-tertiary-fixed">
                     Munið að aldrei má vera kostnaður sem útilokar börn. Ef safnað er í <strong>bekkjarsjóð</strong> (frjáls framlög) er hægt að nota hann til að niðurgreiða fyrir alla.
                 </p>
             </div>
@@ -73,14 +73,14 @@ export default function EventsPage() {
 
 function EventCard({ title, desc }: { title: string, desc: string }) {
     return (
-        <div className="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="mt-1 text-green-600">
+        <div className="flex gap-4 p-4 bg-surface-container-low rounded-2xl ghost-border">
+            <div className="mt-1 text-primary">
                 <Calendar size={24} />
             </div>
             <div>
-                <h3 className="font-bold text-gray-900">{title}</h3>
-                <p className="text-gray-600 text-sm">{desc}</p>
+                <h3 className="font-bold text-on-surface">{title}</h3>
+                <p className="text-on-surface-variant text-sm">{desc}</p>
             </div>
         </div>
-    )
+    );
 }

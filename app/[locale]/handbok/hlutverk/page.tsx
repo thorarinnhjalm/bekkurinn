@@ -2,14 +2,14 @@ import { CheckCircle, AlertTriangle, Users } from 'lucide-react';
 
 export default function RolePage() {
     return (
-        <article className="max-w-3xl mx-auto prose prose-blue prose-lg bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+        <article className="max-w-3xl mx-auto prose prose-lg bg-surface-container-lowest p-8 md:p-12 rounded-3xl shadow-ambient">
             <div className="flex items-center gap-4 mb-8 not-prose">
-                <div className="w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center text-nordic-blue">
+                <div className="w-16 h-16 bg-primary-container/15 rounded-2xl flex items-center justify-center text-primary">
                     <Users size={32} />
                 </div>
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 m-0">Hlutverk Bekkjarfulltrúa</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Hvað gerir góður bekkjarfulltrúi?</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-on-surface m-0">Hlutverk Bekkjarfulltrúa</h1>
+                    <p className="text-on-surface-variant mt-2 font-medium">Hvað gerir góður bekkjarfulltrúi?</p>
                 </div>
             </div>
 
@@ -40,15 +40,15 @@ export default function RolePage() {
             </div>
 
             <h2>Hvað gerir bekkjarfulltrúi EKKI?</h2>
-            <div className="bg-amber-50 rounded-xl p-6 border border-amber-100 not-prose mb-8">
+            <div className="bg-tertiary-fixed/50 rounded-2xl p-6 not-prose mb-8">
                 <ul className="space-y-4">
                     <li className="flex items-start gap-3">
-                        <AlertTriangle className="text-amber-600 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-amber-900"><strong>Leysa úr einelti:</strong> Slík mál eiga alltaf að fara beint til umsjónarkennara eða stjórnenda skóla.</span>
+                        <AlertTriangle className="text-on-tertiary-fixed flex-shrink-0 mt-1" size={20} />
+                        <span className="text-on-tertiary-fixed"><strong>Leysa úr einelti:</strong> Slík mál eiga alltaf að fara beint til umsjónarkennara eða stjórnenda skóla.</span>
                     </li>
                     <li className="flex items-start gap-3">
-                        <AlertTriangle className="text-amber-600 flex-shrink-0 mt-1" size={20} />
-                        <span className="text-amber-900"><strong>Safna skyldugjöldum:</strong> Það er ólöglegt að krefja foreldra um gjöld. Öll framlög í bekkjarsjóði verða að vera frjáls.</span>
+                        <AlertTriangle className="text-on-tertiary-fixed flex-shrink-0 mt-1" size={20} />
+                        <span className="text-on-tertiary-fixed"><strong>Safna skyldugjöldum:</strong> Það er ólöglegt að krefja foreldra um gjöld. Öll framlög í bekkjarsjóði verða að vera frjáls.</span>
                     </li>
                 </ul>
             </div>
@@ -70,14 +70,14 @@ export default function RolePage() {
 
 function AdviceCard({ title, text }: { title: string, text: string }) {
     return (
-        <div className="flex gap-4 p-4 bg-gray-50 rounded-xl border border-gray-200">
-            <div className="mt-1 text-green-600">
+        <div className="flex gap-4 p-4 bg-surface-container-low rounded-2xl ghost-border">
+            <div className="mt-1 text-primary">
                 <CheckCircle size={24} />
             </div>
             <div>
-                <h3 className="font-bold text-gray-900">{title}</h3>
-                <p className="text-gray-600 text-sm">{text}</p>
+                <h3 className="font-bold text-on-surface">{title}</h3>
+                <p className="text-on-surface-variant text-sm">{text}</p>
             </div>
         </div>
-    )
+    );
 }
