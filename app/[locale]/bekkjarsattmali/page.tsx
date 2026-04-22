@@ -76,16 +76,16 @@ export default function BekkjarsattmaliLandingPage() {
                 </section>
 
                 {/* Topics Section */}
-                <section className="py-20 bg-on-surface text-white">
+                <section className="py-20 bg-primary text-white">
                     <div className="container mx-auto px-4">
                         <div className="text-center mb-16">
-                            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('topics.title')}</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">{t('topics.title')}</h2>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
                             {[1, 2, 3, 4, 5].map((i) => (
-                                <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-on-surface/90/50 border border-outline-variant">
-                                    <Shield className="text-secondary/70 shrink-0" size={20} />
-                                    <span className="font-medium">{t(`topics.t${i}`)}</span>
+                                <div key={i} className="flex items-center gap-3 p-4 rounded-xl bg-white/10 border border-white/20">
+                                    <Shield className="text-tertiary-fixed shrink-0" size={20} />
+                                    <span className="font-medium text-white">{t(`topics.t${i}`)}</span>
                                 </div>
                             ))}
                         </div>
