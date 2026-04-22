@@ -1,15 +1,15 @@
-import { Shield, Lock, EyeOff, CheckCircle } from 'lucide-react';
+import { Shield, Lock, CheckCircle } from 'lucide-react';
 
 export default function PrivacyPage() {
     return (
-        <article className="max-w-3xl mx-auto prose prose-blue prose-lg bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+        <article className="max-w-3xl mx-auto prose prose-lg bg-surface-container-lowest p-8 md:p-12 rounded-3xl shadow-ambient">
             <div className="flex items-center gap-4 mb-8 not-prose">
-                <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600">
+                <div className="w-16 h-16 bg-secondary-container rounded-2xl flex items-center justify-center text-on-secondary-container">
                     <Shield size={32} />
                 </div>
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 m-0">Persónuvernd og Bekkjarlistar</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Hvernig höldum við úti listum án þess að brjóta lög?</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-on-surface m-0">Persónuvernd og Bekkjarlistar</h1>
+                    <p className="text-on-surface-variant mt-2 font-medium">Hvernig höldum við úti listum án þess að brjóta lög?</p>
                 </div>
             </div>
 
@@ -34,12 +34,12 @@ export default function PrivacyPage() {
                 Til að halda bekkjarlista löglega þarf <strong>upplýst samþykki</strong>. Það þýðir að foreldri verður sjálft að skrá sig og samþykkja að aðrir foreldrar sjái upplýsingarnar.
             </p>
 
-            <div className="bg-blue-50 p-6 rounded-2xl border border-blue-100 not-prose my-8">
-                <h3 className="font-bold text-blue-900 flex items-center gap-2 mb-4">
+            <div className="bg-primary-container/15 p-6 rounded-2xl not-prose my-8">
+                <h3 className="font-bold text-primary flex items-center gap-2 mb-4">
                     <Lock size={20} />
                     Hvernig Bekkurinn leysir málið
                 </h3>
-                <p className="text-blue-800 mb-4">
+                <p className="text-on-surface mb-4">
                     Í kerfinu okkar er bekkjarlistinn "lifandi". Foreldrar skrá sig sjálfir.
                 </p>
                 <div className="grid gap-3">
@@ -66,9 +66,9 @@ export default function PrivacyPage() {
 
 function FeatureRow({ text }: { text: string }) {
     return (
-        <div className="flex items-center gap-3 text-blue-900 font-medium">
-            <CheckCircle size={18} className="text-blue-500" />
+        <div className="flex items-center gap-3 text-on-surface font-medium">
+            <CheckCircle size={18} className="text-primary flex-shrink-0" />
             <span>{text}</span>
         </div>
-    )
+    );
 }

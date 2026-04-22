@@ -1,15 +1,15 @@
-import { BookOpen, Scale, FileText } from 'lucide-react';
+import { Scale, FileText } from 'lucide-react';
 
 export default function LawsPage() {
     return (
-        <article className="max-w-3xl mx-auto prose prose-blue prose-lg bg-white p-8 md:p-12 rounded-3xl shadow-sm border border-gray-100">
+        <article className="max-w-3xl mx-auto prose prose-lg bg-surface-container-lowest p-8 md:p-12 rounded-3xl shadow-ambient">
             <div className="flex items-center gap-4 mb-8 not-prose">
-                <div className="w-16 h-16 bg-amber-100 rounded-2xl flex items-center justify-center text-amber-600">
+                <div className="w-16 h-16 bg-tertiary-fixed rounded-2xl flex items-center justify-center text-on-tertiary-fixed">
                     <Scale size={32} />
                 </div>
                 <div>
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 m-0">Lög og Reglugerðir</h1>
-                    <p className="text-gray-500 mt-2 font-medium">Hvaða lög gilda um foreldrastarf?</p>
+                    <h1 className="text-3xl md:text-4xl font-bold text-on-surface m-0">Lög og Reglugerðir</h1>
+                    <p className="text-on-surface-variant mt-2 font-medium">Hvaða lög gilda um foreldrastarf?</p>
                 </div>
             </div>
 
@@ -21,7 +21,7 @@ export default function LawsPage() {
             <p>
                 Í <strong>9. grein</strong> laganna segir:
             </p>
-            <blockquote className="italic border-l-4 border-amber-300 pl-4 py-2 bg-amber-50 rounded-r-lg">
+            <blockquote className="italic border-l-4 border-primary pl-4 py-2 bg-surface-container-low rounded-r-lg not-prose text-on-surface">
                 "Við hvern grunnskóla skal starfa foreldrafélag. Skólastjóri sér til þess að félagið sé stofnað og að því sé búin aðstaða."
             </blockquote>
             <p>
@@ -43,24 +43,24 @@ export default function LawsPage() {
                 Í aðalnámskrá (kafla 4.3) er lögð áhersla á að foreldrar séu virkir þátttakendur. Þar segir að skólar eigi að hafa frumkvæði að upplýsingagjöf til foreldra.
             </p>
 
-            <div className="not-prose mt-12 space-y-4">
-                <h3 className="font-bold text-gray-900 border-b pb-2">Gagnlegir hlekkir (Opnast í nýjum glugga)</h3>
+            <div className="not-prose mt-12 space-y-3">
+                <h3 className="font-bold text-on-surface border-b border-outline-variant/30 pb-2">Gagnlegir hlekkir (Opnast í nýjum glugga)</h3>
 
                 <a href="https://www.althingi.is/lagasige/lys/2008091.html" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-amber-50 hover:text-amber-800 transition-colors group">
-                    <FileText className="text-gray-400 group-hover:text-amber-600" />
+                    className="flex items-center gap-3 p-4 bg-surface-container-low rounded-2xl hover:bg-primary-container/15 hover:text-primary transition-colors group ghost-border">
+                    <FileText className="text-on-surface-variant group-hover:text-primary" />
                     <span className="font-medium">Lög um grunnskóla nr. 91/2008</span>
                 </a>
 
                 <a href="https://island.is/reglugerdir/nr/0897-2009" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-amber-50 hover:text-amber-800 transition-colors group">
-                    <FileText className="text-gray-400 group-hover:text-amber-600" />
+                    className="flex items-center gap-3 p-4 bg-surface-container-low rounded-2xl hover:bg-primary-container/15 hover:text-primary transition-colors group ghost-border">
+                    <FileText className="text-on-surface-variant group-hover:text-primary" />
                     <span className="font-medium">Reglugerð um foreldrafélög og foreldraráð</span>
                 </a>
 
                 <a href="https://heimiliogskoli.is" target="_blank" rel="noopener noreferrer"
-                    className="flex items-center gap-3 p-4 bg-gray-50 rounded-xl hover:bg-amber-50 hover:text-amber-800 transition-colors group">
-                    <FileText className="text-gray-400 group-hover:text-amber-600" />
+                    className="flex items-center gap-3 p-4 bg-surface-container-low rounded-2xl hover:bg-primary-container/15 hover:text-primary transition-colors group ghost-border">
+                    <FileText className="text-on-surface-variant group-hover:text-primary" />
                     <span className="font-medium">Heimili og skóli - Landssamtök foreldra</span>
                 </a>
             </div>
