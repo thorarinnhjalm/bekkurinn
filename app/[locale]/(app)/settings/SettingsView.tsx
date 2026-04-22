@@ -413,7 +413,7 @@ export default function SettingsView() {
     if (authLoading || classLoading) {
         return (
             <div className="flex justify-center pt-20">
-                <Loader2 className="animate-spin text-nordic-blue" size={40} />
+                <Loader2 className="animate-spin text-primary" size={40} />
             </div>
         );
     }
@@ -422,15 +422,15 @@ export default function SettingsView() {
 
     return (
         <div className="max-w-2xl mx-auto p-4 space-y-8 pb-24 pt-8">
-            <header className="border-b border-gray-200 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <header className="border-b border-outline-variant/30 pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                    <h1 className="text-3xl font-bold text-gray-900">{t('title')}</h1>
-                    <p className="text-gray-500">{t('subtitle')}</p>
+                    <h1 className="text-3xl font-bold text-on-surface">{t('title')}</h1>
+                    <p className="text-on-surface-variant">{t('subtitle')}</p>
                 </div>
                 <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="hidden sm:flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 shadow-sm border-none"
+                    className="hidden sm:flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-container transition-colors disabled:opacity-50 shadow-sm border-none"
                 >
                     {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                     {t('save_btn')}
@@ -450,29 +450,29 @@ export default function SettingsView() {
 
 
             {/* Invite Code Section */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 space-y-6">
+            <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-primary/20 space-y-6">
                 <div>
-                    <h2 className="text-xl font-semibold text-gray-900 mb-1 flex items-center gap-2">
-                        <Users className="text-[#4A7C9E]" size={24} />
+                    <h2 className="text-xl font-semibold text-on-surface mb-1 flex items-center gap-2">
+                        <Users className="text-primary" size={24} />
                         {t('invite_section_title')}
                     </h2>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-sm text-on-surface-variant">
                         {t('invite_section_desc')}
                     </p>
                 </div>
 
                 {/* Standard Join Code */}
-                <div className="bg-blue-50 p-4 rounded-lg border border-blue-100">
-                    <label className="block text-sm font-semibold text-blue-900 uppercase tracking-wider mb-2">
+                <div className="bg-primary-container/15 p-4 rounded-lg border border-primary/20">
+                    <label className="block text-sm font-semibold text-primary uppercase tracking-wider mb-2">
                         {t('general_code_label')}
                     </label>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                        <div className="bg-white px-4 py-3 rounded-lg border border-blue-200 flex-1 min-w-0">
+                        <div className="bg-surface-container-lowest px-4 py-3 rounded-lg border border-primary/30 flex-1 min-w-0">
                             <input
                                 type="text"
                                 value={formData.joinCode}
                                 readOnly
-                                className="text-2xl sm:text-3xl font-mono font-bold text-[#4A7C9E] tracking-widest bg-white border border-blue-200 rounded-lg outline-none w-full uppercase text-center select-all p-2"
+                                className="text-2xl sm:text-3xl font-mono font-bold text-primary tracking-widest bg-surface-container-lowest border border-primary/30 rounded-lg outline-none w-full uppercase text-center select-all p-2"
                                 placeholder="KÓÐI"
                             />
                         </div>
@@ -483,7 +483,7 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(url);
                                     alert(t('link_copied') + '\n\n' + url);
                                 }}
-                                className="flex-1 sm:flex-none px-4 py-2 bg-[#4A7C9E] text-white rounded-lg hover:bg-[#2E5A75] transition-colors text-sm font-medium"
+                                className="flex-1 sm:flex-none px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-container transition-colors text-sm font-medium"
                                 title={t('copy_link')}
                             >
                                 📋 {t('copy_link')}
@@ -493,31 +493,31 @@ export default function SettingsView() {
                                     navigator.clipboard.writeText(formData.joinCode);
                                     alert(t('code_copied'));
                                 }}
-                                className="px-4 py-2 bg-white text-[#4A7C9E] border border-[#B3CDE0] rounded-lg hover:bg-blue-50 transition-colors text-sm font-medium"
+                                className="px-4 py-2 bg-surface-container-lowest text-primary border border-primary/30 rounded-lg hover:bg-primary-container/15 transition-colors text-sm font-medium"
                                 title={t('copy_code')}
                             >
                                 {t('copy_code')}
                             </button>
                         </div>
                     </div>
-                    <p className="text-xs text-blue-700 mt-2">
+                    <p className="text-xs text-primary mt-2">
                         ℹ️ {t('parent_info')}
                     </p>
                 </div>
 
                 {/* Admin/Parent Team Code */}
                 {formData.parentTeamCode && (
-                    <div className="bg-purple-50 p-4 rounded-lg border border-purple-200">
-                        <label className="block text-sm font-semibold text-purple-900 uppercase tracking-wider mb-2">
+                    <div className="bg-secondary-container/60 p-4 rounded-lg border border-secondary/30">
+                        <label className="block text-sm font-semibold text-on-secondary-container uppercase tracking-wider mb-2">
                             {t('admin_code_label')}
                         </label>
                         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-                            <div className="bg-white px-4 py-3 rounded-lg border border-purple-200 flex-1 min-w-0 overflow-hidden">
+                            <div className="bg-surface-container-lowest px-4 py-3 rounded-lg border border-secondary/30 flex-1 min-w-0 overflow-hidden">
                                 <input
                                     type="text"
                                     value={formData.parentTeamCode}
                                     readOnly
-                                    className="text-xl sm:text-2xl font-mono font-bold text-purple-800 tracking-widest bg-white border border-purple-200 rounded-lg outline-none w-full uppercase text-center select-all break-all p-2"
+                                    className="text-xl sm:text-2xl font-mono font-bold text-on-secondary-container tracking-widest bg-surface-container-lowest border border-secondary/30 rounded-lg outline-none w-full uppercase text-center select-all break-all p-2"
                                 />
                             </div>
                             <div className="flex gap-2 w-full sm:w-auto">
@@ -527,7 +527,7 @@ export default function SettingsView() {
                                         navigator.clipboard.writeText(url);
                                         alert(t('link_copied') + '\n\n' + url);
                                     }}
-                                    className="flex-1 sm:flex-none px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors text-sm font-medium"
+                                    className="flex-1 sm:flex-none px-4 py-2 bg-secondary text-white rounded-lg hover:bg-secondary transition-colors text-sm font-medium"
                                 >
                                     📋 {t('copy_link')}
                                 </button>
@@ -536,13 +536,13 @@ export default function SettingsView() {
                                         navigator.clipboard.writeText(formData.parentTeamCode);
                                         alert(t('code_copied'));
                                     }}
-                                    className="px-4 py-2 bg-white text-purple-700 border border-purple-200 rounded-lg hover:bg-purple-50 transition-colors text-sm font-medium"
+                                    className="px-4 py-2 bg-surface-container-lowest text-on-secondary-container border border-secondary/30 rounded-lg hover:bg-secondary-container/60 transition-colors text-sm font-medium"
                                 >
                                     {t('copy_code')}
                                 </button>
                             </div>
                         </div>
-                        <p className="text-xs text-purple-700 mt-2">
+                        <p className="text-xs text-on-secondary-container mt-2">
                             ⚠️ {t('admin_warning')}
                         </p>
                     </div>
@@ -550,43 +550,43 @@ export default function SettingsView() {
             </section>
 
             {/* Admin Management */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+            <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                        <Shield className="text-nordic-blue" size={24} />
+                    <div className="p-2 bg-primary-container/15 rounded-lg">
+                        <Shield className="text-primary" size={24} />
                     </div>
                     <div>
                         <h2 className="text-xl font-semibold">{t('admins_section_title')}</h2>
-                        <p className="text-sm text-gray-500">{t('admins_section_desc')}</p>
+                        <p className="text-sm text-on-surface-variant">{t('admins_section_desc')}</p>
                     </div>
                 </div>
 
                 {/* Current Admins List */}
                 <div className="space-y-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('current_admins')} ({adminUsers.length})</label>
-                    <div className="border border-gray-200 rounded-lg divide-y divide-gray-100">
+                    <label className="block text-sm font-medium text-on-surface mb-2">{t('current_admins')} ({adminUsers.length})</label>
+                    <div className="border border-outline-variant/30 rounded-lg divide-y divide-outline-variant/30">
                         {adminUsers.map((admin) => (
-                            <div key={admin.uid} className="p-3 flex items-center justify-between hover:bg-gray-50">
+                            <div key={admin.uid} className="p-3 flex items-center justify-between hover:bg-surface">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 rounded-full bg-nordic-blue text-white flex items-center justify-center text-sm font-bold">
+                                    <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-bold">
                                         {admin.displayName[0]?.toUpperCase() || 'U'}
                                     </div>
                                     <div>
-                                        <p className="font-medium text-sm text-gray-900">{admin.displayName}</p>
-                                        <p className="text-xs text-gray-500">{admin.email}</p>
+                                        <p className="font-medium text-sm text-on-surface">{admin.displayName}</p>
+                                        <p className="text-xs text-on-surface-variant">{admin.email}</p>
                                     </div>
                                 </div>
                                 {adminUsers.length > 1 && (
                                     <button
                                         onClick={() => handleRemoveAdmin(admin.uid)}
-                                        className="text-red-600 hover:text-red-700 p-1 rounded hover:bg-red-50 transition-colors"
+                                        className="text-error hover:text-error p-1 rounded hover:bg-error-container/40 transition-colors"
                                         title={t('remove_admin')}
                                     >
                                         <X size={18} />
                                     </button>
                                 )}
                                 {adminUsers.length === 1 && (
-                                    <span className="text-xs text-gray-400 italic">{t('only_admin_msg')}</span>
+                                    <span className="text-xs text-on-surface-variant italic">{t('only_admin_msg')}</span>
                                 )}
                             </div>
                         ))}
@@ -594,15 +594,15 @@ export default function SettingsView() {
                 </div>
 
                 {/* Add New Admin */}
-                <div className="pt-4 border-t border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">{t('add_admin_title')}</label>
+                <div className="pt-4 border-t border-outline-variant/30">
+                    <label className="block text-sm font-medium text-on-surface mb-2">{t('add_admin_title')}</label>
                     <div className="flex gap-2">
                         <input
                             type="email"
                             value={newAdminEmail}
                             onChange={(e) => setNewAdminEmail(e.target.value)}
                             placeholder={t('add_admin_placeholder')}
-                            className="flex-1 p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
+                            className="flex-1 p-2 border border-outline-variant rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                             onKeyPress={(e) => {
                                 if (e.key === 'Enter') handleAddAdmin();
                             }}
@@ -610,13 +610,13 @@ export default function SettingsView() {
                         <button
                             onClick={handleAddAdmin}
                             disabled={isAddingAdmin || !newAdminEmail.trim()}
-                            className="flex items-center gap-2 bg-nordic-blue text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-container transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {isAddingAdmin ? <Loader2 className="animate-spin" size={16} /> : <UserPlus size={16} />}
                             {t('add_btn')}
                         </button>
                     </div>
-                    <p className="text-xs text-gray-500 mt-2">
+                    <p className="text-xs text-on-surface-variant mt-2">
                         ⚠️ {t('add_admin_warning')}
                     </p>
                 </div>
@@ -624,21 +624,21 @@ export default function SettingsView() {
             </section>
 
             {/* General Settings */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 space-y-6">
+            <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/30 space-y-6">
                 <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 bg-blue-50 rounded-lg">
-                        <School className="text-nordic-blue" size={24} />
+                    <div className="p-2 bg-primary-container/15 rounded-lg">
+                        <School className="text-primary" size={24} />
                     </div>
                     <h2 className="text-xl font-semibold">{t('general_settings_title')}</h2>
                 </div>
 
                 <div className="grid gap-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">{t('school_label')}</label>
+                        <label className="block text-sm font-medium text-on-surface mb-1">{t('school_label')}</label>
                         <select
                             value={formData.schoolName}
                             onChange={handleSchoolChange}
-                            className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none bg-white text-gray-900"
+                            className="w-full p-2 border border-outline-variant rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none bg-surface-container-lowest text-on-surface"
                         >
                             <option value="">{t('select_school')}</option>
                             {SCHOOLS.map(school => (
@@ -654,7 +654,7 @@ export default function SettingsView() {
                                 type="text"
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-                                className="w-full mt-2 p-2 border border-gray-300 rounded-md"
+                                className="w-full mt-2 p-2 border border-outline-variant rounded-md"
                                 placeholder={t('enter_school_name')}
                             />
                         )}
@@ -662,12 +662,12 @@ export default function SettingsView() {
 
                     {/* Calendar Sync Section */}
                     {formData.calendarUrl && (
-                        <div className="bg-blue-50 p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                        <div className="bg-primary-container/15 p-4 rounded-lg flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3">
-                                <Calendar className="text-nordic-blue" />
+                                <Calendar className="text-primary" />
                                 <div>
-                                    <p className="font-medium text-nordic-blue-dark">{t('calendar_found')}</p>
-                                    <p className="text-xs text-nordic-blue">
+                                    <p className="font-medium text-on-surface">{t('calendar_found')}</p>
+                                    <p className="text-xs text-primary">
                                         {t('calendar_sync_desc')}
                                     </p>
                                 </div>
@@ -675,7 +675,7 @@ export default function SettingsView() {
                             <button
                                 onClick={handleSyncCalendar}
                                 disabled={isSyncing}
-                                className="flex items-center gap-2 bg-white text-nordic-blue border border-blue-200 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-blue-50 transition-colors"
+                                className="flex items-center gap-2 bg-surface-container-lowest text-primary border border-primary/30 px-3 py-1.5 rounded-md text-sm font-medium hover:bg-primary-container/15 transition-colors"
                             >
                                 {isSyncing ? <Loader2 className="animate-spin" size={16} /> : <RefreshCw size={16} />}
                                 {syncStatus || t('update_calendar')}
@@ -685,29 +685,29 @@ export default function SettingsView() {
 
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('grade_label')}</label>
+                            <label className="block text-sm font-medium text-on-surface mb-1">{t('grade_label')}</label>
                             <input
                                 type="number"
                                 value={formData.grade}
                                 onChange={(e) => setFormData({ ...formData, grade: Number(e.target.value) })}
-                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none text-gray-900"
+                                className="w-full p-2 border border-outline-variant rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none text-on-surface"
                                 min="1"
                                 max="10"
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('section_label')}</label>
+                            <label className="block text-sm font-medium text-on-surface mb-1">{t('section_label')}</label>
                             <input
                                 type="text"
                                 value={formData.section}
                                 onChange={(e) => setFormData({ ...formData, section: e.target.value })}
-                                className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-nordic-blue focus:border-transparent outline-none"
+                                className="w-full p-2 border border-outline-variant rounded-md focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                                 placeholder={t('section_placeholder')}
                             />
                         </div>
                     </div>
 
-                    <div className="pt-2 text-sm text-gray-500 bg-gray-50 p-3 rounded">
+                    <div className="pt-2 text-sm text-on-surface-variant bg-surface p-3 rounded">
                         <strong>{t('preview_name')}</strong><br />
                         {formData.schoolName && formData.grade
                             ? `${formData.grade}. Bekkur ${formData.section || ''} - ${formData.schoolName}`
@@ -719,7 +719,7 @@ export default function SettingsView() {
                     <button
                         onClick={handleSave}
                         disabled={isSaving}
-                        className="flex items-center gap-2 bg-[#4A7C9E] text-white px-4 py-2 rounded-lg hover:bg-[#2E5A75] transition-colors disabled:opacity-50 border-none"
+                        className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-container transition-colors disabled:opacity-50 border-none"
                     >
                         {isSaving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
                         {t('save_changes')}
@@ -728,32 +728,32 @@ export default function SettingsView() {
             </section>
 
             {/* Advance Grade Level */}
-            <section className="bg-white p-6 rounded-xl shadow-sm border border-amber-100 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full translate-x-10 -translate-y-10" />
+            <section className="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-tertiary/30 relative overflow-hidden">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-tertiary-fixed/40 rounded-full translate-x-10 -translate-y-10" />
 
                 <div className="relative z-10">
                     <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2 bg-amber-100 rounded-lg">
-                            <GraduationCap className="text-amber-600" size={24} />
+                        <div className="p-2 bg-tertiary-fixed/60 rounded-lg">
+                            <GraduationCap className="text-on-tertiary-fixed" size={24} />
                         </div>
-                        <h2 className="text-xl font-semibold text-gray-900">{t('new_school_year_title')}</h2>
+                        <h2 className="text-xl font-semibold text-on-surface">{t('new_school_year_title')}</h2>
                     </div>
 
-                    <p className="text-gray-600 mb-6">
+                    <p className="text-on-surface-variant mb-6">
                         {t('new_school_year_desc')}
                     </p>
 
-                    <div className="flex items-center justify-between bg-amber-50 p-4 rounded-lg border border-amber-100">
+                    <div className="flex items-center justify-between bg-tertiary-fixed/40 p-4 rounded-lg border border-tertiary/30">
                         <div className="flex items-center gap-3">
-                            <span className="font-bold text-gray-400 text-lg">{formData.grade}. bekkur</span>
-                            <ChevronRight className="text-gray-400" />
-                            <span className="font-bold text-nordic-blue text-lg">{Number(formData.grade) + 1}. bekkur</span>
+                            <span className="font-bold text-on-surface-variant text-lg">{formData.grade}. bekkur</span>
+                            <ChevronRight className="text-on-surface-variant" />
+                            <span className="font-bold text-primary text-lg">{Number(formData.grade) + 1}. bekkur</span>
                         </div>
 
                         <button
                             onClick={handlePromoteClass}
                             disabled={isSaving}
-                            className="flex items-center gap-2 bg-white border-2 border-amber-400 text-amber-700 px-4 py-2 rounded-lg hover:bg-amber-50 transition-colors font-semibold shadow-sm"
+                            className="flex items-center gap-2 bg-surface-container-lowest border-2 border-tertiary text-on-tertiary-fixed px-4 py-2 rounded-lg hover:bg-tertiary-fixed/40 transition-colors font-semibold shadow-sm"
                         >
                             <GraduationCap size={20} />
                             {t('start_new_year')}

@@ -32,20 +32,20 @@ function ProgressIndicator({ currentStep, totalSteps, labels }: {
                     <div key={i} className="flex-1 flex items-center">
                         <div
                             className={`h-2 flex-1 rounded-full transition-all duration-300 ${i < currentStep
-                                ? 'bg-blue-600'
+                                ? 'bg-primary'
                                 : i === currentStep
-                                    ? 'bg-blue-400'
-                                    : 'bg-gray-200'
+                                    ? 'bg-primary/70'
+                                    : 'bg-surface-container-high'
                                 }`}
                         />
                     </div>
                 ))}
             </div>
             {/* Step label */}
-            <div className="flex justify-between text-xs text-gray-500">
+            <div className="flex justify-between text-xs text-on-surface-variant">
                 <span>Skref {currentStep + 1} af {totalSteps}</span>
                 {labels && labels[currentStep] && (
-                    <span className="text-gray-700 font-medium">{labels[currentStep]}</span>
+                    <span className="text-on-surface font-medium">{labels[currentStep]}</span>
                 )}
             </div>
         </div>
@@ -578,13 +578,13 @@ export default function OnboardingView() {
     // --- STEP 1: LANGUAGE SELECTION ---
     if (step === 'language') {
         return (
-            <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
+            <div className="min-h-screen bg-surface p-4 flex flex-col items-center justify-center space-y-8 animate-in fade-in zoom-in duration-300">
                 <div className="text-center space-y-3">
-                    <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
+                    <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mx-auto shadow-lg mb-6">
                         <Globe className="text-white" size={32} />
                     </div>
-                    <h1 className="text-3xl font-bold text-gray-900">{t('language_select_title')}</h1>
-                    <p className="text-gray-500 text-lg">{t('language_select_subtitle')}</p>
+                    <h1 className="text-3xl font-bold text-on-surface">{t('language_select_title')}</h1>
+                    <p className="text-on-surface-variant text-lg">{t('language_select_subtitle')}</p>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-2xl">
@@ -624,7 +624,7 @@ export default function OnboardingView() {
     // --- STEP 2: SELECT MODE (Create vs Join) ---
     if (step === 'select') {
         return (
-            <div className="min-h-screen bg-stone-50 p-4 flex flex-col items-center justify-center space-y-8">
+            <div className="min-h-screen bg-surface p-4 flex flex-col items-center justify-center space-y-8">
                 <div className="w-full max-w-md">
                     <ProgressIndicator
                         currentStep={0}
@@ -635,41 +635,41 @@ export default function OnboardingView() {
                 <div className="text-center space-y-2">
                     <button
                         onClick={() => setStep('language')}
-                        className="text-sm text-gray-400 hover:text-gray-600 mb-4 flex items-center gap-1 mx-auto"
+                        className="text-sm text-on-surface-variant hover:text-on-surface-variant mb-4 flex items-center gap-1 mx-auto"
                     >
                         <Globe size={14} /> {t('change_language')}
                     </button>
-                    <h1 className="text-3xl font-bold text-nordic-blue-dark">{t('welcome_main_title')}</h1>
-                    <p className="text-text-secondary">{t('welcome_select_method')}</p>
+                    <h1 className="text-3xl font-bold text-on-surface">{t('welcome_main_title')}</h1>
+                    <p className="text-on-surface-variant">{t('welcome_select_method')}</p>
                 </div>
 
                 <div className="grid gap-4 w-full max-w-md">
                     <button
                         onClick={() => setStep('join')}
-                        className="nordic-card p-6 flex items-center gap-4 hover:border-nordic-blue transition-all group text-left"
+                        className="nordic-card p-6 flex items-center gap-4 hover:border-primary transition-all group text-left"
                     >
-                        <div className="bg-blue-50 p-3 rounded-full group-hover:bg-blue-100 transition-colors">
-                            <Users className="text-nordic-blue" size={24} />
+                        <div className="bg-primary-container/15 p-3 rounded-full group-hover:bg-primary-container/20 transition-colors">
+                            <Users className="text-primary" size={24} />
                         </div>
                         <div>
                             <h3 className="font-bold text-lg">{t('join_class')}</h3>
-                            <p className="text-sm text-text-secondary">{t('join_class_desc')}</p>
+                            <p className="text-sm text-on-surface-variant">{t('join_class_desc')}</p>
                         </div>
-                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-nordic-blue" />
+                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
                     </button>
 
                     <button
                         onClick={() => setStep('create')}
-                        className="nordic-card p-6 flex items-center gap-4 hover:border-amber-400 transition-all group text-left border-2 border-transparent"
+                        className="nordic-card p-6 flex items-center gap-4 hover:border-tertiary transition-all group text-left border-2 border-transparent"
                     >
-                        <div className="bg-amber-50 p-3 rounded-full group-hover:bg-amber-100 transition-colors">
-                            <Plus className="text-amber-600" size={24} />
+                        <div className="bg-tertiary-fixed/40 p-3 rounded-full group-hover:bg-tertiary-fixed/60 transition-colors">
+                            <Plus className="text-on-tertiary-fixed" size={24} />
                         </div>
                         <div>
                             <h3 className="font-bold text-lg">{t('create_class')}</h3>
-                            <p className="text-sm text-text-secondary">{t('create_class_role_desc')}</p>
+                            <p className="text-sm text-on-surface-variant">{t('create_class_role_desc')}</p>
                         </div>
-                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-amber-600" />
+                        <ArrowRight className="ml-auto opacity-0 group-hover:opacity-100 transition-opacity text-on-tertiary-fixed" />
                     </button>
                 </div>
             </div>
@@ -681,31 +681,31 @@ export default function OnboardingView() {
         // SUCCESS SCREEN AFTER CREATION
         if (createdClassInfo) {
             return (
-                <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
-                    <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center space-y-6">
-                        <div className="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="min-h-screen bg-surface p-4 flex items-center justify-center">
+                    <div className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-8 text-center space-y-6">
+                        <div className="w-20 h-20 bg-primary-container/20 text-primary rounded-full flex items-center justify-center mx-auto mb-4">
                             <Check size={40} />
                         </div>
 
-                        <h2 className="text-2xl font-bold text-gray-900">{t('success_title')}</h2>
-                        <p className="text-gray-600">{t('success_desc')}</p>
+                        <h2 className="text-2xl font-bold text-on-surface">{t('success_title')}</h2>
+                        <p className="text-on-surface-variant">{t('success_desc')}</p>
 
-                        <div className="bg-blue-50 p-6 rounded-xl border border-blue-100 space-y-4 text-left">
+                        <div className="bg-primary-container/15 p-6 rounded-xl border border-primary/20 space-y-4 text-left">
                             <div>
-                                <p className="text-sm font-semibold text-blue-900 uppercase tracking-wider mb-1">{t('code_parents_label')}</p>
-                                <div className="text-3xl font-mono font-bold text-blue-800 bg-white p-3 rounded-lg border border-blue-200 text-center tracking-widest select-all">
+                                <p className="text-sm font-semibold text-primary uppercase tracking-wider mb-1">{t('code_parents_label')}</p>
+                                <div className="text-3xl font-mono font-bold text-primary bg-surface-container-lowest p-3 rounded-lg border border-primary/30 text-center tracking-widest select-all">
                                     {createdClassInfo.joinCode}
                                 </div>
                             </div>
 
-                            <hr className="border-blue-200" />
+                            <hr className="border-primary/30" />
 
                             <div>
-                                <p className="text-sm font-semibold text-purple-900 uppercase tracking-wider mb-1">{t('code_admin_label')}</p>
-                                <div className="text-xl font-mono font-bold text-purple-800 bg-purple-50 p-3 rounded-lg border border-purple-200 text-center tracking-widest select-all break-all">
+                                <p className="text-sm font-semibold text-on-secondary-container uppercase tracking-wider mb-1">{t('code_admin_label')}</p>
+                                <div className="text-xl font-mono font-bold text-on-secondary-container bg-secondary-container/60 p-3 rounded-lg border border-secondary/30 text-center tracking-widest select-all break-all">
                                     {createdClassInfo.parentTeamCode}
                                 </div>
-                                <p className="text-xs text-purple-700 mt-2">{t('code_admin_warning')}</p>
+                                <p className="text-xs text-on-secondary-container mt-2">{t('code_admin_warning')}</p>
                             </div>
                         </div>
 
@@ -715,7 +715,7 @@ export default function OnboardingView() {
                                 const locale = segments[1] || 'is';
                                 router.push(`/${locale}/dashboard?welcome=true`);
                             }}
-                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all shadow-lg"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all shadow-lg"
                         >
                             {t('continue_dashboard')}
                         </button>
@@ -725,43 +725,43 @@ export default function OnboardingView() {
         }
 
         return (
-            <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
-                <div className="w-full max-w-lg bg-white rounded-2xl shadow-sm border border-gray-100 p-6 sm:p-8 space-y-6">
+            <div className="min-h-screen bg-surface p-4 flex items-center justify-center">
+                <div className="w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 sm:p-8 space-y-6">
                     <ProgressIndicator
                         currentStep={1}
                         totalSteps={2}
                         labels={['Velja aðferð', 'Stofna bekk']}
                     />
                     <header>
-                        <button onClick={() => setStep('select')} className="text-sm text-gray-500 hover:text-gray-800 mb-4 flex items-center gap-1">
+                        <button onClick={() => setStep('select')} className="text-sm text-on-surface-variant hover:text-on-surface mb-4 flex items-center gap-1">
                             ← Til baka
                         </button>
-                        <h1 className="text-2xl font-bold text-nordic-blue-dark">{t('create_class_title')}</h1>
-                        <p className="text-text-secondary">{t('create_class_subtitle')}</p>
+                        <h1 className="text-2xl font-bold text-on-surface">{t('create_class_title')}</h1>
+                        <p className="text-on-surface-variant">{t('create_class_subtitle')}</p>
                     </header>
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">{t('school_label')}</label>
+                            <label className="block text-sm font-medium text-on-surface mb-1">{t('school_label')}</label>
                             <select
                                 value={formData.schoolName}
                                 onChange={(e) => setFormData({ ...formData, schoolName: e.target.value })}
-                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white text-gray-900"
+                                className="w-full p-3 border border-outline-variant/30 rounded-lg outline-none focus:ring-2 focus:ring-primary bg-surface-container-lowest text-on-surface"
                             >
                                 <option value="">Veldu skóla...</option>
                                 {availableSchools.map(s => <option key={s.id || s.name} value={s.name}>{s.name}</option>)}
                             </select>
-                            <div className="mt-1 text-xs text-right text-gray-500">
-                                {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-blue-600 hover:underline">{t('contact_us_school')}</a>
+                            <div className="mt-1 text-xs text-right text-on-surface-variant">
+                                {t('missing_school')} <a href="mailto:thorarinnhjalmarsson@gmail.com?subject=Vantar skóla á lista" className="text-primary hover:underline">{t('contact_us_school')}</a>
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Árgangur</label>
+                            <label className="block text-sm font-medium text-on-surface mb-2">Árgangur</label>
                             <select
                                 value={formData.grade}
                                 onChange={(e) => setFormData({ ...formData, grade: Number(e.target.value) })}
-                                className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400 bg-white text-gray-900"
+                                className="w-full p-3 border border-outline-variant/30 rounded-lg outline-none focus:ring-2 focus:ring-primary bg-surface-container-lowest text-on-surface"
                             >
                                 {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(g => (
                                     <option key={g} value={g}>
@@ -771,54 +771,54 @@ export default function OnboardingView() {
                             </select>
                         </div>
 
-                        <div className="bg-blue-50 p-4 rounded-lg space-y-3">
-                            <label className="block text-sm font-medium text-nordic-blue-dark">Hvernig er árganginum skipt?</label>
+                        <div className="bg-primary-container/15 p-4 rounded-lg space-y-3">
+                            <label className="block text-sm font-medium text-on-surface">Hvernig er árganginum skipt?</label>
 
-                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-blue-300">
+                            <label className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-md border cursor-pointer hover:border-primary/40">
                                 <input
                                     type="radio"
                                     checked={!formData.isSplit}
                                     onChange={() => setFormData({ ...formData, isSplit: false })}
                                     name="structure"
-                                    className="w-4 h-4 text-nordic-blue"
+                                    className="w-4 h-4 text-primary"
                                 />
                                 <div>
                                     <span className="font-semibold block text-sm">Heill árgangur saman</span>
-                                    <span className="text-xs text-gray-500">Engin sérstök deildaskipting (Allur 4. bekkur)</span>
+                                    <span className="text-xs text-on-surface-variant">Engin sérstök deildaskipting (Allur 4. bekkur)</span>
                                 </div>
                             </label>
 
-                            <label className="flex items-center gap-3 p-3 bg-white rounded-md border cursor-pointer hover:border-blue-300">
+                            <label className="flex items-center gap-3 p-3 bg-surface-container-lowest rounded-md border cursor-pointer hover:border-primary/40">
                                 <input
                                     type="radio"
                                     checked={formData.isSplit}
                                     onChange={() => setFormData({ ...formData, isSplit: true })}
                                     name="structure"
-                                    className="w-4 h-4 text-nordic-blue"
+                                    className="w-4 h-4 text-primary"
                                 />
                                 <div>
                                     <span className="font-semibold block text-sm">Skipt í bekki/deildir</span>
-                                    <span className="text-xs text-gray-500">T.d. 4. bekkur A, 4. bekkur B...</span>
+                                    <span className="text-xs text-on-surface-variant">T.d. 4. bekkur A, 4. bekkur B...</span>
                                 </div>
                             </label>
                         </div>
 
                         {formData.isSplit && (
                             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-                                <label className="block text-sm font-medium text-gray-700 mb-1">{t('section_label')}</label>
+                                <label className="block text-sm font-medium text-on-surface mb-1">{t('section_label')}</label>
                                 <input
                                     type="text"
                                     value={formData.section}
                                     onChange={(e) => setFormData({ ...formData, section: e.target.value })}
                                     placeholder={t.raw('split_grade_desc').split(' ')[0]} // Using part of example or just generic placeholder? Let's use generic from t if possible, or keep simple
-                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-amber-400"
+                                    className="w-full p-3 border border-outline-variant/30 rounded-lg outline-none focus:ring-2 focus:ring-primary"
                                     autoFocus
                                 />
                             </div>
                         )}
 
                         {error && (
-                            <div className="text-red-600 text-sm bg-red-50 p-3 rounded-lg flex items-center gap-2">
+                            <div className="text-error text-sm bg-error-container/40 p-3 rounded-lg flex items-center gap-2">
                                 <AlertTriangle size={16} />
                                 {error}
                             </div>
@@ -827,7 +827,7 @@ export default function OnboardingView() {
                         <button
                             onClick={handleCreate}
                             disabled={loading}
-                            className="w-full bg-blue-900 text-white py-3 rounded-xl font-bold hover:bg-blue-800 transition-all transform active:scale-95 shadow-lg shadow-blue-900/10 flex items-center justify-center gap-2"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all transform active:scale-95 shadow-lg flex items-center justify-center gap-2"
                         >
                             {loading && <Loader2 className="animate-spin" />}
                             {loading && <Loader2 className="animate-spin" />}
@@ -842,8 +842,8 @@ export default function OnboardingView() {
     // --- STEP 4: JOIN CLASS ---
     if (step === 'join') {
         return (
-            <div className="min-h-screen bg-stone-50 p-4 flex items-center justify-center">
-                <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6 text-center space-y-6 relative">
+            <div className="min-h-screen bg-surface p-4 flex items-center justify-center">
+                <div className="w-full max-w-md bg-surface-container-lowest rounded-2xl shadow-sm border border-outline-variant/30 p-6 text-center space-y-6 relative">
                     <ProgressIndicator
                         currentStep={1}
                         totalSteps={2}
@@ -864,13 +864,13 @@ export default function OnboardingView() {
                                 setStep('select');
                             }
                         }
-                    }} className="absolute top-4 left-4 text-gray-500 hover:text-gray-800 transition-colors font-medium flex items-center gap-1">
+                    }} className="absolute top-4 left-4 text-on-surface-variant hover:text-on-surface transition-colors font-medium flex items-center gap-1">
                         <ArrowRight className="rotate-180" size={16} />
                         Til baka
                     </button>
 
-                    <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4">
-                        <QrCode className="text-nordic-blue" size={32} />
+                    <div className="w-16 h-16 bg-primary-container/15 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <QrCode className="text-primary" size={32} />
                     </div>
 
                     {!foundClass ? (
@@ -882,21 +882,21 @@ export default function OnboardingView() {
                                 value={joinCode}
                                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
                                 placeholder="XXXX-XXXX"
-                                className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none uppercase"
+                                className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-surface-container-lowest focus:ring-2 focus:ring-primary outline-none uppercase"
                                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyCode()}
                             />
 
-                            <p className="text-gray-500 text-sm">
+                            <p className="text-on-surface-variant text-sm">
                                 Sláðu inn kóðann (t.d. SALA-4B) frá fulltrúa.<br />
                                 <span className="opacity-70 text-xs">Stjórnendur notaðu 'Parent Team' aðgangskóða.</span>
                             </p>
 
                             {user && (
-                                <div className="bg-blue-50 p-3 rounded-lg text-xs text-blue-800 flex gap-2 items-start text-left">
+                                <div className="bg-primary-container/15 p-3 rounded-lg text-xs text-primary flex gap-2 items-start text-left">
                                     <Globe size={14} className="mt-0.5 flex-shrink-0" />
                                     <span>
                                         Ertu að leita að kóðanum þínum? <br />
-                                        <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-blue-900">
+                                        <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-primary">
                                             Skoðaðu mælaborðið
                                         </a>
                                     </span>
@@ -904,13 +904,13 @@ export default function OnboardingView() {
                             )}
 
                             {error && (
-                                <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
+                                <div className="text-error bg-error-container/40 p-3 rounded-lg text-sm">{error}</div>
                             )}
 
                             <button
                                 onClick={handleVerifyCode}
                                 disabled={!joinCode || checkingCode}
-                                className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                             >
                                 {checkingCode && <Loader2 className="animate-spin" size={20} />}
                                 Áfram
@@ -918,14 +918,14 @@ export default function OnboardingView() {
                         </>
                     ) : (
                         <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
-                            <div className="bg-green-50 p-4 rounded-xl text-green-800">
+                            <div className="bg-primary-container/15 p-4 rounded-xl text-primary">
                                 <p className="font-bold flex items-center justify-center gap-2">
                                     <Check size={20} />
                                     {foundClass.name}
                                 </p>
                                 <p className="text-sm opacity-80">{foundClass.schoolName}</p>
                                 {isAdminCode && (
-                                    <div className="mt-2 text-xs font-bold bg-purple-100 text-purple-800 py-1 px-2 rounded-full inline-block">
+                                    <div className="mt-2 text-xs font-bold bg-secondary-container text-on-secondary-container py-1 px-2 rounded-full inline-block">
                                         Admin / Stjórnandi aðgangur
                                     </div>
                                 )}
@@ -934,11 +934,11 @@ export default function OnboardingView() {
                             {!isCreatingStudent ? (
                                 <>
                                     <div className="text-left">
-                                        <label className="block text-sm font-medium text-gray-700 mb-2">Hvert er barnið þitt?</label>
+                                        <label className="block text-sm font-medium text-on-surface mb-2">Hvert er barnið þitt?</label>
                                         <select
                                             value={selectedStudentId}
                                             onChange={(e) => setSelectedStudentId(e.target.value)}
-                                            className="w-full p-3 border border-gray-200 rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none"
+                                            className="w-full p-3 border border-outline-variant/30 rounded-xl bg-surface-container-lowest focus:ring-2 focus:ring-primary outline-none"
                                         >
                                             <option value="">Veldu barn af listanum...</option>
                                             {students.map(s => (
@@ -947,7 +947,7 @@ export default function OnboardingView() {
                                         </select>
                                         <button
                                             onClick={() => setIsCreatingStudent(true)}
-                                            className="text-sm text-blue-600 hover:text-blue-800 mt-3 flex items-center gap-1 font-medium"
+                                            className="text-sm text-primary hover:text-primary mt-3 flex items-center gap-1 font-medium"
                                         >
                                             <Plus size={14} /> Barnið mitt er ekki á listanum (Stofna nýtt)
                                         </button>
@@ -956,7 +956,7 @@ export default function OnboardingView() {
                                     <button
                                         onClick={handleJoinClass}
                                         disabled={!selectedStudentId || joining}
-                                        className="w-full bg-[#4A7C9E] text-white py-3 rounded-xl font-bold hover:bg-[#2E5A75] transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
+                                        className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all disabled:opacity-50 disabled:cursor-not-allowed flex justify-center items-center gap-2"
                                     >
                                         {joining && <Loader2 className="animate-spin" size={20} />}
                                         Skrá mig í bekkinn
@@ -969,44 +969,44 @@ export default function OnboardingView() {
 
                                         <div className="space-y-4">
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Fullt nafn barns</label>
+                                                <label className="block text-sm font-medium text-on-surface mb-1">Fullt nafn barns</label>
                                                 <input
                                                     type="text"
                                                     value={newStudentName}
                                                     onChange={(e) => setNewStudentName(e.target.value)}
                                                     placeholder="Jón Jónsson"
-                                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full p-3 border border-outline-variant/30 rounded-lg outline-none focus:ring-2 focus:ring-primary"
                                                     autoFocus
                                                 />
                                             </div>
 
                                             <div>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">Fæðingardagur</label>
+                                                <label className="block text-sm font-medium text-on-surface mb-1">Fæðingardagur</label>
                                                 <input
                                                     type="date"
                                                     value={newStudentDob}
                                                     onChange={(e) => setNewStudentDob(e.target.value)}
-                                                    className="w-full p-3 border border-gray-200 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                                                    className="w-full p-3 border border-outline-variant/30 rounded-lg outline-none focus:ring-2 focus:ring-primary"
                                                 />
                                             </div>
                                         </div>
                                     </div>
 
                                     {error && (
-                                        <div className="text-red-600 bg-red-50 p-3 rounded-lg text-sm">{error}</div>
+                                        <div className="text-error bg-error-container/40 p-3 rounded-lg text-sm">{error}</div>
                                     )}
 
                                     <div className="grid grid-cols-2 gap-3">
                                         <button
                                             onClick={() => setIsCreatingStudent(false)}
-                                            className="px-4 py-3 border border-gray-200 text-gray-700 rounded-xl font-medium hover:bg-gray-50 bg-white"
+                                            className="px-4 py-3 border border-outline-variant/30 text-on-surface rounded-xl font-medium hover:bg-surface bg-surface-container-lowest"
                                         >
                                             Hætta við
                                         </button>
                                         <button
                                             onClick={handleCreateStudentAndJoin}
                                             disabled={!newStudentName || !newStudentDob || joining}
-                                            className="px-4 py-3 bg-[#4A7C9E] text-white rounded-xl font-bold hover:bg-[#2E5A75] disabled:opacity-50 flex justify-center items-center gap-2"
+                                            className="px-4 py-3 bg-primary text-white rounded-xl font-bold hover:bg-primary-container disabled:opacity-50 flex justify-center items-center gap-2"
                                         >
                                             {joining ? <Loader2 className="animate-spin" size={18} /> : 'Skrá og klára'}
                                         </button>
@@ -1026,12 +1026,12 @@ function LanguageCard({ lang, flag, name, sub, onClick }: any) {
     return (
         <button
             onClick={onClick}
-            className="flex items-center gap-4 p-5 bg-white border border-gray-200 rounded-xl hover:border-blue-500 hover:shadow-md transition-all text-left group"
+            className="flex items-center gap-4 p-5 bg-surface-container-lowest border border-outline-variant/30 rounded-xl hover:border-primary hover:shadow-md transition-all text-left group"
         >
             <span className="text-4xl group-hover:scale-110 transition-transform">{flag}</span>
             <div>
-                <h3 className="font-bold text-lg text-gray-900">{name}</h3>
-                <p className="text-sm text-gray-500">{sub}</p>
+                <h3 className="font-bold text-lg text-on-surface">{name}</h3>
+                <p className="text-sm text-on-surface-variant">{sub}</p>
             </div>
         </button>
     );
