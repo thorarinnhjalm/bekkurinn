@@ -168,6 +168,11 @@ export interface Task {
     // Birthday Features
     invitees?: string[]; // Array of Student IDs
     isPrivate?: boolean; // If true, only visible to invitees
+
+    // Reminders
+    volunteerReminderHours?: number; // How many hours before the event to remind volunteers
+    volunteerReminderSent?: boolean;
+    generalReminderSent?: boolean;
 }
 
 // ========================================

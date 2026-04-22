@@ -22,7 +22,8 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
         date: task.date?.toDate?.() ? formatDateForInput(task.date.toDate()) : '',
         slotsTotal: task.slotsTotal,
         isAllDay: task.isAllDay || false,
-        scope: task.scope || 'class'
+        scope: task.scope || 'class',
+        volunteerReminderHours: task.volunteerReminderHours || 24
     });
 
     if (!isOpen) return null;
@@ -42,6 +43,7 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
                 description: formData.description,
                 date: finalDate as any,
                 slotsTotal: formData.slotsTotal,
+                volunteerReminderHours: formData.slotsTotal > 0 ? formData.volunteerReminderHours : undefined,
                 isAllDay: formData.isAllDay,
                 scope: formData.scope as any
             });
@@ -149,20 +151,35 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
                     </div>
 
                     {task.slotsTotal > 0 && (
-                        <div>
-                            <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Fjöldi plássa</label>
-                            <input
-                                type="number"
-                                value={formData.slotsTotal}
-                                onChange={e => setFormData({ ...formData, slotsTotal: Number(e.target.value) })}
-                                className="w-full px-4 py-3 rounded-xl bg-surface border-2 border-outline-variant/30 focus:border-primary focus:bg-surface-container-lowest transition-all outline-none font-medium"
-                                min={task.slotsFilled}
-                            />
-                            {formData.slotsTotal < task.slotsFilled && (
-                                <p className="text-xs text-error mt-1 font-bold">
-                                    Getur ekki verið minna en {task.slotsFilled} (núverandi skráningar)
-                                </p>
-                            )}
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Fjöldi plássa</label>
+                                <input
+                                    type="number"
+                                    value={formData.slotsTotal}
+                                    onChange={e => setFormData({ ...formData, slotsTotal: Number(e.target.value) })}
+                                    className="w-full px-4 py-3 rounded-xl bg-surface border-2 border-outline-variant/30 focus:border-primary focus:bg-surface-container-lowest transition-all outline-none font-medium"
+                                    min={task.slotsFilled}
+                                />
+                                {formData.slotsTotal < task.slotsFilled && (
+                                    <p className="text-xs text-error mt-1 font-bold">
+                                        Getur ekki verið minna en {task.slotsFilled}
+                                    </p>
+                                )}
+                            </div>
+                            <div>
+                                <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Áminning sjálfboðaliða</label>
+                                <select
+                                    value={formData.volunteerReminderHours}
+                                    onChange={e => setFormData({ ...formData, volunteerReminderHours: Number(e.target.value) })}
+                                    className="w-full px-4 py-3 rounded-xl bg-surface border-2 border-outline-variant/30 focus:border-primary focus:bg-surface-container-lowest transition-all outline-none font-medium"
+                                >
+                                    <option value={12}>12 klst fyrir</option>
+                                    <option value={24}>24 klst fyrir</option>
+                                    <option value={48}>48 klst fyrir (2 dögum)</option>
+                                    <option value={168}>1 viku fyrir</option>
+                                </select>
+                            </div>
                         </div>
                     )}
 

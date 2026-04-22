@@ -57,6 +57,7 @@ export default function TasksPage() {
     const [createTime, setCreateTime] = useState('12:00');
     const [createDesc, setCreateDesc] = useState('');
     const [createSlots, setCreateSlots] = useState(2);
+    const [createReminderHours, setCreateReminderHours] = useState<number>(24);
     const [createIsAllDay, setCreateIsAllDay] = useState(false);
     const [scope, setScope] = useState<'class' | 'school'>('class');
     const [filter, setFilter] = useState<'all' | 'rolt' | 'birthday' | 'event'>('all');
@@ -517,7 +518,22 @@ export default function TasksPage() {
                                         min={0}
                                     />
                                 </div>
-                                <div className="pt-5">
+                                {createSlots > 0 && (
+                                    <div className="flex-1">
+                                        <label className="text-xs font-bold text-on-surface-variant uppercase tracking-wider ml-1">Áminning (klst fyrir)</label>
+                                        <select
+                                            value={createReminderHours}
+                                            onChange={e => setCreateReminderHours(Number(e.target.value))}
+                                            className="w-full px-4 py-3 rounded-xl bg-surface-container-high border-0 focus:ring-2 focus:ring-primary/40 transition-all outline-none font-medium text-on-surface"
+                                        >
+                                            <option value={12}>12 klst</option>
+                                            <option value={24}>24 klst</option>
+                                            <option value={48}>48 klst (2 dagar)</option>
+                                            <option value={168}>1 vika</option>
+                                        </select>
+                                    </div>
+                                )}
+                                <div className="pt-5 flex-1">
                                     <span className="text-xs text-on-surface-variant font-medium leading-tight inline-block max-w-[140px]">
                                         {t('slots_help')}
                                     </span>
@@ -548,12 +564,15 @@ export default function TasksPage() {
                                         description: createDesc,
                                         date: finalDate as any,
                                         slotsTotal: createSlots,
+                                        volunteerReminderHours: createSlots > 0 ? createReminderHours : undefined,
+                                        volunteerReminderSent: false,
+                                        generalReminderSent: false,
                                         isAllDay: createIsAllDay,
                                         createdBy: user?.uid || '',
                                         originalLanguage: locale,
                                     } as any);
                                     setIsCreating(false);
-                                    setCreateTitle(''); setCreateDesc(''); setScope('class');
+                                    setCreateTitle(''); setCreateDesc(''); setScope('class'); setCreateReminderHours(24);
                                 }}
                                 className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
