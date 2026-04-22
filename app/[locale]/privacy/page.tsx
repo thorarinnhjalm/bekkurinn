@@ -17,7 +17,6 @@ export default function PrivacyPage() {
     const locale = (params.locale as string) || 'is';
     const t = useTranslations('privacy_page');
 
-    // Arrays need to be handled specially since they're stored as JSON arrays
     const section1Items = [
         t('section1_items.0'),
         t('section1_items.1'),
@@ -46,123 +45,115 @@ export default function PrivacyPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+        <div className="min-h-screen bg-surface p-4 md:p-8">
             <div className="max-w-2xl mx-auto">
                 <Link
                     href={`/${locale}/login`}
-                    className="inline-flex items-center gap-2 text-gray-500 hover:text-gray-700 mb-8 transition-colors"
+                    className="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary mb-8 transition-colors font-medium"
                 >
                     <ArrowLeft size={18} />
                     {t('back')}
                 </Link>
 
-                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+                <div className="bg-surface-container-lowest rounded-3xl shadow-ambient p-8">
                     <div className="flex items-center gap-3 mb-6">
-                        <div className="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center">
-                            <Shield className="text-blue-600" size={24} />
+                        <div className="w-12 h-12 bg-secondary-container rounded-2xl flex items-center justify-center">
+                            <Shield className="text-on-secondary-container" size={24} />
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-900">
+                        <h1 className="text-2xl font-bold text-on-surface">
                             {t('title')}
                         </h1>
                     </div>
 
-                    <div className="prose prose-gray max-w-none">
-                        <p className="text-gray-600 mb-6">
+                    <div className="prose prose-lg max-w-none">
+                        <p className="text-on-surface-variant mb-6">
                             {t('last_updated')}
                         </p>
 
-                        {/* Section 1 */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section1_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section1_intro')}
                         </p>
-                        <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+                        <ul className="list-disc pl-6 text-on-surface-variant space-y-2 mb-4">
                             {section1Items.map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>
 
-                        {/* Section 2 */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section2_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section2_intro')}
                         </p>
-                        <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+                        <ul className="list-disc pl-6 text-on-surface-variant space-y-2 mb-4">
                             {section2Items.map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>
 
-                        {/* Section 3 */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section3_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section3_intro')}
                         </p>
-                        <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+                        <ul className="list-disc pl-6 text-on-surface-variant space-y-2 mb-4">
                             {section3Items.map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>
 
-                        {/* Section 4 */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section4_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section4_intro')}
                         </p>
-                        <ul className="list-disc pl-6 text-gray-600 space-y-2 mb-4">
+                        <ul className="list-disc pl-6 text-on-surface-variant space-y-2 mb-4">
                             {section4Items.map((item, i) => (
                                 <li key={i}>{item}</li>
                             ))}
                         </ul>
 
-                        {/* Section 5 */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section5_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section5_text')}{' '}
-                            <a href="mailto:privacy@bekkurinn.is" className="text-blue-600 hover:underline">
+                            <a href="mailto:privacy@bekkurinn.is" className="text-primary hover:underline font-medium">
                                 privacy@bekkurinn.is
                             </a>
                         </p>
 
-                        {/* Section 6: Cookies */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section6_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section6_text')}
                         </p>
 
-                        {/* Section 7: Data Retention */}
-                        <h2 className="text-lg font-semibold text-gray-900 mt-6 mb-3">
+                        <h2 className="text-lg font-semibold text-on-surface mt-6 mb-3">
                             {t('section7_title')}
                         </h2>
-                        <p className="text-gray-600 mb-4">
+                        <p className="text-on-surface-variant mb-4">
                             {t('section7_text')}
                         </p>
 
-                        {/* Notice */}
-                        <div className="mt-8 p-4 bg-blue-50 rounded-lg border border-blue-100">
-                            <p className="text-sm text-blue-800">
-                                <strong>{t('notice_title')}</strong> {t('notice_text')}
+                        <div className="mt-8 p-4 bg-primary-container/15 rounded-2xl">
+                            <p className="text-sm text-on-surface">
+                                <strong className="text-primary">{t('notice_title')}</strong> {t('notice_text')}
                             </p>
                         </div>
                     </div>
                 </div>
 
-                <p className="text-center text-gray-400 text-sm mt-8">
+                <p className="text-center text-on-surface-variant text-sm mt-8">
                     {t('copyright')}
                 </p>
             </div>
-        </div >
+        </div>
     );
 }
