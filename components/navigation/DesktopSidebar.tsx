@@ -128,7 +128,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                                 Skólafélagið
                             </span>
                             {isVerified && (
-                                <ShieldCheck size={12} className="text-green-600" />
+                                <ShieldCheck size={12} className="text-primary" />
                             )}
                         </div>
                     </div>

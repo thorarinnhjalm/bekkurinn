@@ -127,21 +127,21 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-            <div className="bg-white rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div className="bg-surface-container-lowest rounded-3xl w-full max-w-lg shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
 
                 {/* Header */}
-                <div className="p-6 border-b border-gray-100 flex justify-between items-center bg-white relative overflow-hidden">
+                <div className="p-6 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest relative overflow-hidden">
                     <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-400 to-purple-400" />
                     <div>
-                        <h2 className="text-2xl font-black text-gray-900 tracking-tight">
+                        <h2 className="text-2xl font-black text-on-surface tracking-tight">
                             {step === 1 ? 'Nýtt afmælisboð' : 'Hverjum á að bjóða?'}
                         </h2>
-                        <p className="text-sm text-gray-500 font-medium">
+                        <p className="text-sm text-on-surface-variant font-medium">
                             {step === 1 ? 'Settu upp smáatriðin' : 'Veldu gestalistann'}
                         </p>
                     </div>
-                    <button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full transition-colors">
-                        <X size={24} className="text-gray-400" />
+                    <button onClick={onClose} className="p-2 hover:bg-surface-container rounded-full transition-colors">
+                        <X size={24} className="text-on-surface-variant" />
                     </button>
                 </div>
 
@@ -154,24 +154,24 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                                     onClick={() => setIsHostSelectOpen(!isHostSelectOpen)}
                                     className="input-modern flex flex-wrap gap-2 items-center cursor-pointer min-h-[50px]"
                                 >
-                                    {birthdayHostIds.size === 0 && <span className="text-gray-400">Veldu afmælisbarn...</span>}
+                                    {birthdayHostIds.size === 0 && <span className="text-on-surface-variant">Veldu afmælisbarn...</span>}
                                     {Array.from(birthdayHostIds).map(id => {
                                         const s = students?.find(st => st.id === id);
                                         return (
-                                            <span key={id} className="bg-blue-100 text-blue-700 px-2 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
+                                            <span key={id} className="bg-primary-container/20 text-primary px-2 py-1 rounded-lg text-sm font-bold flex items-center gap-1">
                                                 {s?.name.split(' ')[0]}
-                                                <X size={12} className="hover:text-blue-900" onClick={(e) => {
+                                                <X size={12} className="hover:text-primary" onClick={(e) => {
                                                     e.stopPropagation();
                                                     toggleHost(id);
                                                 }} />
                                             </span>
                                         );
                                     })}
-                                    <ChevronDown size={16} className="ml-auto text-gray-400" />
+                                    <ChevronDown size={16} className="ml-auto text-on-surface-variant" />
                                 </div>
 
                                 {isHostSelectOpen && (
-                                    <div className="absolute top-full left-0 w-full mt-2 bg-white rounded-xl shadow-xl border border-gray-100 z-10 max-h-60 overflow-y-auto p-2">
+                                    <div className="absolute top-full left-0 w-full mt-2 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/30 z-10 max-h-60 overflow-y-auto p-2">
                                         {students?.map(student => (
                                             <div
                                                 key={student.id}
@@ -179,13 +179,13 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                                                     toggleHost(student.id);
                                                     setIsHostSelectOpen(false);
                                                 }}
-                                                className={`flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer ${birthdayHostIds.has(student.id) ? 'bg-blue-50' : ''}`}
+                                                className={`flex items-center gap-3 p-2 rounded-lg hover:bg-surface cursor-pointer ${birthdayHostIds.has(student.id) ? 'bg-primary-container/15' : ''}`}
                                             >
-                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${birthdayHostIds.has(student.id) ? 'bg-nordic-blue text-white' : 'bg-gray-100 text-gray-400'}`}>
+                                                <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${birthdayHostIds.has(student.id) ? 'bg-primary text-white' : 'bg-surface-container-high text-on-surface-variant'}`}>
                                                     {student.name[0]}
                                                 </div>
-                                                <span className="text-sm font-medium text-gray-700">{student.name}</span>
-                                                {birthdayHostIds.has(student.id) && <Check size={14} className="ml-auto text-nordic-blue" />}
+                                                <span className="text-sm font-medium text-on-surface">{student.name}</span>
+                                                {birthdayHostIds.has(student.id) && <Check size={14} className="ml-auto text-primary" />}
                                             </div>
                                         ))}
                                     </div>
@@ -218,7 +218,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                             <div>
                                 <label className="label-modern">Staðsetning</label>
                                 <div className="relative">
-                                    <MapPin size={18} className="absolute left-3 top-3.5 text-gray-400" />
+                                    <MapPin size={18} className="absolute left-3 top-3.5 text-on-surface-variant" />
                                     <input
                                         value={location} onChange={e => setLocation(e.target.value)}
                                         placeholder="Heimilisfang eða staður"
@@ -242,34 +242,34 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                             <div className="grid grid-cols-3 gap-3">
                                 <button
                                     onClick={() => handleSelectMode('all')}
-                                    className={`quick-select-card ${selectionMode === 'all' ? 'active ring-2 ring-nordic-blue bg-blue-50' : ''}`}
+                                    className={`quick-select-card ${selectionMode === 'all' ? 'active ring-2 ring-nordic-blue bg-primary-container/15' : ''}`}
                                 >
                                     <span className="text-2xl mb-1">🎉</span>
                                     <span className="text-xs font-bold">Allir</span>
                                 </button>
                                 <button
                                     onClick={() => handleSelectMode('boys')}
-                                    className={`quick-select-card ${selectionMode === 'boys' ? 'active ring-2 ring-blue-400 bg-blue-50' : ''}`}
+                                    className={`quick-select-card ${selectionMode === 'boys' ? 'active ring-2 ring-primary/50 bg-primary-container/15' : ''}`}
                                 >
                                     <span className="text-2xl mb-1">👦</span>
                                     <span className="text-xs font-bold">Strákar</span>
                                 </button>
                                 <button
                                     onClick={() => handleSelectMode('girls')}
-                                    className={`quick-select-card ${selectionMode === 'girls' ? 'active ring-2 ring-pink-400 bg-pink-50' : ''}`}
+                                    className={`quick-select-card ${selectionMode === 'girls' ? 'active ring-2 ring-secondary/50 bg-secondary-container/30' : ''}`}
                                 >
                                     <span className="text-2xl mb-1">👧</span>
                                     <span className="text-xs font-bold">Stelpur</span>
                                 </button>
                             </div>
 
-                            <div className="border-t border-gray-100 my-4" />
+                            <div className="border-t border-outline-variant/30 my-4" />
 
                             {/* Detailed List */}
                             <div>
                                 <div className="flex justify-between items-center mb-3">
-                                    <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider">Gestalistinn</h3>
-                                    <span className="text-xs font-bold bg-gray-100 text-gray-600 px-2 py-1 rounded-full">
+                                    <h3 className="text-xs font-bold text-on-surface-variant uppercase tracking-wider">Gestalistinn</h3>
+                                    <span className="text-xs font-bold bg-surface-container-high text-on-surface-variant px-2 py-1 rounded-full">
                                         {selectedCount} valdir
                                     </span>
                                 </div>
@@ -279,16 +279,16 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                                             key={student.id}
                                             onClick={() => toggleStudent(student.id)}
                                             className={`flex items-center gap-3 p-3 rounded-xl border transition-all cursor-pointer ${selectedStudentIds.has(student.id)
-                                                ? 'bg-blue-50/50 border-blue-200 shadow-sm'
-                                                : 'bg-white border-gray-100 hover:border-gray-200'
+                                                ? 'bg-primary-container/15/50 border-primary/30 shadow-sm'
+                                                : 'bg-surface-container-lowest border-outline-variant/30 hover:border-outline-variant/30'
                                                 }`}
                                         >
-                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedStudentIds.has(student.id) ? 'bg-nordic-blue text-white' : 'bg-gray-100 text-gray-400'
+                                            <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${selectedStudentIds.has(student.id) ? 'bg-primary text-white' : 'bg-surface-container-high text-on-surface-variant'
                                                 }`}>
                                                 {selectedStudentIds.has(student.id) ? <Check size={14} /> : student.name[0]}
                                             </div>
                                             <div className="flex-1">
-                                                <p className={`text-sm font-bold ${selectedStudentIds.has(student.id) ? 'text-gray-900' : 'text-gray-500'}`}>
+                                                <p className={`text-sm font-bold ${selectedStudentIds.has(student.id) ? 'text-on-surface' : 'text-on-surface-variant'}`}>
                                                     {student.name}
                                                 </p>
                                             </div>
@@ -303,11 +303,11 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                 </div>
 
                 {/* Footer */}
-                <div className="p-6 border-t border-gray-100 bg-gray-50/50 flex gap-4">
+                <div className="p-6 border-t border-outline-variant/30 bg-surface/50 flex gap-4">
                     {step === 2 && (
                         <button
                             onClick={() => setStep(1)}
-                            className="bg-white border border-gray-200 text-gray-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-gray-50 transition-colors"
+                            className="bg-surface-container-lowest border border-outline-variant/30 text-on-surface-variant px-6 py-3 rounded-xl font-bold text-sm hover:bg-surface transition-colors"
                         >
                             Til baka
                         </button>
@@ -319,7 +319,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                                 if (title && date && location) setStep(2);
                                 else alert('Please fill in all fields');
                             }}
-                            className="flex-1 bg-gray-900 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg shadow-gray-200"
+                            className="flex-1 bg-on-surface text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-black transition-all shadow-lg shadow-gray-200"
                         >
                             Áfram <ChevronRight size={16} />
                         </button>
@@ -337,13 +337,13 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
 
             <style jsx>{`
                 .label-modern {
-                    @apply block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5 ml-1;
+                    @apply block text-xs font-bold text-on-surface-variant uppercase tracking-wider mb-1.5 ml-1;
                 }
                 .input-modern {
-                    @apply w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-nordic-blue focus:ring-4 focus:ring-blue-50/50 transition-all outline-none font-medium text-gray-900 placeholder:text-gray-400;
+                    @apply w-full px-4 py-3 rounded-xl bg-surface border border-outline-variant/30 focus:border-primary focus:ring-4 focus:ring-primary/20/50 transition-all outline-none font-medium text-on-surface placeholder:text-on-surface-variant;
                 }
                 .quick-select-card {
-                    @apply flex flex-col items-center justify-center p-4 rounded-xl bg-gray-50 border border-gray-100 hover:bg-white hover:shadow-md transition-all text-gray-500;
+                    @apply flex flex-col items-center justify-center p-4 rounded-xl bg-surface border border-outline-variant/30 hover:bg-surface-container-lowest hover:shadow-md transition-all text-on-surface-variant;
                 }
             `}</style>
         </div>

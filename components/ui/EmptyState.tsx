@@ -35,18 +35,18 @@ export function EmptyState({
     return (
         <div className="text-center py-12 px-4">
             {/* Icon */}
-            <div className="flex justify-center mb-4 text-gray-300">
+            <div className="flex justify-center mb-4 text-surface/80">
                 {icon}
             </div>
 
             {/* Title */}
-            <h3 className="text-lg font-semibold mb-2 text-gray-900">
+            <h3 className="text-lg font-semibold mb-2 text-on-surface">
                 {title}
             </h3>
 
             {/* Description */}
             <p
-                className="text-sm text-gray-600 max-w-md mx-auto mb-6 leading-relaxed"
+                className="text-sm text-on-surface-variant max-w-md mx-auto mb-6 leading-relaxed"
                 dangerouslySetInnerHTML={{ __html: description }}
             />
 
@@ -58,14 +58,14 @@ export function EmptyState({
                         actionHref ? (
                             <Link
                                 href={actionHref}
-                                className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-container transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2"
                             >
                                 {actionLabel}
                             </Link>
                         ) : onAction ? (
                             <button
                                 onClick={onAction}
-                                className="bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2"
+                                className="bg-primary text-white px-6 py-3 rounded-xl font-semibold hover:bg-primary-container transition-all shadow-lg shadow-blue-600/20 flex items-center gap-2"
                             >
                                 {actionLabel}
                             </button>
@@ -77,14 +77,14 @@ export function EmptyState({
                         secondaryHref ? (
                             <Link
                                 href={secondaryHref}
-                                className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition-all"
+                                className="bg-surface-container-high text-on-surface px-6 py-3 rounded-xl font-medium hover:bg-surface-container-high transition-all"
                             >
                                 {secondaryLabel}
                             </Link>
                         ) : onSecondary ? (
                             <button
                                 onClick={onSecondary}
-                                className="bg-gray-100 text-gray-700 px-6 py-3 rounded-xl font-medium hover:bg-gray-200 transition-all"
+                                className="bg-surface-container-high text-on-surface px-6 py-3 rounded-xl font-medium hover:bg-surface-container-high transition-all"
                             >
                                 {secondaryLabel}
                             </button>

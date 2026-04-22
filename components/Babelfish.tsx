@@ -40,7 +40,7 @@ export function Babelfish({ text, originalLanguage = 'is', targetLanguage, class
 
     if (isLoading) {
         return (
-            <div className={`flex items-center gap-2 text-xs text-gray-400 mt-4 animate-pulse ${className}`}>
+            <div className={`flex items-center gap-2 text-xs text-on-surface-variant mt-4 animate-pulse ${className}`}>
                 <Loader2 size={12} className="animate-spin" />
                 <span>Þýði yfir á {targetLanguage.toUpperCase()}...</span>
             </div>
@@ -50,21 +50,21 @@ export function Babelfish({ text, originalLanguage = 'is', targetLanguage, class
     if (error || !translation) return null;
 
     return (
-        <div className={`mt-6 pt-6 border-t border-gray-100 space-y-3 ${className}`}>
+        <div className={`mt-6 pt-6 border-t border-outline-variant/30 space-y-3 ${className}`}>
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-nordic-blue uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-primary uppercase tracking-widest">
                     <Languages size={12} />
                     <span>Babelfish Þýðing ({targetLanguage.toUpperCase()})</span>
                 </div>
                 <div className="group relative">
-                    <Info size={12} className="text-gray-300 hover:text-gray-400 cursor-help" />
-                    <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-gray-800 text-white text-[10px] rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                    <Info size={12} className="text-surface/80 hover:text-on-surface-variant cursor-help" />
+                    <div className="absolute bottom-full right-0 mb-2 w-48 p-2 bg-on-surface/90 text-white text-[10px] rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
                         {DISCLAIMERS[targetLanguage] || DISCLAIMERS.en}
                     </div>
                 </div>
             </div>
 
-            <div className="text-gray-600 leading-relaxed italic whitespace-pre-wrap">
+            <div className="text-on-surface-variant leading-relaxed italic whitespace-pre-wrap">
                 {translation}
             </div>
         </div>

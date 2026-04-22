@@ -51,11 +51,11 @@ export function ExitIntentPopup({ onSignUp }: ExitIntentPopupProps) {
             />
 
             {/* Modal */}
-            <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
+            <div className="relative bg-surface-container-lowest rounded-2xl shadow-2xl max-w-md w-full p-6 animate-in zoom-in-95 slide-in-from-bottom-4 duration-300">
                 {/* Close button */}
                 <button
                     onClick={handleClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface-variant transition-colors"
                     aria-label="Loka"
                 >
                     <X size={20} />
@@ -64,35 +64,35 @@ export function ExitIntentPopup({ onSignUp }: ExitIntentPopupProps) {
                 {/* Content */}
                 <div className="text-center space-y-4">
                     <div className="flex justify-center">
-                        <div className="w-16 h-16 rounded-full bg-blue-100 flex items-center justify-center">
-                            <Users size={32} className="text-blue-600" />
+                        <div className="w-16 h-16 rounded-full bg-primary-container/20 flex items-center justify-center">
+                            <Users size={32} className="text-primary" />
                         </div>
                     </div>
 
-                    <h2 className="text-xl font-bold text-gray-900">
+                    <h2 className="text-xl font-bold text-on-surface">
                         Bíddu aðeins!
                     </h2>
 
-                    <p className="text-gray-600">
+                    <p className="text-on-surface-variant">
                         Vissu þú að með Bekkurinn færðu:
                     </p>
 
-                    <div className="space-y-3 text-left bg-gray-50 rounded-xl p-4">
-                        <div className="flex items-center gap-3 text-sm text-gray-700">
-                            <div className="p-1.5 bg-green-100 rounded-full">
-                                <Calendar size={16} className="text-green-600" />
+                    <div className="space-y-3 text-left bg-surface rounded-xl p-4">
+                        <div className="flex items-center gap-3 text-sm text-on-surface">
+                            <div className="p-1.5 bg-primary-container/20 rounded-full">
+                                <Calendar size={16} className="text-primary" />
                             </div>
                             <span>Sjálfvirka afmælisáminningu fyrir alla í bekk</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-700">
-                            <div className="p-1.5 bg-purple-100 rounded-full">
-                                <Bell size={16} className="text-purple-600" />
+                        <div className="flex items-center gap-3 text-sm text-on-surface">
+                            <div className="p-1.5 bg-secondary-container rounded-full">
+                                <Bell size={16} className="text-on-secondary-container" />
                             </div>
                             <span>Tilkynningar um viðburði og verkefni</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm text-gray-700">
-                            <div className="p-1.5 bg-orange-100 rounded-full">
-                                <Gift size={16} className="text-orange-600" />
+                        <div className="flex items-center gap-3 text-sm text-on-surface">
+                            <div className="p-1.5 bg-tertiary-fixed/60 rounded-full">
+                                <Gift size={16} className="text-on-tertiary-fixed" />
                             </div>
                             <span>Óskilamunaskrá og fleira — allt ókeypis!</span>
                         </div>
@@ -101,13 +101,13 @@ export function ExitIntentPopup({ onSignUp }: ExitIntentPopupProps) {
                     <div className="pt-2 space-y-3">
                         <button
                             onClick={handleSignUp}
-                            className="w-full bg-blue-600 text-white py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98]"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all shadow-lg shadow-blue-900/20 active:scale-[0.98]"
                         >
                             Já, ég vil skrá mig!
                         </button>
                         <button
                             onClick={handleClose}
-                            className="w-full text-gray-500 hover:text-gray-700 py-2 text-sm transition-colors"
+                            className="w-full text-on-surface-variant hover:text-on-surface py-2 text-sm transition-colors"
                         >
                             Nei takk, ég kíki aftur seinna
                         </button>

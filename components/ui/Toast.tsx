@@ -110,22 +110,22 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
 
     const styles = {
         success: {
-            bg: 'bg-green-50',
-            border: 'border-green-200',
-            text: 'text-green-800',
-            icon: 'text-green-600',
+            bg: 'bg-primary-container/15',
+            border: 'border-primary/30',
+            text: 'text-primary',
+            icon: 'text-primary',
         },
         error: {
-            bg: 'bg-red-50',
-            border: 'border-red-200',
-            text: 'text-red-800',
-            icon: 'text-red-600',
+            bg: 'bg-error-container/40',
+            border: 'border-error/30',
+            text: 'text-error',
+            icon: 'text-error',
         },
         info: {
-            bg: 'bg-blue-50',
-            border: 'border-blue-200',
-            text: 'text-blue-800',
-            icon: 'text-blue-600',
+            bg: 'bg-primary-container/15',
+            border: 'border-primary/30',
+            text: 'text-primary',
+            icon: 'text-primary',
         },
     };
 

@@ -40,12 +40,12 @@ export function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }:
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
+            <div className="bg-surface-container-lowest rounded-xl p-6 max-w-md w-full space-y-4 shadow-xl">
                 <div className="flex items-center justify-between">
-                    <h2 className="text-xl font-bold text-gray-900">Breyta tilkynningu</h2>
+                    <h2 className="text-xl font-bold text-on-surface">Breyta tilkynningu</h2>
                     <button
                         onClick={onClose}
-                        className="text-gray-400 hover:text-gray-600 transition-colors"
+                        className="text-on-surface-variant hover:text-on-surface-variant transition-colors"
                     >
                         <X size={24} />
                     </button>
@@ -53,7 +53,7 @@ export function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }:
 
                 <div className="space-y-3">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Fyrirsögn</label>
+                        <label className="block text-sm font-medium text-on-surface">Fyrirsögn</label>
                         <input
                             type="text"
                             value={formData.title}
@@ -63,7 +63,7 @@ export function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }:
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Efni</label>
+                        <label className="block text-sm font-medium text-on-surface">Efni</label>
                         <textarea
                             value={formData.content}
                             onChange={e => setFormData({ ...formData, content: e.target.value })}
@@ -77,16 +77,16 @@ export function EditAnnouncementModal({ announcement, isOpen, onClose, onSave }:
                             id="edit-pin"
                             checked={formData.pinned}
                             onChange={e => setFormData({ ...formData, pinned: e.target.checked })}
-                            className="w-4 h-4 text-blue-600 rounded border-gray-300"
+                            className="w-4 h-4 text-primary rounded border-outline-variant"
                         />
-                        <label htmlFor="edit-pin" className="text-sm text-gray-700">Festa efst (Mikilvægt)</label>
+                        <label htmlFor="edit-pin" className="text-sm text-on-surface">Festa efst (Mikilvægt)</label>
                     </div>
                 </div>
 
                 <div className="flex justify-end gap-3 pt-2">
                     <button
                         onClick={onClose}
-                        className="px-4 py-2 text-gray-600 font-medium hover:bg-gray-100 rounded-lg"
+                        className="px-4 py-2 text-on-surface-variant font-medium hover:bg-surface-container rounded-lg"
                     >
                         Hætta við
                     </button>

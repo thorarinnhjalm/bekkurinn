@@ -11,7 +11,7 @@ export default function ForeldraroltLandingPage() {
     const locale = useLocale();
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen bg-surface-container-lowest">
             <NavBar locale={locale} />
 
             <main>
@@ -19,20 +19,20 @@ export default function ForeldraroltLandingPage() {
                 <section className="relative pt-32 pb-20 overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-b from-blue-50 to-white -z-10" />
                     <div className="container mx-auto px-4 text-center">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-700 text-sm font-bold uppercase tracking-wide mb-6 animate-fade-in-up">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-container/20 text-primary text-sm font-bold uppercase tracking-wide mb-6 animate-fade-in-up">
                             <Footprints size={16} />
                             {t('hero.badge')}
                         </div>
-                        <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 tracking-tight max-w-4xl mx-auto leading-tight">
+                        <h1 className="text-5xl md:text-7xl font-bold text-on-surface mb-6 tracking-tight max-w-4xl mx-auto leading-tight">
                             {t('hero.title')}
                         </h1>
-                        <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+                        <p className="text-xl text-on-surface-variant mb-10 max-w-2xl mx-auto leading-relaxed">
                             {t('hero.subtitle')}
                         </p>
                         <div className="flex flex-col sm:flex-row gap-4 justify-center">
                             <Link
                                 href="/register?create=true"
-                                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-blue-600 rounded-xl hover:bg-blue-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-primary rounded-xl hover:bg-primary-container shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                             >
                                 {t('hero.cta')}
                                 <ChevronRight className="ml-2" size={20} />
@@ -42,41 +42,41 @@ export default function ForeldraroltLandingPage() {
                 </section>
 
                 {/* Features Grid */}
-                <section className="py-20 bg-white">
+                <section className="py-20 bg-surface-container-lowest">
                     <div className="container mx-auto px-4">
                         <div className="grid md:grid-cols-3 gap-8">
                             {/* Feature 1 */}
-                            <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 bg-rose-100 rounded-xl flex items-center justify-center mb-6">
-                                    <CalendarCheck className="text-rose-600" size={24} />
+                            <div className="p-8 rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-md transition-shadow">
+                                <div className="w-12 h-12 bg-secondary-container/70 rounded-xl flex items-center justify-center mb-6">
+                                    <CalendarCheck className="text-secondary" size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.schedule_title')}</h3>
-                                <p className="text-gray-600 leading-relaxed">{t('features.schedule_desc')}</p>
+                                <h3 className="text-xl font-bold text-on-surface mb-3">{t('features.schedule_title')}</h3>
+                                <p className="text-on-surface-variant leading-relaxed">{t('features.schedule_desc')}</p>
                             </div>
 
                             {/* Feature 2 */}
-                            <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center mb-6">
-                                    <Bell className="text-amber-600" size={24} />
+                            <div className="p-8 rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-md transition-shadow">
+                                <div className="w-12 h-12 bg-tertiary-fixed/60 rounded-xl flex items-center justify-center mb-6">
+                                    <Bell className="text-on-tertiary-fixed" size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.reminders_title')}</h3>
-                                <p className="text-gray-600 leading-relaxed">{t('features.reminders_desc')}</p>
+                                <h3 className="text-xl font-bold text-on-surface mb-3">{t('features.reminders_title')}</h3>
+                                <p className="text-on-surface-variant leading-relaxed">{t('features.reminders_desc')}</p>
                             </div>
 
                             {/* Feature 3 */}
-                            <div className="p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:shadow-md transition-shadow">
-                                <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center mb-6">
-                                    <ClipboardList className="text-emerald-600" size={24} />
+                            <div className="p-8 rounded-2xl bg-surface border border-outline-variant/30 hover:shadow-md transition-shadow">
+                                <div className="w-12 h-12 bg-primary-container/20 rounded-xl flex items-center justify-center mb-6">
+                                    <ClipboardList className="text-primary" size={24} />
                                 </div>
-                                <h3 className="text-xl font-bold text-gray-900 mb-3">{t('features.report_title')}</h3>
-                                <p className="text-gray-600 leading-relaxed">{t('features.report_desc')}</p>
+                                <h3 className="text-xl font-bold text-on-surface mb-3">{t('features.report_title')}</h3>
+                                <p className="text-on-surface-variant leading-relaxed">{t('features.report_desc')}</p>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 {/* How it works Section */}
-                <section className="py-20 bg-gray-50">
+                <section className="py-20 bg-surface">
                     <div className="container mx-auto px-4">
                         <div className="text-center mb-16">
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('steps.title')}</h2>
@@ -84,11 +84,11 @@ export default function ForeldraroltLandingPage() {
                         <div className="grid md:grid-cols-3 gap-12 max-w-5xl mx-auto">
                             {[1, 2, 3].map((i) => (
                                 <div key={i} className="text-center relative">
-                                    <div className="w-16 h-16 mx-auto bg-white rounded-full flex items-center justify-center text-xl font-bold text-blue-600 shadow-sm border border-gray-100 mb-6">
+                                    <div className="w-16 h-16 mx-auto bg-surface-container-lowest rounded-full flex items-center justify-center text-xl font-bold text-primary shadow-sm border border-outline-variant/30 mb-6">
                                         {i}
                                     </div>
-                                    <h3 className="text-xl font-bold text-gray-900 mb-3">{t(`steps.s${i}_title`)}</h3>
-                                    <p className="text-gray-600 leading-relaxed">{t(`steps.s${i}_desc`)}</p>
+                                    <h3 className="text-xl font-bold text-on-surface mb-3">{t(`steps.s${i}_title`)}</h3>
+                                    <p className="text-on-surface-variant leading-relaxed">{t(`steps.s${i}_desc`)}</p>
                                 </div>
                             ))}
                         </div>
@@ -96,14 +96,14 @@ export default function ForeldraroltLandingPage() {
                 </section>
 
                 {/* FAQ Section */}
-                <section className="py-20 bg-white">
+                <section className="py-20 bg-surface-container-lowest">
                     <div className="container mx-auto px-4 max-w-3xl">
                         <h2 className="text-3xl font-bold text-center mb-12">{t('faq.title')}</h2>
                         <div className="space-y-8">
                             {[1, 2, 3].map((i) => (
-                                <div key={i} className="border-b border-gray-100 pb-8 last:border-0">
-                                    <h3 className="text-xl font-bold text-gray-900 mb-2">{t(`faq.q${i}`)}</h3>
-                                    <p className="text-gray-600 leading-relaxed">{t(`faq.a${i}`)}</p>
+                                <div key={i} className="border-b border-outline-variant/30 pb-8 last:border-0">
+                                    <h3 className="text-xl font-bold text-on-surface mb-2">{t(`faq.q${i}`)}</h3>
+                                    <p className="text-on-surface-variant leading-relaxed">{t(`faq.a${i}`)}</p>
                                 </div>
                             ))}
                         </div>
@@ -111,14 +111,14 @@ export default function ForeldraroltLandingPage() {
                 </section>
 
                 {/* CTA Bottom */}
-                <section className="py-20 bg-blue-50">
+                <section className="py-20 bg-primary-container/15">
                     <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl font-bold text-gray-900 mb-8 max-w-2xl mx-auto">
+                        <h2 className="text-3xl font-bold text-on-surface mb-8 max-w-2xl mx-auto">
                             {t('hero.title')}
                         </h2>
                         <Link
                             href="/register?create=true"
-                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-gray-900 rounded-xl hover:bg-gray-800 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-on-surface rounded-xl hover:bg-on-surface/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                         >
                             {t('hero.cta')}
                             <ChevronRight className="ml-2" size={20} />

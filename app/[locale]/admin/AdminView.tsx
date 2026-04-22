@@ -145,7 +145,7 @@ export default function AdminView() {
         }
     };
 
-    if (loading || isFetching) return <div className="flex justify-center pt-20"><Loader2 className="animate-spin text-nordic-blue" /></div>;
+    if (loading || isFetching) return <div className="flex justify-center pt-20"><Loader2 className="animate-spin text-primary" /></div>;
 
     const isSuperAdmin = user && (
         process.env.NEXT_PUBLIC_ADMIN_EMAILS?.split(',').map(e => e.trim()).includes(user.email || '')
@@ -156,7 +156,7 @@ export default function AdminView() {
     if (!isFetching && !loading) {
         if (!isSuperAdmin && schools.length === 0) {
             return (
-                <div className="p-8 text-center text-red-600">
+                <div className="p-8 text-center text-error">
                     <Shield className="mx-auto mb-4" size={48} />
                     <h1 className="text-2xl font-bold">Aðgangur bannaður</h1>
                     <p>Þú hefur ekki réttindi til að skoða þessa síðu ({user?.email}).</p>
@@ -179,21 +179,21 @@ export default function AdminView() {
 
                 <div className="glass-card p-8 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
                     <div className="space-y-4">
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/50 backdrop-blur border border-white/30 text-xs font-bold text-gray-800 uppercase tracking-wide">
-                            <Shield size={12} className="text-gray-800" />
+                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-lowest/50 backdrop-blur border border-white/30 text-xs font-bold text-on-surface uppercase tracking-wide">
+                            <Shield size={12} className="text-on-surface" />
                             Admin Console
                         </div>
-                        <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-gray-900">
+                        <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-on-surface">
                             Stjórnborð
                         </h1>
-                        <p className="text-lg text-gray-600 font-medium max-w-lg">
+                        <p className="text-lg text-on-surface-variant font-medium max-w-lg">
                             Yfirlit yfir skóla, bekki og notendur. Hér er hjarta kerfisins.
                         </p>
                     </div>
 
                     <button
                         onClick={() => router.push(`/${params.locale || 'is'}/dashboard`)}
-                        className="flex items-center gap-2 bg-white/80 backdrop-blur border border-white/50 text-gray-700 px-6 py-3 rounded-2xl hover:scale-105 transition-all shadow-lg font-bold"
+                        className="flex items-center gap-2 bg-surface-container-lowest/80 backdrop-blur border border-white/50 text-on-surface px-6 py-3 rounded-2xl hover:scale-105 transition-all shadow-lg font-bold"
                     >
                         <Users size={20} />
                         Fara í mitt Mælaborð
@@ -204,45 +204,45 @@ export default function AdminView() {
 
             {/* Navigation Tabs */}
             <div className="flex justify-center overflow-x-auto pb-2">
-                <div className="inline-flex bg-gray-100 p-1 rounded-2xl gap-1">
+                <div className="inline-flex bg-surface-container-high p-1 rounded-2xl gap-1">
                     <button
                         onClick={() => setActiveTab('dashboard')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'dashboard' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'dashboard' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         📊 Dashboard
                     </button>
                     <button
                         onClick={() => setActiveTab('users')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'users' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'users' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         👥 Notendur
                     </button>
                     <button
                         onClick={() => setActiveTab('approvals')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap relative ${activeTab === 'approvals' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap relative ${activeTab === 'approvals' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         ✅ Samþykktir
                         {pendingLinks.length > 0 && (
-                            <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                            <span className="absolute -top-1 -right-1 bg-tertiary-fixed/400 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                                 {pendingLinks.length}
                             </span>
                         )}
                     </button>
                     <button
                         onClick={() => setActiveTab('schools')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'schools' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'schools' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         🏫 Skólar
                     </button>
                     <button
                         onClick={() => setActiveTab('classes')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'classes' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'classes' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         📚 Bekkir
                     </button>
                     <button
                         onClick={() => setActiveTab('testimonials')}
-                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'testimonials' ? 'bg-white shadow-md text-gray-900' : 'text-gray-500 hover:text-gray-900'}`}
+                        className={`px-6 py-3 rounded-xl font-bold transition-all whitespace-nowrap ${activeTab === 'testimonials' ? 'bg-surface-container-lowest shadow-md text-on-surface' : 'text-on-surface-variant hover:text-on-surface'}`}
                     >
                         ⭐ Umsagnir
                     </button>
@@ -280,7 +280,7 @@ export default function AdminView() {
                         <div className="flex justify-end">
                             <button
                                 onClick={() => setIsCreatingSchool(!isCreatingSchool)}
-                                className="bg-gray-900 text-white px-6 py-3 rounded-2xl font-bold hover:bg-gray-800 transition-all flex items-center gap-2 shadow-lg"
+                                className="bg-on-surface text-white px-6 py-3 rounded-2xl font-bold hover:bg-on-surface/90 transition-all flex items-center gap-2 shadow-lg"
                             >
                                 {isCreatingSchool ? <X size={20} /> : <Plus size={20} />}
                                 {isCreatingSchool ? 'Hætta við' : 'Stofna nýjan skóla'}
@@ -290,47 +290,47 @@ export default function AdminView() {
 
                     {/* Create School Form */}
                     {isCreatingSchool && (
-                        <div className="glass-card p-8 animate-in zoom-in-95 duration-300 border-2 border-blue-100">
-                            <h3 className="text-2xl font-bold text-gray-900 mb-6">Stofna nýjan skóla</h3>
+                        <div className="glass-card p-8 animate-in zoom-in-95 duration-300 border-2 border-primary/20">
+                            <h3 className="text-2xl font-bold text-on-surface mb-6">Stofna nýjan skóla</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Auðkenni (ID)</label>
+                                    <label className="block text-xs font-bold text-on-surface-variant uppercase mb-2">Auðkenni (ID)</label>
                                     <input
                                         type="text"
                                         value={newSchoolId}
                                         onChange={e => setNewSchoolId(e.target.value.toLowerCase().replace(/\s/g, ''))}
                                         placeholder="e.g. grandaskoli"
-                                        className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all font-mono"
+                                        className="w-full p-4 bg-surface rounded-xl border border-outline-variant/30 focus:ring-2 focus:ring-primary outline-none transition-all font-mono"
                                     />
-                                    <p className="text-xs text-gray-400 mt-2">Engin bil, engir íslenskir stafir. verður hluti af slóð.</p>
+                                    <p className="text-xs text-on-surface-variant mt-2">Engin bil, engir íslenskir stafir. verður hluti af slóð.</p>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Heiti skóla</label>
+                                    <label className="block text-xs font-bold text-on-surface-variant uppercase mb-2">Heiti skóla</label>
                                     <input
                                         type="text"
                                         value={newSchoolName}
                                         onChange={e => setNewSchoolName(e.target.value)}
                                         placeholder="e.g. Grandaskóli"
-                                        className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                                        className="w-full p-4 bg-surface rounded-xl border border-outline-variant/30 focus:ring-2 focus:ring-primary outline-none transition-all"
                                     />
                                 </div>
                                 <div className="md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-2">Dagatal (ICS Slóð) - Valfrjálst</label>
+                                    <label className="block text-xs font-bold text-on-surface-variant uppercase mb-2">Dagatal (ICS Slóð) - Valfrjálst</label>
                                     <input
                                         type="text"
                                         value={newSchoolIcs}
                                         onChange={e => setNewSchoolIcs(e.target.value)}
                                         placeholder="https://example.com/calendar.ics"
-                                        className="w-full p-4 bg-gray-50 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none transition-all font-mono text-sm"
+                                        className="w-full p-4 bg-surface rounded-xl border border-outline-variant/30 focus:ring-2 focus:ring-primary outline-none transition-all font-mono text-sm"
                                     />
-                                    <p className="text-xs text-blue-500 mt-2">💡 Ef þú setur inn slóð mun kerfið sjálfkrafa fylgjast með starfsdögum og fríum.</p>
+                                    <p className="text-xs text-primary mt-2">💡 Ef þú setur inn slóð mun kerfið sjálfkrafa fylgjast með starfsdögum og fríum.</p>
                                 </div>
                             </div>
                             <div className="flex justify-end">
                                 <button
                                     onClick={handleCreateSchool}
                                     disabled={!newSchoolId || !newSchoolName}
-                                    className="bg-blue-600 text-white px-8 py-4 rounded-xl font-bold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-600/20"
+                                    className="bg-primary text-white px-8 py-4 rounded-xl font-bold hover:bg-primary-container disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-lg shadow-blue-600/20"
                                 >
                                     Stofna skóla
                                 </button>
@@ -356,41 +356,41 @@ export default function AdminView() {
                             <div key={schoolName} className="glass-card overflow-hidden transition-all">
                                 <button
                                     onClick={() => toggleSchool(schoolName)}
-                                    className="w-full flex items-center justify-between p-6 hover:bg-gray-50/50 transition-colors text-left"
+                                    className="w-full flex items-center justify-between p-6 hover:bg-surface/50 transition-colors text-left"
                                 >
                                     <div className="flex items-center gap-4">
-                                        <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-blue-600">
+                                        <div className="w-10 h-10 rounded-full bg-primary-container/15 flex items-center justify-center text-primary">
                                             <SchoolIcon size={20} />
                                         </div>
                                         <div>
-                                            <h3 className="font-bold text-xl text-gray-900">{schoolName}</h3>
-                                            <p className="text-sm text-gray-500 font-medium">{schoolClasses.length} bekkir skráðir</p>
+                                            <h3 className="font-bold text-xl text-on-surface">{schoolName}</h3>
+                                            <p className="text-sm text-on-surface-variant font-medium">{schoolClasses.length} bekkir skráðir</p>
                                         </div>
                                     </div>
                                     <div className={`transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
-                                        <ChevronDown className="text-gray-400" />
+                                        <ChevronDown className="text-on-surface-variant" />
                                     </div>
                                 </button>
 
                                 {isExpanded && (
-                                    <div className="border-t border-gray-100 divide-y divide-gray-100">
+                                    <div className="border-t border-outline-variant/30 divide-y divide-outline-variant/30">
                                         {schoolClasses.map(cls => (
-                                            <div key={cls.id} className="p-6 hover:bg-gray-50/30 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                            <div key={cls.id} className="p-6 hover:bg-surface/30 transition-colors flex flex-col md:flex-row md:items-center justify-between gap-4">
                                                 <div>
-                                                    <h4 className="font-bold text-gray-900">{cls.name}</h4>
-                                                    <div className="flex items-center gap-2 text-sm text-gray-500 mt-1">
-                                                        <span className="bg-gray-100 px-2 py-0.5 rounded text-xs font-bold">{cls.grade}. bekkur</span>
+                                                    <h4 className="font-bold text-on-surface">{cls.name}</h4>
+                                                    <div className="flex items-center gap-2 text-sm text-on-surface-variant mt-1">
+                                                        <span className="bg-surface-container-high px-2 py-0.5 rounded text-xs font-bold">{cls.grade}. bekkur</span>
                                                         <span>• {cls.admins.length} stjórnendur</span>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex items-center gap-3">
-                                                    <div className="bg-gray-50 px-4 py-2 rounded-lg border border-gray-200 flex items-center gap-3">
-                                                        <span className="text-xs font-bold text-gray-400 uppercase">Kóði:</span>
-                                                        <code className="text-blue-600 font-bold font-mono text-lg">{cls.joinCode || '---'}</code>
+                                                    <div className="bg-surface px-4 py-2 rounded-lg border border-outline-variant/30 flex items-center gap-3">
+                                                        <span className="text-xs font-bold text-on-surface-variant uppercase">Kóði:</span>
+                                                        <code className="text-primary font-bold font-mono text-lg">{cls.joinCode || '---'}</code>
                                                         <button
                                                             onClick={() => { navigator.clipboard.writeText(cls.joinCode || ''); alert('Afritað!') }}
-                                                            className="text-gray-400 hover:text-blue-600 transition-colors"
+                                                            className="text-on-surface-variant hover:text-primary transition-colors"
                                                         >
                                                             <Copy size={16} />
                                                         </button>
@@ -406,7 +406,7 @@ export default function AdminView() {
                                                                 alert('Villa við að eyða bekk');
                                                             }
                                                         }}
-                                                        className="bg-red-600 text-white px-3 py-2 rounded-lg font-bold hover:bg-red-700 transition-all inline-flex items-center gap-2"
+                                                        className="bg-error text-white px-3 py-2 rounded-lg font-bold hover:bg-error/90 transition-all inline-flex items-center gap-2"
                                                     >
                                                         <Trash2 size={14} />
                                                         Eyða
@@ -497,16 +497,16 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
     };
 
     return (
-        <div className="glass-card p-0 overflow-hidden group hover:border-blue-200 transition-all">
+        <div className="glass-card p-0 overflow-hidden group hover:border-primary/30 transition-all">
             <div className="p-8 pb-4">
                 <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-4 flex-1">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-blue-700 shadow-inner">
+                        <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-primary shadow-inner">
                             <GraduationCap size={32} />
                         </div>
                         <div>
-                            <h3 className="text-2xl font-bold text-gray-900 group-hover:text-blue-700 transition-colors">{school.name}</h3>
-                            <code className="text-xs font-bold text-gray-400 bg-gray-100 px-2 py-1 rounded-md">{school.id}</code>
+                            <h3 className="text-2xl font-bold text-on-surface group-hover:text-primary transition-colors">{school.name}</h3>
+                            <code className="text-xs font-bold text-on-surface-variant bg-surface-container-high px-2 py-1 rounded-md">{school.id}</code>
                         </div>
                     </div>
                     <button
@@ -519,7 +519,7 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                                 alert('Villa við að eyða skóla');
                             }
                         }}
-                        className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 transition-all flex items-center gap-2"
+                        className="bg-error text-white px-4 py-2 rounded-lg font-bold hover:bg-error/90 transition-all flex items-center gap-2"
                     >
                         <Trash2 size={16} />
                         Eyða skóla
@@ -528,17 +528,17 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
             </div>
 
             {/* MANAGEMENT SECTIONS */}
-            <div className="divide-y divide-gray-100">
+            <div className="divide-y divide-outline-variant/30">
 
                 {/* 1. ADMINS */}
-                <div className="bg-gray-50/80 p-6">
+                <div className="bg-surface/80 p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-on-surface uppercase tracking-wide flex items-center gap-2">
                             <Shield size={14} /> Stjórnendur ({school.admins.length})
                         </h4>
                         <button
                             onClick={() => setIsAddingAdmin(!isAddingAdmin)}
-                            className="text-sm font-bold text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                            className="text-sm font-bold text-primary hover:text-primary flex items-center gap-1"
                         >
                             <Plus size={14} strokeWidth={3} /> {isAddingAdmin ? 'Loka' : 'Bæta við'}
                         </button>
@@ -547,30 +547,30 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                     {isAddingAdmin && (
                         <div className="mb-6 animate-in fade-in slide-in-from-top-2">
                             <div className="relative">
-                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" size={18} />
                                 <input
                                     type="text"
                                     placeholder="Leita eftir netfangi..."
                                     value={adminSearch}
                                     onChange={e => setAdminSearch(e.target.value)}
-                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-blue-500 outline-none"
+                                    className="w-full pl-12 pr-4 py-3 rounded-xl border border-outline-variant/30 focus:ring-2 focus:ring-primary outline-none"
                                     autoFocus
                                 />
                             </div>
 
                             {searchResults.length > 0 && (
-                                <div className="mt-2 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden divide-y divide-gray-50">
+                                <div className="mt-2 bg-surface-container-lowest rounded-xl shadow-xl border border-outline-variant/30 overflow-hidden divide-y divide-outline-variant/30">
                                     {searchResults.map(u => (
                                         <button
                                             key={u.uid}
                                             onClick={() => handleAddAdmin(u.uid)}
-                                            className="w-full p-3 text-left hover:bg-blue-50 transition-colors flex items-center justify-between group"
+                                            className="w-full p-3 text-left hover:bg-primary-container/15 transition-colors flex items-center justify-between group"
                                         >
                                             <div>
-                                                <p className="font-bold text-gray-900">{u.displayName}</p>
-                                                <p className="text-xs text-gray-500">{u.email}</p>
+                                                <p className="font-bold text-on-surface">{u.displayName}</p>
+                                                <p className="text-xs text-on-surface-variant">{u.email}</p>
                                             </div>
-                                            <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                                            <div className="w-8 h-8 rounded-full bg-primary-container/20 flex items-center justify-center text-primary opacity-0 group-hover:opacity-100 transition-opacity">
                                                 <Plus size={16} />
                                             </div>
                                         </button>
@@ -582,7 +582,7 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
 
                     <div className="flex flex-wrap gap-2">
                         {school.admins.map((uid, i) => (
-                            <div key={i} className="bg-white border text-gray-600 text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
+                            <div key={i} className="bg-surface-container-lowest border text-on-surface-variant text-xs font-mono px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">
                                 {uid}
                             </div>
                         ))}
@@ -590,39 +590,39 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                 </div>
 
                 {/* 2. SCHOOL EVENTS */}
-                <div className="bg-white p-6">
+                <div className="bg-surface-container-lowest p-6">
                     <div className="flex items-center justify-between mb-4">
-                        <h4 className="text-sm font-bold text-gray-700 uppercase tracking-wide flex items-center gap-2">
+                        <h4 className="text-sm font-bold text-on-surface uppercase tracking-wide flex items-center gap-2">
                             <Calendar size={14} /> Viðburðir skóla ({schoolTasks?.length || 0})
                         </h4>
                         <button
                             onClick={() => setIsCreatingEvent(!isCreatingEvent)}
-                            className="text-sm font-bold text-nordic-blue hover:text-blue-800 flex items-center gap-1"
+                            className="text-sm font-bold text-primary hover:text-primary flex items-center gap-1"
                         >
                             <Megaphone size={14} strokeWidth={3} /> {isCreatingEvent ? 'Loka' : 'Nýr viðburður'}
                         </button>
                     </div>
 
                     {isCreatingEvent && (
-                        <div className="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-100 animate-in fade-in">
+                        <div className="mb-6 bg-surface p-4 rounded-xl border border-outline-variant/30 animate-in fade-in">
                             <div className="space-y-3">
                                 <input
                                     type="text"
                                     placeholder="Heiti viðburðar (t.d. Árshátíð)"
                                     value={newEventTitle}
                                     onChange={e => setNewEventTitle(e.target.value)}
-                                    className="w-full p-2 rounded-lg border border-gray-200"
+                                    className="w-full p-2 rounded-lg border border-outline-variant/30"
                                 />
                                 <input
                                     type="datetime-local"
                                     value={newEventDate}
                                     onChange={e => setNewEventDate(e.target.value)}
-                                    className="w-full p-2 rounded-lg border border-gray-200"
+                                    className="w-full p-2 rounded-lg border border-outline-variant/30"
                                 />
                                 <button
                                     onClick={handleCreateEvent}
                                     disabled={!newEventTitle || !newEventDate}
-                                    className="w-full bg-nordic-blue text-white py-2 rounded-lg font-bold hover:bg-blue-700 disabled:opacity-50"
+                                    className="w-full bg-primary text-white py-2 rounded-lg font-bold hover:bg-primary-container disabled:opacity-50"
                                 >
                                     Vista viðburð
                                 </button>
@@ -633,9 +633,9 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                     <div className="space-y-2">
                         {schoolTasks && schoolTasks.length > 0 ? (
                             schoolTasks.map((task) => (
-                                <div key={task.id} className="flex items-center justify-between p-3 rounded-xl bg-gray-50 border border-gray-100">
+                                <div key={task.id} className="flex items-center justify-between p-3 rounded-xl bg-surface border border-outline-variant/30">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-lg bg-white flex flex-col items-center justify-center text-xs font-bold text-gray-600 border border-gray-200">
+                                        <div className="w-10 h-10 rounded-lg bg-surface-container-lowest flex flex-col items-center justify-center text-xs font-bold text-on-surface-variant border border-outline-variant/30">
                                             <span>
                                                 {task.date?.toDate ? task.date.toDate().getDate() : ''}
                                             </span>
@@ -644,8 +644,8 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                                             </span>
                                         </div>
                                         <div>
-                                            <p className="font-bold text-gray-800">{task.title}</p>
-                                            <p className="text-xs text-gray-500">Skólaviðburður</p>
+                                            <p className="font-bold text-on-surface">{task.title}</p>
+                                            <p className="text-xs text-on-surface-variant">Skólaviðburður</p>
                                         </div>
                                     </div>
                                     <button
@@ -659,14 +659,14 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
                                                 alert('Villa við að eyða viðburði');
                                             }
                                         }}
-                                        className="text-gray-400 hover:text-red-600 transition-colors p-2"
+                                        className="text-on-surface-variant hover:text-error transition-colors p-2"
                                     >
                                         <Trash2 size={14} />
                                     </button>
                                 </div>
                             ))
                         ) : (
-                            <div className="text-center py-4 text-xs text-gray-400 italic">Engir viðburðir skráðir</div>
+                            <div className="text-center py-4 text-xs text-on-surface-variant italic">Engir viðburðir skráðir</div>
                         )}
                     </div>
                 </div>

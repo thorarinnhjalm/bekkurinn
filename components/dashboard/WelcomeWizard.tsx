@@ -17,20 +17,20 @@ const STEPS = [
     {
         title: 'Bekkjarlistinn',
         description: 'Hér sérðu upplýsingar um alla nemendur og foreldra. Þú getur breytt upplýsingum um þitt barn hvenær sem er.',
-        icon: <Users className="w-8 h-8 text-blue-600" />,
-        color: 'bg-blue-50'
+        icon: <Users className="w-8 h-8 text-primary" />,
+        color: 'bg-primary-container/15'
     },
     {
         title: 'Viðburðir & Rölt',
         description: 'Skráðu þig í foreldrarölt eða sjáðu hvað er framundan í skólastarfinu.',
-        icon: <Calendar className="w-8 h-8 text-amber-600" />,
-        color: 'bg-amber-50'
+        icon: <Calendar className="w-8 h-8 text-on-tertiary-fixed" />,
+        color: 'bg-tertiary-fixed/40'
     },
     {
         title: 'Auglýsingatafla',
         description: 'Mikilvægar tilkynningar frá bekkjarfulltrúum birtast hér. Fylgstu með nýjustu fréttum.',
-        icon: <Megaphone className="w-8 h-8 text-green-600" />,
-        color: 'bg-green-50'
+        icon: <Megaphone className="w-8 h-8 text-primary" />,
+        color: 'bg-primary-container/15'
     }
 ];
 
@@ -56,12 +56,12 @@ export default function WelcomeWizard({ isOpen, onClose }: WelcomeWizardProps) {
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.95 }}
-                    className="bg-white rounded-2xl shadow-xl w-full max-w-md overflow-hidden"
+                    className="bg-surface-container-lowest rounded-2xl shadow-xl w-full max-w-md overflow-hidden"
                 >
                     {/* Progress Bar */}
-                    <div className="h-1 bg-gray-100 w-full">
+                    <div className="h-1 bg-surface-container-high w-full">
                         <div
-                            className="h-full bg-blue-600 transition-all duration-300 ease-out"
+                            className="h-full bg-primary transition-all duration-300 ease-out"
                             style={{ width: `${((currentStep + 1) / STEPS.length) * 100}%` }}
                         />
                     </div>
@@ -84,7 +84,7 @@ export default function WelcomeWizard({ isOpen, onClose }: WelcomeWizardProps) {
                                 key={`title-${currentStep}`}
                                 initial={{ opacity: 0, y: 10 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="text-2xl font-bold text-gray-900"
+                                className="text-2xl font-bold text-on-surface"
                             >
                                 {STEPS[currentStep].title}
                             </motion.h2>
@@ -92,7 +92,7 @@ export default function WelcomeWizard({ isOpen, onClose }: WelcomeWizardProps) {
                                 key={`desc-${currentStep}`}
                                 initial={{ opacity: 0 }}
                                 animate={{ opacity: 1 }}
-                                className="text-gray-600 leading-relaxed"
+                                className="text-on-surface-variant leading-relaxed"
                             >
                                 {STEPS[currentStep].description}
                             </motion.p>
@@ -102,13 +102,13 @@ export default function WelcomeWizard({ isOpen, onClose }: WelcomeWizardProps) {
                         <div className="pt-4 flex gap-3">
                             <button
                                 onClick={onClose}
-                                className="flex-1 py-3 text-sm font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-xl transition-colors"
+                                className="flex-1 py-3 text-sm font-medium text-on-surface-variant hover:text-on-surface hover:bg-surface rounded-xl transition-colors"
                             >
                                 Loka
                             </button>
                             <button
                                 onClick={handleNext}
-                                className="flex-[2] py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-xl shadow-md shadow-blue-900/10 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                                className="flex-[2] py-3 bg-primary hover:bg-primary-container text-white font-semibold rounded-xl shadow-md shadow-blue-900/10 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
                             >
                                 {isLastStep ? (
                                     <>

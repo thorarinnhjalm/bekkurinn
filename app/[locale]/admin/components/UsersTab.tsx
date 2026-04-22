@@ -81,14 +81,14 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
             <div className="professional-card p-6">
                 <div className="flex justify-between items-start mb-6">
                     <div>
-                        <h3 className="font-bold text-2xl text-gray-900 mb-2">Notendastjórnun</h3>
-                        <p className="text-gray-600">
+                        <h3 className="font-bold text-2xl text-on-surface mb-2">Notendastjórnun</h3>
+                        <p className="text-on-surface-variant">
                             Hér sérðu alla notendur í kerfinu. Notaðu leitina til að finna tiltekinn notanda.
                         </p>
                     </div>
                     <button
                         onClick={handleBulkDeleteDemo}
-                        className="bg-red-100 text-red-700 px-4 py-2 rounded-xl font-bold hover:bg-red-200 transition-colors flex items-center gap-2 border border-red-200"
+                        className="bg-error-container/60 text-error px-4 py-2 rounded-xl font-bold hover:bg-error-container/70 transition-colors flex items-center gap-2 border border-error/30"
                     >
                         <Trash2 size={16} />
                         Eyða demo notendum
@@ -97,17 +97,17 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
 
                 {/* Search */}
                 <div className="relative mb-6">
-                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" size={20} />
                     <input
                         type="text"
                         placeholder="Leita eftir netfangi..."
                         value={userSearch}
                         onChange={(e) => handleSearch(e.target.value)}
-                        className="w-full pl-12 pr-6 py-4 rounded-lg border border-gray-200 focus:ring-2 focus:ring-nordic-blue outline-none"
+                        className="w-full pl-12 pr-6 py-4 rounded-lg border border-outline-variant/30 focus:ring-2 focus:ring-primary outline-none"
                     />
                     {isSearching && (
                         <div className="absolute right-4 top-1/2 -translate-y-1/2">
-                            <div className="animate-spin h-5 w-5 border-2 border-nordic-blue border-t-transparent rounded-full" />
+                            <div className="animate-spin h-5 w-5 border-2 border-primary border-t-transparent rounded-full" />
                         </div>
                     )}
                 </div>
@@ -116,27 +116,27 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="border-b-2 border-gray-200">
-                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Name</th>
-                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Netfang</th>
-                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Sími</th>
-                                <th className="text-left py-3 px-4 font-bold text-gray-700 text-sm uppercase">Stofnað</th>
-                                <th className="text-right py-3 px-4 font-bold text-gray-700 text-sm uppercase">Aðgerðir</th>
+                            <tr className="border-b-2 border-outline-variant/30">
+                                <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Name</th>
+                                <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Netfang</th>
+                                <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Sími</th>
+                                <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Stofnað</th>
+                                <th className="text-right py-3 px-4 font-bold text-on-surface text-sm uppercase">Aðgerðir</th>
                             </tr>
                         </thead>
                         <tbody>
                             {users.map(user => (
-                                <tr key={user.uid} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
-                                    <td className="py-4 px-4 font-semibold text-gray-900">{user.displayName}</td>
-                                    <td className="py-4 px-4 text-gray-600 font-mono text-sm">{user.email}</td>
-                                    <td className="py-4 px-4 text-gray-600">{user.phone}</td>
-                                    <td className="py-4 px-4 text-gray-600 text-sm">
+                                <tr key={user.uid} className="border-b border-outline-variant/30 hover:bg-surface transition-colors">
+                                    <td className="py-4 px-4 font-semibold text-on-surface">{user.displayName}</td>
+                                    <td className="py-4 px-4 text-on-surface-variant font-mono text-sm">{user.email}</td>
+                                    <td className="py-4 px-4 text-on-surface-variant">{user.phone}</td>
+                                    <td className="py-4 px-4 text-on-surface-variant text-sm">
                                         {user.createdAt?.toDate?.().toLocaleDateString('is-IS') || 'N/A'}
                                     </td>
                                     <td className="py-4 px-4 text-right">
                                         <button
                                             onClick={() => handleDeleteUser(user)}
-                                            className="bg-red-600 text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-red-700 transition-all inline-flex items-center gap-2"
+                                            className="bg-error text-white px-3 py-1.5 rounded-lg text-sm font-bold hover:bg-error/90 transition-all inline-flex items-center gap-2"
                                         >
                                             <Trash2 size={14} />
                                             Eyða
@@ -149,14 +149,14 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                 </div>
 
                 {users.length === 0 && (
-                    <div className="text-center py-12 text-gray-500">
+                    <div className="text-center py-12 text-on-surface-variant">
                         <p className="text-lg font-semibold">Engir notendur fundust</p>
                         <p className="text-sm mt-2">Prófaðu aðra leitarskilyrði</p>
                     </div>
                 )}
 
                 {users.length > 0 && (
-                    <div className="mt-4 text-sm text-gray-600">
+                    <div className="mt-4 text-sm text-on-surface-variant">
                         Sýni {users.length} notend{users.length === 1 ? 'a' : 'ur'}
                     </div>
                 )}

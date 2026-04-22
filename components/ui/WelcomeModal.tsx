@@ -47,11 +47,11 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
 
     return (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
-            <div className="bg-white rounded-2xl max-w-md w-full p-8 space-y-6 shadow-2xl animate-in zoom-in duration-300">
+            <div className="bg-surface-container-lowest rounded-2xl max-w-md w-full p-8 space-y-6 shadow-2xl animate-in zoom-in duration-300">
                 {/* Close Button */}
                 <button
                     onClick={handleClose}
-                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+                    className="absolute top-4 right-4 text-on-surface-variant hover:text-on-surface-variant transition-colors"
                 >
                     <X size={24} />
                 </button>
@@ -62,10 +62,10 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                         <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
                             <Sparkles className="text-white" size={32} />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900">
+                        <h2 className="text-3xl font-bold text-on-surface">
                             Velkomin í Bekkurinn! 🎉
                         </h2>
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-on-surface-variant leading-relaxed">
                             Einfalt og þægilegt kerfi fyrir foreldra og bekkjarformenn. Allt sem bekkurinn þinn þarf á einum stað.
                         </p>
                     </div>
@@ -74,7 +74,7 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                 {/* Step 2: Features */}
                 {step === 2 && (
                     <div className="space-y-4">
-                        <h2 className="text-2xl font-bold text-gray-900 text-center">
+                        <h2 className="text-2xl font-bold text-on-surface text-center">
                             Hvað geturðu gert?
                         </h2>
                         <div className="space-y-3">
@@ -108,13 +108,13 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                         <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
                             <CheckCircle2 className="text-white" size={32} />
                         </div>
-                        <h2 className="text-3xl font-bold text-gray-900">
+                        <h2 className="text-3xl font-bold text-on-surface">
                             Þú ert tilbúinn! ✨
                         </h2>
-                        <p className="text-gray-600 leading-relaxed">
+                        <p className="text-on-surface-variant leading-relaxed">
                             Við erum hér til að auðvelda þér lífið. Ef þú hefur spurningar, ekki hika við að hafa samband.
                         </p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-on-surface-variant">
                             Gangi þér vel!
                         </p>
                     </div>
@@ -125,7 +125,7 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                     {[1, 2, 3].map((i) => (
                         <div
                             key={i}
-                            className={`w-2 h-2 rounded-full transition-colors ${i === step ? 'bg-blue-600' : 'bg-gray-300'
+                            className={`w-2 h-2 rounded-full transition-colors ${i === step ? 'bg-primary' : 'bg-surface-container-high'
                                 }`}
                         />
                     ))}
@@ -136,14 +136,14 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                     {step > 1 && (
                         <button
                             onClick={() => setStep(step - 1)}
-                            className="flex-1 px-6 py-3 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-all"
+                            className="flex-1 px-6 py-3 rounded-xl font-medium text-on-surface bg-surface-container-high hover:bg-surface-container-high transition-all"
                         >
                             Til baka
                         </button>
                     )}
                     <button
                         onClick={handleNext}
-                        className="flex-1 px-6 py-3 rounded-xl font-semibold text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20"
+                        className="flex-1 px-6 py-3 rounded-xl font-semibold text-white bg-primary hover:bg-primary-container transition-all shadow-lg shadow-blue-600/20"
                     >
                         {step === totalSteps ? 'Byrja' : 'Áfram'}
                     </button>
@@ -155,11 +155,11 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
 
 function FeatureItem({ icon, title, description }: { icon: string; title: string; description: string }) {
     return (
-        <div className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+        <div className="flex items-start gap-3 p-3 bg-surface rounded-lg">
             <span className="text-2xl">{icon}</span>
             <div>
-                <h3 className="font-semibold text-gray-900">{title}</h3>
-                <p className="text-sm text-gray-600">{description}</p>
+                <h3 className="font-semibold text-on-surface">{title}</h3>
+                <p className="text-sm text-on-surface-variant">{description}</p>
             </div>
         </div>
     );

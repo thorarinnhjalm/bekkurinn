@@ -17,25 +17,25 @@ interface HelpBoxProps {
 export function HelpBox({ title, tips, variant = 'tip' }: HelpBoxProps) {
     const variants = {
         tip: {
-            bg: 'bg-blue-50',
-            border: 'border-blue-200',
-            icon: <Lightbulb className="text-blue-600" size={20} />,
-            titleColor: 'text-blue-900',
-            textColor: 'text-blue-800',
+            bg: 'bg-primary-container/15',
+            border: 'border-primary/30',
+            icon: <Lightbulb className="text-primary" size={20} />,
+            titleColor: 'text-primary',
+            textColor: 'text-primary',
         },
         info: {
-            bg: 'bg-gray-50',
-            border: 'border-gray-200',
-            icon: <Info className="text-gray-600" size={20} />,
-            titleColor: 'text-gray-900',
-            textColor: 'text-gray-700',
+            bg: 'bg-surface',
+            border: 'border-outline-variant/30',
+            icon: <Info className="text-on-surface-variant" size={20} />,
+            titleColor: 'text-on-surface',
+            textColor: 'text-on-surface',
         },
         warning: {
-            bg: 'bg-amber-50',
-            border: 'border-amber-200',
-            icon: <AlertCircle className="text-amber-600" size={20} />,
-            titleColor: 'text-amber-900',
-            textColor: 'text-amber-800',
+            bg: 'bg-tertiary-fixed/40',
+            border: 'border-tertiary/40',
+            icon: <AlertCircle className="text-on-tertiary-fixed" size={20} />,
+            titleColor: 'text-on-tertiary-fixed',
+            textColor: 'text-on-tertiary-fixed',
         },
     };
 
@@ -53,7 +53,7 @@ export function HelpBox({ title, tips, variant = 'tip' }: HelpBoxProps) {
             <ul className="space-y-2">
                 {tips.map((tip, index) => (
                     <li key={index} className={`text-sm ${style.textColor} flex items-start gap-2`}>
-                        <span className="text-blue-600 font-bold mt-0.5">•</span>
+                        <span className="text-primary font-bold mt-0.5">•</span>
                         <span className="flex-1">{tip}</span>
                     </li>
                 ))}

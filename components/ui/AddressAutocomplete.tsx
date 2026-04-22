@@ -115,7 +115,7 @@ export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder =
     return (
         <div ref={wrapperRef} className={`relative ${className}`}>
             <div className="relative">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant" size={18} />
                 <input
                     type="text"
                     value={searchTerm}
@@ -124,27 +124,27 @@ export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder =
                         setShowSuggestions(true);
                     }}
                     placeholder={placeholder}
-                    className="w-full pl-10 pr-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-nordic-blue transition-all"
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
                 {loading && (
                     <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                        <Loader2 className="animate-spin text-nordic-blue" size={18} />
+                        <Loader2 className="animate-spin text-primary" size={18} />
                     </div>
                 )}
             </div>
 
             {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute z-50 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-y-auto">
+                <div className="absolute z-50 w-full mt-1 bg-surface-container-lowest border rounded-lg shadow-lg max-h-60 overflow-y-auto">
                     {suggestions.map((addr, idx) => (
                         <button
                             key={idx}
                             onClick={() => handleSelect(addr)}
-                            className="w-full text-left px-4 py-3 hover:bg-gray-50 flex items-start gap-3 border-b last:border-0 transition-colors"
+                            className="w-full text-left px-4 py-3 hover:bg-surface flex items-start gap-3 border-b last:border-0 transition-colors"
                         >
-                            <MapPin className="text-gray-400 flex-shrink-0 mt-0.5" size={16} />
+                            <MapPin className="text-on-surface-variant flex-shrink-0 mt-0.5" size={16} />
                             <div>
-                                <p className="font-medium text-gray-900">{addr.fullAddress}</p>
-                                <p className="text-sm text-gray-500">{addr.zip} {addr.city}</p>
+                                <p className="font-medium text-on-surface">{addr.fullAddress}</p>
+                                <p className="text-sm text-on-surface-variant">{addr.zip} {addr.city}</p>
                             </div>
                         </button>
                     ))}

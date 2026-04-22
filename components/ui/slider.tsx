@@ -24,7 +24,7 @@ export function Slider({ value, min, max, step, onValueChange, className }: Slid
             value={value[0]}
             onChange={handleChange}
             className={cn(
-                "w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-nordic-blue",
+                "w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer accent-nordic-blue",
                 className
             )}
         />

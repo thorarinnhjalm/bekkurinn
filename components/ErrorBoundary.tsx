@@ -63,24 +63,24 @@ export class ErrorBoundary extends Component<Props, State> {
 
             // Default fallback UI
             return (
-                <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
-                    <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 text-center">
-                        <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <AlertTriangle className="text-red-600" size={32} />
+                <div className="min-h-screen flex items-center justify-center p-4 bg-surface">
+                    <div className="max-w-md w-full bg-surface-container-lowest rounded-2xl shadow-lg p-8 text-center">
+                        <div className="w-16 h-16 bg-error-container/60 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <AlertTriangle className="text-error" size={32} />
                         </div>
 
-                        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+                        <h1 className="text-2xl font-bold text-on-surface mb-2">
                             Úps! Eitthvað fór úrskeiðis
                         </h1>
 
-                        <p className="text-gray-600 mb-6">
+                        <p className="text-on-surface-variant mb-6">
                             Ekki hafa áhyggjur — gögnin þín eru óhult.
                             Reyndu að endurhlaða síðuna.
                         </p>
 
                         {process.env.NODE_ENV === 'development' && this.state.error && (
-                            <div className="mb-6 p-4 bg-gray-100 rounded-lg text-left">
-                                <p className="text-xs font-mono text-red-600 break-all">
+                            <div className="mb-6 p-4 bg-surface-container-high rounded-lg text-left">
+                                <p className="text-xs font-mono text-error break-all">
                                     {this.state.error.message}
                                 </p>
                             </div>
@@ -89,7 +89,7 @@ export class ErrorBoundary extends Component<Props, State> {
                         <div className="flex gap-3 justify-center">
                             <button
                                 onClick={this.handleReset}
-                                className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                                className="flex items-center gap-2 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-primary-container transition-colors"
                             >
                                 <RefreshCw size={20} />
                                 Reyndu aftur
@@ -97,13 +97,13 @@ export class ErrorBoundary extends Component<Props, State> {
 
                             <button
                                 onClick={() => window.location.href = '/'}
-                                className="px-6 py-3 bg-gray-200 text-gray-800 rounded-lg font-semibold hover:bg-gray-300 transition-colors"
+                                className="px-6 py-3 bg-surface-container-high text-on-surface rounded-lg font-semibold hover:bg-surface-container-high transition-colors"
                             >
                                 Fara heim
                             </button>
                         </div>
 
-                        <p className="text-xs text-gray-500 mt-6">
+                        <p className="text-xs text-on-surface-variant mt-6">
                             Ef vandamálið er viðvarandi, hafðu samband við stuðning.
                         </p>
                     </div>
@@ -123,8 +123,8 @@ export function InlineErrorBoundary({ children, fallback }: Props) {
         <ErrorBoundary
             fallback={
                 fallback || (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <p className="text-red-800 text-sm">
+                    <div className="p-4 bg-error-container/40 border border-error/30 rounded-lg">
+                        <p className="text-error text-sm">
                             An error occurred loading this section.
                         </p>
                     </div>

@@ -79,13 +79,13 @@ export default async function HowItWorksPage({ params }: PageProps) {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-surface">
             {/* Header */}
             <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
                 <div className="max-w-4xl mx-auto space-y-6">
                     <Link
                         href={`/${locale}/login`}
-                        className="inline-flex items-center gap-2 text-blue-200 hover:text-white transition-colors"
+                        className="inline-flex items-center gap-2 text-primary-container/40 hover:text-white transition-colors"
                     >
                         <ArrowLeft size={18} />
                         Til baka
@@ -94,7 +94,7 @@ export default async function HowItWorksPage({ params }: PageProps) {
                     <h1 className="text-4xl md:text-5xl font-bold">
                         Hvernig virkar Bekkurinn?
                     </h1>
-                    <p className="text-xl text-blue-100 max-w-2xl">
+                    <p className="text-xl text-primary-container/30 max-w-2xl">
                         Einfalt kerfi fyrir foreldra til að halda utan um bekkjarsamfélagið.
                         Engar Excel-skrár, engir Facebook-hópar.
                     </p>
@@ -103,7 +103,7 @@ export default async function HowItWorksPage({ params }: PageProps) {
 
             {/* Steps Section */}
             <div className="max-w-4xl mx-auto px-4 py-16">
-                <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+                <h2 className="text-2xl font-bold text-on-surface text-center mb-12">
                     Komast af stað í fjórum einföldum skrefum
                 </h2>
 
@@ -113,10 +113,10 @@ export default async function HowItWorksPage({ params }: PageProps) {
                         const isLast = index === steps.length - 1;
 
                         const colorClasses = {
-                            blue: 'bg-blue-100 text-blue-600 border-blue-200',
-                            purple: 'bg-purple-100 text-purple-600 border-purple-200',
-                            green: 'bg-green-100 text-green-600 border-green-200',
-                            orange: 'bg-orange-100 text-orange-600 border-orange-200',
+                            blue: 'bg-primary-container/20 text-primary border-primary/30',
+                            purple: 'bg-secondary-container text-on-secondary-container border-secondary/30',
+                            green: 'bg-primary-container/20 text-primary border-primary/30',
+                            orange: 'bg-tertiary-fixed/60 text-on-tertiary-fixed border-tertiary/30',
                         };
 
                         return (
@@ -127,22 +127,22 @@ export default async function HowItWorksPage({ params }: PageProps) {
                                         <Icon size={24} />
                                     </div>
                                     {!isLast && (
-                                        <div className="w-0.5 h-full bg-gray-200 mt-2" />
+                                        <div className="w-0.5 h-full bg-surface-container-high mt-2" />
                                     )}
                                 </div>
 
                                 {/* Step Content */}
                                 <div className="flex-1 pb-8">
-                                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
+                                    <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
                                         <div className="flex items-center gap-3 mb-2">
-                                            <span className="text-sm font-bold text-gray-400 uppercase">
+                                            <span className="text-sm font-bold text-on-surface-variant uppercase">
                                                 Skref {step.number}
                                             </span>
                                         </div>
-                                        <h3 className="text-xl font-bold text-gray-900 mb-2">
+                                        <h3 className="text-xl font-bold text-on-surface mb-2">
                                             {step.title}
                                         </h3>
-                                        <p className="text-gray-600">
+                                        <p className="text-on-surface-variant">
                                             {step.description}
                                         </p>
                                     </div>
@@ -154,12 +154,12 @@ export default async function HowItWorksPage({ params }: PageProps) {
             </div>
 
             {/* Features Section */}
-            <div className="bg-white py-16 px-4">
+            <div className="bg-surface-container-lowest py-16 px-4">
                 <div className="max-w-4xl mx-auto">
-                    <h2 className="text-2xl font-bold text-gray-900 text-center mb-4">
+                    <h2 className="text-2xl font-bold text-on-surface text-center mb-4">
                         Hvað er innifalið?
                     </h2>
-                    <p className="text-gray-600 text-center mb-12 max-w-2xl mx-auto">
+                    <p className="text-on-surface-variant text-center mb-12 max-w-2xl mx-auto">
                         Bekkurinn er hannað til að einfalda samskipti foreldra og halda utan um allt sem skiptir máli.
                     </p>
 
@@ -169,13 +169,13 @@ export default async function HowItWorksPage({ params }: PageProps) {
                             return (
                                 <div
                                     key={feature.title}
-                                    className="bg-gray-50 rounded-2xl p-6 border border-gray-100 hover:border-blue-200 transition-colors"
+                                    className="bg-surface rounded-2xl p-6 border border-outline-variant/30 hover:border-primary/30 transition-colors"
                                 >
-                                    <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-4">
-                                        <Icon className="text-blue-600" size={24} />
+                                    <div className="w-12 h-12 bg-primary-container/20 rounded-xl flex items-center justify-center mb-4">
+                                        <Icon className="text-primary" size={24} />
                                     </div>
-                                    <h3 className="font-bold text-gray-900 mb-2">{feature.title}</h3>
-                                    <p className="text-sm text-gray-600">{feature.description}</p>
+                                    <h3 className="font-bold text-on-surface mb-2">{feature.title}</h3>
+                                    <p className="text-sm text-on-surface-variant">{feature.description}</p>
                                 </div>
                             );
                         })}
@@ -185,35 +185,35 @@ export default async function HowItWorksPage({ params }: PageProps) {
 
             {/* FAQ Section */}
             <div className="max-w-4xl mx-auto px-4 py-16">
-                <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">
+                <h2 className="text-2xl font-bold text-on-surface text-center mb-12">
                     Algengar spurningar
                 </h2>
 
                 <div className="space-y-4">
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-2">Er þetta ókeypis?</h3>
-                        <p className="text-gray-600">
+                    <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
+                        <h3 className="font-bold text-on-surface mb-2">Er þetta ókeypis?</h3>
+                        <p className="text-on-surface-variant">
                             Já, Bekkurinn er ókeypis fyrir foreldra og bekkjarfulltrúa. Við erum að prófa kerfið og viljum fá endurgjöf.
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-2">Hvernig fæ ég bekkjarkóða?</h3>
-                        <p className="text-gray-600">
+                    <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
+                        <h3 className="font-bold text-on-surface mb-2">Hvernig fæ ég bekkjarkóða?</h3>
+                        <p className="text-on-surface-variant">
                             Bekkjarfulltrúi stofnar bekkinn og fær einstakan kóða sem hægt er að deila með öðrum foreldrum. Ef enginn bekkjarfulltrúi er í bekknum getur þú sjálf/ur stofnað hann.
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-2">Hversu örugg eru gögnin mín?</h3>
-                        <p className="text-gray-600">
+                    <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
+                        <h3 className="font-bold text-on-surface mb-2">Hversu örugg eru gögnin mín?</h3>
+                        <p className="text-on-surface-variant">
                             Við notum Firebase sem er öruggur vettvangur frá Google. Allar tengingar eru dulkóðaðar og aðeins staðfestir foreldrar hafa aðgang að bekkjarupplýsingum.
                         </p>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-200">
-                        <h3 className="font-bold text-gray-900 mb-2">Get ég verið í fleiri en einum bekk?</h3>
-                        <p className="text-gray-600">
+                    <div className="bg-surface-container-lowest rounded-2xl p-6 shadow-sm border border-outline-variant/30">
+                        <h3 className="font-bold text-on-surface mb-2">Get ég verið í fleiri en einum bekk?</h3>
+                        <p className="text-on-surface-variant">
                             Já, ef þú átt fleiri en eitt barn í mismunandi bekkjum getur þú bætt þeim öllum við og skipt á milli þeirra í appinu.
                         </p>
                     </div>
@@ -226,12 +226,12 @@ export default async function HowItWorksPage({ params }: PageProps) {
                     <h2 className="text-3xl font-bold">
                         Tilbúin/n að byrja?
                     </h2>
-                    <p className="text-blue-100 text-lg">
+                    <p className="text-primary-container/30 text-lg">
                         Skráðu þig inn og vertu með í að einfalda samskipti foreldra.
                     </p>
                     <Link
                         href={`/${locale}/login`}
-                        className="inline-flex items-center gap-2 bg-white text-blue-600 px-8 py-4 rounded-xl font-bold hover:bg-blue-50 transition-colors"
+                        className="inline-flex items-center gap-2 bg-surface-container-lowest text-primary px-8 py-4 rounded-xl font-bold hover:bg-primary-container/15 transition-colors"
                     >
                         Skrá inn
                         <ArrowRight size={20} />
@@ -240,10 +240,10 @@ export default async function HowItWorksPage({ params }: PageProps) {
             </div>
 
             {/* Footer */}
-            <div className="py-8 px-4 text-center text-sm text-gray-500">
+            <div className="py-8 px-4 text-center text-sm text-on-surface-variant">
                 <p>
                     Ertu með spurningu?{' '}
-                    <Link href={`/${locale}/contact`} className="text-blue-600 hover:underline">
+                    <Link href={`/${locale}/contact`} className="text-primary hover:underline">
                         Hafðu samband
                     </Link>
                 </p>

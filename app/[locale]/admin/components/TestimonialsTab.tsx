@@ -56,7 +56,7 @@ export default function TestimonialsTab() {
     if (loading) {
         return (
             <div className="flex justify-center py-12">
-                <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
@@ -73,7 +73,7 @@ export default function TestimonialsTab() {
 
             {/* Testimonials List */}
             {filteredTestimonials.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">
+                <div className="text-center py-12 text-on-surface-variant">
                     <MessageSquare size={48} className="mx-auto mb-4 opacity-50" />
                     <p>Engar umsagnir fundust</p>
                 </div>
@@ -102,17 +102,17 @@ function StatCard({ label, count, active, onClick, color = 'blue' }: {
     color?: 'blue' | 'orange' | 'green' | 'red';
 }) {
     const colors = {
-        blue: 'bg-blue-100 text-blue-700 border-blue-300',
-        orange: 'bg-orange-100 text-orange-700 border-orange-300',
-        green: 'bg-green-100 text-green-700 border-green-300',
-        red: 'bg-red-100 text-red-700 border-red-300',
+        blue: 'bg-primary-container/20 text-primary border-primary/40',
+        orange: 'bg-tertiary-fixed/60 text-on-tertiary-fixed border-tertiary/40',
+        green: 'bg-primary-container/20 text-primary border-primary/40',
+        red: 'bg-error-container/60 text-error border-error/40',
     };
 
     return (
         <button
             onClick={onClick}
             className={`p-4 rounded-xl border-2 transition-all text-left ${
-                active ? colors[color] : 'bg-white border-gray-200 hover:border-gray-300'
+                active ? colors[color] : 'bg-surface-container-lowest border-outline-variant/30 hover:border-outline-variant'
             }`}
         >
             <p className="text-2xl font-black">{count}</p>
@@ -128,9 +128,9 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
     onDelete: () => void;
 }) {
     const statusColors = {
-        pending: 'bg-orange-100 text-orange-700',
-        approved: 'bg-green-100 text-green-700',
-        rejected: 'bg-red-100 text-red-700',
+        pending: 'bg-tertiary-fixed/60 text-on-tertiary-fixed',
+        approved: 'bg-primary-container/20 text-primary',
+        rejected: 'bg-error-container/60 text-error',
     };
 
     const statusLabels = {
@@ -150,7 +150,7 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                                 <Star
                                     key={star}
                                     size={16}
-                                    className={star <= testimonial.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}
+                                    className={star <= testimonial.rating ? 'fill-yellow-400 text-on-tertiary-fixed' : 'text-surface/80'}
                                 />
                             ))}
                         </div>
@@ -160,11 +160,11 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                     </div>
 
                     {/* Text */}
-                    <p className="text-gray-800 mb-3">"{testimonial.text}"</p>
+                    <p className="text-on-surface mb-3">"{testimonial.text}"</p>
 
                     {/* Author */}
-                    <div className="flex items-center gap-2 text-sm text-gray-500">
-                        <span className="font-medium text-gray-700">{testimonial.userName}</span>
+                    <div className="flex items-center gap-2 text-sm text-on-surface-variant">
+                        <span className="font-medium text-on-surface">{testimonial.userName}</span>
                         <span>•</span>
                         <span>{testimonial.userRole}</span>
                         {testimonial.schoolName && (
@@ -176,7 +176,7 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                     </div>
 
                     {/* Date */}
-                    <div className="flex items-center gap-1 text-xs text-gray-400 mt-2">
+                    <div className="flex items-center gap-1 text-xs text-on-surface-variant mt-2">
                         <Clock size={12} />
                         <span>
                             {testimonial.createdAt?.toDate?.()
@@ -192,14 +192,14 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                         <>
                             <button
                                 onClick={onApprove}
-                                className="p-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors"
+                                className="p-2 bg-primary-container/20 text-primary rounded-lg hover:bg-primary-container/30 transition-colors"
                                 title="Samþykkja"
                             >
                                 <Check size={18} />
                             </button>
                             <button
                                 onClick={onReject}
-                                className="p-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors"
+                                className="p-2 bg-error-container/60 text-error rounded-lg hover:bg-error-container/70 transition-colors"
                                 title="Hafna"
                             >
                                 <X size={18} />
@@ -208,7 +208,7 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                     )}
                     <button
                         onClick={onDelete}
-                        className="p-2 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition-colors"
+                        className="p-2 bg-surface-container-high text-on-surface-variant rounded-lg hover:bg-surface-container-high transition-colors"
                         title="Eyða"
                     >
                         <Trash2 size={18} />

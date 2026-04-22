@@ -57,7 +57,7 @@ export function TranslationButton({ text, className = '' }: TranslationButtonPro
         <div className={`mt-2 ${className}`}>
             <button
                 onClick={handleTranslate}
-                className="flex items-center gap-1.5 text-xs font-medium text-blue-600 hover:text-blue-700 transition-colors"
+                className="flex items-center gap-1.5 text-xs font-medium text-primary hover:text-primary transition-colors"
                 title="Translate with AI"
             >
                 {loading ? (
@@ -69,18 +69,18 @@ export function TranslationButton({ text, className = '' }: TranslationButtonPro
             </button>
 
             {error && (
-                <span className="text-xs text-red-500 ml-2">Failed to translate</span>
+                <span className="text-xs text-error ml-2">Failed to translate</span>
             )}
 
             {translation && (
-                <div className="mt-2 p-3 bg-blue-50/50 border border-blue-100 rounded-lg animate-in fade-in slide-in-from-top-1">
+                <div className="mt-2 p-3 bg-primary-container/15/50 border border-primary/20 rounded-lg animate-in fade-in slide-in-from-top-1">
                     <div className="flex gap-2">
-                        <div className="shrink-0 w-0.5 self-stretch bg-blue-400 rounded-full" />
+                        <div className="shrink-0 w-0.5 self-stretch bg-primary/70 rounded-full" />
                         <div>
-                            <p className="text-sm text-gray-700 leading-relaxed italic">
+                            <p className="text-sm text-on-surface leading-relaxed italic">
                                 &quot;{translation}&quot;
                             </p>
-                            <p className="text-[10px] text-gray-400 mt-1 uppercase tracking-wider font-medium">
+                            <p className="text-[10px] text-on-surface-variant mt-1 uppercase tracking-wider font-medium">
                                 AI Translated
                             </p>
                         </div>
