@@ -109,8 +109,8 @@ function FeatureCard({
 
     const descClasses: Record<Tone, string> = {
         default: 'text-on-surface-variant',
-        primary: 'text-on-primary/85',
-        tertiary: 'text-on-tertiary-fixed/85',
+        primary: 'opacity-90',
+        tertiary: 'opacity-90',
     };
 
     return (
