@@ -65,7 +65,7 @@ export function AIFoodPlanner({
             } else {
                 setError(data.error || 'Error occurred');
             }
-        } catch (err) {
+        } catch {
             setError('Error connecting to service');
         } finally {
             setLoading(false);

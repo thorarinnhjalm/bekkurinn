@@ -58,7 +58,8 @@
       "Bash(rm \"app/[locale]/test/page.tsx\")",
       "Bash(git reset *)",
       "Bash(gh pr create --title 'redesign: Phase 4+5+6 — marketing, admin, shared components fjord_moss retint' --body ' *)",
-      "Bash(gh pr *)"
+      "Bash(gh pr *)",
+      "Bash(git restore *)"
     ]
   }
 }

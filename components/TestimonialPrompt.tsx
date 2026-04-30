@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { X, Star, Send, Heart } from 'lucide-react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { createTestimonial, hasUserSubmittedTestimonial } from '@/services/firestore';
@@ -46,11 +46,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    useEffect(() => {
-        checkIfShouldShow();
-    }, [user]);
-
-    const checkIfShouldShow = async () => {
+    const checkIfShouldShow = useCallback(async () => {
         if (!user) return;
 
         // Check session storage
@@ -81,7 +77,11 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
         if (oncePerSession) {
             sessionStorage.setItem('testimonialPromptShown', 'true');
         }
-    };
+    }, [user, oncePerSession, minDaysActive]);
+
+    useEffect(() => {
+        checkIfShouldShow();
+    }, [checkIfShouldShow]);
 
     const handleSubmit = async () => {
         if (!user || rating === 0 || text.trim().length < 10) {
@@ -102,7 +102,7 @@ export function TestimonialPrompt({ minDaysActive = 7, oncePerSession = true }: 
                 rating,
             });
             setIsSubmitted(true);
-        } catch (err) {
+        } catch {
             setError(t('error_generic'));
         } finally {
             setIsSubmitting(false);

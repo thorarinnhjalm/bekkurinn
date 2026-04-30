@@ -9,7 +9,7 @@ import { Timestamp } from 'firebase/firestore';
 // USER & AUTHENTICATION
 // ========================================
 
-export type UserLanguage = 'is' | 'en' | 'pl';
+export type UserLanguage = 'is' | 'en' | 'pl' | 'es' | 'lt' | 'tl' | 'uk' | 'vi';
 
 // Lost & Found
 export interface LostItem {

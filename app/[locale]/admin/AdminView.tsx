@@ -174,7 +174,7 @@ export default function AdminView() {
             <header className="relative isolate overflow-hidden">
                 {/* Blurry blobs */}
                 <div className="absolute top-0 right-0 -z-10 transform-gpu blur-3xl opacity-30" aria-hidden="true">
-                    <div className="aspect-[1155/678] w-[60rem] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc]" style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }} />
+                    <div className="aspect-[1155/678] w-[60rem] bg-linear-to-tr from-[#ff80b5] to-[#9089fc]" style={{ clipPath: 'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)' }} />
                 </div>
 
                 <div className="glass-card p-8 md:p-12 flex flex-col md:flex-row items-start md:items-end justify-between gap-8">
@@ -501,7 +501,7 @@ function SchoolCard({ school, refreshData }: { school: School; refreshData: () =
             <div className="p-8 pb-4">
                 <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-4 flex-1">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-primary shadow-inner">
+                        <div className="w-16 h-16 bg-linear-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center text-primary shadow-inner">
                             <GraduationCap size={32} />
                         </div>
                         <div>

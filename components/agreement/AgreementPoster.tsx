@@ -1,32 +1,31 @@
 import { useTranslations } from 'next-intl';
-import { Agreement } from '@/types';
-import { ShieldCheck, PartyPopper, MessageCircle, Info, Calendar, Smartphone, Gamepad2, Gift, Users, CheckCircle2 } from 'lucide-react';
+import { Agreement, AgreementItem } from '@/types';
+import { ShieldCheck, PartyPopper, Info, Calendar, Smartphone, Gamepad2, Users, CheckCircle2 } from 'lucide-react';
 
 interface AgreementPosterProps {
     agreement: Agreement;
     signaturesCount?: number;
 }
 
-export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterProps) {
+export function AgreementPoster({ agreement }: AgreementPosterProps) {
     const t = useTranslations('agreement');
 
     const cleanKey = (key: string) => key?.replace(/^agreement\./, '') || '';
 
     const renderText = (key: string) => {
         const cleaned = cleanKey(key);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const translated = t(cleaned as any);
         return translated.startsWith('agreement.') ? cleaned : translated;
     };
 
-    const getWinningLabel = (item: any) => {
+    const getWinningLabel = (item: AgreementItem) => {
         if (!item.winningValue) return 'N/A';
         if (item.type === 'info') {
             return renderText(item.questionKey);
         }
 
-        if (!item.winningValue) return t('options.pending') || 'Pending...';
-
-        const winningOption = item.options?.find((opt: any) => opt.value === item.winningValue);
+        const winningOption = item.options?.find((opt) => opt.value === item.winningValue);
         if (winningOption) {
             return renderText(winningOption.labelKey);
         }
@@ -42,6 +41,8 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
         if (sectionId.includes('screen')) return <Smartphone size={14} />;
         return <CheckCircle2 size={14} />;
     };
+
+    const schoolYear = new Date(agreement.updatedAt?.seconds ? agreement.updatedAt.seconds * 1000 : 0).getFullYear();
 
     return (
         <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
@@ -107,7 +108,7 @@ export function AgreementPoster({ agreement, signaturesCount }: AgreementPosterP
                             <Calendar size={14} className="text-on-surface-variant" />
                         </div>
                         <span className="text-sm font-bold text-on-surface-variant">
-                            Gildir fyrir skólaárið {new Date(agreement.updatedAt?.seconds * 1000 || Date.now()).getFullYear()}-{new Date(agreement.updatedAt?.seconds * 1000 || Date.now()).getFullYear() + 1}
+                            Gildir fyrir skólaárið {schoolYear}-{schoolYear + 1}
                         </span>
                     </div>
                     <div className="text-xs font-semibold text-on-surface-variant uppercase tracking-widest">

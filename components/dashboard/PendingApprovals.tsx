@@ -57,7 +57,7 @@ export default function PendingApprovals({ classId, myStudentId, isAdmin }: Pend
         }
 
         fetchRequests();
-    }, [classId, myStudentId]);
+    }, [classId, myStudentId, isAdmin]);
 
     const handleApprove = async (linkId: string) => {
         setProcessingId(linkId);

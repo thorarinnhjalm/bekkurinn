@@ -149,7 +149,7 @@ function ToastItem({ toast, onClose }: { toast: Toast; onClose: () => void }) {
 
             <button
                 onClick={onClose}
-                className={`${style.text} hover:opacity-70 transition-opacity flex-shrink-0`}
+                className={`${style.text} hover:opacity-70 transition-opacity shrink-0`}
                 aria-label="Close notification"
             >
                 <X size={18} />

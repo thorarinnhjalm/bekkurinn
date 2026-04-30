@@ -29,7 +29,7 @@ export function CallToAction({ locale }: { locale: string }) {
                 <div className="flex flex-col items-center gap-6 w-full">
                     <Link
                         href={`/${locale}/onboarding`}
-                        className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full font-bold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                        className="inline-flex items-center justify-center gap-2 px-10 py-4 rounded-full font-bold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                     >
                         {t('cta_final.button')}
                         <ArrowRight size={20} />

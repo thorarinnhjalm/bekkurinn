@@ -15,7 +15,7 @@ export function Footer() {
                     {/* Brand */}
                     <div className="lg:col-span-1">
                         <div className="flex items-center gap-3 mb-4">
-                            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-on-primary shadow-ambient bg-gradient-to-br from-primary to-primary-container">
+                            <div className="w-10 h-10 rounded-xl flex items-center justify-center text-on-primary shadow-ambient bg-linear-to-br from-primary to-primary-container">
                                 <Users size={20} />
                             </div>
                             <span className="font-bold text-xl text-on-surface">Bekkurinn</span>

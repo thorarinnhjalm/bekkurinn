@@ -57,7 +57,41 @@ Root render order (see [app/[locale]/layout.tsx](app/[locale]/layout.tsx)):
 
 `AuthProvider` ([components/providers/AuthProvider.tsx](components/providers/AuthProvider.tsx)) exposes Firebase auth + a synced `users/{uid}` doc via `useAuth()`. `QueryProvider` is mounted once at the root ([app/layout.tsx](app/layout.tsx)), so `useQuery` works anywhere.
 
+`useAuth()` returns two distinct user objects — don't confuse them:
+- `user` — Firebase `User` object (auth state, `uid`, `email`, `photoURL`)
+- `userData` — Firestore `User` doc from `users/{uid}` (app-specific fields: `phone`, `language`, `notificationSettings`, etc.)
+
 The root [app/page.tsx](app/page.tsx) renders the Icelandic landing directly (not a redirect) — deliberate fix for Google Search Console indexing. Because this route is not under `[locale]/`, it mounts its own `AuthProvider` + `NextIntlClientProvider`; any page under `[locale]/` goes through the locale layout's providers instead. Don't convert the root to a redirect.
+
+### Scope model
+
+Tasks, announcements, and lost-found items all carry `scope: 'class' | 'school'` paired with `classId` / `schoolId` fields. A `'class'` scoped document sets `classId` and queries filter on it; a `'school'` scoped document sets `schoolId` instead and is visible to all class members within that school. Always set the unused ID field to `null` — Firestore rules check both.
+
+### Babelfish translation
+
+Non-Icelandic parents see announcements and tasks in their language via the `<Babelfish>` component ([components/Babelfish.tsx](components/Babelfish.tsx)), which calls `/api/translate` (Gemini-backed, rate-limited at 20 req/min per IP). Translations are cached with `staleTime: Infinity` in React Query — they never refetch. The `originalLanguage` field on `Announcement` and `Task` records tells Babelfish whether to show a translation at all (no translation when `originalLanguage === targetLanguage`).
+
+### API routes
+
+`app/api/` contains six routes:
+- **`translate/`** — Gemini translation proxy (rate-limited, 5000 char max, whitelisted target languages)
+- **`notifications/`** — push notification delivery
+- **`send-critical-announcement/`** — Resend email blast for `isCritical` announcements
+- **`proxy-calendar/`** — ICS proxy to avoid CORS issues fetching school calendars
+- **`plausible-stats/`** — Plausible analytics proxy
+- **`cron/reminders`** — runs hourly via Vercel cron (see [vercel.json](vercel.json)); sends volunteer and general reminders using `volunteerReminderSent`/`generalReminderSent` flags on `Task` to prevent double-sends
+
+### Utilities
+
+[lib/logger.ts](lib/logger.ts) — env-aware logger: `debug`/`info` are no-ops in production; `warn`/`error` always log. Use `logger.*` instead of `console.*` in services and API routes.
+
+[lib/rate-limit.ts](lib/rate-limit.ts) — LRU-cache rate limiter (tracks up to 500 identifiers, 1 min TTL). Used by `/api/translate` and other API routes.
+
+[lib/validation.ts](lib/validation.ts) — Zod schemas (`OnboardingSchema`, `JoinCodeSchema`, `StudentSchema`, etc.) with Icelandic error messages. Import from here for all form validation.
+
+[lib/utils.ts](lib/utils.ts) — exports `cn(...inputs)` (clsx + tailwind-merge). Use it for all conditional class merging.
+
+[constants/schools.ts](constants/schools.ts) — `SCHOOLS` array of Kópavogur municipality schools with ICS calendar URLs. `isKopavogurSchool(schoolId)` in [utils/schoolUtils.ts](utils/schoolUtils.ts) gates municipality-specific features. Only Kópavogur schools are hardcoded currently.
 
 ### Tests
 

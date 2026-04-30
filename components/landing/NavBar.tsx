@@ -18,9 +18,9 @@ export function NavBar({ locale }: { locale: string }) {
                     {/* Logo */}
                     <Link
                         href={`/${locale}`}
-                        className="flex-shrink-0 flex items-center gap-2 cursor-pointer"
+                        className="shrink-0 flex items-center gap-2 cursor-pointer"
                     >
-                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-on-primary shadow-ambient bg-gradient-to-br from-primary to-primary-container">
+                        <div className="w-10 h-10 rounded-xl flex items-center justify-center text-on-primary shadow-ambient bg-linear-to-br from-primary to-primary-container">
                             <Users size={20} />
                         </div>
                         <span className="text-2xl font-bold text-on-surface tracking-tight">
@@ -61,17 +61,17 @@ export function NavBar({ locale }: { locale: string }) {
                                 <span className="uppercase text-xs font-bold">{t('nav.locale')}</span>
                             </button>
                             <div className="absolute top-full right-0 mt-2 w-36 rounded-xl shadow-ambient overflow-hidden opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform translate-y-2 group-hover:translate-y-0 bg-surface-container-lowest ghost-border">
-                                <a href="/is" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇮🇸 Íslenska</a>
-                                <a href="/en" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇬🇧 English</a>
-                                <a href="/pl" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇵🇱 Polski</a>
-                                <a href="/lt" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇱🇹 Lietuvių</a>
+                                <Link href="/is" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇮🇸 Íslenska</Link>
+                                <Link href="/en" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇬🇧 English</Link>
+                                <Link href="/pl" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇵🇱 Polski</Link>
+                                <Link href="/lt" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇱🇹 Lietuvių</Link>
                             </div>
                         </div>
 
                         {user ? (
                             <Link
                                 href={`/${locale}/dashboard`}
-                                className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                                className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                             >
                                 Mælaborð
                             </Link>
@@ -85,7 +85,7 @@ export function NavBar({ locale }: { locale: string }) {
                                 </Link>
                                 <Link
                                     href={`/${locale}/onboarding`}
-                                    className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                                    className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                                 >
                                     {t('hero.cta_primary')}
                                 </Link>
@@ -145,7 +145,7 @@ export function NavBar({ locale }: { locale: string }) {
                         {user ? (
                             <Link
                                 href={`/${locale}/dashboard`}
-                                className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container"
+                                className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container"
                                 onClick={() => setIsOpen(false)}
                             >
                                 Mælaborð
@@ -161,7 +161,7 @@ export function NavBar({ locale }: { locale: string }) {
                                 </Link>
                                 <Link
                                     href={`/${locale}/onboarding`}
-                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container"
+                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container"
                                     onClick={() => setIsOpen(false)}
                                 >
                                     {t('hero.cta_primary')}

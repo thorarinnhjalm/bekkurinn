@@ -41,13 +41,8 @@ export class ErrorBoundary extends Component<Props, State> {
     }
 
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-        // Log error to console (in production, you might send to error tracking service)
+        // Vercel captures all console.error calls in production automatically
         console.error('ErrorBoundary caught an error:', error, errorInfo);
-
-        // TODO: Send to error tracking service (Sentry, etc)
-        // if (process.env.NODE_ENV === 'production') {
-        //     Sentry.captureException(error, { extra: errorInfo });
-        // }
     }
 
     handleReset = () => {

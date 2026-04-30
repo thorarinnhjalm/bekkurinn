@@ -97,7 +97,7 @@ function FeatureCard({
 }) {
     const toneClasses: Record<Tone, string> = {
         default: 'bg-surface-container-lowest text-on-surface',
-        primary: 'bg-gradient-to-br from-primary to-primary-container text-on-primary',
+        primary: 'bg-linear-to-br from-primary to-primary-container text-on-primary',
         tertiary: 'bg-tertiary-fixed text-on-tertiary-fixed',
     };
 

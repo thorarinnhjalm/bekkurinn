@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Loader2, Calendar, Trash2 } from 'lucide-react';
-import type { Task, TaskVolunteer } from '@/types';
+import { X, Loader2, Trash2 } from 'lucide-react';
+import type { Task } from '@/types';
+import { Timestamp } from 'firebase/firestore';
 import { useUnclaimTaskSlot } from '@/hooks/useFirestore';
 
 interface EditTaskModalProps {
@@ -41,11 +42,11 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
             await onSave(task.id, {
                 title: formData.title,
                 description: formData.description,
-                date: finalDate as any,
+                date: Timestamp.fromDate(finalDate),
                 slotsTotal: formData.slotsTotal,
                 volunteerReminderHours: formData.slotsTotal > 0 ? formData.volunteerReminderHours : undefined,
                 isAllDay: formData.isAllDay,
-                scope: formData.scope as any
+                scope: formData.scope as 'class' | 'school'
             });
             onClose();
         } catch (error) {
@@ -69,7 +70,7 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
     return (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
             <div className="bg-surface-container-lowest rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-2xl scale-100 animate-in zoom-in-95 duration-300 relative overflow-hidden">
-                <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-nordic-blue to-purple-600 left-0" />
+                <div className="absolute top-0 w-full h-2 bg-linear-to-r from-nordic-blue to-purple-600 left-0" />
 
                 <div className="flex items-center justify-between">
                     <h2 className="text-2xl font-black text-on-surface tracking-tight">Breyta verkefni</h2>
@@ -220,7 +221,7 @@ export function EditTaskModal({ task, isOpen, onClose, onSave, isSchoolAdmin }: 
                     <button
                         onClick={handleSave}
                         disabled={isSaving || !formData.title || !formData.date}
-                        className="flex-1 py-3 rounded-xl font-bold text-white bg-gradient-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                        className="flex-1 py-3 rounded-xl font-bold text-white bg-linear-to-br from-nordic-blue to-nordic-blue-dark shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
                     >
                         {isSaving && <Loader2 className="animate-spin" size={18} />}
                         Vista breytingar

@@ -16,12 +16,12 @@ export default function TestimonialsTab() {
         loadTestimonials();
     }, []);
 
-    const loadTestimonials = async () => {
+    async function loadTestimonials() {
         setLoading(true);
         const data = await getAllTestimonials();
         setTestimonials(data);
         setLoading(false);
-    };
+    }
 
     const handleApprove = async (id: string) => {
         if (!user) return;
@@ -160,7 +160,7 @@ function TestimonialCard({ testimonial, onApprove, onReject, onDelete }: {
                     </div>
 
                     {/* Text */}
-                    <p className="text-on-surface mb-3">"{testimonial.text}"</p>
+                    <p className="text-on-surface mb-3">&quot;{testimonial.text}&quot;</p>
 
                     {/* Author */}
                     <div className="flex items-center gap-2 text-sm text-on-surface-variant">

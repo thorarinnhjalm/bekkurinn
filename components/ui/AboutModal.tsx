@@ -22,7 +22,7 @@ export function AboutModal({ isOpen, onClose }: AboutModalProps) {
             {/* Modal */}
             <div className="relative w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200 flex flex-col max-h-[90vh]">
                 {/* Header */}
-                <div className="bg-primary p-6 text-white relative overflow-hidden flex-shrink-0">
+                <div className="bg-primary p-6 text-white relative overflow-hidden shrink-0">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-surface-container-lowest/10 rounded-full translate-x-10 -translate-y-10" />
 
                     <button

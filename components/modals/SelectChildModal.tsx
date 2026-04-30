@@ -4,12 +4,12 @@ import { Student } from '@/types';
 interface SelectChildModalProps {
     isOpen: boolean;
     onClose: () => void;
-    children: Student[];
+    students: Student[];
     onSelect: (studentId: string, studentName: string) => void;
     title?: string;
 }
 
-export function SelectChildModal({ isOpen, onClose, children, onSelect, title }: SelectChildModalProps) {
+export function SelectChildModal({ isOpen, onClose, students, onSelect, title }: SelectChildModalProps) {
     if (!isOpen) return null;
 
     return (
@@ -29,7 +29,7 @@ export function SelectChildModal({ isOpen, onClose, children, onSelect, title }:
                 </p>
 
                 <div className="space-y-3">
-                    {children.map(child => (
+                    {students.map(child => (
                         <button
                             key={child.id}
                             onClick={() => onSelect(child.id, child.name)}

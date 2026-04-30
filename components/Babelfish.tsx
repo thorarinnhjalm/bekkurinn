@@ -1,6 +1,5 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { Languages, Info, Loader2 } from 'lucide-react';
 import { useQuery } from '@tanstack/react-query';
 
@@ -18,10 +17,6 @@ const DISCLAIMERS: Record<string, string> = {
 };
 
 export function Babelfish({ text, originalLanguage = 'is', targetLanguage, className }: BabelfishProps) {
-    // If viewing in original language, don't show translation
-    // We treat 'is' as default if not specified
-    if (originalLanguage === targetLanguage || !text) return null;
-
     const { data: translation, isLoading, error } = useQuery({
         queryKey: ['translate', text, targetLanguage],
         queryFn: async () => {

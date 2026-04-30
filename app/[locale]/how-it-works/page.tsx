@@ -81,7 +81,7 @@ export default async function HowItWorksPage({ params }: PageProps) {
     return (
         <div className="min-h-screen bg-surface">
             {/* Header */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
+            <div className="bg-linear-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
                 <div className="max-w-4xl mx-auto space-y-6">
                     <Link
                         href={`/${locale}/login`}
@@ -221,7 +221,7 @@ export default async function HowItWorksPage({ params }: PageProps) {
             </div>
 
             {/* CTA Section */}
-            <div className="bg-gradient-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
+            <div className="bg-linear-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
                 <div className="max-w-2xl mx-auto text-center space-y-6">
                     <h2 className="text-3xl font-bold">
                         Tilbúin/n að byrja?

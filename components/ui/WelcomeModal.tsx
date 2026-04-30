@@ -59,7 +59,7 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                 {/* Step 1: Welcome */}
                 {step === 1 && (
                     <div className="text-center space-y-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                        <div className="w-16 h-16 bg-linear-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
                             <Sparkles className="text-white" size={32} />
                         </div>
                         <h2 className="text-3xl font-bold text-on-surface">
@@ -105,7 +105,7 @@ export function WelcomeModal({ onClose }: WelcomeModalProps) {
                 {/* Step 3: Ready to Go */}
                 {step === 3 && (
                     <div className="text-center space-y-4">
-                        <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
+                        <div className="w-16 h-16 bg-linear-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto shadow-lg">
                             <CheckCircle2 className="text-white" size={32} />
                         </div>
                         <h2 className="text-3xl font-bold text-on-surface">

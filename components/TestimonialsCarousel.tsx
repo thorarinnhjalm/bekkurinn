@@ -57,7 +57,7 @@ export function TestimonialsCarousel({ maxCount = 5 }: TestimonialsCarouselProps
     const current = testimonials[currentIndex];
 
     return (
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-primary/20 p-6 space-y-4 relative overflow-hidden">
+        <div className="bg-linear-to-br from-blue-50 to-indigo-50 rounded-2xl shadow-sm border border-primary/20 p-6 space-y-4 relative overflow-hidden">
             {/* Decorative quote */}
             <Quote
                 size={80}
@@ -91,7 +91,7 @@ export function TestimonialsCarousel({ maxCount = 5 }: TestimonialsCarouselProps
 
                     {/* Quote */}
                     <p className="text-on-surface text-center text-sm italic leading-relaxed">
-                        "{current.text}"
+                        &ldquo;{current.text}&rdquo;
                     </p>
 
                     {/* Author */}

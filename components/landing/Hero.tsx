@@ -42,7 +42,7 @@ export function Hero({ locale }: { locale: string }) {
 
                 <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-8 leading-[1.05] text-center text-on-surface">
                     {t('hero.title_start')}{' '}
-                    <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-primary to-primary-container bg-clip-text text-transparent">
                         {t('hero.title_highlight')}
                     </span>
                 </h1>
@@ -56,7 +56,7 @@ export function Hero({ locale }: { locale: string }) {
                 <div className="flex flex-col items-center gap-4">
                     <Link
                         href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 active:translate-y-0 bg-gradient-to-r from-primary to-primary-container"
+                        className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 active:translate-y-0 bg-linear-to-r from-primary to-primary-container"
                     >
                         {t('hero.cta_primary')} <ArrowRight size={20} />
                     </Link>

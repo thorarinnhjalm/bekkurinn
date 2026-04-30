@@ -141,7 +141,7 @@ export function AddressAutocomplete({ onSelect, defaultValue = '', placeholder =
                             onClick={() => handleSelect(addr)}
                             className="w-full text-left px-4 py-3 hover:bg-surface flex items-start gap-3 border-b last:border-0 transition-colors"
                         >
-                            <MapPin className="text-on-surface-variant flex-shrink-0 mt-0.5" size={16} />
+                            <MapPin className="text-on-surface-variant shrink-0 mt-0.5" size={16} />
                             <div>
                                 <p className="font-medium text-on-surface">{addr.fullAddress}</p>
                                 <p className="text-sm text-on-surface-variant">{addr.zip} {addr.city}</p>

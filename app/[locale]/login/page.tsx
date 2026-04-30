@@ -287,19 +287,19 @@ export default function LoginPage() {
                                 Facebook hópar
                             </div>
                             <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <X size={16} className="text-red-400 shrink-0" />
                                 <span>Upplýsingar týnast í straumi</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <X size={16} className="text-red-400 shrink-0" />
                                 <span>Erfitt að finna símanúmer</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <X size={16} className="text-red-400 shrink-0" />
                                 <span>Engin afmælisáminnning</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-500">
-                                <X size={16} className="text-red-400 flex-shrink-0" />
+                                <X size={16} className="text-red-400 shrink-0" />
                                 <span>Auglýsingar og truflun</span>
                             </div>
                         </div>
@@ -308,19 +308,19 @@ export default function LoginPage() {
                                 Bekkurinn
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <Check size={16} className="text-green-500 shrink-0" />
                                 <span>Allt skipulagt á einum stað</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <Check size={16} className="text-green-500 shrink-0" />
                                 <span>Bekkjarlisti með símum</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <Check size={16} className="text-green-500 shrink-0" />
                                 <span>Sjálfvirk afmælisáminnning</span>
                             </div>
                             <div className="flex items-center gap-2 text-gray-700">
-                                <Check size={16} className="text-green-500 flex-shrink-0" />
+                                <Check size={16} className="text-green-500 shrink-0" />
                                 <span>Engar auglýsingar, aldrei</span>
                             </div>
                         </div>

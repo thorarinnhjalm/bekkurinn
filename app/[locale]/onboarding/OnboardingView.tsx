@@ -893,7 +893,7 @@ export default function OnboardingView() {
 
                             {user && (
                                 <div className="bg-surface-container-low p-3 rounded-lg text-xs text-primary flex gap-2 items-start text-left">
-                                    <Globe size={14} className="mt-0.5 flex-shrink-0" />
+                                    <Globe size={14} className="mt-0.5 shrink-0" />
                                     <span>
                                         Ertu að leita að kóðanum þínum? <br />
                                         <a href={`/${pathname.split('/')[1] || 'is'}/dashboard`} className="underline font-bold hover:text-primary">

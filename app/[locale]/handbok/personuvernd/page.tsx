@@ -67,7 +67,7 @@ export default function PrivacyPage() {
 function FeatureRow({ text }: { text: string }) {
     return (
         <div className="flex items-center gap-3 text-on-surface font-medium">
-            <CheckCircle size={18} className="text-primary flex-shrink-0" />
+            <CheckCircle size={18} className="text-primary shrink-0" />
             <span>{text}</span>
         </div>
     );

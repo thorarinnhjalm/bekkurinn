@@ -28,12 +28,8 @@ export const logger = {
      * Error logs (always logged, can be sent to monitoring service)
      */
     error: (message: string, error?: Error | unknown) => {
+        // Vercel captures all console.error calls in production automatically
         console.error(message, error);
-
-        // TODO: Send to error tracking service in production
-        // if (!isDevelopment && typeof window !== 'undefined') {
-        //     Sentry.captureException(error, { extra: { message } });
-        // }
     },
 };
 

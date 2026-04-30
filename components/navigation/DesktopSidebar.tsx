@@ -4,13 +4,12 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Home, Users, Settings, LogOut, CheckSquare, Megaphone, ShieldCheck, Calendar, Camera } from 'lucide-react';
+import { Home, Users, Settings, LogOut, Megaphone, ShieldCheck, Calendar, Camera } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, query, where, getDocs, limit } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { useClass } from '@/hooks/useFirestore';
-import { locales } from '@/i18n-config';
 
 interface DesktopSidebarProps {
     className?: string;
@@ -156,7 +155,7 @@ export function DesktopSidebar({ className, locale, translations }: DesktopSideb
                             <Icon
                                 size={20}
                                 strokeWidth={isActive ? 2.5 : 2}
-                                className="flex-shrink-0"
+                                className="shrink-0"
                             />
                             <span className="text-sm">{item.label}</span>
                         </Link>

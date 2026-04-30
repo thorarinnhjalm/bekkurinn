@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Upload, X, Loader2, Check } from 'lucide-react';
+import Image from 'next/image';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase/config';
 import { ImageCropper } from './ImageCropper';
@@ -136,10 +137,13 @@ export function ImageUploader({
             <div className="relative">
                 {previewUrl ? (
                     <div className="relative inline-block">
-                        <img
+                        <Image
                             src={previewUrl}
                             alt="Preview"
+                            width={128}
+                            height={128}
                             className="w-32 h-32 object-cover rounded-lg border-2 border-outline-variant/30"
+                            unoptimized
                         />
                         {!isUploading && (
                             <button

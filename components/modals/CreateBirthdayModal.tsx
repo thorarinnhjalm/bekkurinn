@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, Calendar, Clock, MapPin, Users, Check, ChevronDown, ChevronUp, ChevronRight, User } from 'lucide-react';
+import { X, MapPin, Check, ChevronDown, ChevronRight } from 'lucide-react';
 import { useCreateTask, useStudents } from '@/hooks/useFirestore';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { Timestamp } from 'firebase/firestore';
@@ -122,7 +122,6 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
         }
     };
 
-    const studentCount = students?.length || 0;
     const selectedCount = selectedStudentIds.size;
 
     return (
@@ -131,7 +130,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
 
                 {/* Header */}
                 <div className="p-6 border-b border-outline-variant/30 flex justify-between items-center bg-surface-container-lowest relative overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-pink-400 to-purple-400" />
+                    <div className="absolute top-0 left-0 w-full h-1 bg-linear-to-r from-pink-400 to-purple-400" />
                     <div>
                         <h2 className="text-2xl font-black text-on-surface tracking-tight">
                             {step === 1 ? 'Nýtt afmælisboð' : 'Hverjum á að bjóða?'}
@@ -327,7 +326,7 @@ export function CreateBirthdayModal({ isOpen, onClose, classId, schoolId }: Crea
                         <button
                             onClick={handleSubmit}
                             disabled={selectedCount === 0}
-                            className="flex-1 bg-gradient-to-r from-nordic-blue to-blue-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:scale-100"
+                            className="flex-1 bg-linear-to-r from-nordic-blue to-blue-600 text-white py-3 rounded-xl font-bold shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all disabled:opacity-50 disabled:scale-100"
                         >
                             Senda boðskort ({selectedCount})
                         </button>

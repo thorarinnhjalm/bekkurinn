@@ -9,7 +9,7 @@ export default async function HandbookIndex({ params }: { params: Promise<{ loca
             <div className="text-center mb-16">
                 <h1 className="text-4xl md:text-5xl font-black text-on-surface mb-6 tracking-tight">
                     Handbók{' '}
-                    <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-primary to-primary-container bg-clip-text text-transparent">
                         Bekkjarfulltrúans
                     </span>
                 </h1>

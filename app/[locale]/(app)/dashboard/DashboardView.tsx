@@ -55,6 +55,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
     useEffect(() => {
         if (userClasses && userClasses.length > 0 && !selectedClassId) {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setSelectedClassId(userClasses[0].id);
         }
     }, [userClasses, selectedClassId]);
@@ -87,6 +88,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
 
     useEffect(() => {
         if (searchParams.get('welcome') === 'true') {
+            // eslint-disable-next-line react-hooks/set-state-in-effect
             setShowWizard(true);
         }
     }, [searchParams]);
@@ -188,7 +190,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </p>
                     <button
                         onClick={() => window.location.reload()}
-                        className="w-full py-3 rounded-full font-bold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                        className="w-full py-3 rounded-full font-bold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                     >
                         Endurhlaða síðu
                     </button>
@@ -219,7 +221,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                 <div className="bg-surface-container-lowest p-6 rounded-2xl shadow-ambient w-full max-w-md">
                     <Link
                         href={`/${locale}/onboarding?step=join${classData?.joinCode ? `&code=${classData.joinCode}` : ''}`}
-                        className="w-full inline-flex justify-center items-center gap-2 py-4 rounded-full font-bold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                        className="w-full inline-flex justify-center items-center gap-2 py-4 rounded-full font-bold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                     >
                         <UserPlus size={20} />
                         Stofna / Velja Nemanda
@@ -238,7 +240,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
             <header className="flex flex-col md:flex-row items-start md:items-end justify-between gap-6">
                 <div className="space-y-3 max-w-2xl">
                     <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-on-surface leading-tight">
-                        Góðan daginn, <span className="bg-gradient-to-r from-primary to-primary-container bg-clip-text text-transparent">{firstName}</span>
+                        Góðan daginn, <span className="bg-linear-to-r from-primary to-primary-container bg-clip-text text-transparent">{firstName}</span>
                     </h1>
                     <p className="text-lg text-on-surface-variant leading-relaxed">
                         Þú ert að skoða <span className="font-semibold text-on-surface">{displayClassName}</span>. Hér er yfirlit dagsins.
@@ -476,7 +478,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     </section>
 
                     {/* Invite Card - primary gradient */}
-                    <section className="p-6 rounded-3xl shadow-ambient relative overflow-hidden bg-gradient-to-br from-primary to-primary-container text-on-primary">
+                    <section className="p-6 rounded-3xl shadow-ambient relative overflow-hidden bg-linear-to-br from-primary to-primary-container text-on-primary">
                         <div className="relative z-10 space-y-4">
                             <div className="w-11 h-11 bg-on-primary/15 rounded-2xl flex items-center justify-center">
                                 <UserPlus size={22} className="text-on-primary" />
@@ -513,7 +515,7 @@ export default function DashboardView({ translations }: DashboardViewProps) {
                     {isAdmin && (
                         <Link
                             href={`/${locale}/settings`}
-                            className="w-full flex items-center justify-center gap-2 py-3 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                            className="w-full flex items-center justify-center gap-2 py-3 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                         >
                             <Settings size={18} />
                             Stjórna bekk

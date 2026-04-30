@@ -17,7 +17,7 @@ export default function BekkjarsattmaliLandingPage() {
             <main>
                 {/* Hero Section */}
                 <section className="relative pt-32 pb-20 overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-b from-rose-50 to-white -z-10" />
+                    <div className="absolute inset-0 bg-linear-to-b from-rose-50 to-white -z-10" />
                     <div className="container mx-auto px-4 text-center">
                         <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-container/70 text-on-secondary-container text-sm font-bold uppercase tracking-wide mb-6 animate-fade-in-up">
                             <Vote size={16} />

@@ -150,10 +150,11 @@ export default function TasksPage() {
         return true;
     });
 
+    const [now] = useState(() => Date.now());
+
     const sortedEvents = [...filteredTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
-        const now = Date.now();
         const aUpcoming = aTime > now;
         const bUpcoming = bTime > now;
         if (aUpcoming && !bUpcoming) return -1;
@@ -177,7 +178,7 @@ export default function TasksPage() {
                     {(isAdmin || isSchoolAdmin) && (
                         <button
                             onClick={() => setIsCreating(true)}
-                            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                         >
                             <Plus size={18} />
                             {t('new_event')}
@@ -218,7 +219,7 @@ export default function TasksPage() {
             {/* Translation Notice (non-Icelandic) */}
             {locale !== 'is' && (
                 <div className="max-w-4xl mx-auto p-4 bg-surface-container-low rounded-2xl flex items-start gap-3 ghost-border">
-                    <Info size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <Info size={16} className="text-primary mt-0.5 shrink-0" />
                     <p className="text-xs text-on-surface-variant leading-relaxed italic">
                         <strong className="text-on-surface">Translation Notice:</strong> Task descriptions are automatically translated into your language. Original text is preserved for accuracy.
                     </p>
@@ -378,7 +379,7 @@ export default function TasksPage() {
                                                 </div>
                                                 <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
                                                     <div
-                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-primary' : 'bg-gradient-to-r from-primary to-primary-container'}`}
+                                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-primary' : 'bg-linear-to-r from-primary to-primary-container'}`}
                                                         style={{ width: `${(task.slotsFilled / task.slotsTotal) * 100}%` }}
                                                     />
                                                 </div>
@@ -389,7 +390,7 @@ export default function TasksPage() {
                                                 disabled={isFull || !isTaskUpcoming}
                                                 className={`px-6 py-2.5 rounded-full font-semibold text-sm transition-all ${isFull
                                                     ? 'bg-primary-container/15 text-primary cursor-default'
-                                                    : 'text-on-primary shadow-ambient hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container'
+                                                    : 'text-on-primary shadow-ambient hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container'
                                                     }`}
                                             >
                                                 {isFull ? t('full') : t('sign_up')}
@@ -430,7 +431,7 @@ export default function TasksPage() {
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
                     <div className="bg-surface-container-lowest rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-ambient scale-100 animate-in zoom-in-95 duration-300 relative overflow-hidden">
-                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-primary to-primary-container left-0" />
+                        <div className="absolute top-0 w-full h-2 bg-linear-to-r from-primary to-primary-container left-0" />
 
                         <div className="text-center">
                             <div className="w-14 h-14 bg-primary-container/15 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary shadow-ambient">
@@ -574,7 +575,7 @@ export default function TasksPage() {
                                     setIsCreating(false);
                                     setCreateTitle(''); setCreateDesc(''); setScope('class'); setCreateReminderHours(24);
                                 }}
-                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-linear-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('publish')}
                             </button>
@@ -607,7 +608,7 @@ export default function TasksPage() {
             <SelectChildModal
                 isOpen={!!taskToVolunteer}
                 onClose={() => setTaskToVolunteer(null)}
-                children={myStudents}
+                students={myStudents}
                 onSelect={(sid, sname) => confirmVolunteer(sid, sname)}
             />
         </div>

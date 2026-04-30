@@ -43,11 +43,11 @@ export default function RolePage() {
             <div className="bg-tertiary-fixed/50 rounded-2xl p-6 not-prose mb-8">
                 <ul className="space-y-4">
                     <li className="flex items-start gap-3">
-                        <AlertTriangle className="text-on-tertiary-fixed flex-shrink-0 mt-1" size={20} />
+                        <AlertTriangle className="text-on-tertiary-fixed shrink-0 mt-1" size={20} />
                         <span className="text-on-tertiary-fixed"><strong>Leysa úr einelti:</strong> Slík mál eiga alltaf að fara beint til umsjónarkennara eða stjórnenda skóla.</span>
                     </li>
                     <li className="flex items-start gap-3">
-                        <AlertTriangle className="text-on-tertiary-fixed flex-shrink-0 mt-1" size={20} />
+                        <AlertTriangle className="text-on-tertiary-fixed shrink-0 mt-1" size={20} />
                         <span className="text-on-tertiary-fixed"><strong>Safna skyldugjöldum:</strong> Það er ólöglegt að krefja foreldra um gjöld. Öll framlög í bekkjarsjóði verða að vera frjáls.</span>
                     </li>
                 </ul>

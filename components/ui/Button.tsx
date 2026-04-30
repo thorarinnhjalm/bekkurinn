@@ -15,7 +15,7 @@ const base =
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-full shadow-ambient hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0',
+    'bg-linear-to-r from-primary to-primary-container text-on-primary rounded-full shadow-ambient hover:opacity-90 hover:-translate-y-0.5 active:translate-y-0',
   secondary:
     'bg-secondary-container text-on-secondary-container rounded-full hover:opacity-90',
   tertiary:

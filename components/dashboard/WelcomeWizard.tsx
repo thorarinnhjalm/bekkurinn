@@ -1,6 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Users, Calendar, Megaphone, X, ChevronRight, Check } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Users, Calendar, Megaphone, ChevronRight, Check } from 'lucide-react';
+import { useState } from 'react';
 
 interface WelcomeWizardProps {
     isOpen: boolean;
@@ -108,7 +108,7 @@ export default function WelcomeWizard({ isOpen, onClose }: WelcomeWizardProps) {
                             </button>
                             <button
                                 onClick={handleNext}
-                                className="flex-[2] py-3 bg-primary hover:bg-primary-container text-white font-semibold rounded-xl shadow-md shadow-blue-900/10 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
+                                className="flex-2 py-3 bg-primary hover:bg-primary-container text-white font-semibold rounded-xl shadow-md shadow-blue-900/10 flex items-center justify-center gap-2 transition-all active:scale-[0.98]"
                             >
                                 {isLastStep ? (
                                     <>

@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useAuth } from '@/components/providers/AuthProvider';
-import { useUserClass, useAgreement, useAgreementVotes, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement, useAgreementSignatures, useSignAgreement } from '@/hooks/useFirestore';
-import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool, Settings, PartyPopper, Smartphone, Plus, X, Save, Trash2, Edit2 } from 'lucide-react';
+import { useUserClass, useAgreement, useMyVote, useCastVote, useUpdateAgreement, useCreateAgreement, useDeleteAgreement, useAgreementSignatures, useSignAgreement } from '@/hooks/useFirestore';
+import { Loader2, Lock, Vote, CheckCircle2, ShieldCheck, PenTool, Settings, PartyPopper, Smartphone, Plus, X, Trash2 } from 'lucide-react';
 import { VotingCard } from '@/components/agreement/VotingCard';
 import { AgreementPoster } from '@/components/agreement/AgreementPoster';
-import { Agreement, AgreementItem, AgreementSection } from '@/types';
+import { AgreementItem, AgreementSection } from '@/types';
 import { Timestamp } from 'firebase/firestore';
 import { SCHOOLS } from '@/constants/schools';
 
@@ -19,7 +19,7 @@ export default function AgreementPage() {
 
     const { data: agreement, isLoading } = useAgreement(activeClass?.id || null);
     const { data: myVote } = useMyVote(agreement?.id, user?.uid);
-    const { data: signatures, isLoading: signaturesLoading } = useAgreementSignatures(agreement?.id);
+    const { data: signatures } = useAgreementSignatures(agreement?.id);
 
     // Mutations
     const castVoteMutation = useCastVote();
@@ -35,7 +35,7 @@ export default function AgreementPage() {
 
     const renderText = (key: string) => {
         const cleaned = cleanKey(key);
-        const translated = t(cleaned as any);
+        const translated = t(cleaned as Parameters<typeof t>[0]);
         return translated.startsWith('agreement.') ? cleaned : translated;
     };
 
@@ -48,12 +48,12 @@ export default function AgreementPage() {
         if (!agreement) return;
 
         try {
-            const newSections = agreement.sections.map((s: any) => {
+            const newSections = agreement.sections.map((s: AgreementSection) => {
                 if (s.id === sectionId) {
-                    const itemExists = s.items.find((i: any) => i.id === item.id);
+                    const itemExists = s.items.find((i: AgreementItem) => i.id === item.id);
                     let newItems;
                     if (itemExists) {
-                        newItems = s.items.map((i: any) => i.id === item.id ? item : i);
+                        newItems = s.items.map((i: AgreementItem) => i.id === item.id ? item : i);
                     } else {
                         newItems = [...s.items, item];
                     }
@@ -77,9 +77,9 @@ export default function AgreementPage() {
         if (!agreement || !confirm('Ertu viss um að þú viljir eyða þessari spurningu?')) return;
 
         try {
-            const newSections = agreement.sections.map((s: any) => {
+            const newSections = agreement.sections.map((s: AgreementSection) => {
                 if (s.id === sectionId) {
-                    return { ...s, items: s.items.filter((i: any) => i.id !== itemId) };
+                    return { ...s, items: s.items.filter((i: AgreementItem) => i.id !== itemId) };
                 }
                 return s;
             });
@@ -98,7 +98,7 @@ export default function AgreementPage() {
         if (!agreement) return;
 
         try {
-            const newSections = agreement.sections.map((s: any) => {
+            const newSections = agreement.sections.map((s: AgreementSection) => {
                 if (s.id === sectionId) {
                     return { ...s, titleKey: title, descriptionKey: desc };
                 }
@@ -130,7 +130,7 @@ export default function AgreementPage() {
 
         const isKopavogur = activeClass.schoolId && SCHOOLS.some(s => s.id === activeClass.schoolId);
 
-        const sections: any[] = [];
+        const sections: AgreementSection[] = [];
 
         if (isKopavogur) {
             sections.push({
@@ -220,9 +220,9 @@ export default function AgreementPage() {
             }
         );
 
-        const newAgreement: any = {
+        const newAgreement = {
             classId: activeClass.id,
-            status: 'draft',
+            status: 'draft' as const,
             createdBy: user.uid,
             sections
         };
@@ -267,7 +267,7 @@ export default function AgreementPage() {
                 {isAdmin ? (
                     <button
                         onClick={handleInitialize}
-                        className="inline-flex items-center gap-2 px-8 py-4 text-lg rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all mx-auto"
+                        className="inline-flex items-center gap-2 px-8 py-4 text-lg rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all mx-auto"
                     >
                         <Plus size={24} />
                         Stofna nýjan sáttmála
@@ -281,14 +281,14 @@ export default function AgreementPage() {
 
     // 1. VOTING PHASE
     if (agreement.status === 'voting') {
-        const sections: AgreementSection[] = agreement.sections.map((s: any) => ({
+        const sections: AgreementSection[] = agreement.sections.map((s: AgreementSection) => ({
             ...s,
             titleKey: cleanKey(s.titleKey),
             descriptionKey: cleanKey(s.descriptionKey),
-            items: s.items.map((i: any) => ({
+            items: s.items.map((i: AgreementItem) => ({
                 ...i,
                 questionKey: cleanKey(i.questionKey),
-                options: i.options.map((o: any) => ({ ...o, labelKey: cleanKey(o.labelKey) }))
+                options: i.options.map((o) => ({ ...o, labelKey: cleanKey(o.labelKey) }))
             }))
         }));
 
@@ -326,7 +326,7 @@ export default function AgreementPage() {
                 <div className="space-y-8">
                     {sections.map(section => (
                         <div key={section.id}>
-                            <h2 className="text-xl font-bold text-on-surface mb-4 px-1">{t(section.titleKey as any)}</h2>
+                            <h2 className="text-xl font-bold text-on-surface mb-4 px-1">{t(section.titleKey as Parameters<typeof t>[0])}</h2>
                             {section.items.map(item => (
                                 <VotingCard
                                     key={item.id}
@@ -380,7 +380,7 @@ export default function AgreementPage() {
                             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
                                 <button
                                     onClick={handleStartVoting}
-                                    className="px-8 py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-black rounded-full transition-all shadow-ambient hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
+                                    className="px-8 py-4 bg-linear-to-r from-primary to-primary-container text-on-primary font-black rounded-full transition-all shadow-ambient hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-2"
                                 >
                                     <Vote size={20} />
                                     Byrja kosningu
@@ -411,7 +411,7 @@ export default function AgreementPage() {
                             </div>
 
                             <div className="space-y-8">
-                                {agreement.sections.map((section: any) => (
+                                {agreement.sections.map((section: AgreementSection) => (
                                     <div key={section.id} className="bg-surface-container-lowest rounded-3xl shadow-ambient overflow-hidden">
                                         <div className="p-6 md:p-8 bg-surface-container-low border-b border-outline-variant/30 flex items-center justify-between">
                                             <div className="flex items-center gap-4">
@@ -436,7 +436,7 @@ export default function AgreementPage() {
                                         </div>
 
                                         <div className="p-6 md:p-8 space-y-8">
-                                            {section.items.map((item: any) => {
+                                            {section.items.map((item: AgreementItem) => {
                                                 const questionKeyRaw = item.questionKey || `sections.${section.id}.${item.id}_q`;
 
                                                 return (
@@ -459,7 +459,7 @@ export default function AgreementPage() {
                                                         </div>
 
                                                         <div className="flex flex-wrap gap-2">
-                                                            {item.options.map((opt: any) => {
+                                                            {item.options.map((opt) => {
                                                                 const labelKeyRaw = opt.labelKey || `options.${opt.value}`;
 
                                                                 return (
@@ -513,7 +513,7 @@ export default function AgreementPage() {
                         {/* Demo/Preview Area */}
                         {
                             isAdmin && (
-                                <div className="bg-gradient-to-br from-primary-container/15 to-surface-container-lowest rounded-3xl shadow-ambient p-10">
+                                <div className="bg-linear-to-br from-primary-container/15 to-surface-container-lowest rounded-3xl shadow-ambient p-10">
                                     <div className="text-center max-w-md mx-auto space-y-4">
                                         <div className="w-16 h-16 bg-surface-container-lowest rounded-2xl shadow-ambient flex items-center justify-center mx-auto text-primary">
                                             <ShieldCheck size={32} />
@@ -525,9 +525,9 @@ export default function AgreementPage() {
                                                 if (!confirm('Þetta býr til gervi-niðurstöður fyrir sáttmálann til að sýna hvernig þetta lítur út. Eldri drögum verður eytt.')) return;
                                                 if (agreement.id) await deleteAgreementMutation.mutateAsync(agreement.id);
 
-                                                const demoData: any = {
+                                                const demoData = {
                                                     classId: activeClass.id,
-                                                    status: 'published',
+                                                    status: 'published' as const,
                                                     createdBy: user!.uid,
                                                     sections: [
                                                         {
@@ -538,7 +538,7 @@ export default function AgreementPage() {
                                                             items: [
                                                                 {
                                                                     id: 'gift_amount',
-                                                                    type: 'radio',
+                                                                    type: 'radio' as const,
                                                                     questionKey: 'sections.birthdays.gift_amount_q',
                                                                     winningValue: 1500,
                                                                     options: [
@@ -551,7 +551,7 @@ export default function AgreementPage() {
                                                                 },
                                                                 {
                                                                     id: 'invites',
-                                                                    type: 'radio',
+                                                                    type: 'radio' as const,
                                                                     questionKey: 'sections.birthdays.invitation_rule_q',
                                                                     winningValue: 'gender_split',
                                                                     options: [
@@ -570,7 +570,7 @@ export default function AgreementPage() {
                                                             items: [
                                                                 {
                                                                     id: 'social_age',
-                                                                    type: 'radio',
+                                                                    type: 'radio' as const,
                                                                     questionKey: 'sections.social.social_age_q',
                                                                     winningValue: 'monitored',
                                                                     options: [
@@ -581,7 +581,7 @@ export default function AgreementPage() {
                                                                 },
                                                                 {
                                                                     id: 'gaming_communication',
-                                                                    type: 'radio',
+                                                                    type: 'radio' as const,
                                                                     questionKey: 'Viðmið um tölvuleiki (t.d. Roblox, Fortnite)',
                                                                     winningValue: 'education',
                                                                     options: [
@@ -592,7 +592,7 @@ export default function AgreementPage() {
                                                                 },
                                                                 {
                                                                     id: 'screen_time',
-                                                                    type: 'radio',
+                                                                    type: 'radio' as const,
                                                                     questionKey: 'sections.social.screen_time_q',
                                                                     winningValue: 'balanced',
                                                                     options: [
@@ -608,7 +608,7 @@ export default function AgreementPage() {
                                                 await createAgreementMutation.mutateAsync(demoData);
                                                 window.location.reload();
                                             }}
-                                            className="w-full py-4 bg-gradient-to-r from-primary to-primary-container text-on-primary font-black rounded-full hover:-translate-y-0.5 transition-all shadow-ambient active:scale-95"
+                                            className="w-full py-4 bg-linear-to-r from-primary to-primary-container text-on-primary font-black rounded-full hover:-translate-y-0.5 transition-all shadow-ambient active:scale-95"
                                         >
                                             Sýna Demo (Fylla með gervigögnum)
                                         </button>
@@ -695,7 +695,7 @@ export default function AgreementPage() {
                         <button
                             onClick={handleSign}
                             disabled={signMutation.isPending}
-                            className="bg-gradient-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-full font-bold hover:-translate-y-0.5 transition-all shadow-ambient active:scale-95 disabled:opacity-50"
+                            className="bg-linear-to-r from-primary to-primary-container text-on-primary px-10 py-4 rounded-full font-bold hover:-translate-y-0.5 transition-all shadow-ambient active:scale-95 disabled:opacity-50"
                         >
                             {signMutation.isPending ? 'Vistar...' : t('poster.sign_button')}
                         </button>
@@ -802,7 +802,7 @@ export default function AgreementPage() {
                                 </button>
                                 <button
                                     onClick={() => handleSaveItem(editingItem.sectionId, editingItem.item)}
-                                    className="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-sm rounded-full hover:-translate-y-0.5 transition-all shadow-ambient"
+                                    className="px-6 py-2 bg-linear-to-r from-primary to-primary-container text-on-primary font-bold text-sm rounded-full hover:-translate-y-0.5 transition-all shadow-ambient"
                                 >
                                     Vista Breytingar
                                 </button>
@@ -847,7 +847,7 @@ export default function AgreementPage() {
                             </button>
                             <button
                                 onClick={() => handleSaveSection(editingSection.id, editingSection.titleKey, editingSection.descriptionKey)}
-                                className="px-6 py-2 bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold rounded-full hover:-translate-y-0.5 shadow-ambient transition-all"
+                                className="px-6 py-2 bg-linear-to-r from-primary to-primary-container text-on-primary font-bold rounded-full hover:-translate-y-0.5 shadow-ambient transition-all"
                             >
                                 Vista
                             </button>
