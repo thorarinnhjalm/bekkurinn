@@ -105,6 +105,21 @@ export async function getAllPendingParentLinks(): Promise<ParentLink[]> {
     }
 }
 
+/**
+ * Get ALL parent links, any status (admin only).
+ * Drives the per-user class membership shown in the admin Users tab.
+ */
+export async function getAllParentLinks(): Promise<ParentLink[]> {
+    try {
+        const snapshot = await getDocs(collection(db, 'parentLinks'));
+        return snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id } as ParentLink));
+    } catch (error) {
+        logger.error('Failed to get all parent links', error);
+        // Rethrow instead of returning []: an empty list would make every user look like a drop-off
+        throw new Error('Gat ekki sótt tengingar foreldra');
+    }
+}
+
 // ========================================
 // ANALYTICS
 // ========================================

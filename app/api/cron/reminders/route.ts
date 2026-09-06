@@ -111,7 +111,7 @@ export async function GET(request: Request) {
                         }
                     }
                     
-                    let finalUserIds = new Set<string>();
+                    const finalUserIds = new Set<string>();
                     
                     if (task.type === 'birthday' && task.invitees && task.invitees.length > 0) {
                         const inviteesSet = new Set(task.invitees);

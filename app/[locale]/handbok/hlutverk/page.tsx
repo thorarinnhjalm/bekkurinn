@@ -60,7 +60,7 @@ export default function RolePage() {
             </p>
 
             <blockquote>
-                "Öflugt foreldrastarf skilar sér beint í betri líðan og námsárangri barna."
+                „Öflugt foreldrastarf skilar sér beint í betri líðan og námsárangri barna.“
                 <footer>— Heimili og skóli</footer>
             </blockquote>
 

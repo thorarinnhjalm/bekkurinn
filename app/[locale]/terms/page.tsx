@@ -93,7 +93,7 @@ export default async function TermsOfServicePage({ params }: PageProps) {
                             5. Takmarkanir á ábyrgð
                         </h2>
                         <p className="text-on-surface-variant mb-4">
-                            Þjónustan er veitt „eins og hún er" og við ábyrgðumst ekki að hún verði alltaf tiltæk eða villulaus. Við berum ekki ábyrgð á:
+                            Þjónustan er veitt „eins og hún er“ og við ábyrgðumst ekki að hún verði alltaf tiltæk eða villulaus. Við berum ekki ábyrgð á:
                         </p>
                         <ul className="list-disc pl-6 text-on-surface-variant space-y-2 mb-4">
                             <li>Tapi gagna vegna tæknilegra bilana</li>

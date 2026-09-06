@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { normalizeJoinCode, JOIN_CODE_PATTERN } from '@/lib/joinCode';
 
 /**
  * Validation Schemas for Bekkurinn
@@ -31,11 +32,16 @@ export type OnboardingInput = z.infer<typeof OnboardingSchema>;
 // JOIN CODE
 // ========================================
 
+// Normalize first (case, whitespace, dashes, NFC), then validate the canonical form.
+// Icelandic letters are legal: codes are built from school names (ÁLFH-, KÓPA-, HÖRÐ-…).
 export const JoinCodeSchema = z.string()
-    .min(4, 'Join code too short')
-    .max(30, 'Join code too long')
-    .regex(/^[A-Z0-9-]+$/, 'Join code can only contain uppercase letters, numbers and hyphens')
-    .transform(val => val.toUpperCase().trim());
+    .transform(normalizeJoinCode)
+    .pipe(
+        z.string()
+            .min(4, 'Join code too short')
+            .max(30, 'Join code too long')
+            .regex(JOIN_CODE_PATTERN, 'Join code can only contain letters, numbers and hyphens')
+    );
 
 // ========================================
 // STUDENT
@@ -111,11 +117,7 @@ export const SettingsSchema = z.object({
         .url('Invalid URL')
         .optional()
         .or(z.literal('')), // Allow empty string
-    joinCode: z.string()
-        .min(4, 'Join code too short')
-        .max(30, 'Join code too long')
-        .regex(/^[A-Z0-9-]+$/, 'Join code can only contain uppercase letters, numbers and hyphens')
-        .optional(),
+    joinCode: JoinCodeSchema.optional(),
 });
 
 export type SettingsInput = z.infer<typeof SettingsSchema>;

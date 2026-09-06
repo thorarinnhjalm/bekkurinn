@@ -69,19 +69,36 @@ describe('Validation Schemas', () => {
             }
         });
 
-        it('rejects lowercase letters', () => {
+        it('normalizes lowercase letters to uppercase', () => {
             const result = JoinCodeSchema.safeParse('kopa-4a');
-            expect(result.success).toBe(false);
+            expect(result.success).toBe(true);
+            if (result.success) {
+                expect(result.data).toBe('KOPA-4A');
+            }
         });
 
-        it('rejects trailing whitespace', () => {
+        it('strips trailing whitespace', () => {
             const result = JoinCodeSchema.safeParse('KOPA-4A  ');
-            expect(result.success).toBe(false);
+            expect(result.success).toBe(true);
+            if (result.success) {
+                expect(result.data).toBe('KOPA-4A');
+            }
         });
 
-        it('rejects code with special characters', () => {
+        it('accepts Icelandic letters from school-name prefixes', () => {
+            const result = JoinCodeSchema.safeParse('álfh-3-4821');
+            expect(result.success).toBe(true);
+            if (result.success) {
+                expect(result.data).toBe('ÁLFH-3-4821');
+            }
+        });
+
+        it('drops stray punctuation instead of rejecting the code', () => {
             const result = JoinCodeSchema.safeParse('KOPA@4A');
-            expect(result.success).toBe(false);
+            expect(result.success).toBe(true);
+            if (result.success) {
+                expect(result.data).toBe('KOPA4A');
+            }
         });
 
         it('rejects code that is too short', () => {

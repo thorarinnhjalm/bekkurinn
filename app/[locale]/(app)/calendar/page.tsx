@@ -61,6 +61,8 @@ export default function TasksPage() {
     const [createIsAllDay, setCreateIsAllDay] = useState(false);
     const [scope, setScope] = useState<'class' | 'school'>('class');
     const [filter, setFilter] = useState<'all' | 'rolt' | 'birthday' | 'event'>('all');
+    // Captured once per mount; must stay above the early returns below (rules of hooks)
+    const [now] = useState(() => Date.now());
 
 
     // Redirect
@@ -149,8 +151,6 @@ export default function TasksPage() {
 
         return true;
     });
-
-    const [now] = useState(() => Date.now());
 
     const sortedEvents = [...filteredTasks].sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;

@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { logger } from '@/lib/logger';
+import { normalizeJoinCode } from '@/lib/joinCode';
 import type {
     Class,
     CreateClassInput,
@@ -181,7 +182,7 @@ export async function getClass(classId: string): Promise<Class | null> {
 }
 
 export async function getClassByJoinCode(joinCode: string): Promise<Class | null> {
-    const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode.toUpperCase()));
+    const q = query(collection(db, 'classes'), where('joinCode', '==', normalizeJoinCode(joinCode)));
     const snapshot = await getDocs(q);
     if (snapshot.empty) return null;
     const doc = snapshot.docs[0];

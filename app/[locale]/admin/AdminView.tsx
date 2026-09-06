@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useAuth } from '@/components/providers/AuthProvider';
 import { collection, getDocs, query, orderBy } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { Loader2, School as SchoolIcon, Users, Shield, Copy, ChevronDown, ChevronRight, GraduationCap, Plus, Save, Search, Check, X, Calendar, Trash2, Megaphone } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
 import { createSchool, getAllSchools, updateSchoolAdmins, getUser, searchUsersByEmail, createTask, migrateClassToSchool, deleteTask } from '@/services/firestore';
-import { getAllUsers, searchUsers, getUserClasses, getAllPendingParentLinks, getSystemStats, type SystemStats, deleteSchool } from '@/services/admin';
+import { getAllUsers, searchUsers, getUserClasses, getAllPendingParentLinks, getAllParentLinks, getSystemStats, type SystemStats, deleteSchool } from '@/services/admin';
+import { buildMembershipIndex } from '@/utils/membership';
 import { useSchoolTasks } from '@/hooks/useFirestore';
 import type { School, User, Task, ParentLink } from '@/types';
 import { Timestamp } from 'firebase/firestore';
@@ -57,6 +58,7 @@ export default function AdminView() {
 
     // Approvals State
     const [pendingLinks, setPendingLinks] = useState<ParentLink[]>([]);
+    const [allLinks, setAllLinks] = useState<ParentLink[] | null>(null); // null = not loaded or failed
 
     useEffect(() => {
         if (!loading && user) {
@@ -99,6 +101,16 @@ export default function AdminView() {
                 setUsers(usersData);
                 setStats(statsData);
                 setPendingLinks(pendingLinksData);
+
+                // Membership for the Users tab, loaded separately: if the read is denied (email listed in
+                // NEXT_PUBLIC_ADMIN_EMAILS but not yet synced to system_admins) the column shows "unknown"
+                // instead of every user looking like they have no class.
+                try {
+                    setAllLinks(await getAllParentLinks());
+                } catch (linkError) {
+                    console.error('Could not load parent links for the Users tab:', linkError);
+                    setAllLinks(null);
+                }
             } else {
                 // Filter schools where user is admin
                 const mySchools = allSchools.filter(s => s.admins.includes(user?.uid || ''));
@@ -108,6 +120,7 @@ export default function AdminView() {
                 setUsers([]);
                 setStats(null);
                 setPendingLinks([]);
+                setAllLinks(null);
             }
 
         } catch (error) {
@@ -116,6 +129,9 @@ export default function AdminView() {
             setIsFetching(false);
         }
     };
+
+    // Per-user class membership (admin / approved / pending / none) for the Users tab
+    const membership = useMemo(() => (allLinks ? buildMembershipIndex(classes, allLinks) : null), [classes, allLinks]);
 
     // Group classes by school name for the "Classes" view
     const classesBySchool = classes.reduce((acc, cls) => {
@@ -260,7 +276,7 @@ export default function AdminView() {
 
             {/* CONTENT: USERS */}
             {activeTab === 'users' && (
-                <UsersTab initialUsers={users} />
+                <UsersTab initialUsers={users} membership={membership} />
             )}
 
             {/* CONTENT: APPROVALS */}
