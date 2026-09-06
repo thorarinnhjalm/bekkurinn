@@ -116,6 +116,9 @@ export interface ParentLink {
     studentId: string;
     classId: string;
     status: ParentLinkStatus;
+    role?: 'admin' | 'parent'; // Written by onboarding; firestore.rules treats role == 'admin' as class admin
+    relationship?: string; // e.g. 'Foreldri', 'Class Representative'
+    invitedBy?: string | null; // UID of the parent whose invite link was used
     createdAt: Timestamp;
     approvedAt?: Timestamp;
     approvedBy?: string; // Admin UID

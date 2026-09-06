@@ -3,16 +3,31 @@
 import { useState } from 'react';
 import { Search, Trash2 } from 'lucide-react';
 import { getAllUsers, searchUsers, deleteUser } from '@/services/admin';
+import { Chip, type ChipVariant } from '@/components/ui/Chip';
 import type { User } from '@/types';
+import type { MembershipStatus, UserMembership } from '@/utils/membership';
 
 interface UsersTabProps {
     initialUsers: User[];
+    /** uid → classes the user belongs to; a missing key means "never joined or created a class" */
+    membership?: Map<string, UserMembership[]>;
 }
 
-export default function UsersTab({ initialUsers }: UsersTabProps) {
+const STATUS_LABEL: Record<MembershipStatus, { label: string; variant: ChipVariant }> = {
+    admin: { label: 'Stjórnandi', variant: 'success' },
+    approved: { label: 'Foreldri', variant: 'info' },
+    pending: { label: 'Bíður samþykkis', variant: 'pinned' },
+};
+
+export default function UsersTab({ initialUsers, membership }: UsersTabProps) {
     const [users, setUsers] = useState<User[]>(initialUsers);
     const [userSearch, setUserSearch] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [onlyWithoutClass, setOnlyWithoutClass] = useState(false);
+
+    const membershipFor = (uid: string): UserMembership[] => membership?.get(uid) ?? [];
+    const usersWithoutClass = users.filter(u => membershipFor(u.uid).length === 0);
+    const visibleUsers = onlyWithoutClass ? usersWithoutClass : users;
 
     const handleSearch = async (query: string) => {
         setUserSearch(query);
@@ -76,14 +91,34 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
         alert(`Búið að eyða ${deletedCount} notendum.`);
     };
 
+    const renderMembership = (uid: string) => {
+        const list = membershipFor(uid);
+        if (list.length === 0) {
+            return <Chip variant="danger">Enginn bekkur</Chip>;
+        }
+        return (
+            <ul className="space-y-1.5">
+                {list.map(m => {
+                    const status = STATUS_LABEL[m.status];
+                    return (
+                        <li key={m.classId} className="flex flex-wrap items-center gap-2">
+                            <span className="text-sm text-on-surface">{m.className}</span>
+                            <Chip variant={status.variant}>{status.label}</Chip>
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    };
+
     return (
-        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 max-w-5xl mx-auto">
+        <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 max-w-6xl mx-auto">
             <div className="professional-card p-6">
                 <div className="flex justify-between items-start mb-6">
                     <div>
                         <h3 className="font-bold text-2xl text-on-surface mb-2">Notendastjórnun</h3>
                         <p className="text-on-surface-variant">
-                            Hér sérðu alla notendur í kerfinu. Notaðu leitina til að finna tiltekinn notanda.
+                            Hér sérðu alla notendur í kerfinu og hvaða bekk þeir tilheyra. Notaðu leitina til að finna tiltekinn notanda.
                         </p>
                     </div>
                     <button
@@ -96,7 +131,7 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                 </div>
 
                 {/* Search */}
-                <div className="relative mb-6">
+                <div className="relative mb-4">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant" size={20} />
                     <input
                         type="text"
@@ -112,6 +147,20 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                     )}
                 </div>
 
+                {/* Drop-off filter: users who signed up but never joined or created a class */}
+                <label className="flex items-center gap-3 mb-6 text-sm text-on-surface cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={onlyWithoutClass}
+                        onChange={(e) => setOnlyWithoutClass(e.target.checked)}
+                        className="h-4 w-4 accent-primary"
+                    />
+                    <span>
+                        Sýna aðeins notendur án bekkjar
+                        <span className="ml-2 text-on-surface-variant">({usersWithoutClass.length} af {users.length})</span>
+                    </span>
+                </label>
+
                 {/* User Table */}
                 <div className="overflow-x-auto">
                     <table className="w-full">
@@ -120,17 +169,19 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                                 <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Name</th>
                                 <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Netfang</th>
                                 <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Sími</th>
+                                <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Bekkur</th>
                                 <th className="text-left py-3 px-4 font-bold text-on-surface text-sm uppercase">Stofnað</th>
                                 <th className="text-right py-3 px-4 font-bold text-on-surface text-sm uppercase">Aðgerðir</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {users.map(user => (
-                                <tr key={user.uid} className="border-b border-outline-variant/30 hover:bg-surface transition-colors">
+                            {visibleUsers.map(user => (
+                                <tr key={user.uid} className="border-b border-outline-variant/30 hover:bg-surface transition-colors align-top">
                                     <td className="py-4 px-4 font-semibold text-on-surface">{user.displayName}</td>
                                     <td className="py-4 px-4 text-on-surface-variant font-mono text-sm">{user.email}</td>
                                     <td className="py-4 px-4 text-on-surface-variant">{user.phone}</td>
-                                    <td className="py-4 px-4 text-on-surface-variant text-sm">
+                                    <td className="py-4 px-4">{renderMembership(user.uid)}</td>
+                                    <td className="py-4 px-4 text-on-surface-variant text-sm whitespace-nowrap">
                                         {user.createdAt?.toDate?.().toLocaleDateString('is-IS') || 'N/A'}
                                     </td>
                                     <td className="py-4 px-4 text-right">
@@ -148,16 +199,16 @@ export default function UsersTab({ initialUsers }: UsersTabProps) {
                     </table>
                 </div>
 
-                {users.length === 0 && (
+                {visibleUsers.length === 0 && (
                     <div className="text-center py-12 text-on-surface-variant">
                         <p className="text-lg font-semibold">Engir notendur fundust</p>
-                        <p className="text-sm mt-2">Prófaðu aðra leitarskilyrði</p>
+                        <p className="text-sm mt-2">{onlyWithoutClass ? 'Allir notendur í listanum tilheyra bekk' : 'Prófaðu aðra leitarskilyrði'}</p>
                     </div>
                 )}
 
-                {users.length > 0 && (
+                {visibleUsers.length > 0 && (
                     <div className="mt-4 text-sm text-on-surface-variant">
-                        Sýni {users.length} notend{users.length === 1 ? 'a' : 'ur'}
+                        Sýni {visibleUsers.length} notend{visibleUsers.length === 1 ? 'a' : 'ur'}
                     </div>
                 )}
             </div>
