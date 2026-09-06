@@ -58,7 +58,7 @@ export default function AdminView() {
 
     // Approvals State
     const [pendingLinks, setPendingLinks] = useState<ParentLink[]>([]);
-    const [allLinks, setAllLinks] = useState<ParentLink[]>([]);
+    const [allLinks, setAllLinks] = useState<ParentLink[] | null>(null); // null = not loaded or failed
 
     useEffect(() => {
         if (!loading && user) {
@@ -92,17 +92,25 @@ export default function AdminView() {
                 setSchools(allSchools);
 
                 // Fetch additional admin data
-                const [usersData, statsData, pendingLinksData, allLinksData] = await Promise.all([
+                const [usersData, statsData, pendingLinksData] = await Promise.all([
                     getAllUsers(100),
                     getSystemStats(),
-                    getAllPendingParentLinks(),
-                    getAllParentLinks()
+                    getAllPendingParentLinks()
                 ]);
 
                 setUsers(usersData);
                 setStats(statsData);
                 setPendingLinks(pendingLinksData);
-                setAllLinks(allLinksData);
+
+                // Membership for the Users tab, loaded separately: if the read is denied (email listed in
+                // NEXT_PUBLIC_ADMIN_EMAILS but not yet synced to system_admins) the column shows "unknown"
+                // instead of every user looking like they have no class.
+                try {
+                    setAllLinks(await getAllParentLinks());
+                } catch (linkError) {
+                    console.error('Could not load parent links for the Users tab:', linkError);
+                    setAllLinks(null);
+                }
             } else {
                 // Filter schools where user is admin
                 const mySchools = allSchools.filter(s => s.admins.includes(user?.uid || ''));
@@ -112,7 +120,7 @@ export default function AdminView() {
                 setUsers([]);
                 setStats(null);
                 setPendingLinks([]);
-                setAllLinks([]);
+                setAllLinks(null);
             }
 
         } catch (error) {
@@ -123,7 +131,7 @@ export default function AdminView() {
     };
 
     // Per-user class membership (admin / approved / pending / none) for the Users tab
-    const membership = useMemo(() => buildMembershipIndex(classes, allLinks), [classes, allLinks]);
+    const membership = useMemo(() => (allLinks ? buildMembershipIndex(classes, allLinks) : null), [classes, allLinks]);
 
     // Group classes by school name for the "Classes" view
     const classesBySchool = classes.reduce((acc, cls) => {

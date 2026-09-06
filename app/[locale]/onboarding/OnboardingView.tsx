@@ -57,7 +57,7 @@ function ProgressIndicator({ currentStep, totalSteps, labels }: {
 // (Keep existing logic, just cleaner)
 async function createClassLocal(data: any, userId: string) {
     // Build every part from normalized text so stored codes are canonical (NFC, uppercase, no stray characters)
-    const schoolPrefix = normalizeJoinCode(data.schoolName).substring(0, 4);
+    const schoolPrefix = normalizeJoinCode(data.schoolName).substring(0, 4) || 'BEKK';
     const sectionLetter = normalizeJoinCode(data.section ?? '').substring(0, 1);
     const sectionSuffix = sectionLetter ? `-${sectionLetter}` : '';
     const baseCode = `${schoolPrefix}-${data.grade}${sectionSuffix}`;
@@ -79,6 +79,43 @@ async function createClassLocal(data: any, userId: string) {
 
     return { id: classRef.id, joinCode: uniqueCode, parentTeamCode: adminCode };
 }
+
+type ClassLookup = { classData: any; isAdminCode: boolean; code: string } | null;
+
+/**
+ * Find a class by join code or parent-team (admin) code.
+ * Tries the normalized form first. On a miss it retries the legacy forms (trimmed, and trimmed + uppercased)
+ * because codes stored before normalization existed, or hand-edited in settings, may contain spaces or
+ * punctuation that the normalizer strips. Extra reads happen only on the miss path.
+ */
+async function findClassByCode(rawInput: string): Promise<ClassLookup> {
+    const trimmed = rawInput.trim();
+    const candidates = Array.from(new Set([normalizeJoinCode(rawInput), trimmed.toUpperCase(), trimmed])).filter(Boolean);
+
+    for (const code of candidates) {
+        const parentSnap = await getDocs(query(collection(db, 'classes'), where('joinCode', '==', code)));
+        if (!parentSnap.empty) {
+            const d = parentSnap.docs[0];
+            return { classData: { id: d.id, ...d.data() }, isAdminCode: false, code };
+        }
+        const adminSnap = await getDocs(query(collection(db, 'classes'), where('parentTeamCode', '==', code)));
+        if (!adminSnap.empty) {
+            const d = adminSnap.docs[0];
+            return { classData: { id: d.id, ...d.data() }, isAdminCode: true, code };
+        }
+    }
+    return null;
+}
+
+async function fetchClassStudents(classId: string) {
+    const snap = await getDocs(query(collection(db, 'students'), where('classId', '==', classId)));
+    const list = snap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+    list.sort((a: any, b: any) => a.name.localeCompare(b.name));
+    return list;
+}
+
+const CODE_NOT_FOUND = (code: string) =>
+    `Enginn bekkur fannst með kóðann ${code}. Berðu hann saman við kóðann frá bekkjarfulltrúa, staf fyrir staf.`;
 
 // Calendar helpers
 function parseICS(icsContent: string) {
@@ -212,7 +249,7 @@ export default function OnboardingView() {
     }, []);
 
     // Join Class State
-    const [joinCode, setJoinCode] = useState(searchParams.get('code') || '');
+    const [joinCode, setJoinCode] = useState(normalizeJoinCode(searchParams.get('code')));
     const [checkingCode, setCheckingCode] = useState(false);
     const [foundClass, setFoundClass] = useState<any>(null);
     const [isAdminCode, setIsAdminCode] = useState(false);
@@ -227,42 +264,23 @@ export default function OnboardingView() {
 
     // Auto-verify if code is present in URL
     useEffect(() => {
-        // Codes arrive here from invite links and pasted URLs; normalize before the exact-match query
-        const codeParam = normalizeJoinCode(searchParams.get('code'));
+        // Codes arrive here from invite links and pasted URLs; show the normalized form, look up with legacy fallback
+        const rawParam = searchParams.get('code') || '';
+        const codeParam = normalizeJoinCode(rawParam);
         if (codeParam && !foundClass && !checkingCode && !error) {
             setJoinCode(codeParam);
             // Trigger verification automatically
             const verify = async () => {
                 setCheckingCode(true);
                 try {
-                    const q = query(collection(db, 'classes'), where('joinCode', '==', codeParam));
-                    const snapshot = await getDocs(q);
-                    // Admin check
-                    const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', codeParam));
-                    const snapshotAdmin = await getDocs(qAdmin);
-
-                    if (snapshot.empty && snapshotAdmin.empty) {
-                        setError('Enginn bekkur fannst með þennan kóða.');
-                        setCheckingCode(false);
+                    const result = await findClassByCode(rawParam);
+                    if (!result) {
+                        setError(CODE_NOT_FOUND(codeParam));
                         return;
                     }
-
-                    let classDoc;
-                    if (!snapshot.empty) {
-                        classDoc = snapshot.docs[0];
-                    } else {
-                        classDoc = snapshotAdmin.docs[0];
-                        setIsAdminCode(true);
-                    }
-                    const cData = { id: classDoc.id, ...classDoc.data() };
-                    setFoundClass(cData);
-
-                    // Fetch students
-                    const studentsQ = query(collection(db, 'students'), where('classId', '==', classDoc.id));
-                    const studentsSnap = await getDocs(studentsQ);
-                    const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
-                    studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
-                    setStudents(studentsList);
+                    setIsAdminCode(result.isAdminCode);
+                    setFoundClass(result.classData);
+                    setStudents(await fetchClassStudents(result.classData.id));
                 } catch (e) {
                     console.error(e);
                 } finally {
@@ -338,44 +356,26 @@ export default function OnboardingView() {
 
     const handleVerifyCode = async () => {
         // Stored codes are canonical uppercase; forgive whitespace, dashes and case from pasted input
-        const code = normalizeJoinCode(joinCode);
-        if (!code) return;
+        const rawInput = joinCode;
+        const code = normalizeJoinCode(rawInput);
+        if (!code) {
+            setError('Sláðu inn boðskóðann frá bekkjarfulltrúa.');
+            return;
+        }
         setJoinCode(code);
         setCheckingCode(true);
         setError(null);
         setIsAdminCode(false);
 
         try {
-            const q = query(collection(db, 'classes'), where('joinCode', '==', code));
-            const snapshot = await getDocs(q);
-
-            const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', code));
-            const snapshotAdmin = await getDocs(qAdmin);
-
-            if (snapshot.empty && snapshotAdmin.empty) {
-                setError(`Enginn bekkur fannst með kóðann ${code}. Berðu hann saman við kóðann frá bekkjarfulltrúa, staf fyrir staf.`);
-                setCheckingCode(false);
+            const result = await findClassByCode(rawInput);
+            if (!result) {
+                setError(CODE_NOT_FOUND(code));
                 return;
             }
-
-            let classDoc;
-            if (!snapshot.empty) {
-                classDoc = snapshot.docs[0];
-            } else {
-                classDoc = snapshotAdmin.docs[0];
-                setIsAdminCode(true);
-            }
-
-            const classData = { id: classDoc.id, ...classDoc.data() };
-            setFoundClass(classData);
-
-            const studentsQ = query(collection(db, 'students'), where('classId', '==', classDoc.id));
-            const studentsSnap = await getDocs(studentsQ);
-            const studentsList = studentsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
-
-            studentsList.sort((a: any, b: any) => a.name.localeCompare(b.name));
-            setStudents(studentsList);
-
+            setIsAdminCode(result.isAdminCode);
+            setFoundClass(result.classData);
+            setStudents(await fetchClassStudents(result.classData.id));
         } catch (err) {
             console.error(err);
             setError('Villa við að sækja bekk.');

@@ -57,6 +57,13 @@ describe('buildMembershipIndex', () => {
         expect(index.get('p4')?.[0].className).toBe('gone');
     });
 
+    it('skips links with statuses the app no longer writes', () => {
+        const index = buildMembershipIndex(classes, [
+            link({ id: 'p5_c1', userId: 'p5', status: 'rejected' as ParentLink['status'] }),
+        ]);
+        expect(index.get('p5')).toBeUndefined();
+    });
+
     it('has no entry for users who never joined or created a class', () => {
         const index = buildMembershipIndex(classes, []);
         expect(index.get('stranger')).toBeUndefined();

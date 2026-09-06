@@ -9,8 +9,11 @@ import type { MembershipStatus, UserMembership } from '@/utils/membership';
 
 interface UsersTabProps {
     initialUsers: User[];
-    /** uid → classes the user belongs to; a missing key means "never joined or created a class" */
-    membership?: Map<string, UserMembership[]>;
+    /**
+     * uid → classes the user belongs to; a missing key means "never joined or created a class".
+     * null/undefined means membership could not be determined (not a super-admin, or the read failed).
+     */
+    membership?: Map<string, UserMembership[]> | null;
 }
 
 const STATUS_LABEL: Record<MembershipStatus, { label: string; variant: ChipVariant }> = {
@@ -25,9 +28,10 @@ export default function UsersTab({ initialUsers, membership }: UsersTabProps) {
     const [isSearching, setIsSearching] = useState(false);
     const [onlyWithoutClass, setOnlyWithoutClass] = useState(false);
 
+    const membershipKnown = membership != null;
     const membershipFor = (uid: string): UserMembership[] => membership?.get(uid) ?? [];
-    const usersWithoutClass = users.filter(u => membershipFor(u.uid).length === 0);
-    const visibleUsers = onlyWithoutClass ? usersWithoutClass : users;
+    const usersWithoutClass = membershipKnown ? users.filter(u => membershipFor(u.uid).length === 0) : [];
+    const visibleUsers = onlyWithoutClass && membershipKnown ? usersWithoutClass : users;
 
     const handleSearch = async (query: string) => {
         setUserSearch(query);
@@ -92,6 +96,9 @@ export default function UsersTab({ initialUsers, membership }: UsersTabProps) {
     };
 
     const renderMembership = (uid: string) => {
+        if (!membershipKnown) {
+            return <Chip variant="info" title="Ekki tókst að sækja tengingar foreldra">Óþekkt</Chip>;
+        }
         const list = membershipFor(uid);
         if (list.length === 0) {
             return <Chip variant="danger">Enginn bekkur</Chip>;
@@ -151,13 +158,16 @@ export default function UsersTab({ initialUsers, membership }: UsersTabProps) {
                 <label className="flex items-center gap-3 mb-6 text-sm text-on-surface cursor-pointer select-none">
                     <input
                         type="checkbox"
-                        checked={onlyWithoutClass}
+                        checked={onlyWithoutClass && membershipKnown}
+                        disabled={!membershipKnown}
                         onChange={(e) => setOnlyWithoutClass(e.target.checked)}
                         className="h-4 w-4 accent-primary"
                     />
                     <span>
                         Sýna aðeins notendur án bekkjar
-                        <span className="ml-2 text-on-surface-variant">({usersWithoutClass.length} af {users.length})</span>
+                        <span className="ml-2 text-on-surface-variant">
+                            {membershipKnown ? `(${usersWithoutClass.length} af ${users.length} í listanum)` : '(tengingar náðust ekki)'}
+                        </span>
                     </span>
                 </label>
 

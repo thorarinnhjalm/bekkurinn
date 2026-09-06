@@ -48,10 +48,15 @@ export function buildMembershipIndex(
 
     for (const link of links) {
         if (!link.userId || !link.classId) continue;
+        // Only statuses the app writes today; legacy 'rejected' / 'denied' docs are skipped, not shown as pending
+        const status: MembershipStatus | null =
+            link.role === 'admin' ? 'admin'
+                : link.status === 'approved' ? 'approved'
+                    : link.status === 'pending' ? 'pending'
+                        : null;
+        if (!status) continue;
         const cls = classById.get(link.classId);
-        const status: MembershipStatus =
-            link.role === 'admin' ? 'admin' : link.status === 'approved' ? 'approved' : 'pending';
-        add(link.userId, { classId: link.classId, className: cls?.name ?? link.classId, status });
+        add(link.userId, { classId: link.classId, className: cls?.name || link.classId, status });
     }
 
     return index;
