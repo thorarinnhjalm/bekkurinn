@@ -40,7 +40,7 @@ export default function PrivacyPage() {
                     Hvernig Bekkurinn leysir málið
                 </h3>
                 <p className="text-on-surface mb-4">
-                    Í kerfinu okkar er bekkjarlistinn "lifandi". Foreldrar skrá sig sjálfir.
+                    Í kerfinu okkar er bekkjarlistinn „lifandi“. Foreldrar skrá sig sjálfir.
                 </p>
                 <div className="grid gap-3">
                     <FeatureRow text="Foreldrar stjórna sýnileika sínum (hægt að fela símanúmer)" />

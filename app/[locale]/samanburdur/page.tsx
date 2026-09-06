@@ -59,7 +59,7 @@ export default function WhyUsPage() {
                                 <p className="text-sm text-on-surface-variant mt-1">Aðgengi að mikilvægum upplýsingum</p>
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-outline-variant/30 text-on-surface-variant">
-                                <p>Týnast í "straumnum" (feed). Erfitt að leita.</p>
+                                <p>Týnast í „straumnum“ (feed). Erfitt að leita.</p>
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-outline-variant/30 bg-primary-container/15/10 dark-blue-text font-medium">
                                 <div className="flex flex-col items-center gap-2">
@@ -76,7 +76,7 @@ export default function WhyUsPage() {
                                 <p className="text-sm text-on-surface-variant mt-1">Að halda utan um mætingu og verkefni</p>
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-outline-variant/30 text-on-surface-variant">
-                                <p>Óformleg "Polls" eða athugasemdir.</p>
+                                <p>Óformleg „Polls“ eða athugasemdir.</p>
                             </div>
                             <div className="col-span-4 p-6 text-center border-l border-outline-variant/30 bg-primary-container/15/10 dark-blue-text font-medium">
                                 <div className="flex flex-col items-center gap-2">

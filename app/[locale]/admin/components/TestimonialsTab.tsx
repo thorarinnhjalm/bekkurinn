@@ -12,16 +12,20 @@ export default function TestimonialsTab() {
     const [loading, setLoading] = useState(true);
     const [filter, setFilter] = useState<'all' | 'pending' | 'approved' | 'rejected'>('all');
 
-    useEffect(() => {
-        loadTestimonials();
-    }, []);
-
     async function loadTestimonials() {
         setLoading(true);
         const data = await getAllTestimonials();
         setTestimonials(data);
         setLoading(false);
     }
+
+    useEffect(() => {
+        // Initial load: `loading` already starts as true, so skip the synchronous setLoading(true)
+        getAllTestimonials().then(data => {
+            setTestimonials(data);
+            setLoading(false);
+        });
+    }, []);
 
     const handleApprove = async (id: string) => {
         if (!user) return;
