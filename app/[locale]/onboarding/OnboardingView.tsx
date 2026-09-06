@@ -9,6 +9,7 @@ import { Users, School, ArrowRight, Loader2, Plus, QrCode, Check, Globe } from '
 import { collection, addDoc, serverTimestamp, Timestamp, query, where, getDocs, doc, setDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { OnboardingSchema, validateInput } from '@/lib/validation';
+import { normalizeJoinCode } from '@/lib/joinCode';
 import { useTranslations } from 'next-intl';
 import { getAllSchools } from '@/services/firestore';
 
@@ -55,11 +56,13 @@ function ProgressIndicator({ currentStep, totalSteps, labels }: {
 // Temporary local implementations until moved to services
 // (Keep existing logic, just cleaner)
 async function createClassLocal(data: any, userId: string) {
-    const schoolPrefix = data.schoolName.substring(0, 4).toUpperCase();
-    const sectionSuffix = data.section ? `-${data.section.toUpperCase().substring(0, 1)}` : '';
+    // Build every part from normalized text so stored codes are canonical (NFC, uppercase, no stray characters)
+    const schoolPrefix = normalizeJoinCode(data.schoolName).substring(0, 4);
+    const sectionLetter = normalizeJoinCode(data.section ?? '').substring(0, 1);
+    const sectionSuffix = sectionLetter ? `-${sectionLetter}` : '';
     const baseCode = `${schoolPrefix}-${data.grade}${sectionSuffix}`;
     const randomSuffix = Math.floor(1000 + Math.random() * 9000);
-    const uniqueCode = `${baseCode}-${randomSuffix}`;
+    const uniqueCode = normalizeJoinCode(`${baseCode}-${randomSuffix}`);
 
     // Create a special Admin Code for Parent Team members
     const adminCode = `${uniqueCode}-ADMIN`;
@@ -224,7 +227,8 @@ export default function OnboardingView() {
 
     // Auto-verify if code is present in URL
     useEffect(() => {
-        const codeParam = searchParams.get('code');
+        // Codes arrive here from invite links and pasted URLs; normalize before the exact-match query
+        const codeParam = normalizeJoinCode(searchParams.get('code'));
         if (codeParam && !foundClass && !checkingCode && !error) {
             setJoinCode(codeParam);
             // Trigger verification automatically
@@ -333,20 +337,23 @@ export default function OnboardingView() {
     };
 
     const handleVerifyCode = async () => {
-        if (!joinCode) return;
+        // Stored codes are canonical uppercase; forgive whitespace, dashes and case from pasted input
+        const code = normalizeJoinCode(joinCode);
+        if (!code) return;
+        setJoinCode(code);
         setCheckingCode(true);
         setError(null);
         setIsAdminCode(false);
 
         try {
-            const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode));
+            const q = query(collection(db, 'classes'), where('joinCode', '==', code));
             const snapshot = await getDocs(q);
 
-            const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', joinCode));
+            const qAdmin = query(collection(db, 'classes'), where('parentTeamCode', '==', code));
             const snapshotAdmin = await getDocs(qAdmin);
 
             if (snapshot.empty && snapshotAdmin.empty) {
-                setError('Enginn bekkur fannst með þennan kóða.');
+                setError(`Enginn bekkur fannst með kóðann ${code}. Berðu hann saman við kóðann frá bekkjarfulltrúa, staf fyrir staf.`);
                 setCheckingCode(false);
                 return;
             }
@@ -881,14 +888,14 @@ export default function OnboardingView() {
                                 type="text"
                                 value={joinCode}
                                 onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
-                                placeholder="XXXX-XXXX"
+                                placeholder="SALA-4-B-1234"
                                 className="w-full text-center text-2xl tracking-widest p-4 border rounded-xl bg-white focus:ring-2 focus:ring-blue-500 outline-none uppercase"
                                 onKeyDown={(e) => e.key === 'Enter' && handleVerifyCode()}
                             />
 
                             <p className="text-gray-500 text-sm">
-                                Sláðu inn kóðann (t.d. SALA-4B) frá fulltrúa.<br />
-                                <span className="opacity-70 text-xs">Stjórnendur notaðu 'Parent Team' aðgangskóða.</span>
+                                Sláðu inn kóðann frá bekkjarfulltrúa (t.d. SALA-4-B-1234). Bil, há- og lágstafir skipta ekki máli.<br />
+                                <span className="opacity-70 text-xs">Bekkjarfulltrúar nota stjórnendakóðann sinn (endar á -ADMIN).</span>
                             </p>
 
                             {user && (
