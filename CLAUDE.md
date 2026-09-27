@@ -54,7 +54,7 @@ The root [app/page.tsx](app/page.tsx) renders the Icelandic landing directly (no
 - `system_admins/{uid}` doc presence → super-admin. `parentLinks/{uid}_{classId}` doc presence → class member. `classes.admins[]` or `parentLinks.role == 'admin'` → class admin. `schools.admins[]` → school admin (foreldrafélag / PTA).
 - The composite parentLink ID is load-bearing (rules require `linkId == userId + '_' + classId`) and implies **one link per user per class** — linking a second child in the same class overwrites the first (`setDoc`).
 - `NEXT_PUBLIC_ADMIN_EMAILS` is read client-side (`AdminView` gating, `useUserClasses`) but rules only honour `system_admins`. After changing it run `npm run sync-admins`, or the UI shows admin controls whose writes get denied.
-- Known rule/code mismatches to resolve deliberately rather than paper over: `useFirestore.ts` reads and writes `lost_items` while rules only define `lostItems`; `agreementService.signAgreement` writes `agreements/{id}/signatures`, which has no rule (only `votes` does). Both are denied under production rules.
+- Collection names in code must match a `match` block in the rules — anything else is denied in production. Lost & found is `lostItems`; agreements have `votes` and `signatures` subcollections (doc id = the user's uid, writable only by that user as a class member).
 - Composite indexes live in [firestore.indexes.json](firestore.indexes.json). A `where` + `orderBy` on different fields needs an entry and a deploy; `getTasksByClass` deliberately sorts in memory to avoid one.
 - `firestore.test.rules` is fully open — local development only. `firebase.json` deploys `firestore.rules`.
 - [storage.rules](storage.rules): images only, 5 MB max, under `users/{uid}/…`, `students/{id}/…`, `lost-found/{classId}/…`; everything else denied.
@@ -69,11 +69,11 @@ The root [app/page.tsx](app/page.tsx) renders the Icelandic landing directly (no
 
 ### Scope model
 
-Tasks, announcements and lost-found items carry `scope: 'class' | 'school'` with `classId` / `schoolId`. `'class'` sets `classId` and queries filter on it; `'school'` sets `schoolId` and is visible to all members of that school. Set the unused ID to `null` — rules check both and the SDK rejects `undefined`. Tasks are polymorphic on `type` (`rolt` | `event` | `gift_collection` | `school_event` | `birthday`); birthdays may be `isPrivate` with `invitees` (student IDs) and are filtered client-side in `useTasks`. Lost & found queries by `schoolId` only, so a class without a `schoolId` sees nothing there.
+Tasks, announcements and lost-found items carry `scope: 'class' | 'school'` with `classId` / `schoolId`. `'class'` sets `classId` and queries filter on it; `'school'` sets `schoolId` and is visible to all members of that school. Set the unused ID to `null` — rules check both and the SDK rejects `undefined`. Tasks are polymorphic on `type` (`rolt` | `event` | `gift_collection` | `school_event` | `birthday`); birthdays may be `isPrivate` with `invitees` (student IDs) and are filtered client-side in `useTasks`. Lost & found queries by `schoolId` only (sorted in memory to avoid a composite index), so a class without a `schoolId` sees nothing there.
 
 ### Babelfish translation
 
-`<Babelfish>` ([components/Babelfish.tsx](components/Babelfish.tsx)) calls `/api/translate` and caches with `staleTime: Infinity`. It runs only when text is present, `originalLanguage !== targetLanguage`, and the target is not `is`. The route (Gemini `gemini-pro`, 20 req/min per IP, 5000 chars) whitelists only `is/en/pl/es/lt` — `tl`, `uk` and `vi` users get a 400 and Babelfish silently renders nothing.
+`<Babelfish>` ([components/Babelfish.tsx](components/Babelfish.tsx)) calls `/api/translate` and caches with `staleTime: Infinity`. It runs only when text is present, `originalLanguage !== targetLanguage`, and the target is not `is`. The route (Gemini `gemini-pro`, 20 req/min per IP, 5000 chars) accepts exactly the eight app locale codes (or their English names) and puts only the resolved language name into the prompt; add a new locale to `LANGUAGE_NAMES` there as well.
 
 ### API routes (`app/api/`)
 
@@ -83,7 +83,7 @@ Mutating routes share one pattern: rate-limit by IP → verify `Authorization: B
 - **`send-critical-announcement/`** — Resend email to members who haven't opted out of `notificationSettings.email.announcements`, max 500 recipients (5/min); needs `RESEND_API_KEY`
 - **`proxy-calendar/`** — ICS fetcher with HTTPS + municipality-domain allowlist (Reykjavík, Kópavogur, Garðabær, Mosfellsbær, Seltjarnarnes, Hafnarfjörður, Keflavík); a school elsewhere needs the list extended (10/min, 1 h cache)
 - **`plausible-stats/`** — analytics proxy for the admin dashboard (`PLAUSIBLE_API_KEY`)
-- **`cron/reminders/`** — hourly via [vercel.json](vercel.json); auth is `Bearer ${CRON_SECRET}` with a `testing123`-in-URL bypass that should not survive into production. Uses `volunteerReminderSent` / `generalReminderSent` flags on `Task` to prevent double sends.
+- **`cron/reminders/`** — hourly via [vercel.json](vercel.json); auth is `Bearer ${CRON_SECRET}` and the route returns 401 when `CRON_SECRET` is unset. Uses `volunteerReminderSent` / `generalReminderSent` flags on `Task` to prevent double sends.
 
 [lib/rate-limit.ts](lib/rate-limit.ts) is an in-memory LRU (500 keys, 1 min TTL) — per serverless instance, so best-effort on Vercel.
 
@@ -100,7 +100,7 @@ Mutating routes share one pattern: rate-limit by IP → verify `Authorization: B
 
 ### Tests
 
-- Vitest ([vitest.config.ts](vitest.config.ts)): `happy-dom`, `pool: 'vmThreads'`, globals on, `tests/**/*.test.{ts,tsx}`, setup just imports `@testing-library/jest-dom`. **`tests/ui/**` is excluded unconditionally** (added because Node 24 deadlocks on `.tsx` workers). The inline comment says CI runs them, but CI uses the same config, so the UI component tests currently run nowhere until that exclude is lifted.
+- Vitest ([vitest.config.ts](vitest.config.ts)): `happy-dom`, `pool: 'vmThreads'`, globals on, `tests/**/*.test.{ts,tsx}` including the `tests/ui/**` component tests, setup just imports `@testing-library/jest-dom`. Node 24 has been seen to deadlock on `.tsx` workers — use Node 20/22 (CI is Node 20).
 - Mocking pattern: `vi.mock('firebase/firestore', importOriginal…)` + `vi.mock('@/lib/firebase/config', () => ({ db: {} }))` + `vi.mock('@/lib/logger')` for services; route-level tests mock `@/lib/firebase/admin` and `@/services/firestore`. No emulator.
 - Playwright: one smoke spec ([e2e/smoke.spec.ts](e2e/smoke.spec.ts)) across Chromium/Firefox/WebKit + Mobile Chrome/Safari. `webServer` starts `npm run dev` (reused if already running locally) — don't start one yourself first.
 

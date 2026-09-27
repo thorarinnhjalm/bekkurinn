@@ -159,7 +159,7 @@ match /accessRequests/{requestId} {
 - [ ] Extend `app/api/cron/reminders/route.ts`: `open` requests older than 24 h with no match → daily digest to super-admins; `invited` older than 3 days without a join → one reminder to the parent.
 - [ ] Users with zero classes and no request 24 h after sign-up → one "Þarftu hjálp við að komast í bekkinn?" email, respecting `notificationSettings.email`.
 - [ ] Auto-close and delete requests older than 90 days.
-- [ ] Remove the `testing123` bypass from the cron route while touching it.
+- [x] Remove the `testing123` bypass from the cron route while touching it.
 
 **Phase 3 estimate:** about half a working day.
 

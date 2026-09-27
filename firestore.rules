@@ -314,6 +314,31 @@ service cloud.firestore {
                          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) || 
                          isSuperAdmin());
       }
+
+      // SIGNATURES Subcollection (doc id = signer's uid, written by signAgreement)
+      match /signatures/{userId} {
+        // Read: Class members can see who has signed
+        allow read: if isAuthenticated() && (
+          isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+          isSuperAdmin()
+        );
+
+        // Create/Update: Only your own signature, and only as a class member
+        allow create, update: if isAuthenticated() &&
+                                 request.auth.uid == userId &&
+                                 request.resource.data.userId == request.auth.uid &&
+                                 (isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+                                  isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+                                  isSuperAdmin());
+
+        // Delete: The signer themselves or class admins
+        allow delete: if isAuthenticated() && (
+          request.auth.uid == userId ||
+          isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
+          isSuperAdmin()
+        );
+      }
     }
 
     // ========================================

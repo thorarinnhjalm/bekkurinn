@@ -16,8 +16,24 @@ const genAI = process.env.GEMINI_API_KEY
     ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY)
     : null;
 
-// Allowed target languages
-const ALLOWED_LANGUAGES = ['is', 'en', 'pl', 'es', 'lt', 'Icelandic', 'English', 'Polish', 'Spanish', 'Lithuanian'];
+// Allowed target languages: every app locale (i18n-config.ts), keyed by code.
+const LANGUAGE_NAMES: Record<string, string> = {
+    is: 'Icelandic',
+    en: 'English',
+    pl: 'Polish',
+    es: 'Spanish',
+    lt: 'Lithuanian',
+    tl: 'Tagalog',
+    uk: 'Ukrainian',
+    vi: 'Vietnamese',
+};
+
+// Accepts a locale code ("pl") or its English name ("Polish"); anything else is rejected.
+function resolveLanguage(targetLang: string): string | null {
+    const normalized = targetLang.trim().toLowerCase();
+    if (LANGUAGE_NAMES[normalized]) return LANGUAGE_NAMES[normalized];
+    return Object.values(LANGUAGE_NAMES).find(name => name.toLowerCase() === normalized) ?? null;
+}
 
 // Max text length to translate
 const MAX_TEXT_LENGTH = 5000;
@@ -67,7 +83,8 @@ export async function POST(request: Request) {
         }
 
         // Language whitelist check
-        if (!ALLOWED_LANGUAGES.some(lang => targetLang.toLowerCase().includes(lang.toLowerCase()))) {
+        const languageName = resolveLanguage(targetLang);
+        if (!languageName) {
             return NextResponse.json({
                 error: "Unsupported target language"
             }, { status: 400 });
@@ -77,7 +94,7 @@ export async function POST(request: Request) {
         const model = genAI.getGenerativeModel({ model: "gemini-pro" });
 
         const prompt = `You are a professional translator.
-        Translate the following text into ${targetLang}.
+        Translate the following text into ${languageName}.
         Output ONLY the translation. Do not include quotes or explanations.
 
         Text: "${text}"`;

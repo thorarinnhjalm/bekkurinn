@@ -5,14 +5,11 @@ export const maxDuration = 60; // Allow 60 seconds for execution
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
+    // Without a configured secret the comparison would accept "Bearer undefined".
+    const cronSecret = process.env.CRON_SECRET;
     const authHeader = request.headers.get('authorization');
-    if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-        // Fallback for manual testing dynamically
-        if(request.url.includes('testing123')) {
-           // allow bypass for dev
-        } else {
-            return new Response('Unauthorized', { status: 401 });
-        }
+    if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+        return new Response('Unauthorized', { status: 401 });
     }
 
     try {
