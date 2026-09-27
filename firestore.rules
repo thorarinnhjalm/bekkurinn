@@ -236,11 +236,15 @@ service cloud.firestore {
       // Create: Authenticated users
       allow create: if isAuthenticated() && request.resource.data.createdBy == request.auth.uid;
       
-      // Update: Creator or admins
+      // Update: Creator or admins, or anyone claiming an unclaimed item for themselves
       allow update: if isAuthenticated() && (
         resource.data.createdBy == request.auth.uid ||
         (resource.data.scope == 'class' && isClassAdmin(resource.data.classId)) ||
-        (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId))
+        (resource.data.scope == 'school' && isSchoolAdmin(resource.data.schoolId)) ||
+        (resource.data.isClaimed == false &&
+         request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isClaimed', 'claimedBy']) &&
+         request.resource.data.isClaimed == true &&
+         request.resource.data.claimedBy == request.auth.uid)
       );
       
       // Delete: Creator or admins
@@ -328,6 +332,8 @@ service cloud.firestore {
         allow create, update: if isAuthenticated() &&
                                  request.auth.uid == userId &&
                                  request.resource.data.userId == request.auth.uid &&
+                                 request.resource.data.keys().hasOnly(['userId', 'userName', 'timestamp']) &&
+                                 request.resource.data.timestamp == request.time &&
                                  (isClassMember(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
                                   isClassAdmin(get(/databases/$(database)/documents/agreements/$(agreementId)).data.classId) ||
                                   isSuperAdmin());

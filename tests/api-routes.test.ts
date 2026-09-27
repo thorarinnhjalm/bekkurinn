@@ -72,7 +72,8 @@ describe('/api/cron/reminders auth', () => {
     const original = process.env.CRON_SECRET;
 
     afterEach(() => {
-        process.env.CRON_SECRET = original;
+        if (original === undefined) delete process.env.CRON_SECRET;
+        else process.env.CRON_SECRET = original;
     });
 
     it('rejects the old testing123 bypass', async () => {
