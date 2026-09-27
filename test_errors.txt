@@ -1,0 +1,143 @@
+
+> bekkurinn@0.1.0 test:run
+> vitest run
+
+
+ RUN  v4.0.18 /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn
+
+⎯⎯⎯⎯⎯⎯ Unhandled Errors ⎯⎯⎯⎯⎯⎯
+
+Vitest caught 9 unhandled errors during the test run.
+This might cause false positive tests. Resolve unhandled errors to make sure your tests are not affected.
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/validation.test.ts.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/auth.test.ts.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/admin.test.ts.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/agreement.test.ts.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/rate-limit.test.ts.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/ui/Button.test.tsx.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/ui/Chip.test.tsx.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/ui/Card.test.tsx.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ runNextTicks node:internal/process/task_queues:64:5
+ ❯ listOnTimeout node:internal/timers:567:9
+ ❯ processTimers node:internal/timers:541:7
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+
+⎯⎯⎯⎯⎯⎯ Unhandled Error ⎯⎯⎯⎯⎯⎯⎯
+Error: [vitest-pool]: Failed to start forks worker for test files /Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/ui/Input.test.tsx.
+ ❯ node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:94
+ ❯ Pool.schedule node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:8046:5
+
+Caused by: Error: [vitest-pool-runner]: Timeout waiting for worker to respond
+ ❯ Timeout.<anonymous> node_modules/vitest/dist/chunks/cli-api.B7PN_QUv.js:7626:58
+ ❯ listOnTimeout node:internal/timers:605:17
+ ❯ processTimers node:internal/timers:541:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+
+
+ Test Files  no tests
+      Tests  no tests
+     Errors  9 errors
+   Start at  23:19:24
+   Duration  60.02s (transform 0ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)
+

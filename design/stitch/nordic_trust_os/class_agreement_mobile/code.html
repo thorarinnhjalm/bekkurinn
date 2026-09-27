@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Bekkjarsáttmáli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen relative pb-28 antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-colors">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<!-- Brand Logo -->
+<div class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d] font-headline">
+                Bekkurinn
+            </div>
+<!-- Trailing Icons -->
+<div class="flex items-center gap-4 text-[#226146] dark:text-[#3d7a5d]">
+<button class="p-2 -m-2 rounded-full hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined text-2xl">notifications</span>
+</button>
+<button class="p-2 -m-2 rounded-full hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined text-2xl">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="max-w-md mx-auto px-6 pt-8 pb-12 flex flex-col gap-8">
+<!-- Header Section -->
+<section class="flex flex-col gap-3">
+<div class="inline-flex items-center gap-2 self-start bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1.5 rounded-full font-label text-sm font-bold tracking-wide">
+<span class="material-symbols-outlined text-base" style="font-variation-settings: 'FILL' 1;">how_to_vote</span>
+                Kosning stendur yfir!
+            </div>
+<h1 class="text-4xl font-headline font-bold tracking-tight text-on-surface">Bekkjarsáttmáli</h1>
+<p class="text-body-lg text-on-surface-variant leading-relaxed">
+                Taktu þátt í að móta leikreglur bekkjarins fyrir komandi skólaár. Saman sköpum við gott umhverfi.
+            </p>
+</section>
+<!-- Voting Card (Bento/Glassmorphism inspired) -->
+<section class="bg-surface-container-lowest rounded-3xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] flex flex-col gap-6 relative overflow-hidden group">
+<!-- Decorative abstract background shape -->
+<div class="absolute -top-12 -right-12 w-40 h-40 bg-gradient-to-br from-primary-fixed to-secondary-fixed opacity-30 rounded-full blur-2xl pointer-events-none" data-alt="abstract soft green decorative gradient blob in top right corner"></div>
+<div class="flex flex-col gap-2 relative z-10">
+<div class="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center mb-2">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+</div>
+<h2 class="text-2xl font-headline font-bold text-on-surface tracking-tight">Þín skoðun skiptir máli</h2>
+<p class="text-on-surface-variant font-body leading-relaxed">
+                    Yfirferð á drögum að sáttmálanum stendur nú yfir. Vinsamlegast lestu yfir og greiddu atkvæði.
+                </p>
+</div>
+<button class="mt-2 w-full bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-2xl py-4 px-6 font-label font-bold text-lg tracking-wide flex justify-center items-center gap-2 shadow-sm hover:opacity-90 transition-opacity active:scale-[0.98]">
+                Kjósa núna
+                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+</button>
+</section>
+<!-- Secondary Information / Context -->
+<section class="bg-surface-container-low rounded-3xl p-6 flex flex-col gap-4">
+<h3 class="font-headline font-bold text-on-surface text-lg">Um bekkjarsáttmálann</h3>
+<ul class="flex flex-col gap-4">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">verified_user</span>
+<p class="text-on-surface-variant text-sm leading-relaxed">Sáttmálinn er saminn af nemendum í samráði við kennara.</p>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary mt-0.5">lock</span>
+<p class="text-on-surface-variant text-sm leading-relaxed">Kosningin er leynileg og upplýsingar um einstök atkvæði eru ekki geymd.</p>
+</li>
+</ul>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 rounded-t-3xl shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] md:hidden">
+<!-- Item 1: Directory -->
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out rounded-2xl group">
+<span class="material-symbols-outlined text-2xl group-hover:-translate-y-1 transition-transform">group</span>
+<span class="text-label-md font-inter font-medium text-[10px] mt-1">Directory</span>
+</button>
+<!-- Item 2: Calendar -->
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out rounded-2xl group">
+<span class="material-symbols-outlined text-2xl group-hover:-translate-y-1 transition-transform">calendar_month</span>
+<span class="text-label-md font-inter font-medium text-[10px] mt-1">Calendar</span>
+</button>
+<!-- Item 3: Patrol -->
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out rounded-2xl group">
+<span class="material-symbols-outlined text-2xl group-hover:-translate-y-1 transition-transform">volunteer_activism</span>
+<span class="text-label-md font-inter font-medium text-[10px] mt-1">Patrol</span>
+</button>
+<!-- Item 4: Feed -->
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out rounded-2xl group">
+<span class="material-symbols-outlined text-2xl group-hover:-translate-y-1 transition-transform">campaign</span>
+<span class="text-label-md font-inter font-medium text-[10px] mt-1">Feed</span>
+</button>
+<!-- Item 5: Agreement (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out group">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<span class="text-label-md font-inter font-medium text-[10px] mt-1 font-bold">Agreement</span>
+</button>
+</nav>
+</body></html>

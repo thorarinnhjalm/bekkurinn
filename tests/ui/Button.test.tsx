@@ -6,7 +6,7 @@ describe('Button', () => {
   it('renders the primary variant with gradient classes by default', () => {
     render(<Button>Stofna bekk</Button>);
     const btn = screen.getByRole('button', { name: 'Stofna bekk' });
-    expect(btn.className).toMatch(/bg-gradient/);
+    expect(btn.className).toMatch(/bg-linear/);
     expect(btn.className).toMatch(/text-on-primary/);
   });
 
@@ -21,7 +21,7 @@ describe('Button', () => {
     render(<Button variant="tertiary">Meira</Button>);
     const btn = screen.getByRole('button', { name: 'Meira' });
     expect(btn.className).toMatch(/text-primary/);
-    expect(btn.className).not.toMatch(/bg-gradient/);
+    expect(btn.className).not.toMatch(/bg-linear/);
   });
 
   it('forwards custom className', () => {

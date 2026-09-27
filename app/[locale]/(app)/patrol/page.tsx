@@ -33,6 +33,8 @@ export default function PatrolPage() {
     const { data: allStudents } = useStudents(activeClassId);
     const myStudents = allStudents?.filter(s => myStudentIds?.includes(s.id)) || [];
 
+    const [now] = useState(() => Date.now());
+
     const claimSlotMutation = useClaimTaskSlot();
     const createTaskMutation = useCreateTask();
     const updateTaskMutation = useUpdateTask();
@@ -99,7 +101,6 @@ export default function PatrolPage() {
     const patrols = (tasksData || []).filter(task => task.type === 'rolt').sort((a, b) => {
         const aTime = a.date?.toDate?.()?.getTime() || 0;
         const bTime = b.date?.toDate?.()?.getTime() || 0;
-        const now = Date.now();
         const aUpcoming = aTime > now;
         const bUpcoming = bTime > now;
         if (aUpcoming && !bUpcoming) return -1;
@@ -119,7 +120,7 @@ export default function PatrolPage() {
                 {isAdmin && (
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                     >
                         <Plus size={18} />
                         {t('new_patrol')}
@@ -178,7 +179,7 @@ export default function PatrolPage() {
                                 </div>
                                 <div className="h-2 w-full bg-surface-container-high rounded-full overflow-hidden mb-4">
                                     <div
-                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-primary' : 'bg-gradient-to-r from-primary to-primary-container'}`}
+                                        className={`h-full rounded-full transition-all duration-500 ${isFull ? 'bg-primary' : 'bg-linear-to-r from-primary to-primary-container'}`}
                                         style={{ width: `${(patrol.slotsFilled / patrol.slotsTotal) * 100}%` }}
                                     />
                                 </div>
@@ -190,7 +191,7 @@ export default function PatrolPage() {
                                         ? 'bg-primary-container/15 text-primary ring-1 ring-primary/30'
                                         : isFull
                                             ? 'bg-surface-container-low text-on-surface-variant'
-                                            : 'bg-gradient-to-r from-primary to-primary-container text-on-primary shadow-ambient hover:-translate-y-0.5 active:scale-95'
+                                            : 'bg-linear-to-r from-primary to-primary-container text-on-primary shadow-ambient hover:-translate-y-0.5 active:scale-95'
                                         }`}
                                 >
                                     {isJoined ? (
@@ -295,7 +296,7 @@ export default function PatrolPage() {
                                     } as any);
                                     setIsCreating(false);
                                 }}
-                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-linear-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('create')}
                             </button>
@@ -321,7 +322,7 @@ export default function PatrolPage() {
             <SelectChildModal
                 isOpen={!!taskToVolunteer}
                 onClose={() => setTaskToVolunteer(null)}
-                children={myStudents}
+                students={myStudents}
                 onSelect={(sid, sname) => confirmVolunteer(sid, sname)}
             />
         </div>

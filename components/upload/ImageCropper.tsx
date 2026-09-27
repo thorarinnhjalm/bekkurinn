@@ -47,10 +47,10 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel }: ImageCroppe
 
     return (
         <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-            <div className="bg-white w-full max-w-md rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
-                <div className="p-4 border-b border-gray-100 flex justify-between items-center bg-gray-50">
-                    <h3 className="font-bold text-gray-800">Skerða mynd</h3>
-                    <button onClick={onCancel} className="text-gray-500 hover:text-gray-700">
+            <div className="bg-surface-container-lowest w-full max-w-md rounded-xl overflow-hidden shadow-2xl flex flex-col max-h-[90vh]">
+                <div className="p-4 border-b border-outline-variant/30 flex justify-between items-center bg-surface">
+                    <h3 className="font-bold text-on-surface">Skerða mynd</h3>
+                    <button onClick={onCancel} className="text-on-surface-variant hover:text-on-surface">
                         <X size={24} />
                     </button>
                 </div>
@@ -69,9 +69,9 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel }: ImageCroppe
 
                 <div className="p-6 space-y-6">
                     <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-700 flex justify-between">
+                        <label className="text-sm font-medium text-on-surface flex justify-between">
                             <span>Aðdráttur</span>
-                            <span className="text-gray-500">{Math.round(zoom * 100)}%</span>
+                            <span className="text-on-surface-variant">{Math.round(zoom * 100)}%</span>
                         </label>
                         <Slider
                             value={[zoom]}
@@ -86,7 +86,7 @@ export function ImageCropper({ imageSrc, onCropComplete, onCancel }: ImageCroppe
                     <div className="flex gap-3">
                         <button
                             onClick={onCancel}
-                            className="flex-1 py-2.5 text-gray-700 font-medium bg-gray-100 rounded-lg hover:bg-gray-200 transition"
+                            className="flex-1 py-2.5 text-on-surface font-medium bg-surface-container-high rounded-lg hover:bg-surface-container-high transition"
                         >
                             Hætta við
                         </button>

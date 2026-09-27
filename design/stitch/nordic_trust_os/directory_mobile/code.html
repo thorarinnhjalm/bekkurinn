@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Skráin - Bekkurinn</title>
+<!-- Fonts & Icons -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="sticky top-0 z-40 w-full bg-[#f9f9f8]/80 backdrop-blur-xl shadow-[0px_12px_32px_rgba(47,49,48,0.06)]">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<!-- Brand -->
+<div class="text-2xl font-bold tracking-tighter text-[#226146]">Bekkurinn</div>
+<!-- Actions -->
+<div class="flex items-center gap-2">
+<button class="p-2 rounded-full text-[#404943] hover:bg-[#f4f4f3] transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined block">search</span>
+</button>
+<button class="p-2 rounded-full text-[#404943] hover:bg-[#f4f4f3] transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined block">notifications</span>
+</button>
+<button class="p-2 rounded-full text-[#404943] hover:bg-[#f4f4f3] transition-all duration-300 scale-98 active:scale-95 transition-transform duration-200">
+<span class="material-symbols-outlined block">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="flex-1 w-full max-w-lg mx-auto px-4 pt-8 pb-32">
+<!-- Typography Anchor -->
+<div class="mb-8 pl-2">
+<h1 class="text-[2.5rem] leading-none font-headline font-extrabold tracking-tight text-on-background mb-3">Skráin</h1>
+<p class="text-on-surface-variant text-lg leading-relaxed">Allir vinirnir í 4. bekk á einum stað.</p>
+</div>
+<!-- Dedicated Search Area (Functional Focus) -->
+<div class="mb-8">
+<div class="bg-surface-container-high rounded-2xl flex items-center px-4 py-3.5 focus-within:ring-2 focus-within:ring-primary/30 focus-within:bg-surface-bright transition-all duration-300">
+<span class="material-symbols-outlined text-outline mr-3">search</span>
+<input class="bg-transparent border-none w-full text-on-background placeholder:text-outline focus:ring-0 text-base font-medium p-0 outline-none" placeholder="Leita að nemanda eða forráðamanni..." type="text"/>
+</div>
+</div>
+<!-- Student Directory List -->
+<div class="space-y-4">
+<!-- Expanded Card (Interactive Focus State) -->
+<div class="bg-surface-container-lowest rounded-3xl p-5 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden ring-1 ring-outline-variant/10">
+<div class="flex items-center gap-4 mb-5">
+<div class="w-14 h-14 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container font-headline font-bold text-xl shrink-0">
+                        AJ
+                    </div>
+<div class="flex-1">
+<h2 class="font-headline font-bold text-xl text-on-background tracking-tight">Aron Jónsson</h2>
+<div class="flex flex-wrap gap-2 mt-1.5">
+<!-- Anthro Chip - Dietary -->
+<span class="inline-flex items-center gap-1.5 bg-tertiary-fixed px-3 py-1 rounded-full text-xs font-semibold text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">local_dining</span> Vegan
+                            </span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full bg-surface-container flex items-center justify-center text-on-surface hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">expand_less</span>
+</button>
+</div>
+<!-- Nested Parent Info (Tonal Layering) -->
+<div class="pt-5 mt-2 border-t border-outline-variant/15 bg-surface-container-low -mx-5 -mb-5 p-5 rounded-b-3xl">
+<h3 class="text-xs font-bold text-on-surface-variant mb-4 uppercase tracking-widest">Forráðamenn</h3>
+<div class="space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-on-background text-base">Jón Daðason</p>
+<p class="text-sm text-on-surface-variant mt-0.5">Faðir</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-primary-container text-on-primary flex items-center justify-center shadow-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center hover:bg-secondary-fixed-dim transition-colors">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</button>
+</div>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<p class="font-bold text-on-background text-base">Anna María</p>
+<p class="text-sm text-on-surface-variant mt-0.5">Móðir</p>
+</div>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-full bg-gradient-to-tr from-primary to-primary-container text-on-primary flex items-center justify-center shadow-md hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-[20px]">call</span>
+</button>
+<button class="w-10 h-10 rounded-full bg-secondary-container text-on-secondary-container flex items-center justify-center hover:bg-secondary-fixed-dim transition-colors">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Collapsed Card 1 -->
+<div class="bg-surface-container-low rounded-3xl p-5 hover:bg-surface-container-lowest hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-all duration-300 cursor-pointer flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-headline font-bold text-xl overflow-hidden shrink-0">
+<img alt="Birta Sól" class="w-full h-full object-cover" data-alt="portrait of a young boy with blonde hair smiling softly on a light background, muted tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCQ4fRiPkOyFmJUKIs6IeeVFS97QdfQAS3ksVlQbWenaR41bUrrd9V7kCts9ITdvwDja3hZjb6yElbWthl9eQgXcd1QKKdyGogCNXWDecyBkB2SI79itQs-Z0bkHFtlUkfBF2BhJfR8H_n0RPxST-jzUm32hWWu3R0VgQnlIjocg7-YM-Z1CArdlBhXQo-Mhnkq__GbvuEoImo9uc3H5YZA8VE7VS6k5DxS2V3iY7EvQHnPWSkBO55dMPdvGJ4nqAevZTqSoo9llTU"/>
+</div>
+<div class="flex-1">
+<h2 class="font-headline font-bold text-xl text-on-background tracking-tight">Birta Sól</h2>
+<div class="flex flex-wrap gap-2 mt-1.5">
+<span class="inline-flex items-center gap-1.5 bg-secondary-fixed px-3 py-1 rounded-full text-xs font-semibold text-on-secondary-fixed">
+<span class="material-symbols-outlined text-[14px]">no_meals</span> Glútenóþol
+                        </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+<!-- Collapsed Card 2 -->
+<div class="bg-surface-container-low rounded-3xl p-5 hover:bg-surface-container-lowest hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-all duration-300 cursor-pointer flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-primary-container/10 flex items-center justify-center text-primary font-headline font-bold text-xl shrink-0">
+                    DE
+                </div>
+<div class="flex-1">
+<h2 class="font-headline font-bold text-xl text-on-background tracking-tight">Daníel Einarsson</h2>
+<p class="text-sm text-on-surface-variant mt-1">Engar sérþarfir skráðar</p>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+<!-- Collapsed Card 3 -->
+<div class="bg-surface-container-low rounded-3xl p-5 hover:bg-surface-container-lowest hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-all duration-300 cursor-pointer flex items-center gap-4">
+<div class="w-14 h-14 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant font-headline font-bold text-xl overflow-hidden shrink-0">
+<img alt="Eva Lind" class="w-full h-full object-cover" data-alt="portrait of a young girl with dark curly hair looking thoughtfully, soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRREViJtD0bYFCamLTs5jG_iSkDIRlda8Ia0amNu5J-MbKE_ANeAefY3iqMuZjnVmjLTARbY8_Vbqyq8cOU32JvF0y-0R7p9NkMnT8sRkWXRm_clme88WxL3b67XAe9u3hJUyUC6k0jNX7n-KDGsXy-PJ7n5EGMDFgqbJQ0AJjRnv3fpSQIjLpPu_OCqLP_4ODtPa4AAJgA_KSmkCJ4fEZ8GTs5n8InLl0qp7Cb8fxQYAD1TmTa-nj2nTF03fUoFZ10BrQhjJ0zx8"/>
+</div>
+<div class="flex-1">
+<h2 class="font-headline font-bold text-xl text-on-background tracking-tight">Eva Lind</h2>
+<div class="flex flex-wrap gap-2 mt-1.5">
+<span class="inline-flex items-center gap-1.5 bg-error-container/50 px-3 py-1 rounded-full text-xs font-semibold text-on-error-container">
+<span class="material-symbols-outlined text-[14px]">warning</span> Hnetuofnæmi
+                        </span>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline">expand_more</span>
+</div>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl rounded-t-3xl shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] md:hidden">
+<!-- Active Item: Directory -->
+<a class="flex flex-col items-center justify-center bg-[#226146]/10 text-[#226146] rounded-2xl px-5 py-2 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="text-xs font-inter font-semibold tracking-wide">Directory</span>
+</a>
+<!-- Inactive Items -->
+<a class="flex flex-col items-center justify-center text-[#404943] px-4 py-2 hover:bg-[#f4f4f3] rounded-2xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">calendar_month</span>
+<span class="text-[10px] font-inter font-medium">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] px-4 py-2 hover:bg-[#f4f4f3] rounded-2xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">volunteer_activism</span>
+<span class="text-[10px] font-inter font-medium">Patrol</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] px-4 py-2 hover:bg-[#f4f4f3] rounded-2xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">campaign</span>
+<span class="text-[10px] font-inter font-medium">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] px-4 py-2 hover:bg-[#f4f4f3] rounded-2xl transition-all duration-300" href="#">
+<span class="material-symbols-outlined mb-1">gavel</span>
+<span class="text-[10px] font-inter font-medium">Agreement</span>
+</a>
+</nav>
+</body></html>

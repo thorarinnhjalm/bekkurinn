@@ -9,7 +9,7 @@ import { Timestamp } from 'firebase/firestore';
 // USER & AUTHENTICATION
 // ========================================
 
-export type UserLanguage = 'is' | 'en' | 'pl';
+export type UserLanguage = 'is' | 'en' | 'pl' | 'es' | 'lt' | 'tl' | 'uk' | 'vi';
 
 // Lost & Found
 export interface LostItem {
@@ -116,6 +116,9 @@ export interface ParentLink {
     studentId: string;
     classId: string;
     status: ParentLinkStatus;
+    role?: 'admin' | 'parent'; // Written by onboarding; firestore.rules treats role == 'admin' as class admin
+    relationship?: string; // e.g. 'Foreldri', 'Class Representative'
+    invitedBy?: string | null; // UID of the parent whose invite link was used
     createdAt: Timestamp;
     approvedAt?: Timestamp;
     approvedBy?: string; // Admin UID
@@ -168,6 +171,11 @@ export interface Task {
     // Birthday Features
     invitees?: string[]; // Array of Student IDs
     isPrivate?: boolean; // If true, only visible to invitees
+
+    // Reminders
+    volunteerReminderHours?: number; // How many hours before the event to remind volunteers
+    volunteerReminderSent?: boolean;
+    generalReminderSent?: boolean;
 }
 
 // ========================================

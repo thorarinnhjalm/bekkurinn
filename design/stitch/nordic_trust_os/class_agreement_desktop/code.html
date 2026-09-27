@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Bekkjarsáttmáli</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-fixed": "#2a1700",
+                        "on-error": "#ffffff",
+                        "inverse-surface": "#2f3130",
+                        "surface-container-low": "#f4f4f3",
+                        "background": "#f9f9f8",
+                        "tertiary": "#7a4c00",
+                        "surface-variant": "#e2e2e2",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "on-secondary": "#ffffff",
+                        "on-background": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "on-primary-fixed": "#002113",
+                        "outline": "#707973",
+                        "error-container": "#ffdad6",
+                        "secondary": "#3a6750",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "surface-dim": "#dadad9",
+                        "on-tertiary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "secondary-fixed": "#bceed1",
+                        "inverse-on-surface": "#f1f1f0",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface": "#f9f9f8",
+                        "on-tertiary-container": "#fff0e3",
+                        "on-surface-variant": "#404943",
+                        "primary": "#226146",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9f8",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "surface-container": "#eeeeed",
+                        "surface-tint": "#2c694e",
+                        "surface-container-high": "#e8e8e7",
+                        "outline-variant": "#bfc9c1",
+                        "on-secondary-fixed": "#002113",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "surface-container-lowest": "#ffffff",
+                        "primary-container": "#3d7a5d",
+                        "on-surface": "#1a1c1c",
+                        "on-secondary-container": "#406d56",
+                        "secondary-container": "#bceed1",
+                        "tertiary-fixed": "#ffddb8",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#95d4b2",
+                        "primary-fixed": "#b0f1cd",
+                        "primary-fixed-dim": "#95d4b2"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    },
+                    fontFamily: {
+                        headline: ["Inter", "sans-serif"],
+                        body: ["Inter", "sans-serif"],
+                        label: ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f9f9f8; color: #1a1c1c; }
+    </style>
+</head>
+<body class="bg-background text-on-background antialiased min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] sticky top-0 z-50">
+<div class="flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="flex items-center gap-8">
+<div class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d]">
+                    Bekkurinn
+                </div>
+<!-- Desktop Navigation -->
+<nav class="hidden md:flex gap-6 items-center">
+<a class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-2 rounded-lg text-sm font-medium" href="#">Directory</a>
+<a class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-2 rounded-lg text-sm font-medium" href="#">Calendar</a>
+<a class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-2 rounded-lg text-sm font-medium" href="#">Patrol</a>
+<a class="text-[#404943] dark:text-stone-400 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 py-2 rounded-lg text-sm font-medium" href="#">Feed</a>
+<a class="text-[#226146] font-bold border-b-2 border-[#226146] pb-1 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 px-3 pt-2 text-sm" href="#">Agreement</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-[#226146] dark:text-[#3d7a5d] hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 p-2 rounded-full scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="text-[#226146] dark:text-[#3d7a5d] hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 p-2 rounded-full scale-98 active:scale-95">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow max-w-screen-xl mx-auto w-full px-6 py-12 md:py-20 mb-24 md:mb-0">
+<!-- Header Section -->
+<div class="mb-16 max-w-2xl">
+<h1 class="text-4xl md:text-5xl font-headline font-bold tracking-tight text-on-background mb-4">Bekkjarsáttmáli</h1>
+<p class="text-xl text-on-surface-variant font-body leading-relaxed">Lýðræðislegur sáttmáli</p>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+<!-- Voting Progress Sidebar (md:col-span-4) -->
+<div class="md:col-span-4 flex flex-col gap-6">
+<!-- Progress Card -->
+<div class="bg-surface-container-lowest rounded-xl p-8 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] border border-outline-variant/15">
+<h2 class="text-lg font-headline font-bold text-on-background mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">how_to_vote</span>
+                        Kosning stendur yfir
+                    </h2>
+<div class="mb-6">
+<div class="flex justify-between text-sm text-on-surface-variant mb-2">
+<span>Þátttaka</span>
+<span class="font-bold text-primary">68%</span>
+</div>
+<div class="h-2 w-full bg-surface-container-high rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full" style="width: 68%;"></div>
+</div>
+<p class="text-xs text-on-surface-variant mt-2">17 af 25 foreldrum hafa kosið</p>
+</div>
+<button class="w-full py-3 px-6 rounded-xl bg-gradient-to-r from-primary to-primary-container text-on-primary font-medium text-sm transition-all hover:shadow-lg active:scale-[0.98]">
+                        Mín atkvæði
+                    </button>
+</div>
+<!-- Info Box -->
+<div class="bg-surface-container-low rounded-xl p-6">
+<h3 class="text-sm font-bold text-on-background mb-2">Um sáttmálann</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed mb-4">Bekkjarsáttmálinn er endurskoðaður árlega. Náist ekki 80% samstaða um tiltekin atriði gilda almennar viðmiðanir skólans.</p>
+<a class="text-sm text-primary font-medium flex items-center gap-1 hover:underline" href="#">
+                        Sjá fyrri sáttmála <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Main Voting Content (md:col-span-8) -->
+<div class="md:col-span-8 flex flex-col gap-8">
+<!-- Category: Afmæli & Veislur -->
+<section>
+<h2 class="text-2xl font-headline font-bold text-on-background mb-6 flex items-center gap-3">
+<span class="p-2 bg-surface-container-high rounded-lg text-primary material-symbols-outlined">cake</span>
+                        Afmæli &amp; Veislur
+                    </h2>
+<div class="space-y-4">
+<!-- Voting Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+<div class="flex-grow">
+<h3 class="text-lg font-bold text-on-background mb-2">Gjafahámark í afmælum</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Til að draga úr pressu mælum við með hóflegu hámarki á afmælisgjafir þegar krökkum er boðið heim.</p>
+</div>
+<div class="w-full md:w-64 space-y-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input checked="" class="text-primary focus:ring-primary w-4 h-4" name="gift_cap" type="radio"/>
+<span class="text-sm font-medium text-on-background">2.000 kr. hámark</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input class="text-primary focus:ring-primary w-4 h-4" name="gift_cap" type="radio"/>
+<span class="text-sm font-medium text-on-background">3.000 kr. hámark</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input class="text-primary focus:ring-primary w-4 h-4" name="gift_cap" type="radio"/>
+<span class="text-sm font-medium text-on-background">Ekkert hámark</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Voting Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+<div class="flex-grow">
+<h3 class="text-lg font-bold text-on-background mb-2">Boðslisti</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Viðmið um hverjum skal bjóða til að forðast útskúfun.</p>
+</div>
+<div class="w-full md:w-64 space-y-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input checked="" class="text-primary focus:ring-primary w-4 h-4" name="invite_list" type="radio"/>
+<span class="text-sm font-medium text-on-background">Allur bekkurinn eða öll kyn</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input class="text-primary focus:ring-primary w-4 h-4" name="invite_list" type="radio"/>
+<span class="text-sm font-medium text-on-background">Frjálst val</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Category: Samskipti & Samfélagsmiðlar -->
+<section class="mt-8">
+<h2 class="text-2xl font-headline font-bold text-on-background mb-6 flex items-center gap-3">
+<span class="p-2 bg-surface-container-high rounded-lg text-primary material-symbols-outlined">forum</span>
+                        Samskipti &amp; Samfélagsmiðlar
+                    </h2>
+<div class="space-y-4">
+<!-- Voting Item 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] border border-outline-variant/15 transition-all hover:bg-surface-bright">
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+<div class="flex-grow">
+<h3 class="text-lg font-bold text-on-background mb-2">Snjallsímanotkun utan skóla</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Samræmdar reglur foreldra um skjátíma og samfélagsmiðla á virkum dögum.</p>
+</div>
+<div class="w-full md:w-64 space-y-3">
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input class="text-primary focus:ring-primary w-4 h-4 rounded text-primary" type="checkbox"/>
+<span class="text-sm font-medium text-on-background">Engir símar eftir kl 20:00</span>
+</label>
+<label class="flex items-center gap-3 p-3 rounded-lg border border-outline-variant/30 hover:border-primary/50 cursor-pointer bg-surface transition-colors">
+<input checked="" class="text-primary focus:ring-primary w-4 h-4 rounded text-primary" type="checkbox"/>
+<span class="text-sm font-medium text-on-background">Ekkert TikTok/Snapchat</span>
+</label>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Signatures Wall Preview -->
+<section class="mt-12">
+<div class="bg-surface-container-low rounded-xl p-8 relative overflow-hidden">
+<!-- Decorative blurred background element -->
+<div class="absolute -top-10 -right-10 w-40 h-40 bg-secondary-fixed opacity-20 blur-3xl rounded-full pointer-events-none"></div>
+<div class="flex justify-between items-end mb-8 relative z-10">
+<div>
+<h2 class="text-xl font-headline font-bold text-on-background mb-2">Undirskriftir</h2>
+<p class="text-sm text-on-surface-variant">Sýnilegar þegar kosningu lýkur</p>
+</div>
+<span class="px-3 py-1 bg-surface-dim text-on-surface-variant text-xs font-medium rounded-full">Lokað til sýnis</span>
+</div>
+<!-- Blurred signature wall to simulate "Privacy Veil" concept -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 opacity-40 blur-[2px] select-none pointer-events-none">
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Jón Jónsson</div>
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Guðrún Pálsdóttir</div>
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Sigurður Helgason</div>
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Anna Björnsdóttir</div>
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Kristín Jónsdóttir</div>
+<div class="font-handwriting text-lg text-on-surface-variant border-b border-outline-variant/30 pb-2">Ólafur Þórsson</div>
+</div>
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="bg-surface/90 backdrop-blur-sm px-6 py-3 rounded-full shadow-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-sm">lock</span>
+<span class="text-sm font-medium text-on-surface-variant">Vantar 8 atkvæði</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 rounded-t-3xl border-none">
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="group">group</span>
+<span class="text-[10px] font-medium font-inter">Directory</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_month">calendar_month</span>
+<span class="text-[10px] font-medium font-inter">Calendar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="volunteer_activism">volunteer_activism</span>
+<span class="text-[10px] font-medium font-inter">Patrol</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="campaign">campaign</span>
+<span class="text-[10px] font-medium font-inter">Feed</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 transition-all duration-300 scale-110 transition-transform duration-300 ease-out" href="#">
+<span class="material-symbols-outlined mb-1" data-icon="gavel" style="font-variation-settings: 'FILL' 1;">gavel</span>
+<span class="text-[10px] font-bold font-inter">Agreement</span>
+</a>
+</nav>
+</body></html>

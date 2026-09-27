@@ -46,8 +46,8 @@ export default function ApprovalsTab({ initialPendingLinks, onRefresh }: Approva
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 max-w-5xl mx-auto">
             <div className="professional-card p-6">
                 <div className="mb-6">
-                    <h3 className="font-bold text-2xl text-gray-900">Samþykktir foreldra</h3>
-                    <p className="text-gray-600 mt-2">
+                    <h3 className="font-bold text-2xl text-on-surface">Samþykktir foreldra</h3>
+                    <p className="text-on-surface-variant mt-2">
                         Hér eru öll pending foreldra sem bíða samþykktar til að fá aðgang að bekk barns síns.
                     </p>
                 </div>
@@ -67,8 +67,8 @@ export default function ApprovalsTab({ initialPendingLinks, onRefresh }: Approva
                 ) : (
                     <div className="text-center py-12">
                         <div className="text-6xl mb-4">🎉</div>
-                        <p className="text-xl font-bold text-gray-900">No pending approvals!</p>
-                        <p className="text-gray-600 mt-2">Allar beiðnir hafa verið afgreiddar.</p>
+                        <p className="text-xl font-bold text-on-surface">No pending approvals!</p>
+                        <p className="text-on-surface-variant mt-2">Allar beiðnir hafa verið afgreiddar.</p>
                     </div>
                 )}
             </div>
@@ -97,15 +97,15 @@ function PendingApprovalRow({
     });
 
     return (
-        <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200 hover:border-nordic-blue transition-colors">
+        <div className="flex items-center justify-between p-4 bg-surface rounded-lg border border-outline-variant/30 hover:border-primary transition-colors">
             <div className="flex-1">
-                <div className="font-bold text-gray-900">
+                <div className="font-bold text-on-surface">
                     {userInfo?.displayName || 'Loading...'}
                 </div>
-                <div className="text-sm text-gray-600 mt-1">
+                <div className="text-sm text-on-surface-variant mt-1">
                     {userInfo?.email} • {classInfo?.name || 'Loading class...'}
                 </div>
-                <div className="text-xs text-gray-500 mt-1">
+                <div className="text-xs text-on-surface-variant mt-1">
                     Beiðni send: {link.createdAt?.toDate?.().toLocaleDateString('is-IS')}
                 </div>
             </div>
@@ -114,7 +114,7 @@ function PendingApprovalRow({
                 <button
                     onClick={onApprove}
                     disabled={isProcessing}
-                    className="bg-green-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    className="bg-primary text-white px-4 py-2 rounded-lg font-bold hover:bg-primary-container disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
                 >
                     {isProcessing ? (
                         <Loader2 size={16} className="animate-spin" />
@@ -126,7 +126,7 @@ function PendingApprovalRow({
                 <button
                     onClick={onReject}
                     disabled={isProcessing}
-                    className="bg-red-600 text-white px-4 py-2 rounded-lg font-bold hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
+                    className="bg-error text-white px-4 py-2 rounded-lg font-bold hover:bg-error/90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2"
                 >
                     <X size={16} />
                     Hafna

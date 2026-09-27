@@ -1,6 +1,6 @@
 'use client';
 
-import { Bell, Settings, LogOut, User as UserIcon, Check, X, HelpCircle } from 'lucide-react';
+import { Bell, Settings, LogOut, User as UserIcon, HelpCircle } from 'lucide-react';
 import { AboutModal } from '@/components/ui/AboutModal';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -8,7 +8,6 @@ import { useAuth } from '@/components/providers/AuthProvider';
 import { useState } from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
 import { useNotifications } from '@/hooks/useNotifications';
-import { Timestamp } from 'firebase/firestore';
 import { locales } from '@/i18n-config';
 import { useTranslations } from 'next-intl';
 
@@ -25,7 +24,7 @@ export function TopHeader({ className }: { className?: string }) {
     const [showSettingsMenu, setShowSettingsMenu] = useState(false);
     const [showNotifications, setShowNotifications] = useState(false);
     const [showAbout, setShowAbout] = useState(false);
-    const { notifications, unreadCount, markAsRead, markAllAsRead, createNotification, loading } = useNotifications();
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
     const params = useParams();
     const pathname = usePathname();
     // Default to 'is' if not found, but it should be available in app router
@@ -42,16 +41,6 @@ export function TopHeader({ className }: { className?: string }) {
             router.push(link);
             setShowNotifications(false);
         }
-    };
-
-    const sendTestNotification = async () => {
-        if (!user) return;
-        await createNotification(
-            user.uid,
-            'Welcome to Bekkurinn!',
-            'This is a test notification. The system works!',
-            'system'
-        );
     };
 
     return (

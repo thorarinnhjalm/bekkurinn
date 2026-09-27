@@ -303,7 +303,7 @@ export default function UserProfilePage() {
             <section className="glass-card p-6">
                 <div className="flex items-start gap-5">
                     {/* Avatar */}
-                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-primary-container/15 text-primary overflow-hidden flex-shrink-0">
+                    <div className="relative w-20 h-20 rounded-xl flex items-center justify-center text-2xl font-semibold shadow-sm bg-primary-container/15 text-primary overflow-hidden shrink-0">
                         {userPhotoUrl ? (
                             <img src={userPhotoUrl} alt={user.displayName || ''} className="w-full h-full object-cover" />
                         ) : (
@@ -320,7 +320,7 @@ export default function UserProfilePage() {
                 <div className="mt-6 space-y-4">
                     {/* Phone */}
                     <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
                             <Phone size={18} className="text-on-surface-variant" />
                         </div>
                         <input
@@ -349,7 +349,7 @@ export default function UserProfilePage() {
 
                     {/* Address */}
                     <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
                             <MapPin size={18} className="text-on-surface-variant" />
                         </div>
                         <div className="flex-1">
@@ -380,7 +380,7 @@ export default function UserProfilePage() {
 
                     {/* Language Switcher */}
                     <div className="flex items-start gap-4 pt-2">
-                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center flex-shrink-0">
+                        <div className="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center shrink-0">
                             <Globe size={18} className="text-on-surface-variant" />
                         </div>
                         <div className="flex-1">
@@ -581,7 +581,7 @@ function StudentCard({
                 onClick={onToggleExpand}
                 className="w-full p-5 flex items-center gap-4 hover:bg-surface/50 transition text-left"
             >
-                <div className="w-16 h-16 rounded-xl bg-primary-container/15 flex items-center justify-center overflow-hidden flex-shrink-0">
+                <div className="w-16 h-16 rounded-xl bg-primary-container/15 flex items-center justify-center overflow-hidden shrink-0">
                     {student.photoUrl ? (
                         <img src={student.photoUrl} alt={student.name} className="w-full h-full object-cover" />
                     ) : (
@@ -706,7 +706,7 @@ function StudentCard({
                             <div className="space-y-2">
                                 {otherParents.map((parent) => (
                                     <div key={parent.id} className="flex items-center gap-3 p-3 bg-primary-container/15 border border-primary/20 rounded-lg">
-                                        <div className="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        <div className="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center overflow-hidden shrink-0">
                                             {parent.photoURL ? (
                                                 <img src={parent.photoURL} alt={parent.displayName || ''} className="w-full h-full object-cover" />
                                             ) : (
@@ -717,7 +717,7 @@ function StudentCard({
                                             <p className="font-medium text-on-surface truncate">{parent.displayName || t('child_card.parent')}</p>
                                             <p className="text-xs text-primary">{t('child_card.connected')}</p>
                                         </div>
-                                        <CheckCircle2 size={18} className="text-primary flex-shrink-0" />
+                                        <CheckCircle2 size={18} className="text-primary shrink-0" />
                                     </div>
                                 ))}
                             </div>

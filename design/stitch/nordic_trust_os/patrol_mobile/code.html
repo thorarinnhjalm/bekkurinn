@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Foreldrarölt</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+                  "on-tertiary-fixed": "#2a1700",
+                  "on-error": "#ffffff",
+                  "inverse-surface": "#2f3130",
+                  "surface-container-low": "#f4f4f3",
+                  "background": "#f9f9f8",
+                  "tertiary": "#7a4c00",
+                  "surface-variant": "#e2e2e2",
+                  "secondary-fixed-dim": "#a1d1b5",
+                  "on-secondary": "#ffffff",
+                  "on-background": "#1a1c1c",
+                  "on-tertiary-fixed-variant": "#653e00",
+                  "on-primary-fixed": "#002113",
+                  "outline": "#707973",
+                  "error-container": "#ffdad6",
+                  "secondary": "#3a6750",
+                  "on-primary-fixed-variant": "#0d5137",
+                  "surface-dim": "#dadad9",
+                  "on-tertiary": "#ffffff",
+                  "tertiary-container": "#9b6200",
+                  "secondary-fixed": "#bceed1",
+                  "inverse-on-surface": "#f1f1f0",
+                  "on-primary-container": "#c8ffdf",
+                  "on-error-container": "#93000a",
+                  "surface-container-highest": "#e2e2e2",
+                  "surface": "#f9f9f8",
+                  "on-tertiary-container": "#fff0e3",
+                  "on-surface-variant": "#404943",
+                  "primary": "#226146",
+                  "error": "#ba1a1a",
+                  "surface-bright": "#f9f9f8",
+                  "on-secondary-fixed-variant": "#224f3a",
+                  "surface-container": "#eeeeed",
+                  "surface-tint": "#2c694e",
+                  "surface-container-high": "#e8e8e7",
+                  "outline-variant": "#bfc9c1",
+                  "on-secondary-fixed": "#002113",
+                  "tertiary-fixed-dim": "#ffb95f",
+                  "surface-container-lowest": "#ffffff",
+                  "primary-container": "#3d7a5d",
+                  "on-surface": "#1a1c1c",
+                  "on-secondary-container": "#406d56",
+                  "secondary-container": "#bceed1",
+                  "tertiary-fixed": "#ffddb8",
+                  "on-primary": "#ffffff",
+                  "inverse-primary": "#95d4b2",
+                  "primary-fixed": "#b0f1cd",
+                  "primary-fixed-dim": "#95d4b2"
+          },
+          "borderRadius": {
+                  "DEFAULT": "0.25rem",
+                  "lg": "0.5rem",
+                  "xl": "0.75rem",
+                  "full": "9999px"
+          },
+          "fontFamily": {
+                  "headline": ["Inter"],
+                  "body": ["Inter"],
+                  "label": ["Inter"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body { font-family: 'Inter', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .material-symbols-outlined[data-weight="fill"] { font-variation-settings: 'FILL' 1; }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col antialiased">
+<!-- TopAppBar -->
+<header class="bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 sticky top-0 z-40 bg-[#f4f4f3] dark:bg-stone-800 transition-colors shadow-[0px_12px_32px_rgba(47,49,48,0.06)] flex justify-between items-center w-full px-6 py-4 max-w-screen-2xl mx-auto">
+<div class="text-2xl font-bold tracking-tighter text-[#226146] dark:text-[#3d7a5d]">Bekkurinn</div>
+<div class="flex items-center gap-4 text-[#226146] dark:text-[#3d7a5d]">
+<button aria-label="Notifications" class="scale-98 active:scale-95 transition-transform duration-200 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-full p-2">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button aria-label="Account" class="scale-98 active:scale-95 transition-transform duration-200 hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-full p-2">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow px-4 pt-6 pb-32 max-w-lg mx-auto w-full">
+<!-- Header Section -->
+<section class="mb-8 pl-2">
+<h1 class="text-4xl font-headline font-bold tracking-tight text-on-background mb-2">Foreldrarölt</h1>
+<p class="text-lg font-body text-on-surface-variant leading-relaxed">Skráðu þig á röltið og hjálpaðu okkur að halda hverfinu öruggu.</p>
+</section>
+<!-- Progress Goal -->
+<section class="bg-surface-container-low rounded-2xl p-6 mb-8 relative overflow-hidden">
+<div class="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent pointer-events-none"></div>
+<div class="relative z-10">
+<div class="flex justify-between items-end mb-4">
+<div>
+<h2 class="text-sm font-label font-medium text-on-surface-variant uppercase tracking-wider mb-1">Markmið bekkjarins</h2>
+<div class="text-3xl font-headline font-bold text-primary">12 / 20</div>
+</div>
+<span class="material-symbols-outlined text-primary text-4xl" data-icon="local_police" data-weight="fill">local_police</span>
+</div>
+<div class="w-full bg-surface-variant rounded-full h-3 mb-2 overflow-hidden">
+<div class="bg-gradient-to-r from-primary to-primary-container h-3 rounded-full" style="width: 60%"></div>
+</div>
+<p class="text-sm text-on-surface-variant font-body">8 vaktir eftir til að ná markmiðinu þennan mánuðinn.</p>
+</div>
+</section>
+<!-- Upcoming Shifts -->
+<section class="space-y-6">
+<h2 class="text-xl font-headline font-semibold text-on-background pl-2 mb-4">Næstu vaktir</h2>
+<!-- Card 1: Open Shift -->
+<article class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-tertiary-fixed"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-headline font-semibold text-on-background">Föstudagur 12. Maí</h3>
+<p class="text-sm font-body text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span> 20:00 - 22:00
+            </p>
+</div>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed text-xs font-label font-medium px-3 py-1 rounded-full">Vantar fólk</span>
+</div>
+<div class="flex items-center gap-3 mb-6 bg-surface-container-low p-3 rounded-xl">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="group">group</span>
+<span class="text-sm font-body text-on-surface-variant">Enginn skráður ennþá. Verið fyrst!</span>
+</div>
+<button class="w-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-headline font-medium py-3 rounded-xl hover:opacity-90 transition-opacity active:scale-98">
+          Taka vaktina
+        </button>
+</article>
+<!-- Card 2: Partially Filled Shift -->
+<article class="bg-surface-container-lowest rounded-2xl p-6 shadow-[0px_12px_32px_rgba(47,49,48,0.06)] relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1.5 bg-primary/40"></div>
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-lg font-headline font-semibold text-on-background">Laugardagur 13. Maí</h3>
+<p class="text-sm font-body text-on-surface-variant flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-base" data-icon="schedule">schedule</span> 20:00 - 23:00
+            </p>
+</div>
+<span class="bg-secondary-fixed text-on-secondary-fixed text-xs font-label font-medium px-3 py-1 rounded-full">1 vantar</span>
+</div>
+<div class="flex flex-col gap-2 mb-6">
+<div class="flex items-center gap-3 bg-surface-container-low p-3 rounded-xl">
+<div class="w-8 h-8 rounded-full bg-secondary text-on-secondary flex items-center justify-center font-bold text-sm">J</div>
+<span class="text-sm font-body text-on-background">Jón Jónsson (faðir Önnu)</span>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-low/50 p-3 rounded-xl border border-dashed border-outline-variant/30">
+<div class="w-8 h-8 rounded-full bg-surface-variant flex items-center justify-center"><span class="material-symbols-outlined text-sm text-on-surface-variant" data-icon="person_add">person_add</span></div>
+<span class="text-sm font-body text-on-surface-variant italic">Laust pláss</span>
+</div>
+</div>
+<button class="w-full bg-surface-container-high text-primary font-headline font-medium py-3 rounded-xl hover:bg-surface-variant transition-colors active:scale-98">
+          Mæti líka!
+        </button>
+</article>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pt-3 pb-8 bg-[#f9f9f8]/80 backdrop-blur-xl dark:bg-stone-900/80 rounded-t-3xl shadow-[0px_-8px_24px_rgba(47,49,48,0.04)] no-border">
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 scale-110 transition-transform duration-300 ease-out hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-2xl">
+<span class="material-symbols-outlined mb-1" data-icon="group">group</span>
+<span class="text-label-md font-inter font-medium text-xs">Directory</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 scale-110 transition-transform duration-300 ease-out hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-2xl">
+<span class="material-symbols-outlined mb-1" data-icon="calendar_month">calendar_month</span>
+<span class="text-label-md font-inter font-medium text-xs">Calendar</span>
+</button>
+<button class="flex flex-col items-center justify-center bg-[#226146]/10 dark:bg-[#3d7a5d]/20 text-[#226146] dark:text-[#3d7a5d] rounded-2xl px-5 py-2 scale-110 transition-transform duration-300 ease-out">
+<span class="material-symbols-outlined mb-1" data-icon="volunteer_activism" data-weight="fill">volunteer_activism</span>
+<span class="text-label-md font-inter font-medium text-xs font-bold">Patrol</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 scale-110 transition-transform duration-300 ease-out hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-2xl">
+<span class="material-symbols-outlined mb-1" data-icon="campaign">campaign</span>
+<span class="text-label-md font-inter font-medium text-xs">Feed</span>
+</button>
+<button class="flex flex-col items-center justify-center text-[#404943] dark:text-stone-400 px-5 py-2 scale-110 transition-transform duration-300 ease-out hover:bg-[#f4f4f3] dark:hover:bg-stone-800 rounded-2xl">
+<span class="material-symbols-outlined mb-1" data-icon="gavel">gavel</span>
+<span class="text-label-md font-inter font-medium text-xs">Agreement</span>
+</button>
+</nav>
+</body></html>

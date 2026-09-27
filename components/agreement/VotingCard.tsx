@@ -32,6 +32,7 @@ export function VotingCard({ item, existingVote, onVote, isVotingOpen }: VotingC
 
     const renderText = (key: string) => {
         const cleaned = cleanKey(key);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         const translated = t(cleaned as any);
         return translated.startsWith('agreement.') ? cleaned : translated;
     };

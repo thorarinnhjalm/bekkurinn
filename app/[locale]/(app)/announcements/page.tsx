@@ -128,7 +128,7 @@ export default function AnnouncementsPage() {
                 {(isAdmin || isSchoolAdmin) && (
                     <button
                         onClick={() => setIsCreating(true)}
-                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
+                        className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                     >
                         <Plus size={18} />
                         {t('new_announcement')}
@@ -139,7 +139,7 @@ export default function AnnouncementsPage() {
             {/* Global Translation Notice (if not Icelandic) */}
             {locale !== 'is' && (
                 <div className="max-w-4xl mx-auto p-4 bg-surface-container-low ghost-border rounded-2xl flex items-start gap-3">
-                    <Info size={16} className="text-primary mt-0.5 flex-shrink-0" />
+                    <Info size={16} className="text-primary mt-0.5 shrink-0" />
                     <p className="text-xs text-on-surface-variant leading-relaxed italic">
                         <strong className="text-on-surface">Translation Notice:</strong> Messages are automatically translated into your language. Original text is preserved for accuracy.
                     </p>
@@ -300,7 +300,7 @@ export default function AnnouncementsPage() {
             {isCreating && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center p-4 z-50 animate-in fade-in duration-300">
                     <div className="bg-surface-container-lowest rounded-3xl p-8 max-w-lg w-full space-y-6 shadow-ambient relative overflow-hidden">
-                        <div className="absolute top-0 w-full h-2 bg-gradient-to-r from-primary to-primary-container left-0" />
+                        <div className="absolute top-0 w-full h-2 bg-linear-to-r from-primary to-primary-container left-0" />
 
                         <div className="text-center">
                             <div className="w-14 h-14 bg-primary-container/15 rounded-2xl flex items-center justify-center mx-auto mb-4 text-primary shadow-ambient">
@@ -417,7 +417,7 @@ export default function AnnouncementsPage() {
                                     }
 
                                     if (newTitle && newContent) {
-                                        await createAnnouncementMutation.mutateAsync({
+                                        const announcementPayload = {
                                             classId: scope === 'class' ? activeClassId : null,
                                             schoolId: activeClass?.schoolId || '',
                                             scope,
@@ -430,7 +430,29 @@ export default function AnnouncementsPage() {
                                             allowMultipleVotes: false,
                                             createdBy: user?.uid || '',
                                             author: user?.displayName || (scope === 'school' ? 'Foreldrafélag' : 'Stjórn'),
-                                        });
+                                        };
+
+                                        await createAnnouncementMutation.mutateAsync(announcementPayload);
+
+                                        // Trigger Notification Fan-out
+                                        try {
+                                            const token = await user?.getIdToken();
+                                            await fetch('/api/notifications/fan-out', {
+                                                method: 'POST',
+                                                headers: { 
+                                                    'Content-Type': 'application/json',
+                                                    ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                                                },
+                                                body: JSON.stringify({
+                                                    ...announcementPayload,
+                                                    message: newTitle, // Short message for notification
+                                                    link: `/${locale}/announcements`
+                                                })
+                                            });
+                                        } catch (err) {
+                                            console.error("Failed to send notification fan-out:", err);
+                                        }
+
                                         setNewTitle('');
                                         setNewContent('');
                                         setIsCreating(false);
@@ -440,7 +462,8 @@ export default function AnnouncementsPage() {
                                         setPollOptions([]);
                                     }
                                 }}
-                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-linear-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
+
                             >
                                 {t('publish')}
                             </button>
@@ -498,13 +521,31 @@ export default function AnnouncementsPage() {
 
                                     // Trigger Email API
                                     try {
+                                        const token = await user?.getIdToken();
                                         await fetch('/api/send-critical-announcement', {
                                             method: 'POST',
-                                            headers: { 'Content-Type': 'application/json' },
+                                            headers: { 
+                                                'Content-Type': 'application/json',
+                                                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                                            },
                                             body: JSON.stringify(announcement)
                                         });
+
+                                        // Also trigger Notification Fan-out
+                                        await fetch('/api/notifications/fan-out', {
+                                            method: 'POST',
+                                            headers: { 
+                                                'Content-Type': 'application/json',
+                                                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+                                            },
+                                            body: JSON.stringify({
+                                                ...announcement,
+                                                message: newTitle,
+                                                link: `/${locale}/announcements`
+                                            })
+                                        });
                                     } catch (err) {
-                                        console.error("Failed to send emails:", err);
+                                        console.error("Failed to send emails or notifications:", err);
                                     }
 
                                     setIsCreating(false);

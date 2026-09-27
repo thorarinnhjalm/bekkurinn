@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+
+<html class="light" lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Fullkomið kerfi fyrir bekkjarfulltrúa</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#3a6750",
+                        "surface-tint": "#2c694e",
+                        "on-secondary-container": "#406d56",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#fff0e3",
+                        "surface-dim": "#dadad9",
+                        "primary": "#226146",
+                        "outline-variant": "#bfc9c1",
+                        "on-background": "#1a1c1c",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#95d4b2",
+                        "inverse-surface": "#2f3130",
+                        "outline": "#707973",
+                        "surface-container-high": "#e8e8e7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-variant": "#e2e2e2",
+                        "background": "#f9f9f8",
+                        "primary-container": "#3d7a5d",
+                        "inverse-on-surface": "#f1f1f0",
+                        "surface": "#f9f9f8",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f4f4f3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "tertiary-fixed": "#ffddb8",
+                        "tertiary": "#7a4c00",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "secondary-container": "#bceed1",
+                        "on-surface-variant": "#404943",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "surface-container": "#eeeeed",
+                        "on-primary-fixed": "#002113",
+                        "secondary-fixed": "#bceed1",
+                        "surface-bright": "#f9f9f8",
+                        "inverse-primary": "#95d4b2",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "primary-fixed": "#b0f1cd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface antialiased min-h-screen flex flex-col selection:bg-primary-container selection:text-on-primary-container">
+<!-- Mobile Navigation (TopAppBar) -->
+<header class="sticky top-0 z-50 bg-surface/90 backdrop-blur-xl px-4 py-3 flex items-center justify-between shadow-[0px_4px_16px_rgba(47,49,48,0.02)]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-headline font-extrabold tracking-tighter text-xl text-primary">Bekkurinn</span>
+</div>
+<button class="p-2 text-on-surface-variant hover:bg-surface-container-high rounded-full min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined text-2xl">menu</span>
+</button>
+</header>
+<main class="flex-1 pb-24">
+<!-- Hero Section -->
+<section class="px-6 pt-16 pb-12 flex flex-col items-start relative overflow-hidden bg-surface-container-low rounded-b-[2.5rem]">
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-fixed opacity-30 rounded-full blur-3xl mix-blend-multiply"></div>
+<span class="inline-flex items-center gap-2 px-3 py-1 bg-surface rounded-full text-primary font-medium text-sm tracking-tight mb-6 shadow-sm">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">verified</span>
+                Fyrir skólaárið 2024-2025
+            </span>
+<h1 class="font-headline text-[2.5rem] leading-[1.1] font-extrabold text-on-surface tracking-[-0.02em] mb-6">
+                Fullkomið kerfi fyrir bekkjarfulltrúa.
+            </h1>
+<p class="font-body text-lg text-on-surface-variant leading-relaxed mb-10 max-w-sm">
+                Hljóðlátur griðastaður til að halda utan um upplýsingar, dagatal og samskipti í þínum bekk. Einfalt og öruggt.
+            </p>
+<button class="w-full min-h-[56px] bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-2xl font-semibold text-lg shadow-[0px_12px_32px_rgba(47,49,48,0.12)] hover:opacity-95 transition-opacity flex items-center justify-center gap-2">
+                Stofna bekk (Frítt)
+                <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</section>
+<!-- Features Stack -->
+<section class="px-4 py-16 flex flex-col gap-4">
+<h2 class="font-headline text-2xl font-bold tracking-tight mb-6 px-2 text-on-surface">Af hverju Bekkurinn?</h2>
+<!-- Feature Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_12px_32px_rgba(47,49,48,0.04)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary rounded-l-3xl"></div>
+<div class="w-12 h-12 bg-secondary-container text-on-secondary-container rounded-2xl flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">calendar_month</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-2 text-on-surface">Einfalt Dagatal</h3>
+<p class="font-body text-on-surface-variant leading-relaxed">Skipuleggðu viðburði, afmæli og foreldrafundi á einum stað. Allir fá áminningar í tæka tíð.</p>
+</div>
+<!-- Feature Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_12px_32px_rgba(47,49,48,0.04)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-tertiary-container rounded-l-3xl"></div>
+<div class="w-12 h-12 bg-tertiary-fixed text-on-tertiary-fixed rounded-2xl flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">lock</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-2 text-on-surface">Öruggt Svæði</h3>
+<p class="font-body text-on-surface-variant leading-relaxed">Engar auglýsingar. Engin gagnasöfnun. Einungis boðnir foreldrar og kennarar hafa aðgang að bekknum.</p>
+</div>
+<!-- Feature Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-3xl shadow-[0px_12px_32px_rgba(47,49,48,0.04)] relative overflow-hidden group">
+<div class="absolute top-0 left-0 w-1 h-full bg-secondary rounded-l-3xl"></div>
+<div class="w-12 h-12 bg-surface-container-high text-on-surface rounded-2xl flex items-center justify-center mb-5">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">group</span>
+</div>
+<h3 class="font-headline font-bold text-xl mb-2 text-on-surface">Bekkjarlistinn</h3>
+<p class="font-body text-on-surface-variant leading-relaxed">Haldið utan um tengiliðaupplýsingar, ofnæmi og aðrar mikilvægar upplýsingar um nemendur.</p>
+</div>
+</section>
+<!-- Timeline Steps -->
+<section class="px-6 py-12 bg-surface-container-low rounded-3xl mx-4 mb-16">
+<h2 class="font-headline text-2xl font-bold tracking-tight mb-8 text-on-surface">Svona virkar það</h2>
+<div class="relative pl-6 border-l-2 border-outline-variant/30 space-y-10">
+<div class="relative">
+<div class="absolute -left-[35px] top-1 w-6 h-6 bg-primary rounded-full border-4 border-surface-container-low flex items-center justify-center"></div>
+<h3 class="font-headline font-bold text-lg text-on-surface">1. Stofnaðu bekk</h3>
+<p class="font-body text-on-surface-variant mt-1">Tekur aðeins 2 mínútur. Skráðu nafn skóla og bekkjar.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[35px] top-1 w-6 h-6 bg-surface-container-high rounded-full border-4 border-surface-container-low flex items-center justify-center"></div>
+<h3 class="font-headline font-bold text-lg text-on-surface">2. Bættu við upplýsingum</h3>
+<p class="font-body text-on-surface-variant mt-1">Settu inn viðburði á dagatal eða bættu við bekkjarlista.</p>
+</div>
+<div class="relative">
+<div class="absolute -left-[35px] top-1 w-6 h-6 bg-surface-container-high rounded-full border-4 border-surface-container-low flex items-center justify-center"></div>
+<h3 class="font-headline font-bold text-lg text-on-surface">3. Bjóddu foreldrum</h3>
+<p class="font-body text-on-surface-variant mt-1">Deildu öruggum tengli til að fá alla með um borð.</p>
+</div>
+</div>
+</section>
+<!-- FAQ Accordion (Static Example) -->
+<section class="px-6 py-8">
+<h2 class="font-headline text-2xl font-bold tracking-tight mb-6 text-on-surface">Algengar spurningar</h2>
+<div class="space-y-4">
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_4px_16px_rgba(47,49,48,0.02)] border border-outline-variant/10">
+<button class="w-full flex justify-between items-center text-left min-h-[44px]">
+<span class="font-headline font-semibold text-on-surface">Kostar eitthvað að nota Bekkinn?</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+<div class="mt-3 text-on-surface-variant font-body text-sm leading-relaxed">
+                        Nei, grunnkerfið er algjörlega ókeypis fyrir bekkjarfulltrúa og foreldra.
+                    </div>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_4px_16px_rgba(47,49,48,0.02)] border border-outline-variant/10">
+<button class="w-full flex justify-between items-center text-left min-h-[44px]">
+<span class="font-headline font-semibold text-on-surface">Hvernig er öryggi gagna tryggt?</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest rounded-2xl p-5 shadow-[0px_4px_16px_rgba(47,49,48,0.02)] border border-outline-variant/10">
+<button class="w-full flex justify-between items-center text-left min-h-[44px]">
+<span class="font-headline font-semibold text-on-surface">Geta kennarar notað kerfið?</span>
+<span class="material-symbols-outlined text-on-surface-variant">expand_more</span>
+</button>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="px-6 py-12 text-center">
+<button class="w-full min-h-[56px] bg-gradient-to-r from-primary to-primary-container text-on-primary rounded-2xl font-semibold text-lg shadow-[0px_12px_32px_rgba(47,49,48,0.12)]">
+                Byrja strax
+            </button>
+</section>
+</main>
+<footer class="bg-surface-container-low pt-12 pb-8 px-6 text-center border-t border-outline-variant/20">
+<div class="flex items-center justify-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary text-2xl" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-headline font-bold text-lg text-primary">Bekkurinn</span>
+</div>
+<p class="font-body text-sm text-on-surface-variant mb-8">
+            Hljóðlátur griðastaður fyrir skólasamfélagið.
+        </p>
+<div class="flex justify-center gap-6 text-sm text-on-surface-variant font-medium">
+<a class="min-h-[44px] flex items-center hover:text-primary transition-colors" href="#">Skilmálar</a>
+<a class="min-h-[44px] flex items-center hover:text-primary transition-colors" href="#">Persónuvernd</a>
+<a class="min-h-[44px] flex items-center hover:text-primary transition-colors" href="#">Hafa samband</a>
+</div>
+</footer>
+</body></html>

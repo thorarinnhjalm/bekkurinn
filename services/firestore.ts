@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 import { logger } from '@/lib/logger';
+import { normalizeJoinCode } from '@/lib/joinCode';
 import type {
     Class,
     CreateClassInput,
@@ -181,7 +182,7 @@ export async function getClass(classId: string): Promise<Class | null> {
 }
 
 export async function getClassByJoinCode(joinCode: string): Promise<Class | null> {
-    const q = query(collection(db, 'classes'), where('joinCode', '==', joinCode.toUpperCase()));
+    const q = query(collection(db, 'classes'), where('joinCode', '==', normalizeJoinCode(joinCode)));
     const snapshot = await getDocs(q);
     if (snapshot.empty) return null;
     const doc = snapshot.docs[0];
@@ -499,6 +500,32 @@ export async function getSchoolMemberEmails(schoolId: string): Promise<string[]>
     }
 
     return Array.from(new Set(allEmails));
+}
+
+export async function getClassMemberUserIds(classId: string): Promise<string[]> {
+    const q = query(
+        collection(db, 'parentLinks'),
+        where('classId', '==', classId),
+        where('status', '==', 'approved')
+    );
+    const snapshot = await getDocs(q);
+    return Array.from(new Set(snapshot.docs.map(doc => doc.data().userId)));
+}
+
+export async function getSchoolMemberUserIds(schoolId: string): Promise<string[]> {
+    const q = query(collection(db, 'classes'), where('schoolId', '==', schoolId));
+    const snapshot = await getDocs(q);
+    const classIds = snapshot.docs.map(doc => doc.id);
+
+    if (classIds.length === 0) return [];
+
+    let allUserIds: string[] = [];
+    for (const classId of classIds) {
+        const uids = await getClassMemberUserIds(classId);
+        allUserIds = [...allUserIds, ...uids];
+    }
+
+    return Array.from(new Set(allUserIds));
 }
 
 // ========================================

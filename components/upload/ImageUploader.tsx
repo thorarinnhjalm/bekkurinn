@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Upload, X, Loader2, Check } from 'lucide-react';
+import Image from 'next/image';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '@/lib/firebase/config';
 import { ImageCropper } from './ImageCropper';
@@ -121,7 +122,7 @@ export function ImageUploader({
 
     return (
         <div className="space-y-3">
-            <label className="block text-sm font-medium text-gray-700">{label}</label>
+            <label className="block text-sm font-medium text-on-surface">{label}</label>
 
             {/* Cropper Modal */}
             {cropImageSrc && (
@@ -136,15 +137,18 @@ export function ImageUploader({
             <div className="relative">
                 {previewUrl ? (
                     <div className="relative inline-block">
-                        <img
+                        <Image
                             src={previewUrl}
                             alt="Preview"
-                            className="w-32 h-32 object-cover rounded-lg border-2 border-gray-200"
+                            width={128}
+                            height={128}
+                            className="w-32 h-32 object-cover rounded-lg border-2 border-outline-variant/30"
+                            unoptimized
                         />
                         {!isUploading && (
                             <button
                                 onClick={handleRemove}
-                                className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors shadow-md"
+                                className="absolute -top-2 -right-2 bg-error-container/400 text-white rounded-full p-1 hover:bg-error transition-colors shadow-md"
                                 title="Remove photo"
                             >
                                 <X size={16} />
@@ -162,10 +166,10 @@ export function ImageUploader({
                 ) : (
                     <div
                         onClick={() => fileInputRef.current?.click()}
-                        className="w-32 h-32 border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-colors"
+                        className="w-32 h-32 border-2 border-dashed border-outline-variant rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-primary/50 hover:bg-primary-container/15 transition-colors"
                     >
-                        <Upload size={24} className="text-gray-400 mb-1" />
-                        <span className="text-xs text-gray-500 text-center px-2">
+                        <Upload size={24} className="text-on-surface-variant mb-1" />
+                        <span className="text-xs text-on-surface-variant text-center px-2">
                             Click to select
                         </span>
                     </div>
@@ -183,19 +187,19 @@ export function ImageUploader({
 
             {/* Error Message */}
             {error && (
-                <p className="text-sm text-red-600">{error}</p>
+                <p className="text-sm text-error">{error}</p>
             )}
 
             {/* Success Message */}
             {!isUploading && previewUrl && currentImageUrl === previewUrl && (
-                <div className="flex items-center gap-1 text-sm text-green-600">
+                <div className="flex items-center gap-1 text-sm text-primary">
                     <Check size={16} />
                     <span>Photo saved</span>
                 </div>
             )}
 
             {/* Help Text */}
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-on-surface-variant">
                 JPG or PNG, maximum {maxSizeMB}MB
             </p>
         </div>

@@ -96,7 +96,7 @@ export default function LostFoundPage() {
 
                 <button
                     onClick={() => setIsCreating(true)}
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                 >
                     <Plus size={20} />
                     {t('register_item')}
@@ -237,7 +237,7 @@ export default function LostFoundPage() {
                             </button>
                             <button
                                 onClick={handleCreate}
-                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
+                                className="flex-1 py-3 rounded-xl font-bold text-on-primary bg-linear-to-r from-primary to-primary-container shadow-ambient hover:-translate-y-0.5 transition-all"
                             >
                                 {t('submit')}
                             </button>

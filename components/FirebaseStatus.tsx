@@ -19,13 +19,15 @@ export function FirebaseStatus() {
                 // Try to read from Firestore (will fail gracefully if no collections exist)
                 await getDocs(collection(db, 'classes'));
                 setStatus('connected');
-            } catch (err: any) {
+            } catch (err) {
                 // Even permission errors mean we're connected
-                if (err.code === 'permission-denied' || err.message.includes('permission')) {
+                const errCode = err instanceof Error && 'code' in err ? (err as Error & { code: string }).code : '';
+                const errMsg = err instanceof Error ? err.message : '';
+                if (errCode === 'permission-denied' || errMsg.includes('permission')) {
                     setStatus('connected');
                 } else {
                     setStatus('error');
-                    setError(err.message);
+                    setError(errMsg);
                 }
             }
         };

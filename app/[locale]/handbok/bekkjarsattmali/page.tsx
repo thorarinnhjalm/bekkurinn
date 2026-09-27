@@ -79,7 +79,7 @@ export default function BekkjarsattmaliPage() {
                 <div className="text-center">
                     <Link
                         href="/agreement"
-                        className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-on-primary shadow-ambient bg-gradient-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
+                        className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
                     >
                         {t('cta')}
                     </Link>
@@ -101,7 +101,7 @@ function TopicItem({ title, desc }: { title: string; desc: string }) {
 function Step({ n, title, desc }: { n: number; title: string; desc: string }) {
     return (
         <li className="flex gap-4">
-            <span className="flex-shrink-0 w-8 h-8 bg-primary-container/15 text-primary rounded-full flex items-center justify-center font-bold text-sm">
+            <span className="shrink-0 w-8 h-8 bg-primary-container/15 text-primary rounded-full flex items-center justify-center font-bold text-sm">
                 {n}
             </span>
             <div>

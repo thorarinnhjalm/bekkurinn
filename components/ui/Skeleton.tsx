@@ -8,10 +8,10 @@ export function CardSkeleton() {
     return (
         <div className="nordic-card p-4 animate-pulse">
             <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-gray-200 rounded-full" />
+                <div className="w-12 h-12 bg-surface-container-high rounded-full" />
                 <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 rounded w-3/4" />
-                    <div className="h-3 bg-gray-200 rounded w-1/2" />
+                    <div className="h-4 bg-surface-container-high rounded w-3/4" />
+                    <div className="h-3 bg-surface-container-high rounded w-1/2" />
                 </div>
             </div>
         </div>
@@ -31,8 +31,8 @@ export function ListSkeleton({ count = 5 }: { count?: number }) {
 export function HeaderSkeleton() {
     return (
         <div className="animate-pulse mb-6">
-            <div className="h-8 bg-gray-200 rounded w-1/3 mb-2" />
-            <div className="h-4 bg-gray-200 rounded w-1/2" />
+            <div className="h-8 bg-surface-container-high rounded w-1/3 mb-2" />
+            <div className="h-4 bg-surface-container-high rounded w-1/2" />
         </div>
     );
 }

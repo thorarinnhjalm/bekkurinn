@@ -47,7 +47,7 @@ export function HowItWorks({ locale }: { locale: string }) {
                 <div className="mt-16 text-center">
                     <Link
                         href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                        className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-gradient-to-r from-primary to-primary-container"
+                        className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
                     >
                         {t('how.cta')}
                     </Link>

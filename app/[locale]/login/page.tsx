@@ -246,7 +246,7 @@ export default function LoginPage() {
                         <button
                             onClick={handleEmailAuth}
                             disabled={mailLoading}
-                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg active:scale-[0.98]"
+                            className="w-full bg-primary text-white py-3 rounded-xl font-bold hover:bg-primary-container transition-all disabled:opacity-50 flex justify-center items-center gap-2 shadow-lg shadow-ambient active:scale-[0.98]"
                         >
                             {mailLoading && <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />}
                             {mode === 'login' ? 'Skrá inn' : 'Nýskráning (Sign up)'}
@@ -287,19 +287,19 @@ export default function LoginPage() {
                                 Facebook hópar
                             </div>
                             <div className="flex items-center gap-2 text-on-surface-variant">
-                                <X size={16} className="text-error/70 flex-shrink-0" />
+                                <X size={16} className="text-error/70 shrink-0" />
                                 <span>Upplýsingar týnast í straumi</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface-variant">
-                                <X size={16} className="text-error/70 flex-shrink-0" />
+                                <X size={16} className="text-error/70 shrink-0" />
                                 <span>Erfitt að finna símanúmer</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface-variant">
-                                <X size={16} className="text-error/70 flex-shrink-0" />
+                                <X size={16} className="text-error/70 shrink-0" />
                                 <span>Engin afmælisáminnning</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface-variant">
-                                <X size={16} className="text-error/70 flex-shrink-0" />
+                                <X size={16} className="text-error/70 shrink-0" />
                                 <span>Auglýsingar og truflun</span>
                             </div>
                         </div>
@@ -308,19 +308,19 @@ export default function LoginPage() {
                                 Bekkurinn
                             </div>
                             <div className="flex items-center gap-2 text-on-surface">
-                                <Check size={16} className="text-primary flex-shrink-0" />
+                                <Check size={16} className="text-primary shrink-0" />
                                 <span>Allt skipulagt á einum stað</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface">
-                                <Check size={16} className="text-primary flex-shrink-0" />
+                                <Check size={16} className="text-primary shrink-0" />
                                 <span>Bekkjarlisti með símum</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface">
-                                <Check size={16} className="text-primary flex-shrink-0" />
+                                <Check size={16} className="text-primary shrink-0" />
                                 <span>Sjálfvirk afmælisáminnning</span>
                             </div>
                             <div className="flex items-center gap-2 text-on-surface">
-                                <Check size={16} className="text-primary flex-shrink-0" />
+                                <Check size={16} className="text-primary shrink-0" />
                                 <span>Engar auglýsingar, aldrei</span>
                             </div>
                         </div>

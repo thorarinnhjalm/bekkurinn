@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html lang="is"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Bekkurinn - Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary": "#3a6750",
+                        "surface-tint": "#2c694e",
+                        "on-secondary-container": "#406d56",
+                        "error": "#ba1a1a",
+                        "on-tertiary-container": "#fff0e3",
+                        "surface-dim": "#dadad9",
+                        "primary": "#226146",
+                        "outline-variant": "#bfc9c1",
+                        "on-background": "#1a1c1c",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#95d4b2",
+                        "inverse-surface": "#2f3130",
+                        "outline": "#707973",
+                        "surface-container-high": "#e8e8e7",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#1a1c1c",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "surface-container-highest": "#e2e2e2",
+                        "surface-variant": "#e2e2e2",
+                        "background": "#f9f9f8",
+                        "primary-container": "#3d7a5d",
+                        "inverse-on-surface": "#f1f1f0",
+                        "surface": "#f9f9f8",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-low": "#f4f4f3",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed": "#002113",
+                        "on-secondary-fixed-variant": "#224f3a",
+                        "on-primary": "#ffffff",
+                        "tertiary-container": "#9b6200",
+                        "tertiary-fixed": "#ffddb8",
+                        "tertiary": "#7a4c00",
+                        "on-primary-container": "#c8ffdf",
+                        "on-error-container": "#93000a",
+                        "on-primary-fixed-variant": "#0d5137",
+                        "secondary-container": "#bceed1",
+                        "on-surface-variant": "#404943",
+                        "secondary-fixed-dim": "#a1d1b5",
+                        "surface-container": "#eeeeed",
+                        "on-primary-fixed": "#002113",
+                        "secondary-fixed": "#bceed1",
+                        "surface-bright": "#f9f9f8",
+                        "inverse-primary": "#95d4b2",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#2a1700",
+                        "primary-fixed": "#b0f1cd"
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter", "sans-serif"],
+                        "body": ["Inter", "sans-serif"],
+                        "label": ["Inter", "sans-serif"]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: theme('colors.background');
+            color: theme('colors.on-background');
+            -webkit-font-smoothing: antialiased;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 1rem); }
+        .pt-safe { padding-top: env(safe-area-inset-top, 1rem); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col md:flex-row">
+<!-- Web SideNav (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col fixed left-0 top-0 h-full p-6 bg-surface-container-low text-primary w-64 border-r-0 shadow-none z-50 transition-colors duration-200">
+<div class="mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-xl">B</div>
+<div>
+<h1 class="text-xl font-bold tracking-tighter text-on-surface">Bekkurinn</h1>
+<p class="text-xs text-on-surface-variant">Hljóðlátur griðastaður</p>
+</div>
+</div>
+<div class="flex flex-col gap-2 font-inter text-sm font-medium tracking-tight">
+<!-- Active: Yfirlit -->
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl bg-surface-container-highest text-primary font-semibold transition-transform active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span>Yfirlit</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">groups</span>
+<span>Bekkir</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span>Dagatal</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">folder</span>
+<span>Skjöl</span>
+</a>
+<div class="mt-auto">
+<a class="flex items-center gap-3 px-4 py-3 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-primary transition-colors duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Stillingar</span>
+</a>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 pb-24 md:pb-8">
+<!-- Mobile TopHeader -->
+<header class="md:hidden sticky top-0 z-40 bg-surface/80 backdrop-blur-xl pt-safe px-4 py-3 flex justify-between items-center">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-sm">B</div>
+<h1 class="text-lg font-bold tracking-tighter text-on-surface">Bekkurinn</h1>
+</div>
+<div class="flex items-center gap-3">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="close-up portrait of a woman with short blonde hair smiling softly against a neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgpnujBW-7MqNjsnARyzALovQpyTj51Ofu_SctxjC6SG3zxfDy_j0gBpeLo8eP-yyA75Z2_xVRnIZe8eNDCxR4n5TzxHlBPkN_O1bhsKJyhybf2Tx-GRIUHSFkLVJiidrj-sNVo6FZRoJkrznUC5vIh2G2yEw5QEG-x7_lG_ALL2kS1ZP2rnbD6ETNr0LUKzlHfn-yBk_R_9B_lOo_VwPqYG9OxvspdAhJ7oZgL5XvDBpZnZ9rMGtAofVVMdlcg9kx-cvnuwzYV1s"/>
+</div>
+</div>
+</header>
+<div class="p-4 md:p-8 max-w-5xl mx-auto space-y-8">
+<!-- Greeting Section -->
+<section class="pt-4 md:pt-8">
+<p class="text-on-surface-variant text-sm font-medium mb-1">Föstudagur, 12. Maí</p>
+<h2 class="text-3xl md:text-4xl font-headline font-bold tracking-tight text-on-surface">Góðan daginn, Helga Pálma</h2>
+</section>
+<!-- Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+<!-- Hvað er framundan? (Agenda) -->
+<section class="md:col-span-8 space-y-4">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">event</span>
+                            Hvað er framundan?
+                        </h3>
+<button class="text-primary text-sm font-medium hover:text-surface-tint transition-colors">Sjá allt</button>
+</div>
+<div class="space-y-3">
+<!-- Agenda Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex gap-4 items-start shadow-[0px_12px_32px_rgba(47,49,48,0.03)] hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-shadow">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex flex-col items-center justify-center shrink-0">
+<span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Kl</span>
+<span class="text-sm font-bold text-on-surface">09:00</span>
+</div>
+<div class="flex-1">
+<h4 class="text-base font-semibold text-on-surface mb-1">Stærðfræði - 4. Bekkur</h4>
+<p class="text-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span> Stofa 12
+                                </p>
+</div>
+<div class="px-3 py-1 rounded-full bg-secondary-container/50 text-on-secondary-container text-xs font-medium self-center hidden sm:block">
+                                25 Nemendur
+                            </div>
+</div>
+<!-- Agenda Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex gap-4 items-start shadow-[0px_12px_32px_rgba(47,49,48,0.03)] hover:shadow-[0px_12px_32px_rgba(47,49,48,0.06)] transition-shadow">
+<div class="w-12 h-12 rounded-lg bg-surface-container flex flex-col items-center justify-center shrink-0">
+<span class="text-xs font-medium text-on-surface-variant uppercase tracking-wider">Kl</span>
+<span class="text-sm font-bold text-on-surface">10:30</span>
+</div>
+<div class="flex-1">
+<h4 class="text-base font-semibold text-on-surface mb-1">Náttúrufræði - Vettvangsferð</h4>
+<p class="text-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">nature_people</span> Grasagarðurinn
+                                </p>
+</div>
+<div class="px-3 py-1 rounded-full bg-tertiary-fixed/30 text-on-tertiary-fixed text-xs font-medium self-center hidden sm:flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">push_pin</span> Úti
+                            </div>
+</div>
+</div>
+</section>
+<!-- Sidebar / Right Column -->
+<div class="md:col-span-4 space-y-6">
+<!-- Nýjasta tilkynningin -->
+<section class="space-y-4">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">campaign</span>
+                            Nýjasta tilkynningin
+                        </h3>
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-[0px_12px_32px_rgba(47,49,48,0.03)] border border-outline-variant/15 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-primary-container/10 to-transparent rounded-bl-full pointer-events-none"></div>
+<div class="flex items-center gap-2 mb-3">
+<div class="w-6 h-6 rounded-full bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-[14px] text-on-surface-variant">school</span>
+</div>
+<span class="text-xs font-medium text-on-surface-variant">Skrifstofa · Fyrir 2 klst</span>
+</div>
+<h4 class="text-base font-semibold text-on-surface mb-2 leading-tight">Vorhátíðin færist innandyra</h4>
+<p class="text-sm text-on-surface-variant line-clamp-3 leading-relaxed">
+                                Vegna veðurspár fyrir morgundaginn höfum við ákveðið að færa alla dagskrá vorhátíðarinnar inn í íþróttahús. Vinsamlegast látið foreldra vita.
+                            </p>
+<button class="mt-4 text-primary text-sm font-medium hover:text-surface-tint transition-colors flex items-center gap-1">
+                                Lesa meira <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</button>
+</div>
+</section>
+<!-- Afmæli framundan -->
+<section class="space-y-4">
+<h3 class="text-lg font-bold text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary-container" style="font-variation-settings: 'FILL' 1;">cake</span>
+                            Afmæli framundan
+                        </h3>
+<div class="bg-tertiary-fixed/20 rounded-xl p-4 flex items-center justify-between border border-tertiary-fixed/40">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-surface-container-lowest flex items-center justify-center font-bold text-tertiary-container shadow-sm">
+                                    J
+                                </div>
+<div>
+<h4 class="text-sm font-semibold text-on-surface">Jón Jónsson</h4>
+<p class="text-xs text-on-surface-variant">Verður 10 ára á morgun</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-surface-container-lowest text-tertiary-container flex items-center justify-center shadow-sm hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[18px]">celebration</span>
+</button>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile BottomNavBar -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-safe pt-3 md:hidden bg-surface-container-lowest/80 backdrop-blur-xl rounded-t-3xl border-t-0 shadow-[0px_-12px_32px_rgba(47,49,48,0.06)] font-inter text-[11px] font-medium transition-opacity duration-300 ease-out">
+<!-- Active: Heim -->
+<a class="flex flex-col items-center justify-center bg-primary-container/20 text-primary-container rounded-2xl px-5 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">home</span>
+<span>Heim</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container/50 rounded-2xl px-5 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mb-1">school</span>
+<span>Bekkur</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container/50 rounded-2xl px-5 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mb-1">notifications</span>
+<span>Tilkynningar</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-container/50 rounded-2xl px-5 py-2 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mb-1">person</span>
+<span>Prófíll</span>
+</a>
+</nav>
+</body></html>

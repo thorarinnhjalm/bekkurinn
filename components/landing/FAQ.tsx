@@ -52,7 +52,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
                     {q}
                 </span>
                 <span
-                    className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
+                    className={`shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${
                         isOpen
                             ? 'bg-primary-container/20 text-primary'
                             : 'bg-surface-container-high text-on-surface-variant'

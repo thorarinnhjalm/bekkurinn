@@ -22,7 +22,7 @@ export default function LawsPage() {
                 Í <strong>9. grein</strong> laganna segir:
             </p>
             <blockquote className="italic border-l-4 border-primary pl-4 py-2 bg-surface-container-low rounded-r-lg not-prose text-on-surface">
-                "Við hvern grunnskóla skal starfa foreldrafélag. Skólastjóri sér til þess að félagið sé stofnað og að því sé búin aðstaða."
+                „Við hvern grunnskóla skal starfa foreldrafélag. Skólastjóri sér til þess að félagið sé stofnað og að því sé búin aðstaða.“
             </blockquote>
             <p>
                 Þetta þýðir að skólinn ber ábyrgð á að foreldrafélag sé til staðar.

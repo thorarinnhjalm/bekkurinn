@@ -37,13 +37,13 @@ export function Tooltip({ content, children, side = 'top' }: TooltipProps) {
 
             {isVisible && (
                 <div
-                    className={`absolute z-50 px-3 py-2 text-xs text-white bg-gray-900 rounded-lg shadow-lg whitespace-nowrap max-w-xs ${positionClasses[side]}`}
+                    className={`absolute z-50 px-3 py-2 text-xs text-white bg-on-surface rounded-lg shadow-lg whitespace-nowrap max-w-xs ${positionClasses[side]}`}
                     style={{ whiteSpace: 'normal' }}
                 >
                     {content}
                     {/* Arrow */}
                     <div
-                        className={`absolute w-2 h-2 bg-gray-900 transform rotate-45 ${side === 'top' ? 'bottom-[-4px] left-1/2 -translate-x-1/2' :
+                        className={`absolute w-2 h-2 bg-on-surface transform rotate-45 ${side === 'top' ? 'bottom-[-4px] left-1/2 -translate-x-1/2' :
                                 side === 'bottom' ? 'top-[-4px] left-1/2 -translate-x-1/2' :
                                     side === 'left' ? 'right-[-4px] top-1/2 -translate-y-1/2' :
                                         'left-[-4px] top-1/2 -translate-y-1/2'
@@ -63,7 +63,7 @@ export function Tooltip({ content, children, side = 'top' }: TooltipProps) {
 export function TooltipIcon({ content, side = 'top' }: { content: string; side?: 'top' | 'bottom' | 'left' | 'right' }) {
     return (
         <Tooltip content={content} side={side}>
-            <HelpCircle size={16} className="text-gray-400 hover:text-gray-600 cursor-help inline-block" />
+            <HelpCircle size={16} className="text-on-surface-variant hover:text-on-surface-variant cursor-help inline-block" />
         </Tooltip>
     );
 }

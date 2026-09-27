@@ -40,7 +40,7 @@ export default function PrivacyPage() {
                     Hvernig Bekkurinn leysir málið
                 </h3>
                 <p className="text-on-surface mb-4">
-                    Í kerfinu okkar er bekkjarlistinn "lifandi". Foreldrar skrá sig sjálfir.
+                    Í kerfinu okkar er bekkjarlistinn „lifandi“. Foreldrar skrá sig sjálfir.
                 </p>
                 <div className="grid gap-3">
                     <FeatureRow text="Foreldrar stjórna sýnileika sínum (hægt að fela símanúmer)" />
@@ -67,7 +67,7 @@ export default function PrivacyPage() {
 function FeatureRow({ text }: { text: string }) {
     return (
         <div className="flex items-center gap-3 text-on-surface font-medium">
-            <CheckCircle size={18} className="text-primary flex-shrink-0" />
+            <CheckCircle size={18} className="text-primary shrink-0" />
             <span>{text}</span>
         </div>
     );

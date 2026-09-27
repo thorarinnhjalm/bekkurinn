@@ -1,0 +1,362 @@
+
+> bekkurinn@0.1.0 lint
+> eslint
+
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/agreement/page.tsx
+  626:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  862:10  warning  'TopicItem' is defined but never used     @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/announcements/page.tsx
+   71:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  107:43  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  520:98  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/calendar/page.tsx
+    6:43  warning  'MapPin' is defined but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           @typescript-eslint/no-unused-vars
+   73:36  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  156:21  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/calendar/page.tsx:156:21
+  154 |         const aTime = a.date?.toDate?.()?.getTime() || 0;
+  155 |         const bTime = b.date?.toDate?.()?.getTime() || 0;
+> 156 |         const now = Date.now();
+      |                     ^^^^^^^^^^ Cannot call impure function
+  157 |         const aUpcoming = aTime > now;
+  158 |         const bUpcoming = bTime > now;
+  159 |         if (aUpcoming && !bUpcoming) return -1;  react-hooks/purity
+  565:60  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  573:42  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     @typescript-eslint/no-explicit-any
+  610:17  error    Do not pass children as props. Instead, nest children between the opening and closing tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react/no-children-prop
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/dashboard/DashboardView.tsx
+   58:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/dashboard/DashboardView.tsx:58:13
+  56 |     useEffect(() => {
+  57 |         if (userClasses && userClasses.length > 0 && !selectedClassId) {
+> 58 |             setSelectedClassId(userClasses[0].id);
+     |             ^^^^^^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  59 |         }
+  60 |     }, [userClasses, selectedClassId]);
+  61 |  react-hooks/set-state-in-effect
+   85:12  warning  'showWizard' is assigned a value but never used                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   90:13  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/dashboard/DashboardView.tsx:90:13
+  88 |     useEffect(() => {
+  89 |         if (searchParams.get('welcome') === 'true') {
+> 90 |             setShowWizard(true);
+     |             ^^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  91 |         }
+  92 |     }, [searchParams]);
+  93 |                                                            react-hooks/set-state-in-effect
+  104:34  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+  112:36  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+  135:36  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+  295:82  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/directory/page.tsx
+   60:62  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   97:74  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  121:59  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  122:64  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  139:55  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  140:44  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  180:41  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  298:45  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/lost-found/page.tsx
+  23:19  warning  'school' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  76:14  warning  Unexpected any. Specify a different type     @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/patrol/page.tsx
+  102:21  error    Error: Cannot call impure function during render
+
+`Date.now` is an impure function. Calling an impure function can produce unstable results that update unpredictably when the component happens to re-render. (https://react.dev/reference/rules/components-and-hooks-must-be-pure#components-and-hooks-must-be-idempotent).
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/patrol/page.tsx:102:21
+  100 |         const aTime = a.date?.toDate?.()?.getTime() || 0;
+  101 |         const bTime = b.date?.toDate?.()?.getTime() || 0;
+> 102 |         const now = Date.now();
+      |                     ^^^^^^^^^^ Cannot call impure function
+  103 |         const aUpcoming = aTime > now;
+  104 |         const bUpcoming = bTime > now;
+  105 |         if (aUpcoming && !bUpcoming) return -1;  react-hooks/purity
+  134:66  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  292:60  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  295:42  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   @typescript-eslint/no-explicit-any
+  324:17  error    Do not pass children as props. Instead, nest children between the opening and closing tags                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 react/no-children-prop
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/settings/SettingsView.tsx
+    7:48  warning  'AlertTriangle' is defined but never used  @typescript-eslint/no-unused-vars
+    7:63  warning  'Check' is defined but never used          @typescript-eslint/no-unused-vars
+   11:75  warning  'getFirestore' is defined but never used   @typescript-eslint/no-unused-vars
+   11:89  warning  'orderBy' is defined but never used        @typescript-eslint/no-unused-vars
+   18:19  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+   20:23  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  269:54  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  282:60  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  768:30  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/(app)/user/profile/page.tsx
+   46:11  warning  'tCommon' is assigned a value but never used                                                                                                                                                                                                                                             @typescript-eslint/no-unused-vars
+   56:46  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   60:66  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+   97:48  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  105:89  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  111:63  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  119:71  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  128:51  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  134:46  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  176:64  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  308:29  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  435:82  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  523:14  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  524:19  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  533:8   warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  534:15  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  541:44  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  550:48  warning  Unexpected any. Specify a different type                                                                                                                                                                                                                                                 @typescript-eslint/no-explicit-any
+  555:18  warning  'e' is defined but never used                                                                                                                                                                                                                                                            @typescript-eslint/no-unused-vars
+  586:25  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+  711:49  warning  Using `<img>` could result in slower LCP and higher bandwidth. Consider using `<Image />` from `next/image` or a custom image loader to automatically optimize images. This may incur additional usage or cost from your provider. See: https://nextjs.org/docs/messages/no-img-element  @next/next/no-img-element
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/AdminView.tsx
+    5:38   warning  'orderBy' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+    7:75   warning  'ChevronRight' is defined but never used                                                                      @typescript-eslint/no-unused-vars
+    7:110  warning  'Save' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+    7:124  warning  'Check' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+    9:59   warning  'getUser' is defined but never used                                                                           @typescript-eslint/no-unused-vars
+    9:100  warning  'migrateClassToSchool' is defined but never used                                                              @typescript-eslint/no-unused-vars
+   10:23   warning  'searchUsers' is defined but never used                                                                       @typescript-eslint/no-unused-vars
+   10:36   warning  'getUserClasses' is defined but never used                                                                    @typescript-eslint/no-unused-vars
+   12:29   warning  'Task' is defined but never used                                                                              @typescript-eslint/no-unused-vars
+   53:12   warning  'userSearch' is assigned a value but never used                                                               @typescript-eslint/no-unused-vars
+   53:24   warning  'setUserSearch' is assigned a value but never used                                                            @typescript-eslint/no-unused-vars
+   65:8    warning  React Hook useEffect has a missing dependency: 'fetchData'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  143:18   warning  'e' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+  405:70   warning  'error' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  465:18   warning  'e' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+  494:18   warning  'e' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+  518:38   warning  'error' is defined but never used                                                                             @typescript-eslint/no-unused-vars
+  658:54   warning  'e' is defined but never used                                                                                 @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/components/ApprovalsTab.tsx
+  23:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  38:18  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+  90:46  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  91:48  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/components/TestimonialsTab.tsx
+   16:9   error  Error: Cannot access variable before it is declared
+
+`loadTestimonials` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/components/TestimonialsTab.tsx:16:9
+  14 |
+  15 |     useEffect(() => {
+> 16 |         loadTestimonials();
+     |         ^^^^^^^^^^^^^^^^ `loadTestimonials` accessed before it is declared
+  17 |     }, []);
+  18 |
+  19 |     const loadTestimonials = async () => {
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/components/TestimonialsTab.tsx:19:5
+  17 |     }, []);
+  18 |
+> 19 |     const loadTestimonials = async () => {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 20 |         setLoading(true);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 21 |         const data = await getAllTestimonials();
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 22 |         setTestimonials(data);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 23 |         setLoading(false);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+> 24 |     };
+     | ^^^^^^^ `loadTestimonials` is declared here
+  25 |
+  26 |     const handleApprove = async (id: string) => {
+  27 |         if (!user) return;  react-hooks/immutability
+  163:57  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react/no-unescaped-entities
+  163:76  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/admin/components/UsersTab.tsx
+  44:18  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  72:22  warning  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/contact/page.tsx
+  57:18  warning  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/foreldrarolt/page.tsx
+  5:72  warning  'Users' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/handbok/hlutverk/page.tsx
+  63:17  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  63:91  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/handbok/layout.tsx
+  14:13  warning  'user' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/handbok/log-og-reglur/page.tsx
+  25:17   error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  25:139  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/handbok/page.tsx
+  65:67  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/handbok/personuvernd/page.tsx
+  43:55  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  43:63  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/layout.tsx
+  85:37  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/login/page.tsx
+  83:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/onboarding/OnboardingView.tsx
+     8:17   warning  'School' is defined but never used                                                                                                            @typescript-eslint/no-unused-vars
+    57:39   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+    82:19   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+    84:23   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   174:62   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   214:50   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   216:46   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   259:103  warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   260:43   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   260:51   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   270:8    warning  React Hook useEffect has missing dependencies: 'checkingCode', 'error', and 'foundClass'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+   302:99   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   303:39   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   303:47   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   367:95   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   369:35   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   369:43   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   519:66   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   523:72   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   570:23   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+   891:89   error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                               react/no-unescaped-entities
+   891:101  error    `'` can be escaped with `&apos;`, `&lsquo;`, `&#39;`, `&rsquo;`                                                                               react/no-unescaped-entities
+  1025:25   warning  'lang' is defined but never used                                                                                                              @typescript-eslint/no-unused-vars
+  1025:59   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+  1040:31   warning  Unexpected any. Specify a different type                                                                                                      @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/samanburdur/page.tsx
+   4:22  warning  'Check' is defined but never used                                @typescript-eslint/no-unused-vars
+   4:29  warning  'X' is defined but never used                                    @typescript-eslint/no-unused-vars
+   9:11  warning  'router' is assigned a value but never used                      @typescript-eslint/no-unused-vars
+  62:45  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  62:55  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  79:45  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+  79:51  error    `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/[locale]/terms/page.tsx
+  96:63  error  `"` can be escaped with `&quot;`, `&ldquo;`, `&#34;`, `&rdquo;`  react/no-unescaped-entities
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/api/cron/reminders/route.ts
+  114:25  error  'finalUserIds' is never reassigned. Use 'const' instead  prefer-const
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/api/proxy-calendar/route.ts
+  177:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/app/api/send-critical-announcement/route.ts
+  112:54  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/hooks/useFirestore.ts
+   40:10  warning  'Class' is defined but never used       @typescript-eslint/no-unused-vars
+   40:17  warning  'Student' is defined but never used     @typescript-eslint/no-unused-vars
+   40:46  warning  'ParentLink' is defined but never used  @typescript-eslint/no-unused-vars
+   52:5   warning  'Timestamp' is defined but never used   @typescript-eslint/no-unused-vars
+  396:21  warning  '_' is defined but never used           @typescript-eslint/no-unused-vars
+  396:24  warning  'variables' is defined but never used   @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/i18n.ts
+  2:10  warning  'notFound' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/lib/firebase/config.ts
+  3:35  warning  'connectFirestoreEmulator' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/lib/rate-limit.ts
+  162:88  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/scripts/importCalendar.ts
+  26:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  28:23  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  76:50  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/scripts/seed.ts
+   2:10  warning  'getFirestore' is defined but never used  @typescript-eslint/no-unused-vars
+  26:7   warning  'app' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/scripts/seedDatabase.ts
+  148:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/scripts/seedDemo.ts
+  54:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:36  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  89:33  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  94:41  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/scripts/syncAdmins.ts
+   4:25  warning  'cert' is defined but never used          @typescript-eslint/no-unused-vars
+  61:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/services/agreementService.ts
+  14:5    warning  'Timestamp' is defined but never used       @typescript-eslint/no-unused-vars
+  15:5    warning  'runTransaction' is defined but never used  @typescript-eslint/no-unused-vars
+  16:5    warning  'writeBatch' is defined but never used      @typescript-eslint/no-unused-vars
+  94:117  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/services/firestore.ts
+  16:5  warning  'DocumentData' is defined but never used     @typescript-eslint/no-unused-vars
+  17:5  warning  'QueryConstraint' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/admin.test.ts
+   47:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   71:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   85:56  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   86:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   88:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  104:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  105:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/agreement.test.ts
+  38:60  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  45:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  63:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  74:18  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/auth.test.ts
+   77:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   92:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  107:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  137:86  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/rate-limit.test.ts
+  1:32  warning  'beforeEach' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/thorarinnhjalmarsson/Documents/Antigravity/bekkurinn/tests/validation.test.ts
+  8:5  warning  'SettingsSchema' is defined but never used  @typescript-eslint/no-unused-vars
+
+✖ 184 problems (23 errors, 161 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+

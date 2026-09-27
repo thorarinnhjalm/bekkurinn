@@ -97,7 +97,7 @@ function FeatureCard({
 }) {
     const toneClasses: Record<Tone, string> = {
         default: 'bg-surface-container-lowest text-on-surface',
-        primary: 'bg-gradient-to-br from-primary to-primary-container text-on-primary',
+        primary: 'bg-linear-to-br from-primary to-primary-container text-on-primary',
         tertiary: 'bg-tertiary-fixed text-on-tertiary-fixed',
     };
 
@@ -109,8 +109,8 @@ function FeatureCard({
 
     const descClasses: Record<Tone, string> = {
         default: 'text-on-surface-variant',
-        primary: 'text-on-primary/85',
-        tertiary: 'text-on-tertiary-fixed/85',
+        primary: 'opacity-90',
+        tertiary: 'opacity-90',
     };
 
     return (

@@ -1,12 +1,8 @@
-import Head from 'next/head';
-
 interface Props {
     locale: string;
 }
 
 export default function StructuredData({ locale }: Props) {
-    const baseUrl = 'https://www.bekkurinn.is';
-
     // SoftwareApplication Schema
     const softwareSchema = {
         "@context": "https://schema.org",

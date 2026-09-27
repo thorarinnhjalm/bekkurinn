@@ -56,12 +56,12 @@ export default function AnalyticsWidget() {
         return (
             <div className="professional-card p-6">
                 <div className="flex items-center gap-2 mb-4">
-                    <TrendingUp size={20} className="text-blue-600" />
-                    <h3 className="font-bold text-xl text-gray-900">Heimsóknir (Plausible)</h3>
+                    <TrendingUp size={20} className="text-primary" />
+                    <h3 className="font-bold text-xl text-on-surface">Heimsóknir (Plausible)</h3>
                 </div>
                 <div className="animate-pulse space-y-4">
-                    <div className="h-20 bg-gray-100 rounded-lg"></div>
-                    <div className="h-32 bg-gray-100 rounded-lg"></div>
+                    <div className="h-20 bg-surface-container-high rounded-lg"></div>
+                    <div className="h-32 bg-surface-container-high rounded-lg"></div>
                 </div>
             </div>
         );
@@ -71,12 +71,12 @@ export default function AnalyticsWidget() {
         return (
             <div className="professional-card p-6">
                 <div className="flex items-center gap-2 mb-4">
-                    <TrendingUp size={20} className="text-blue-600" />
-                    <h3 className="font-bold text-xl text-gray-900">Heimsóknir (Plausible)</h3>
+                    <TrendingUp size={20} className="text-primary" />
+                    <h3 className="font-bold text-xl text-on-surface">Heimsóknir (Plausible)</h3>
                 </div>
-                <div className="text-center py-6 text-gray-500">
+                <div className="text-center py-6 text-on-surface-variant">
                     <p className="text-sm">{error}</p>
-                    <p className="text-xs mt-2 text-gray-400">
+                    <p className="text-xs mt-2 text-on-surface-variant">
                         Athugaðu hvort PLAUSIBLE_API_KEY sé stillt í .env
                     </p>
                 </div>
@@ -90,14 +90,14 @@ export default function AnalyticsWidget() {
         <div className="professional-card p-6">
             <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
-                    <TrendingUp size={20} className="text-blue-600" />
-                    <h3 className="font-bold text-xl text-gray-900">Heimsóknir (30 dagar)</h3>
+                    <TrendingUp size={20} className="text-primary" />
+                    <h3 className="font-bold text-xl text-on-surface">Heimsóknir (30 dagar)</h3>
                 </div>
                 <a
                     href="https://plausible.io/bekkurinn.is"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1"
+                    className="text-sm text-primary hover:text-primary flex items-center gap-1"
                 >
                     Opna Plausible <ExternalLink size={14} />
                 </a>
@@ -105,12 +105,12 @@ export default function AnalyticsWidget() {
 
             {/* Realtime indicator */}
             {stats.realtimeVisitors > 0 && (
-                <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 bg-green-50 border border-green-200 rounded-full">
+                <div className="mb-4 inline-flex items-center gap-2 px-3 py-1.5 bg-primary-container/15 border border-primary/30 rounded-full">
                     <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/80 opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                     </span>
-                    <span className="text-sm font-bold text-green-700">
+                    <span className="text-sm font-bold text-primary">
                         {stats.realtimeVisitors} á síðunni núna
                     </span>
                 </div>
@@ -118,42 +118,42 @@ export default function AnalyticsWidget() {
 
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                <div className="bg-surface rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-on-surface-variant mb-1">
                         <Users size={14} />
                         <span className="text-xs font-bold uppercase">Gestir</span>
                     </div>
-                    <p className="text-2xl font-black text-gray-900">
+                    <p className="text-2xl font-black text-on-surface">
                         {stats.aggregate.visitors.value.toLocaleString()}
                     </p>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                <div className="bg-surface rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-on-surface-variant mb-1">
                         <Eye size={14} />
                         <span className="text-xs font-bold uppercase">Síðuflettingar</span>
                     </div>
-                    <p className="text-2xl font-black text-gray-900">
+                    <p className="text-2xl font-black text-on-surface">
                         {stats.aggregate.pageviews.value.toLocaleString()}
                     </p>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                <div className="bg-surface rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-on-surface-variant mb-1">
                         <Activity size={14} />
                         <span className="text-xs font-bold uppercase">Fráhlaup</span>
                     </div>
-                    <p className="text-2xl font-black text-gray-900">
+                    <p className="text-2xl font-black text-on-surface">
                         {stats.aggregate.bounce_rate.value}%
                     </p>
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4">
-                    <div className="flex items-center gap-2 text-gray-500 mb-1">
+                <div className="bg-surface rounded-xl p-4">
+                    <div className="flex items-center gap-2 text-on-surface-variant mb-1">
                         <Clock size={14} />
                         <span className="text-xs font-bold uppercase">Heimsókn</span>
                     </div>
-                    <p className="text-2xl font-black text-gray-900">
+                    <p className="text-2xl font-black text-on-surface">
                         {formatDuration(stats.aggregate.visit_duration.value)}
                     </p>
                 </div>
@@ -162,20 +162,20 @@ export default function AnalyticsWidget() {
             {/* Top Pages */}
             {stats.topPages.length > 0 && (
                 <div>
-                    <h4 className="text-sm font-bold text-gray-500 uppercase mb-3">Vinsælustu síður</h4>
+                    <h4 className="text-sm font-bold text-on-surface-variant uppercase mb-3">Vinsælustu síður</h4>
                     <div className="space-y-2">
                         {stats.topPages.map((page, i) => (
                             <div
                                 key={page.page}
-                                className="flex items-center justify-between py-2 px-3 bg-gray-50 rounded-lg"
+                                className="flex items-center justify-between py-2 px-3 bg-surface rounded-lg"
                             >
                                 <div className="flex items-center gap-3">
-                                    <span className="text-xs font-bold text-gray-400 w-5">{i + 1}.</span>
-                                    <span className="text-sm font-medium text-gray-700 truncate max-w-[200px]">
+                                    <span className="text-xs font-bold text-on-surface-variant w-5">{i + 1}.</span>
+                                    <span className="text-sm font-medium text-on-surface truncate max-w-[200px]">
                                         {page.page === '/' ? 'Forsíða' : page.page}
                                     </span>
                                 </div>
-                                <span className="text-sm font-bold text-gray-900">
+                                <span className="text-sm font-bold text-on-surface">
                                     {page.visitors.toLocaleString()}
                                 </span>
                             </div>
@@ -185,7 +185,7 @@ export default function AnalyticsWidget() {
             )}
 
             {/* Last updated */}
-            <p className="text-xs text-gray-400 mt-4 text-right">
+            <p className="text-xs text-on-surface-variant mt-4 text-right">
                 Uppfært: {new Date(stats.lastUpdated).toLocaleTimeString('is-IS')}
             </p>
         </div>
