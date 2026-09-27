@@ -49,8 +49,7 @@ import {
     updateDoc,
     deleteDoc,
     serverTimestamp,
-    Timestamp,
-    orderBy
+    Timestamp
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
 
@@ -532,6 +531,14 @@ export function useDeleteAnnouncement() {
 // Lost & Found Hooks
 // ==========================================
 
+// Must match the `lostItems` match block in firestore.rules.
+const LOST_ITEMS_COLLECTION = 'lostItems';
+
+const toMillis = (value: unknown): number =>
+    value && typeof (value as { toMillis?: unknown }).toMillis === 'function'
+        ? (value as { toMillis: () => number }).toMillis()
+        : 0;
+
 export const useLostItems = (schoolId: string, classId: string) => {
     return useQuery({
         queryKey: ['lostItems', schoolId, classId],
@@ -550,14 +557,16 @@ export const useLostItems = (schoolId: string, classId: string) => {
             // Then filter in memory or valid security rules.
             // Assuming we just want to see everything for the school for now to be safe.
 
+            // Sorted in memory: a where + orderBy on different fields would need a composite index.
             const q = query(
-                collection(db, 'lost_items'),
-                where('schoolId', '==', schoolId),
-                orderBy('createdAt', 'desc')
+                collection(db, LOST_ITEMS_COLLECTION),
+                where('schoolId', '==', schoolId)
             );
 
             const snapshot = await getDocs(q);
-            return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as LostItem));
+            return snapshot.docs
+                .map(doc => ({ id: doc.id, ...doc.data() } as LostItem))
+                .sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt));
         },
         enabled: !!schoolId
     });
@@ -567,7 +576,7 @@ export const useCreateLostItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (item: Omit<LostItem, 'id'>) => {
-            const docRef = await addDoc(collection(db, 'lost_items'), {
+            const docRef = await addDoc(collection(db, LOST_ITEMS_COLLECTION), {
                 ...item,
                 createdAt: serverTimestamp()
             });
@@ -583,7 +592,7 @@ export const useUpdateLostItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async ({ id, data }: { id: string; data: Partial<LostItem> }) => {
-            const docRef = doc(db, 'lost_items', id);
+            const docRef = doc(db, LOST_ITEMS_COLLECTION, id);
             await updateDoc(docRef, data);
         },
         onSuccess: () => {
@@ -596,7 +605,7 @@ export const useDeleteLostItem = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: async (id: string) => {
-            await deleteDoc(doc(db, 'lost_items', id));
+            await deleteDoc(doc(db, LOST_ITEMS_COLLECTION, id));
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['lostItems'] });
