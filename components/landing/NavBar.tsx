@@ -2,13 +2,11 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useAuth } from '@/components/providers/AuthProvider';
 import { Globe, Menu, X, Users } from 'lucide-react';
 import { useState } from 'react';
 
 export function NavBar({ locale }: { locale: string }) {
     const t = useTranslations('landing');
-    const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
 
     return (
@@ -67,30 +65,6 @@ export function NavBar({ locale }: { locale: string }) {
                                 <Link href="/lt" className="block px-4 py-2 text-sm text-on-surface hover:bg-surface-container-high hover:text-primary">🇱🇹 Lietuvių</Link>
                             </div>
                         </div>
-
-                        {user ? (
-                            <Link
-                                href={`/${locale}/dashboard`}
-                                className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
-                            >
-                                Mælaborð
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href={`/${locale}/login`}
-                                    className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors"
-                                >
-                                    {t('nav.login')}
-                                </Link>
-                                <Link
-                                    href={`/${locale}/onboarding`}
-                                    className="inline-flex items-center px-6 py-2.5 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
-                                >
-                                    {t('hero.cta_primary')}
-                                </Link>
-                            </>
-                        )}
                     </div>
                 </div>
             </div>
@@ -140,35 +114,6 @@ export function NavBar({ locale }: { locale: string }) {
                     >
                         {t('nav.faq')}
                     </Link>
-
-                    <div className="pt-4 flex flex-col gap-4">
-                        {user ? (
-                            <Link
-                                href={`/${locale}/dashboard`}
-                                className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container"
-                                onClick={() => setIsOpen(false)}
-                            >
-                                Mælaborð
-                            </Link>
-                        ) : (
-                            <>
-                                <Link
-                                    href={`/${locale}/login`}
-                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-medium text-on-surface bg-surface-container-high"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    {t('nav.login')}
-                                </Link>
-                                <Link
-                                    href={`/${locale}/onboarding`}
-                                    className="inline-flex items-center justify-center px-6 py-3 rounded-full font-semibold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container"
-                                    onClick={() => setIsOpen(false)}
-                                >
-                                    {t('hero.cta_primary')}
-                                </Link>
-                            </>
-                        )}
-                    </div>
                 </div>
             )}
         </nav>

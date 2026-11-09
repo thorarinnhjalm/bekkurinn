@@ -1,4 +1,4 @@
-import { ArrowLeft, UserPlus, Key, Users, Bell, Calendar, MapPin, Gift, BookOpen, ArrowRight } from 'lucide-react';
+import { ArrowLeft, UserPlus, Key, Users, Bell, Calendar, MapPin, Gift, BookOpen } from 'lucide-react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 
@@ -84,7 +84,7 @@ export default async function HowItWorksPage({ params }: PageProps) {
             <div className="bg-linear-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
                 <div className="max-w-4xl mx-auto space-y-6">
                     <Link
-                        href={`/${locale}/login`}
+                        href={`/${locale}`}
                         className="inline-flex items-center gap-2 text-primary-container/40 hover:text-white transition-colors"
                     >
                         <ArrowLeft size={18} />
@@ -217,25 +217,6 @@ export default async function HowItWorksPage({ params }: PageProps) {
                             Já, ef þú átt fleiri en eitt barn í mismunandi bekkjum getur þú bætt þeim öllum við og skipt á milli þeirra í appinu.
                         </p>
                     </div>
-                </div>
-            </div>
-
-            {/* CTA Section */}
-            <div className="bg-linear-to-br from-blue-600 to-indigo-700 text-white py-16 px-4">
-                <div className="max-w-2xl mx-auto text-center space-y-6">
-                    <h2 className="text-3xl font-bold">
-                        Tilbúin/n að byrja?
-                    </h2>
-                    <p className="text-primary-container/30 text-lg">
-                        Skráðu þig inn og vertu með í að einfalda samskipti foreldra.
-                    </p>
-                    <Link
-                        href={`/${locale}/login`}
-                        className="inline-flex items-center gap-2 bg-surface-container-lowest text-primary px-8 py-4 rounded-xl font-bold hover:bg-primary-container/15 transition-colors"
-                    >
-                        Skrá inn
-                        <ArrowRight size={20} />
-                    </Link>
                 </div>
             </div>
 

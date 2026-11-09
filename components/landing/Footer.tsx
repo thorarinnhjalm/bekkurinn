@@ -80,14 +80,6 @@ export function Footer() {
                                     {t('footer.contact')}
                                 </Link>
                             </li>
-                            <li>
-                                <Link
-                                    href={`/${locale}/login`}
-                                    className="hover:text-primary transition-colors"
-                                >
-                                    {t('footer.forgot_password')}
-                                </Link>
-                            </li>
                         </ul>
                     </div>
 

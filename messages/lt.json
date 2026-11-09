@@ -82,7 +82,9 @@
   },
   "privacy_page": {
     "title": "Privatumo politika",
-    "last_updated": "Paskutinį kartą atnaujinta: 2026 m. sausis",
+    "last_updated": "Paskutinį kartą atnaujinta: 2026 m. lapkritis",
+    "section6_title": "5. Slapukai ir statistika",
+    "section6_text": "Nenaudojame sekimo slapukų ar reklamos pikselių. Viešuose svetainės puslapiuose apsilankymus skaičiuojame naudodami „Vercel Web Analytics“. Ši paslauga nenaudoja slapukų, o apsilankymai nesiejami su konkrečiais asmenimis. Prisijungusių naudotojų apsilankymai nematuojami.",
     "section1_title": "1. Kokius duomenis renkame?",
     "section1_intro": "Bekkurinn renka šią informaciją paslaugai teikti:",
     "section1_items": [
