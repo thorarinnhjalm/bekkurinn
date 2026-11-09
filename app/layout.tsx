@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import Script from "next/script";
+import { PublicAnalytics } from "@/components/analytics/PublicAnalytics";
 import { QueryProvider } from "@/components/providers/QueryProvider";
 import "./globals.css";
 
@@ -77,31 +77,13 @@ export default function RootLayout({
             })
           }}
         />
-        {/* Plausible Analytics - privacy-focused, no cookies, GDPR compliant */}
-        {process.env.NODE_ENV === 'production' && (
-          <>
-            <Script
-              async
-              src="https://plausible.io/js/pa-Z7q7W2PyTFMrROBjkzzxp.js"
-              strategy="afterInteractive"
-            />
-            <Script
-              id="plausible-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-                  plausible.init()
-                `
-              }}
-            />
-          </>
-        )}
       </head>
       <body>
         <QueryProvider>
           {children}
         </QueryProvider>
+        {/* Vercel Web Analytics: engar vefkökur, aðeins í production og aðeins hjá óinnskráðum */}
+        {process.env.VERCEL_ENV === 'production' && <PublicAnalytics />}
       </body>
     </html>
   );

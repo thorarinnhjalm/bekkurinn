@@ -1,14 +1,11 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
-import { useAuth } from '@/components/providers/AuthProvider';
 import { PlusCircle, UserPlus, CheckCircle2 } from 'lucide-react';
 import React from 'react';
 
 export function HowItWorks({ locale }: { locale: string }) {
     const t = useTranslations('landing');
-    const { user } = useAuth();
 
     return (
         <section id="how-it-works" className="py-24 bg-surface-container-low">
@@ -42,18 +39,6 @@ export function HowItWorks({ locale }: { locale: string }) {
                         title={t('how.step3_title')}
                         desc={t('how.step3_desc')}
                     />
-                </div>
-
-                <div className="mt-16 text-center">
-                    <Link
-                        href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                        className="inline-flex items-center justify-center px-8 py-4 rounded-full font-semibold text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 bg-linear-to-r from-primary to-primary-container"
-                    >
-                        {t('how.cta')}
-                    </Link>
-                    <p className="mt-4 text-sm text-on-surface-variant">
-                        {t('how.fine_print')}
-                    </p>
                 </div>
             </div>
         </section>

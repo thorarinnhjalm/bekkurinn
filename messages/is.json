@@ -324,7 +324,7 @@
   },
   "privacy_page": {
     "title": "Persónuverndarstefna",
-    "last_updated": "Síðast uppfært: Janúar 2026",
+    "last_updated": "Síðast uppfært: Nóvember 2026",
     "section1_title": "1. Hvaða gögn söfnum við?",
     "section1_intro": "Bekkurinn safnar eftirfarandi upplýsingum til að veita þjónustuna:",
     "section1_items": [
@@ -356,8 +356,8 @@
       "Eyða aðgangi þínum og tengdum gögnum",
       "Stjórna sýnileika símanúmers (kveikt/slökkt)"
     ],
-    "section6_title": "5. Vefkökur (Cookies)",
-    "section6_text": "Við notum eingöngu nauðsynlegar kökur til að halda þér innskráðum. Við notum ekki rakningarkökur frá þriðja aðila.",
+    "section6_title": "5. Vefkökur og mælingar",
+    "section6_text": "Við notum engar rakningarkökur og engar auglýsingakökur. Á opnum síðum vefsins teljum við heimsóknir með Vercel Web Analytics. Sú mæling notar engar vefkökur og heimsóknir eru ekki raktar til einstaklinga. Engar mælingar eru gerðar hjá innskráðum notendum.",
     "section7_title": "6. Varðveisla gagna",
     "section7_text": "Við geymum gögnin þín aðeins á meðan þau þarf til að veita þjónustuna. Ef þú yfirgefur bekk eða eyðir aðgangi þínum, er persónuupplýsingum þínum eytt varanlega.",
     "section5_title": "7. Hafa samband",

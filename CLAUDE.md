@@ -2,6 +2,24 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Staða: forritið er lokað (nóvember 2026)
+
+Eigandinn ákvað í nóvember 2026 að enginn noti bekkjarforritið og að bekkurinn.is verði kynningarsíða. Þar til nýja síðan kemur gildir þetta, og því má ekki breyta án berorðs samþykkis eigandans:
+
+- [middleware.ts](middleware.ts) stöðvar allt sem tilheyrir forritinu áður en það keyrir. Innskráning, nýskráning, admin og allar `(app)`-leiðir fá tímabundna tilvísun (307) á forsíðu sama tungumáls, og allar slóðir undir `/api` svara 410. Listinn er í [lib/closedRoutes.ts](lib/closedRoutes.ts) og prófin í [tests/closedRoutes.test.ts](tests/closedRoutes.test.ts).
+- Kóði forritsins (síður, API-leiðir, services, hooks) stendur óhreyfður en er óaðgengilegur. Lýsingarnar hér að neðan eiga við um þann kóða, ekki um það sem er í loftinu.
+- Ekkert keyrir sjálfkrafa: [vercel.json](vercel.json) hefur engin cron.
+- Kynningarsíðurnar hafa enga hnappa inn í forritið og snertingarsíðan ekkert form, aðeins netfang. Ný síða eða hnappur má ekki vísa á lokaða leið.
+- Mælingar: Vercel Web Analytics gegnum [components/analytics/PublicAnalytics.tsx](components/analytics/PublicAnalytics.tsx). Hún hleðst aðeins þegar `VERCEL_ENV === 'production'` og aðeins þegar staðfest er að enginn er innskráður. Plausible er ekki lengur notað. Persónuverndarsíðan (`privacy_page.section6_*` í `messages/`) lýsir þessu og verður að fylgja ef mælingum er breytt.
+
+## Prófunarumhverfi
+
+- Ytri kerfi: Firebase (Authentication, Firestore, Storage), Resend (tölvupóstur), Gemini (þýðingar), Vercel Web Analytics.
+- Ekkert prófunarumhverfi er til: enginn emulator og ekkert prófunarverkefni í Firebase. Próf keyra aðeins í vitest með hermdum Firebase (sjá "Tests"), og CI byggir með gervigildum í stað lykla.
+- Vercel preview bendir á raun-Firebase, sama verkefni og production. Þar má aðeins skoða: aldrei skrá sig inn, senda neitt eða búa til færslur.
+- Mælingar eru óvirkar í preview.
+- Playwright-prófin ræsa `npm run dev` með þeim env-breytum sem eru á vélinni. Þau má aðeins keyra með gervigildum, aldrei með lyklum að raun-Firebase.
+
 ## Commands
 
 ```bash
@@ -27,7 +45,7 @@ Stack: Next.js 16 (App Router, `params` is a Promise), React 19, TypeScript **st
 
 ### Routing & i18n
 
-All user-facing routes live under `app/[locale]/`. Locales: `is` (default), `en`, `pl`, `es`, `lt`, `tl`, `uk`, `vi` ([i18n-config.ts](i18n-config.ts)). [middleware.ts](middleware.ts) forces a locale prefix on every path except `/api`, `_next`, `_vercel` and dotted files; `localeDetection: false` — never auto-redirect on Accept-Language.
+All user-facing routes live under `app/[locale]/`. Locales: `is` (default), `en`, `pl`, `es`, `lt`, `tl`, `uk`, `vi` ([i18n-config.ts](i18n-config.ts)). [middleware.ts](middleware.ts) forces a locale prefix on every path except `_next`, `_vercel` and dotted files (and answers 410 on `/api`, see "Staða" above); `localeDetection: false` — never auto-redirect on Accept-Language.
 
 There is exactly one route group, **`(app)/`** — the authenticated shell (dashboard, directory, calendar, patrol, announcements, agreement, lost-found, settings, user/profile) wrapped in `DesktopSidebar` + `TopHeader` + `MobileNavWrapper` by [app/[locale]/(app)/layout.tsx](app/[locale]/(app)/layout.tsx). Everything else sits directly under `app/[locale]/` with no shell: `login`, `onboarding`, `admin` (super-admin / school-admin console, deliberately outside the shell; its Users tab shows per-user class membership — admin / approved / pending / none — built for super-admins by [utils/membership.ts](utils/membership.ts) from `classes.admins[]` plus every `parentLinks` doc; other admins see the column as unknown) and the marketing/legal pages (`how-it-works`, `samanburdur`, `bekkjarsattmali`, `foreldrarolt`, `contact`, `handbok/*`, `privacy`, `terms`). There is no `(marketing)` group.
 
@@ -83,13 +101,13 @@ Mutating routes share one pattern: rate-limit by IP → verify `Authorization: B
 - **`send-critical-announcement/`** — Resend email to members who haven't opted out of `notificationSettings.email.announcements`, max 500 recipients (5/min); needs `RESEND_API_KEY`
 - **`proxy-calendar/`** — ICS fetcher with HTTPS + municipality-domain allowlist (Reykjavík, Kópavogur, Garðabær, Mosfellsbær, Seltjarnarnes, Hafnarfjörður, Keflavík); a school elsewhere needs the list extended (10/min, 1 h cache)
 - **`plausible-stats/`** — analytics proxy for the admin dashboard (`PLAUSIBLE_API_KEY`)
-- **`cron/reminders/`** — hourly via [vercel.json](vercel.json); auth is `Bearer ${CRON_SECRET}` and the route returns 401 when `CRON_SECRET` is unset. Uses `volunteerReminderSent` / `generalReminderSent` flags on `Task` to prevent double sends.
+- **`cron/reminders/`** — no longer scheduled (was hourly via [vercel.json](vercel.json)); auth is `Bearer ${CRON_SECRET}` and the route returns 401 when `CRON_SECRET` is unset. Uses `volunteerReminderSent` / `generalReminderSent` flags on `Task` to prevent double sends.
 
 [lib/rate-limit.ts](lib/rate-limit.ts) is an in-memory LRU (500 keys, 1 min TTL) — per serverless instance, so best-effort on Vercel.
 
 ### Environment
 
-`.env.example` covers the client Firebase keys, `GEMINI_API_KEY`, `NEXT_PUBLIC_BASE_URL`, `RESEND_API_KEY`, `NEXT_PUBLIC_PLAUSIBLE_SITE_ID` and `PLAUSIBLE_API_KEY`. Also used but not listed there: `NEXT_PUBLIC_ADMIN_EMAILS`, `FIREBASE_ADMIN_*`, `CRON_SECRET`. The Plausible script loads only when `NODE_ENV === 'production'`.
+`.env.example` covers the client Firebase keys, `GEMINI_API_KEY`, `NEXT_PUBLIC_BASE_URL`, `RESEND_API_KEY`, `NEXT_PUBLIC_PLAUSIBLE_SITE_ID` and `PLAUSIBLE_API_KEY`. Also used but not listed there: `NEXT_PUBLIC_ADMIN_EMAILS`, `FIREBASE_ADMIN_*`, `CRON_SECRET`. Plausible is no longer loaded (see "Staða" above); the `NEXT_PUBLIC_PLAUSIBLE_SITE_ID` and `PLAUSIBLE_API_KEY` entries are leftovers.
 
 ### Utilities
 

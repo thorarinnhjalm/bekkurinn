@@ -1,8 +1,7 @@
 'use client';
 
 import { useTranslations, useLocale } from 'next-intl';
-import Link from 'next/link';
-import { Footprints, Bell, CalendarCheck, ClipboardList, ChevronRight, Users } from 'lucide-react';
+import { Footprints, Bell, CalendarCheck, ClipboardList, Users } from 'lucide-react';
 import { NavBar } from '@/components/landing/NavBar';
 import { Footer } from '@/components/landing/Footer';
 
@@ -29,15 +28,6 @@ export default function ForeldraroltLandingPage() {
                         <p className="text-xl text-on-surface-variant mb-10 max-w-2xl mx-auto leading-relaxed">
                             {t('hero.subtitle')}
                         </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                            <Link
-                                href="/register?create=true"
-                                className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-primary rounded-xl hover:bg-primary-container shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                            >
-                                {t('hero.cta')}
-                                <ChevronRight className="ml-2" size={20} />
-                            </Link>
-                        </div>
                     </div>
                 </section>
 
@@ -107,22 +97,6 @@ export default function ForeldraroltLandingPage() {
                                 </div>
                             ))}
                         </div>
-                    </div>
-                </section>
-
-                {/* CTA Bottom */}
-                <section className="py-20 bg-primary-container/15">
-                    <div className="container mx-auto px-4 text-center">
-                        <h2 className="text-3xl font-bold text-on-surface mb-8 max-w-2xl mx-auto">
-                            {t('hero.title')}
-                        </h2>
-                        <Link
-                            href="/register?create=true"
-                            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all bg-on-surface rounded-xl hover:bg-on-surface/90 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                        >
-                            {t('hero.cta')}
-                            <ChevronRight className="ml-2" size={20} />
-                        </Link>
                     </div>
                 </section>
             </main>

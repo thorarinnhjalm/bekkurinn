@@ -2,13 +2,10 @@
 
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { ArrowRight } from 'lucide-react';
 import React from 'react';
-import { useAuth } from '@/components/providers/AuthProvider';
 
 export function Hero({ locale }: { locale: string }) {
     const t = useTranslations('landing');
-    const { user } = useAuth();
 
     const richText = {
         strong: (chunks: React.ReactNode) => (
@@ -54,12 +51,6 @@ export function Hero({ locale }: { locale: string }) {
                 </div>
 
                 <div className="flex flex-col items-center gap-4">
-                    <Link
-                        href={user ? `/${locale}/dashboard` : `/${locale}/onboarding`}
-                        className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-semibold text-lg text-on-primary shadow-ambient transition-all hover:-translate-y-0.5 active:translate-y-0 bg-linear-to-r from-primary to-primary-container"
-                    >
-                        {t('hero.cta_primary')} <ArrowRight size={20} />
-                    </Link>
                     <Link
                         href="#how-it-works"
                         className="text-sm font-medium text-on-surface-variant hover:text-primary transition-colors underline-offset-4 hover:underline"

@@ -293,7 +293,9 @@
   },
   "privacy_page": {
     "title": "Patakaran sa Privacy",
-    "last_updated": "Huling na-update: Enero 2026",
+    "last_updated": "Huling na-update: Nobyembre 2026",
+    "section6_title": "5. Cookies at analytics",
+    "section6_text": "Hindi kami gumagamit ng tracking cookies o advertising pixels. Sa mga pampublikong pahina ng site, binibilang namin ang mga pagbisita gamit ang Vercel Web Analytics. Hindi ito gumagamit ng cookies at hindi natutunton ang mga pagbisita sa mga indibidwal. Walang analytics para sa mga naka-log in na user.",
     "section1_title": "1. Anong data ang kinokolekta namin?",
     "section1_intro": "Kinokolekta ng Bekkurinn ang sumusunod na impormasyon upang ibigay ang aming serbisyo:",
     "section1_items": [

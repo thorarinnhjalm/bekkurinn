@@ -293,7 +293,9 @@
   },
   "privacy_page": {
     "title": "Chính sách bảo mật",
-    "last_updated": "Cập nhật lần cuối: Tháng 1 năm 2026",
+    "last_updated": "Cập nhật lần cuối: Tháng 11 năm 2026",
+    "section6_title": "5. Cookie và phân tích",
+    "section6_text": "Chúng tôi không sử dụng cookie theo dõi hay pixel quảng cáo. Trên các trang công khai của trang web, chúng tôi đếm lượt truy cập bằng Vercel Web Analytics. Dịch vụ này không sử dụng cookie và lượt truy cập không được gắn với cá nhân nào. Không có phân tích nào đối với người dùng đã đăng nhập.",
     "section1_title": "1. Chúng tôi thu thập dữ liệu gì?",
     "section1_intro": "Bekkurinn thu thập các thông tin sau để cung cấp dịch vụ:",
     "section1_items": [

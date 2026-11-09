@@ -1,9 +1,8 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowRight, Check, X, Shield, Users, Globe, Lock, Calendar, Search, Scale } from 'lucide-react';
+import { Check, X, Shield, Users, Globe, Lock, Calendar, Search, Scale } from 'lucide-react';
 import { NavBar } from '@/components/landing/NavBar';
-import Link from 'next/link';
 
 export default function WhyUsPage() {
     const router = useRouter();
@@ -166,19 +165,6 @@ export default function WhyUsPage() {
                             </p>
                         </div>
                     </div>
-                </section>
-
-                {/* Final CTA */}
-                <section className="text-center py-12 bg-primary text-white rounded-none md:rounded-3xl max-w-5xl mx-auto md:mb-12">
-                    <h2 className="text-3xl font-bold mb-4 text-white">Prófaðu kerfið í dag</h2>
-                    <p className="opacity-80 mb-8 max-w-xl mx-auto text-white">Enginn kostnaður, engin skuldbinding. Einfaldaðu utanumhaldið.</p>
-                    <Link
-                        href={`/${locale}/onboarding`}
-                        className="inline-flex items-center gap-2 px-8 py-3 bg-surface-container-lowest text-on-surface rounded-full font-bold hover:bg-surface-container transition-colors"
-                    >
-                        Stofna Bekk
-                        <ArrowRight size={20} />
-                    </Link>
                 </section>
 
                 <footer className="text-center text-on-surface-variant text-sm pb-8">

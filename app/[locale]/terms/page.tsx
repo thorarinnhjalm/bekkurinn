@@ -23,7 +23,7 @@ export default async function TermsOfServicePage({ params }: PageProps) {
         <div className="min-h-screen bg-surface p-4 md:p-8">
             <div className="max-w-2xl mx-auto">
                 <Link
-                    href={`/${locale}/login`}
+                    href={`/${locale}`}
                     className="inline-flex items-center gap-2 text-on-surface-variant hover:text-primary mb-8 transition-colors font-medium"
                 >
                     <ArrowLeft size={18} />
