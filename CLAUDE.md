@@ -45,7 +45,7 @@ Stack: Next.js 16 (App Router, `params` is a Promise), React 19, TypeScript **st
 
 ### Routing & i18n
 
-All user-facing routes live under `app/[locale]/`. Locales: `is` (default), `en`, `pl`, `es`, `lt`, `tl`, `uk`, `vi` ([i18n-config.ts](i18n-config.ts)). [middleware.ts](middleware.ts) forces a locale prefix on every path except `/api`, `_next`, `_vercel` and dotted files; `localeDetection: false` — never auto-redirect on Accept-Language.
+All user-facing routes live under `app/[locale]/`. Locales: `is` (default), `en`, `pl`, `es`, `lt`, `tl`, `uk`, `vi` ([i18n-config.ts](i18n-config.ts)). [middleware.ts](middleware.ts) forces a locale prefix on every path except `_next`, `_vercel` and dotted files (and answers 410 on `/api`, see "Staða" above); `localeDetection: false` — never auto-redirect on Accept-Language.
 
 There is exactly one route group, **`(app)/`** — the authenticated shell (dashboard, directory, calendar, patrol, announcements, agreement, lost-found, settings, user/profile) wrapped in `DesktopSidebar` + `TopHeader` + `MobileNavWrapper` by [app/[locale]/(app)/layout.tsx](app/[locale]/(app)/layout.tsx). Everything else sits directly under `app/[locale]/` with no shell: `login`, `onboarding`, `admin` (super-admin / school-admin console, deliberately outside the shell; its Users tab shows per-user class membership — admin / approved / pending / none — built for super-admins by [utils/membership.ts](utils/membership.ts) from `classes.admins[]` plus every `parentLinks` doc; other admins see the column as unknown) and the marketing/legal pages (`how-it-works`, `samanburdur`, `bekkjarsattmali`, `foreldrarolt`, `contact`, `handbok/*`, `privacy`, `terms`). There is no `(marketing)` group.
 

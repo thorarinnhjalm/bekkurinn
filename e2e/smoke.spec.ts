@@ -14,6 +14,6 @@ test('login is closed and redirects to the landing page', async ({ page }) => {
 
 test('landing page loads in English', async ({ page }) => {
     await page.goto('/en');
-    // Check for English text in the nav
-    await expect(page.getByText('Comparison').first()).toBeVisible();
+    // Check for English text that is visible on every viewport
+    await expect(page.getByText("How does it work?").first()).toBeVisible();
 });

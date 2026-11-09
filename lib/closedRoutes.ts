@@ -40,7 +40,9 @@ export function closedPageRedirect(pathname: string): string | null {
     if (parts.length === 0) return null;
 
     const hasLocale = (locales as readonly string[]).includes(parts[0]);
-    const segment = (hasLocale ? parts[1] : parts[0])?.toLowerCase();
+    // Aðeins það sem stendur framan við punkt eða (kóðað) skástrik er borið saman,
+    // svo innri slóðir Next eins og `/is/dashboard.segments/...` sleppi ekki í gegn.
+    const segment = (hasLocale ? parts[1] : parts[0])?.toLowerCase().split(/[./]/)[0];
     if (!segment) return null;
     if (!(CLOSED_APP_SEGMENTS as readonly string[]).includes(segment)) return null;
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { Vote, CheckCircle2, Shield, Users, Calendar } from 'lucide-react';
 
 export default function BekkjarsattmaliPage() {
@@ -74,16 +73,6 @@ export default function BekkjarsattmaliPage() {
                     </h2>
                     <p className="text-on-tertiary-fixed leading-relaxed">{t('privacy.desc')}</p>
                 </section>
-
-                {/* CTA */}
-                <div className="text-center">
-                    <Link
-                        href="/agreement"
-                        className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-on-primary shadow-ambient bg-linear-to-r from-primary to-primary-container hover:-translate-y-0.5 transition-all"
-                    >
-                        {t('cta')}
-                    </Link>
-                </div>
             </div>
         </div>
     );

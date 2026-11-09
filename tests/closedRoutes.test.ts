@@ -57,6 +57,9 @@ describe('closedPageRedirect', () => {
         expect(closedPageRedirect('/is/Login')).toBe('/is');
         expect(closedPageRedirect('/is/%6Cogin')).toBe('/is');
         expect(closedPageRedirect('/is//onboarding')).toBe('/is');
+        expect(closedPageRedirect('/is/dashboard.segments/_tree.segment.rsc')).toBe('/is');
+        expect(closedPageRedirect('/is/dashboard.rsc')).toBe('/is');
+        expect(closedPageRedirect('/is/dashboard%2Fx')).toBe('/is');
     });
 
     it('snertir ekki kynningarsíðurnar', () => {
