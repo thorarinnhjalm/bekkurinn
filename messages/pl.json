@@ -262,7 +262,7 @@
     "title": "Polityka prywatności",
     "last_updated": "Ostatnia aktualizacja: Listopad 2026",
     "section6_title": "5. Pliki cookie i statystyki",
-    "section6_text": "Nie używamy śledzących plików cookie ani pikseli reklamowych. Na publicznych stronach serwisu liczymy odwiedziny za pomocą Vercel Web Analytics. Usługa nie używa plików cookie, a odwiedziny nie są przypisywane do konkretnych osób. U zalogowanych użytkowników nie prowadzimy żadnych pomiarów.",
+    "section6_text": "Nie używamy śledzących plików cookie ani pikseli reklamowych. Na publicznych stronach serwisu liczymy odwiedziny za pomocą Vercel Web Analytics. Usługa nie używa plików cookie, a odwiedziny nie są przypisywane do konkretnych osób. U zalogowanych użytkowników nie prowadzimy żadnych pomiarów. Vercel, który hostuje serwis, przetwarza informacje techniczne o wizycie, takie jak adres IP i typ przeglądarki, aby ją policzyć.",
     "section1_title": "1. Jakie dane zbieramy?",
     "section1_intro": "Bekkurinn zbiera następujące informacje w celu świadczenia usługi:",
     "section1_items": [
@@ -284,7 +284,7 @@
     "section3_items": [
       "Szyfrowanymi połączeniami (HTTPS)",
       "Regułami dostępu zapewniającymi, że tylko członkowie klasy widzą dane",
-      "Bez udostępniania danych stronom trzecim"
+      "Dane nie są sprzedawane i są przekazywane wyłącznie podmiotom przetwarzającym, które hostują serwis (Google Firebase i Vercel)"
     ],
     "section4_title": "4. Twoje prawa",
     "section4_intro": "Masz prawo do:",

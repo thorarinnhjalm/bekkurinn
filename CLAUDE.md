@@ -9,8 +9,9 @@ Eigandinn ákvað í nóvember 2026 að enginn noti bekkjarforritið og að bekk
 - [middleware.ts](middleware.ts) stöðvar allt sem tilheyrir forritinu áður en það keyrir. Innskráning, nýskráning, admin og allar `(app)`-leiðir fá tímabundna tilvísun (307) á forsíðu sama tungumáls, og allar slóðir undir `/api` svara 410. Listinn er í [lib/closedRoutes.ts](lib/closedRoutes.ts) og prófin í [tests/closedRoutes.test.ts](tests/closedRoutes.test.ts).
 - Kóði forritsins (síður, API-leiðir, services, hooks) stendur óhreyfður en er óaðgengilegur. Lýsingarnar hér að neðan eiga við um þann kóða, ekki um það sem er í loftinu.
 - Ekkert keyrir sjálfkrafa: [vercel.json](vercel.json) hefur engin cron.
+- Firebase lifir áfram að ákvörðun eigandans (9. nóv. 2026): innskráningaraðferðirnar í Firebase Authentication (stillingar í Firebase-stjórnborðinu) eru enn virkar og gögnin óhreyfð, þótt innskráningarsíður vefsins séu lokaðar. Ekki slökkva á neinu í Firebase né eyða þar án berorðs samþykkis.
 - Kynningarsíðurnar hafa enga hnappa inn í forritið og snertingarsíðan ekkert form, aðeins netfang. Ný síða eða hnappur má ekki vísa á lokaða leið.
-- Mælingar: Vercel Web Analytics gegnum [components/analytics/PublicAnalytics.tsx](components/analytics/PublicAnalytics.tsx). Hún hleðst aðeins þegar `VERCEL_ENV === 'production'` og aðeins þegar staðfest er að enginn er innskráður. Plausible er ekki lengur notað. Persónuverndarsíðan (`privacy_page.section6_*` í `messages/`) lýsir þessu og verður að fylgja ef mælingum er breytt.
+- Mælingar: Vercel Web Analytics gegnum [components/analytics/PublicAnalytics.tsx](components/analytics/PublicAnalytics.tsx). Hún hleðst aðeins þegar `VERCEL_ENV === 'production'` og aðeins þegar staðfest er að enginn er innskráður. Plausible er ekki lengur notað. Persónuverndarsíðan (`privacy_page.section6_*` í `messages/`) lýsir þessu og verður að fylgja ef mælingum er breytt. `privacy_page.section3_items` segir að gögn fari aðeins til Google Firebase og Vercel. Það stenst aðeins meðan `/api` er lokað: verði forritið eða `/api` opnað aftur (Resend, Gemini) þarf að uppfæra þá setningu fyrst.
 
 ## Prófunarumhverfi
 

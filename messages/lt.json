@@ -84,7 +84,7 @@
     "title": "Privatumo politika",
     "last_updated": "Paskutinį kartą atnaujinta: 2026 m. lapkritis",
     "section6_title": "5. Slapukai ir statistika",
-    "section6_text": "Nenaudojame sekimo slapukų ar reklamos pikselių. Viešuose svetainės puslapiuose apsilankymus skaičiuojame naudodami „Vercel Web Analytics“. Ši paslauga nenaudoja slapukų, o apsilankymai nesiejami su konkrečiais asmenimis. Prisijungusių naudotojų apsilankymai nematuojami.",
+    "section6_text": "Nenaudojame sekimo slapukų ar reklamos pikselių. Viešuose svetainės puslapiuose apsilankymus skaičiuojame naudodami „Vercel Web Analytics“. Ši paslauga nenaudoja slapukų, o apsilankymai nesiejami su konkrečiais asmenimis. Prisijungusių naudotojų apsilankymai nematuojami. „Vercel“, kuri talpina svetainę, apdoroja techninę apsilankymo informaciją, pvz., IP adresą ir naršyklės tipą, kad jį suskaičiuotų.",
     "section1_title": "1. Kokius duomenis renkame?",
     "section1_intro": "Bekkurinn renka šią informaciją paslaugai teikti:",
     "section1_items": [
@@ -106,7 +106,7 @@
     "section3_items": [
       "Šifruotais ryšiais (HTTPS)",
       "Prieigos taisyklėmis, užtikrinančiomis, kad tik klasės nariai mato duomenis",
-      "Jokių duomenų nesidalinama su trečiosiomis šalimis"
+      "Duomenys neparduodami ir perduodami tik duomenų tvarkytojams, kurie talpina svetainę (Google Firebase ir Vercel)"
     ],
     "section4_title": "4. Jūsų teisės",
     "section4_intro": "Turite teisę:",
