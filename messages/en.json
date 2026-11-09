@@ -340,7 +340,7 @@
     "section3_items": [
       "Encrypted connections (HTTPS)",
       "Access rules ensuring only class members see data",
-      "No data shared with third parties"
+      "Data is never sold, and is shared only with the processors that host the site (Google Firebase and Vercel)"
     ],
     "section4_title": "4. Your rights",
     "section4_intro": "You have the right to:",
@@ -351,7 +351,7 @@
       "Control phone number visibility (on/off)"
     ],
     "section6_title": "5. Cookies and analytics",
-    "section6_text": "We do not use tracking cookies or advertising pixels. On the public pages of the site we count visits with Vercel Web Analytics. It uses no cookies and visits are not traced to individuals. No analytics run for logged-in users.",
+    "section6_text": "We do not use tracking cookies or advertising pixels. On the public pages of the site we count visits with Vercel Web Analytics. It uses no cookies and visits are not traced to individuals. No analytics run for logged-in users. Vercel, which hosts the site, processes technical information about the visit, such as IP address and browser type, in order to count it.",
     "section7_title": "6. Data Retention",
     "section7_text": "We retain your data only for as long as needed to provide the service to your class. If you leave a class or delete your account, your personal data is permanently removed.",
     "section5_title": "7. Contact",

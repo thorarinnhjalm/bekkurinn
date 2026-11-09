@@ -295,7 +295,7 @@
     "title": "Chính sách bảo mật",
     "last_updated": "Cập nhật lần cuối: Tháng 11 năm 2026",
     "section6_title": "5. Cookie và phân tích",
-    "section6_text": "Chúng tôi không sử dụng cookie theo dõi hay pixel quảng cáo. Trên các trang công khai của trang web, chúng tôi đếm lượt truy cập bằng Vercel Web Analytics. Dịch vụ này không sử dụng cookie và lượt truy cập không được gắn với cá nhân nào. Không có phân tích nào đối với người dùng đã đăng nhập.",
+    "section6_text": "Chúng tôi không sử dụng cookie theo dõi hay pixel quảng cáo. Trên các trang công khai của trang web, chúng tôi đếm lượt truy cập bằng Vercel Web Analytics. Dịch vụ này không sử dụng cookie và lượt truy cập không được gắn với cá nhân nào. Không có phân tích nào đối với người dùng đã đăng nhập. Vercel, đơn vị lưu trữ trang web, xử lý thông tin kỹ thuật về lượt truy cập, chẳng hạn như địa chỉ IP và loại trình duyệt, để đếm lượt truy cập đó.",
     "section1_title": "1. Chúng tôi thu thập dữ liệu gì?",
     "section1_intro": "Bekkurinn thu thập các thông tin sau để cung cấp dịch vụ:",
     "section1_items": [
@@ -317,7 +317,7 @@
     "section3_items": [
       "Kết nối được mã hóa (HTTPS)",
       "Các quy tắc truy cập đảm bảo chỉ các thành viên trong lớp mới thấy dữ liệu",
-      "Không chia sẻ dữ liệu với bên thứ ba"
+      "Dữ liệu không được bán và chỉ được chia sẻ với các bên xử lý lưu trữ trang web (Google Firebase và Vercel)"
     ],
     "section4_title": "4. Quyền của bạn",
     "section4_intro": "Bạn có quyền:",

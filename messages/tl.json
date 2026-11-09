@@ -295,7 +295,7 @@
     "title": "Patakaran sa Privacy",
     "last_updated": "Huling na-update: Nobyembre 2026",
     "section6_title": "5. Cookies at analytics",
-    "section6_text": "Hindi kami gumagamit ng tracking cookies o advertising pixels. Sa mga pampublikong pahina ng site, binibilang namin ang mga pagbisita gamit ang Vercel Web Analytics. Hindi ito gumagamit ng cookies at hindi natutunton ang mga pagbisita sa mga indibidwal. Walang analytics para sa mga naka-log in na user.",
+    "section6_text": "Hindi kami gumagamit ng tracking cookies o advertising pixels. Sa mga pampublikong pahina ng site, binibilang namin ang mga pagbisita gamit ang Vercel Web Analytics. Hindi ito gumagamit ng cookies at hindi natutunton ang mga pagbisita sa mga indibidwal. Walang analytics para sa mga naka-log in na user. Ang Vercel, na nagho-host ng site, ay nagpoproseso ng teknikal na impormasyon tungkol sa pagbisita, tulad ng IP address at uri ng browser, upang mabilang ito.",
     "section1_title": "1. Anong data ang kinokolekta namin?",
     "section1_intro": "Kinokolekta ng Bekkurinn ang sumusunod na impormasyon upang ibigay ang aming serbisyo:",
     "section1_items": [
@@ -317,7 +317,7 @@
     "section3_items": [
       "Naka-encrypt na mga koneksyon (HTTPS)",
       "Mga panuntunan sa pag-access na tinitiyak na ang mga miyembro ng klase lamang ang makakakita ng data",
-      "Walang data na ibinabahagi sa mga third party"
+      "Hindi ibinebenta ang data at ibinabahagi lamang sa mga processor na nagho-host ng site (Google Firebase at Vercel)"
     ],
     "section4_title": "4. Ang iyong mga karapatan",
     "section4_intro": "May karapatan kang:",

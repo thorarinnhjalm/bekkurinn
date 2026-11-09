@@ -346,7 +346,7 @@
     "section3_items": [
       "Dulkóðuðum tengingum (HTTPS)",
       "Aðgangsreglum sem tryggja að aðeins meðlimir bekkjar sjái gögn",
-      "Engum gögnum deilt með þriðja aðila"
+      "Gögn eru ekki seld og ekki afhent öðrum en vinnsluaðilum sem hýsa vefinn (Google Firebase og Vercel)"
     ],
     "section4_title": "4. Þín réttindi",
     "section4_intro": "Þú hefur rétt til að:",
@@ -357,7 +357,7 @@
       "Stjórna sýnileika símanúmers (kveikt/slökkt)"
     ],
     "section6_title": "5. Vefkökur og mælingar",
-    "section6_text": "Við notum engar rakningarkökur og engar auglýsingakökur. Á opnum síðum vefsins teljum við heimsóknir með Vercel Web Analytics. Sú mæling notar engar vefkökur og heimsóknir eru ekki raktar til einstaklinga. Engar mælingar eru gerðar hjá innskráðum notendum.",
+    "section6_text": "Við notum engar rakningarkökur og engar auglýsingakökur. Á opnum síðum vefsins teljum við heimsóknir með Vercel Web Analytics. Sú mæling notar engar vefkökur og heimsóknir eru ekki raktar til einstaklinga. Engar mælingar eru gerðar hjá innskráðum notendum. Vercel, sem hýsir vefinn, vinnur úr tæknilegum upplýsingum um heimsóknina, svo sem IP-tölu og gerð vafra, til að telja hana.",
     "section7_title": "6. Varðveisla gagna",
     "section7_text": "Við geymum gögnin þín aðeins á meðan þau þarf til að veita þjónustuna. Ef þú yfirgefur bekk eða eyðir aðgangi þínum, er persónuupplýsingum þínum eytt varanlega.",
     "section5_title": "7. Hafa samband",
