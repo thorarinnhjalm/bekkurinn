@@ -10,13 +10,14 @@ Eigandinn ákvað í nóvember 2026 að enginn noti bekkjarforritið og að bekk
 - Kóði forritsins (síður, API-leiðir, services, hooks) stendur óhreyfður en er óaðgengilegur. Lýsingarnar hér að neðan eiga við um þann kóða, ekki um það sem er í loftinu.
 - Ekkert keyrir sjálfkrafa: [vercel.json](vercel.json) hefur engin cron.
 - Firebase lifir áfram að ákvörðun eigandans (9. nóv. 2026): innskráningaraðferðirnar í Firebase Authentication (stillingar í Firebase-stjórnborðinu) eru enn virkar og gögnin óhreyfð, þótt innskráningarsíður vefsins séu lokaðar. Ekki slökkva á neinu í Firebase né eyða þar án berorðs samþykkis.
+- Aðgangsreglurnar loka öllu (eigandinn samþykkti 19. nóv. 2026): [firestore.rules](firestore.rules) og [storage.rules](storage.rules) hafna öllum lestri og skrifum úr vafra, líka hjá ofurstjórnendum. Eldri reglurnar leyfðu hverjum innskráðum notanda að lesa `users`, `students` og `classes` (með boðskóðum) og eru aðeins í git-sögunni. Setjið þær ekki aftur í loftið. Admin SDK fer framhjá reglunum. Nýtt safn fær eigin reglur ofan við lokunina og próf í [tests-rules/](tests-rules/rules.test.ts). Reglurnar fara í loftið aðeins með `firebase deploy` sem eigandinn keyrir.
 - Kynningarsíðurnar hafa enga hnappa inn í forritið og snertingarsíðan ekkert form, aðeins netfang. Ný síða eða hnappur má ekki vísa á lokaða leið.
 - Mælingar: Vercel Web Analytics gegnum [components/analytics/PublicAnalytics.tsx](components/analytics/PublicAnalytics.tsx). Hún hleðst aðeins þegar `VERCEL_ENV === 'production'` og aðeins þegar staðfest er að enginn er innskráður. Plausible er ekki lengur notað. Persónuverndarsíðan (`privacy_page.section6_*` í `messages/`) lýsir þessu og verður að fylgja ef mælingum er breytt. `privacy_page.section3_items` segir að gögn fari aðeins til Google Firebase og Vercel. Það stenst aðeins meðan `/api` er lokað: verði forritið eða `/api` opnað aftur (Resend, Gemini) þarf að uppfæra þá setningu fyrst.
 
 ## Prófunarumhverfi
 
 - Ytri kerfi: Firebase (Authentication, Firestore, Storage), Resend (tölvupóstur), Gemini (þýðingar), Vercel Web Analytics.
-- Ekkert prófunarumhverfi er til: enginn emulator og ekkert prófunarverkefni í Firebase. Próf keyra aðeins í vitest með hermdum Firebase (sjá "Tests"), og CI byggir með gervigildum í stað lykla.
+- Ekkert prófunarverkefni er til í Firebase. Aðgangsreglurnar eru prófaðar á Firebase-emulator (`npm run test:rules`, demo-verkefnið `demo-bekkurinn`, þarf Java). Önnur próf keyra í vitest með hermdum Firebase (sjá "Tests"), og CI byggir með gervigildum í stað lykla.
 - Vercel preview bendir á raun-Firebase, sama verkefni og production. Þar má aðeins skoða: aldrei skrá sig inn, senda neitt eða búa til færslur.
 - Mælingar eru óvirkar í preview.
 - Playwright-prófin ræsa `npm run dev` með þeim env-breytum sem eru á vélinni. Þau má aðeins keyra með gervigildum, aldrei með lyklum að raun-Firebase.
@@ -32,6 +33,7 @@ npm run test             # Vitest watch mode
 npm run test:run         # Vitest single run (CI)
 npm run test:run tests/validation.test.ts   # Run one test file
 npm run test:coverage    # Vitest with coverage
+npm run test:rules       # Firestore + Storage rules on the Firebase emulator (needs Java; separate CI job)
 npx playwright test                          # E2E suite (boots `npm run dev` itself)
 npx playwright test e2e/smoke.spec.ts --project=chromium  # Single e2e
 npm run sync-admins      # Materialize NEXT_PUBLIC_ADMIN_EMAILS (.env.local) into Firestore `system_admins`
@@ -69,13 +71,13 @@ The root [app/page.tsx](app/page.tsx) renders the Icelandic landing directly (no
 
 ### Security model (Firestore + Storage rules)
 
-[firestore.rules](firestore.rules) is the source of truth for access control; read it before changing data shapes.
+**Since 19 Nov 2026 both rule files deny everything** (see "Staða"). The bullets below describe the old model the app code was written against; it now lives only in git history and was not safe to deploy (any signed-in user could read every `users`, `students` and `classes` doc). Reopening any part of the app means writing membership-based rules anew, with emulator tests in `tests-rules/`.
 - `system_admins/{uid}` doc presence → super-admin. `parentLinks/{uid}_{classId}` doc presence → class member. `classes.admins[]` or `parentLinks.role == 'admin'` → class admin. `schools.admins[]` → school admin (foreldrafélag / PTA).
 - The composite parentLink ID is load-bearing (rules require `linkId == userId + '_' + classId`) and implies **one link per user per class** — linking a second child in the same class overwrites the first (`setDoc`).
 - `NEXT_PUBLIC_ADMIN_EMAILS` is read client-side (`AdminView` gating, `useUserClasses`) but rules only honour `system_admins`. After changing it run `npm run sync-admins`, or the UI shows admin controls whose writes get denied.
 - Collection names in code must match a `match` block in the rules — anything else is denied in production. Lost & found is `lostItems`; agreements have `votes` and `signatures` subcollections (doc id = the user's uid, writable only by that user as a class member, with a server timestamp). Any member may claim an unclaimed lost item by setting only `isClaimed`/`claimedBy` to themselves.
 - Composite indexes live in [firestore.indexes.json](firestore.indexes.json). A `where` + `orderBy` on different fields needs an entry and a deploy; `getTasksByClass` deliberately sorts in memory to avoid one.
-- `firestore.test.rules` is fully open — local development only. `firebase.json` deploys `firestore.rules`.
+- `firebase.json` deploys `firestore.rules` and `storage.rules`. The old fully open `firestore.test.rules` was deleted; the docs that tell you to paste it into the console (`QUICKSTART.md`, `DEPLOYMENT.md`) are stale.
 - [storage.rules](storage.rules): images only, 5 MB max, under `users/{uid}/…`, `students/{id}/…`, `lost-found/{classId}/…`; everything else denied.
 
 ### Auth, onboarding and the dashboard gate

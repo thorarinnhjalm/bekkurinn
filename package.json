@@ -10,6 +10,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
+    "test:rules": "npx -y firebase-tools@15.37.0 emulators:exec --only firestore,storage --project demo-bekkurinn \"vitest run -c vitest.rules.config.ts\"",
     "sync-admins": "tsx scripts/syncAdmins.ts"
   },
   "dependencies": {
@@ -38,6 +39,7 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
     "@playwright/test": "^1.58.0",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
