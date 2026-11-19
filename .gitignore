@@ -46,3 +46,9 @@ next-env.d.ts
 # Stitch design exports — zips are large, raw PNG mockups are not source of truth
 stitch_*.zip
 design/stitch/**/screen.png
+
+# firebase emulators
+firestore-debug.log
+storage-debug.log
+firebase-debug.log
+ui-debug.log
